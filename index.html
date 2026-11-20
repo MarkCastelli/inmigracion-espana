@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ruta Legal · Tu situación en España, paso a paso</title>
+<meta name="description" content="Diagnóstico gratuito y privado de vías legales para residir, trabajar o nacionalizarte en España. Hecho para hispanohablantes, funciona sin conexión y sin registro.">
+<meta name="theme-color" content="#0d4f5c">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d4f5c'/%3E%3Cpath d='M18 44V28l14-9 14 9v16' fill='none' stroke='%23f7f4ee' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M26 44V34h12v10' fill='none' stroke='%23e8863a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="brand" href="#/inicio" data-nav="inicio" aria-label="Ruta Legal, ir al inicio">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="34" height="34"><rect width="64" height="64" rx="15" fill="var(--brand)"/><path d="M17 45V28.5L32 19l15 9.5V45" fill="none" stroke="#f7f4ee" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.5 45V34h13v11" fill="none" stroke="#e8863a" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="brand__text">
+        <strong>Ruta Legal</strong>
+        <small>España, paso a paso</small>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Secciones">
+      <button class="nav__link" data-nav="inicio">Inicio</button>
+      <button class="nav__link" data-nav="plan">Mi plan</button>
+      <button class="nav__link" data-nav="vias">Vías</button>
+      <button class="nav__link" data-nav="tramites">Trámites</button>
+      <button class="nav__link" data-nav="online">Online</button>
+      <button class="nav__link" data-nav="preguntas">Preguntas</button>
+      <button class="nav__link" data-nav="derechos">Derechos</button>
+      <button class="nav__link" data-nav="directorio">Dónde ir</button>
+      <button class="nav__link" data-nav="consulta">Consulta IA</button>
+      <button class="nav__link" data-nav="docs">Documentos</button>
+      <button class="nav__link" data-nav="formularios">Formularios</button>
+      <button class="nav__link" data-nav="ayuda">Ayuda</button>
+    </nav>
+
+    <div class="topbar__actions">
+      <span class="pill pill--free" title="Sin pago, sin registro y sin publicidad">Gratis</span>
+      <span class="pill pill--private" title="Tus datos no salen de este dispositivo">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 10V8a6 6 0 1 1 12 0v2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="10" width="16" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        Privado
+      </span>
+      <button class="icon-btn" data-action="listen-view" type="button" aria-label="Escuchar esta página" title="Escuchar esta página">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 9.2v5.6h3.2l4.3 3.4V5.8L7.2 9.2H4Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M15.2 8.6a4.8 4.8 0 0 1 0 6.8M17.9 6a8.4 8.4 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Cambiar entre tema claro y oscuro" title="Tema claro / oscuro">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="topbar__progress" id="globalProgress" hidden><span></span></div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ══════════ INICIO ══════════ -->
+  <section class="view" id="view-inicio" aria-labelledby="t-inicio">
+    <div class="hero">
+      <div class="hero__content">
+        <p class="eyebrow">Diagnóstico migratorio · España · 100 % gratuito</p>
+        <h1 id="t-inicio">Tu camino hacia una situación legal en España, <em>claro y paso a paso</em>.</h1>
+        <p class="lead">Es gratis, es privado y no te pedimos nada. Responde unas preguntas y te diremos qué vías legales encajan contigo, qué te falta, qué documentos necesitas y qué hacer primero. Si ya tienes papeles (NIE, tarjeta roja, hoja blanca, certificado digital…), los tendremos en cuenta para no repetir pasos.</p>
+
+        <div class="hero__badges" aria-label="Compromisos">
+          <span class="badge-trust"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 3l7.5 3v5.4c0 4.6-3.1 8.8-7.5 10.4C7.6 20.2 4.5 16 4.5 11.4V6L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.6 12.1l2.3 2.3 4.5-4.7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg> Gratis para el inmigrante</span>
+          <span class="badge-trust"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M6 10V8a6 6 0 1 1 12 0v2" fill="none" stroke="currentColor" stroke-width="1.9"/><rect x="4" y="10" width="16" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"/></svg> Tus datos no se comparten</span>
+          <span class="badge-trust"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M6 3.5h7l5 5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M13 3.5V9h5M8.5 13h7M8.5 16.5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> PDF para tu abogado</span>
+        </div>
+
+        <div class="trust-panel" aria-labelledby="t-trust">
+          <p class="trust-panel__title" id="t-trust">Antes de empezar, que sepas esto</p>
+          <ul class="trust-panel__list">
+            <li><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><strong>Es totalmente gratis para el inmigrante.</strong> Sin pago, sin registro y sin publicidad.</span></li>
+            <li><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><strong>Es una ayuda, no una garantía.</strong> No garantizamos que sea ni el mejor ni el único camino, aunque nos esforzamos en lograrlo.</span></li>
+            <li><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><strong>Siempre te recomendaremos un abogado de extranjería.</strong> Es quien puede valorar tu expediente concreto y decirte si hay una vía mejor.</span></li>
+            <li><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><strong>Tus datos no se envían ni se comparten con nadie.</strong> Se quedan en tu dispositivo: no hay servidor, ni cuentas, ni terceros.</span></li>
+            <li><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><strong>Puedes descargar tu plan en PDF.</strong> Incluye todo lo que el abogado necesita para empezar y te ahorra tiempo en la consulta.</span></li>
+          </ul>
+        </div>
+
+        <div class="hero__cta">
+          <button class="btn btn--primary btn--lg" data-nav="diagnostico" id="startBtn">
+            Empezar mi diagnóstico
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="btn btn--ghost btn--lg" data-nav="vias">Ver las vías disponibles</button>
+        </div>
+
+        <p class="hero__meta" id="resumeHint" hidden></p>
+        <p class="hero__meta"><button class="btn btn--link" data-action="demo" type="button">Ver un plan de ejemplo →</button> <span class="dot-sep">·</span> <button class="btn btn--link" data-action="listen-view" type="button"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M4 9.2v5.6h3.2l4.3 3.4V5.8L7.2 9.2H4Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M15.2 8.6a4.8 4.8 0 0 1 0 6.8M17.9 6a8.4 8.4 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg> Escuchar esta página</button></p>
+        <ul class="trust" aria-label="Características">
+          <li><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-2.9 8.4-7 10-4.1-1.6-7-5.6-7-10V6l7-3Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M8.8 12l2.2 2.2 4.2-4.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg> 100% en tu dispositivo</li>
+          <li><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg> Sin cuentas ni contraseñas</li>
+          <li><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M7 4h10v16l-5-3.2L7 20V4Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg> Con fuentes oficiales</li>
+        </ul>
+      </div>
+
+      <aside class="hero__card" aria-label="Resumen del funcionamiento">
+        <div class="mini-plan">
+          <div class="mini-plan__head">
+            <span class="dot dot--ok"></span> Ejemplo de resultado
+          </div>
+          <p class="mini-plan__title">Tu plan probable</p>
+          <ol class="mini-plan__list">
+            <li><span>1</span><div><strong>Arraigo social</strong><small>Te faltan 8 meses de permanencia</small></div></li>
+            <li><span>2</span><div><strong>Nacionalidad por residencia</strong><small>2 años si eres iberoamericano</small></div></li>
+            <li><span>3</span><div><strong>Documentos base</strong><small>7 de 12 ya los tienes</small></div></li>
+          </ol>
+          <div class="mini-plan__foot">Cada paso, con su enlace oficial</div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="commitments" aria-labelledby="t-compromisos">
+      <div class="commitments__head">
+        <p class="eyebrow">Sin letra pequeña</p>
+        <h2 id="t-compromisos">Nuestros compromisos contigo</h2>
+        <p class="commitments__sub">Ruta Legal existe para ayudarte a entender tus opciones. No vendemos nada, no pedimos datos y no prometemos milagros.</p>
+      </div>
+      <div class="commitments__grid">
+        <article class="commit">
+          <span class="commit__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M17.5 6.4A7 7 0 0 0 7.2 12a7 7 0 0 0 10.3 5.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M4.6 10.2h8.6M4.6 13.8h8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span>
+          <h3>Gratis, de verdad</h3>
+          <p>No hay pago, ni registro, ni versión premium. Para el inmigrante, siempre gratis. Sin publicidad y sin letra pequeña.</p>
+        </article>
+        <article class="commit">
+          <span class="commit__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 3l7.5 3v5.4c0 4.6-3.1 8.8-7.5 10.4C7.6 20.2 4.5 16 4.5 11.4V6L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.6 12.1l2.3 2.3 4.5-4.7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <h3>Tus datos no se comparten</h3>
+          <p>Todo se queda en tu dispositivo. No hay servidor, ni cuentas, ni analítica. Nadie ve lo que respondes y nada se envía a terceros.</p>
+        </article>
+        <article class="commit">
+          <span class="commit__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 11v5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.8" r="1.15" fill="currentColor"/></svg></span>
+          <h3>Honestidad antes que promesas</h3>
+          <p>No garantizamos que sea ni el mejor ni el único camino. Te mostramos lo que encaja, lo que no y por qué, con sus límites y sus riesgos.</p>
+        </article>
+        <article class="commit">
+          <span class="commit__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3.5h7l5 5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M13 3.5V9h5M8.5 13h7M8.5 16.5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <h3>Un abogado siempre suma</h3>
+          <p>Descarga tu plan en PDF con perfil, requisitos, documentos y plazos. Llévalo a tu abogado de extranjería: ahorrarás tiempo y dinero.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="how" aria-labelledby="t-how">
+      <h2 id="t-how" class="section-title">Cómo funciona</h2>
+      <div class="how__grid">
+        <article class="card step-card">
+          <span class="step-num">1</span>
+          <h3>Cuéntanos tu caso</h3>
+          <p>Nacionalidad, dónde estás, cómo entraste, qué papeles ya tienes, familia, trabajo y estudios. Unas 40 preguntas, muchas opcionales. Puedes parar y continuar cuando quieras.</p>
+        </article>
+        <article class="card step-card">
+          <span class="step-num">2</span>
+          <h3>Analizamos las vías</h3>
+          <p>Comprobamos tu perfil contra las vías vigentes: arraigos, visados, reagrupación, nacionalidad. Marcamos lo que cumples, lo que te falta y lo que no aplica.</p>
+        </article>
+        <article class="card step-card">
+          <span class="step-num">3</span>
+          <h3>Recibes tu plan</h3>
+          <p>Pasos ordenados, documentos, formularios oficiales, plazos, costes aproximados y avisos. Guarda el progreso y exporta tu plan para llevarlo a tu cita o a tu abogado.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="pdf-band" aria-labelledby="t-pdf">
+      <div class="pdf-band__text">
+        <p class="eyebrow">Pensado para tu abogado</p>
+        <h2 id="t-pdf">Tu plan en PDF, listo para llevar</h2>
+        <p>Incluye tus datos, las vías recomendadas, los requisitos que cumples y los que te faltan, los documentos y las fechas clave. Es la información que un abogado de extranjería necesita para empezar, sin que tengas que repetirla mil veces. Podrás descargarlo en PDF desde tu plan.</p>
+      </div>
+      <div class="pdf-band__cta">
+        <button class="btn btn--accent btn--lg" data-nav="diagnostico">Crear mi plan</button>
+        <small>Gratis, sin registro y sin enviar datos.</small>
+      </div>
+    </section>
+
+    <section class="notice-strip" aria-label="Aviso importante">
+      <div class="notice-strip__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 3 2.8 20h18.4L12 3Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M12 9.5v4.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.1" fill="currentColor"/></svg>
+      </div>
+      <div>
+        <strong>Esto es una ayuda, no asesoramiento jurídico.</strong>
+        <p>No garantizamos que sea ni el mejor ni el único camino: hacemos lo posible por acercarnos a tu caso, pero la normativa cambia y cada expediente tiene matices. Antes de presentar nada, confirma en la fuente oficial y consulta con un abogado de extranjería o una entidad social. <a href="#/ayuda" data-nav="ayuda">Ver recursos gratuitos y aviso legal</a>.</p>
+      </div>
+    </section>
+  </section>
+
+  <!-- ══════════ ASISTENTE ══════════ -->
+  <section class="view" id="view-diagnostico" hidden aria-labelledby="t-wizard">
+    <div class="wizard">
+      <header class="wizard__head">
+        <div class="wizard__top">
+          <button class="btn btn--link" data-nav="inicio" type="button">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Inicio
+          </button>
+          <p class="wizard__step-label" id="wizardStepLabel">Paso 1 de 6</p>
+          <button class="btn btn--link" id="saveExitBtn" type="button">Guardar y salir</button>
+        </div>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="wizardProgress"><span></span></div>
+        <h2 id="t-wizard" class="wizard__title">Cuéntanos tu caso</h2>
+        <p class="wizard__intro" id="wizardIntro"></p>
+        <p class="wizard__trust">
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Gratis, privado y sin registro. Es una ayuda: no sustituye a un abogado.
+        </p>
+      </header>
+
+      <form id="wizardForm" novalidate autocomplete="off">
+        <div id="wizardFields"></div>
+        <p class="form-error" id="wizardError" role="alert" hidden></p>
+        <div class="wizard__nav">
+          <button type="button" class="btn btn--ghost" id="prevBtn">Atrás</button>
+          <button type="submit" class="btn btn--primary" id="nextBtn">Continuar</button>
+        </div>
+        <p class="wizard__privacy">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 10V8a6 6 0 1 1 12 0v2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="10" width="16" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          Tus respuestas se guardan solo en este navegador. No hay servidor, no hay cuentas y no compartimos nada.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ══════════ PLAN ══════════ -->
+  <section class="view" id="view-plan" hidden aria-label="Tu plan personalizado"></section>
+
+  <!-- ══════════ VÍAS ══════════ -->
+  <section class="view" id="view-vias" hidden aria-label="Catálogo de vías"></section>
+
+  <!-- ══════════ TRÁMITES ══════════ -->
+  <section class="view" id="view-tramites" hidden aria-label="Guías de trámites, citas y documentos"></section>
+
+  <!-- ══════════ ONLINE ══════════ -->
+  <section class="view" id="view-online" hidden aria-label="Trámites online, sedes y notificaciones"></section>
+
+  <!-- ══════════ PREGUNTAS ══════════ -->
+  <section class="view" id="view-preguntas" hidden aria-label="Preguntas frecuentes"></section>
+
+  <!-- ══════════ DERECHOS Y AYUDAS ══════════ -->
+  <section class="view" id="view-derechos" hidden aria-label="Derechos, discapacidad, dependencia, familia numerosa y ayudas"></section>
+
+  <!-- ══════════ DÓNDE IR ══════════ -->
+  <section class="view" id="view-directorio" hidden aria-label="Directorio de sitios de interés"></section>
+
+  <!-- ══════════ CONSULTA IA ══════════ -->
+  <section class="view" id="view-consulta" hidden aria-label="Consulta abierta a una IA"></section>
+
+  <!-- ══════════ DOCUMENTOS ══════════ -->
+  <section class="view" id="view-docs" hidden aria-label="Checklist de documentos"></section>
+
+  <!-- ══════════ FORMULARIOS ══════════ -->
+  <section class="view" id="view-formularios" hidden aria-label="Formularios oficiales y modelos EX"></section>
+
+  <!-- ══════════ AYUDA ══════════ -->
+  <section class="view" id="view-ayuda" hidden aria-label="Ayuda, recursos y aviso legal"></section>
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div>
+      <p class="footer__brand">Ruta Legal <span class="dot-sep">·</span> <span id="footerVersion">v1.0</span></p>
+      <p class="footer__note">Gratis para el inmigrante, sin publicidad ni registro. Orientación informativa elaborada con fuentes públicas. No sustituye el asesoramiento de un profesional del derecho ni la información oficial del consulado o de la Administración.</p>
+    </div>
+    <nav class="footer__nav" aria-label="Enlaces legales">
+      <button class="btn btn--link" data-nav="ayuda">Aviso legal y privacidad</button>
+      <button class="btn btn--link" data-nav="ayuda">Fuentes</button>
+    </nav>
+  </div>
+</footer>
+
+<noscript>
+  <div class="noscript">Ruta Legal necesita JavaScript para funcionar. Actívalo en tu navegador; no se envía ningún dato a internet.</div>
+</noscript>
+
+<div id="speechBar" class="speech-bar" hidden role="region" aria-label="Lector en voz alta">
+  <div class="speech-bar__inner">
+    <button class="btn btn--soft btn--sm" id="speechToggle" type="button">Pausar</button>
+    <button class="btn btn--ghost btn--sm" id="speechStop" type="button">Detener</button>
+    <div class="speech-bar__info">
+      <strong id="speechTitle">Leyendo</strong>
+      <span id="speechProgress"></span>
+    </div>
+    <label class="speech-bar__field">Voz
+      <select id="speechVoice" class="select" aria-label="Voz"></select>
+    </label>
+    <label class="speech-bar__field">Velocidad
+      <select id="speechRate" class="select" aria-label="Velocidad">
+        <option value="0.85">Lenta</option>
+        <option value="1" selected>Normal</option>
+        <option value="1.15">Rápida</option>
+        <option value="1.3">Muy rápida</option>
+      </select>
+    </label>
+  </div>
+</div>
+
+<script src="assets/js/core.js"></script>
+<script src="assets/js/data/countries.js"></script>
+<script src="assets/js/data/regions.js"></script>
+<script src="assets/js/data/questions.js"></script>
+<script src="assets/js/data/routes-nacionalidad.js"></script>
+<script src="assets/js/data/routes-espana.js"></script>
+<script src="assets/js/data/routes-exterior.js"></script>
+<script src="assets/js/data/resources.js"></script>
+<script src="assets/js/data/directory.js"></script>
+<script src="assets/js/data/procedures.js"></script>
+<script src="assets/js/data/aids.js"></script>
+<script src="assets/js/data/faq.js"></script>
+<script src="assets/js/data/online.js"></script>
+<script src="assets/js/engine.js"></script>
+<script src="assets/js/decision.js"></script>
+<script src="assets/js/forms.js"></script>
+<script src="assets/js/ai.js"></script>
+<script src="assets/js/pdf.js"></script>
+<script src="assets/js/speech.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
