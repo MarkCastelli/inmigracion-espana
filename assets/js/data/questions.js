@@ -528,6 +528,20 @@
             id: 'exitOrder', type: 'radio', label: '¿Tienes una orden de salida o prohibición de entrada?', showIf: inSpain,
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'dontknow', l: 'No lo sé' }]
           },
+          {
+            id: 'hasAppointment', type: 'select', label: '¿Tienes cita para presentar tu solicitud?', showIf: inSpain,
+            options: [
+              { v: 'yes', l: 'Sí, tengo cita' },
+              { v: 'no', l: 'Todavía no' },
+              { v: 'not_needed', l: 'No necesito cita / ya presenté' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'La fecha decide cuándo pedir antecedentes: caducan a los 3 meses. No los pidas si la cita está muy lejos.'
+          },
+          {
+            id: 'appointmentDate', type: 'date', label: '¿Para qué fecha es la cita?', showIf: function (p) { return inSpain(p) && p.hasAppointment === 'yes'; },
+            help: 'Si la cita es dentro de 3 meses, puedes pedir antecedentes ahora; si es más adelante, espera.'
+          },
 
           /* — fuera de España — */
           {

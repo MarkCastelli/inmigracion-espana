@@ -295,6 +295,7 @@
       doc.kv('Después de la salida del asilo', (postText[d.postRenunciation] || d.postRenunciation) + (d.postRenunciationDateISO ? ' · ' + RL.fmt.monthYear(d.postRenunciationDateISO) : ''));
     }
     if (d.residenceApproved === 'yes') doc.kv('Residencia aprobada', (d.residenceApprovedYears ? d.residenceApprovedYears + ' años' : 'Sí') + (d.residenceApprovedDate ? ' · ' + RL.fmt.date(d.residenceApprovedDate) : '') + (d.tieWaitingExpiry === 'yes' ? ' · esperando vencimiento de TIE' : ''));
+    if (d.appointmentDate) doc.kv('Cita para presentar', RL.fmt.date(d.appointmentDate));
     if (d.permitExpiry) doc.kv('Vencimiento de la TIE', RL.fmt.date(d.permitExpiry));
     if (d.permitYears) doc.kv('Años de residencia concedidos', d.permitYears + ' años');
     if (d.renewalMercurio) doc.kv('Renovación por Mercurio/sede', d.renewalMercurio);

@@ -377,6 +377,8 @@
     d.overstayDays = d.overstay && d.monthsInSpain != null ? Math.round(d.monthsInSpain * 30.44 - 90) : null;
 
     d.exitOrder = p.exitOrder === 'yes';
+    d.hasAppointment = p.hasAppointment || '';
+    d.appointmentDate = p.appointmentDate || '';
     d.leftSpain = p.leftSpain || null;
     d.postRenunciation = p.postRenunciationOutcome || '';
     d.postRenunciationDate = p.postRenunciationDate || '';
@@ -967,8 +969,25 @@
     if (d.hasReturnAuth && p.returnAuthExpiry) add('regreso', 'Controla tu autorización de regreso',
       'Sirve para salir y volver mientras se renueva tu permiso. Mira la fecha y no la dejes caducar fuera de España.', 'Antes de viajar', 'plazo');
     if (!d.euCitizen && (!hasStableStatus || d.pendingNationality || d.pendingExtranjeria)) {
-      add('antecedentes', 'Pide antecedentes solo cuando tengas dónde presentarlos',
-        'España: certificado del Ministerio de Justicia (gratis, online o presencial). Tu país: consulado o ministerio, apostillado o legalizado. Suelen caducar a los 3 meses: no los pidas si aún no vas a presentar la solicitud.', 'Cuando tengas la solicitud preparada', 'documentos');
+      if (d.hasAppointment === 'yes' && d.appointmentDate) {
+        var apptDays = RL.dates.diff(RL.dates.today(), d.appointmentDate);
+        if (apptDays != null && apptDays > 90) {
+          add('antecedentes-espera', 'No pidas antecedentes todavía',
+            'Tu cita es el ' + RL.fmt.date(d.appointmentDate) + '. Los antecedentes suelen caducar a los 3 meses: pídelos a partir del ' + RL.fmt.date(RL.dates.addDays(d.appointmentDate, -90)) + '.', 'A partir de esa fecha', 'documentos');
+        } else if (apptDays != null && apptDays >= 0) {
+          add('antecedentes', 'Pide antecedentes para la cita',
+            'Tu cita es el ' + RL.fmt.date(d.appointmentDate) + ', dentro de los próximos 3 meses. Pide el certificado de España y, si te lo exigen, el de tu país; revisa que no caduque antes de la cita.', 'Ahora', 'documentos');
+        } else {
+          add('antecedentes-cita', 'Revisa la fecha de tu cita',
+            'La fecha indicada ya pasó. Si la cita se celebró, no pidas antecedentes nuevos hasta que tengas otra solicitud; si se canceló, pide una nueva cita.', 'Ahora', 'documentos');
+        }
+      } else if (d.hasAppointment === 'no' || d.hasAppointment === 'dontknow') {
+        add('antecedentes-cita', 'Primero consigue cita; no pidas antecedentes',
+          'Los antecedentes caducan a los 3 meses. Sin cita o solicitud concreta, no los pidas: espera a tener la fecha y pídelos dentro de los 3 meses anteriores.', 'Cuando tengas cita', 'documentos');
+      } else {
+        add('antecedentes', 'Pide antecedentes cuando tengas cita',
+          'España: certificado del Ministerio de Justicia (gratis, online o presencial). Tu país: consulado o ministerio, apostillado o legalizado. Caducan a los 3 meses: pídelos dentro de los 3 meses anteriores a la presentación.', 'Cuando tengas la cita', 'documentos');
+      }
     }
     if (d.hasAncestry && !d.ancestryDocsOK) add('partidas', 'Busca la partida de nacimiento española',
       'Empieza por el Registro Civil del municipio donde nació tu antepasado. Muchas partidas están digitalizadas; también puedes pedir una búsqueda registral. Sin ese papel no hay vía de nacionalidad.', 'Este mes', 'documentos');

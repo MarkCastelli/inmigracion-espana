@@ -43,6 +43,23 @@ test('las acciones se adaptan a una familia con TIE, ESO y cónyuge peruana', ()
   assert.ok(plan.d.familyAdvice.some(x => /ESO en España/i.test(x.text)), 'los hijos con ESO no necesitan exámenes');
 });
 
+test('los antecedentes dependen de la fecha de la cita', () => {
+  const noCita = RL.buildPlan(base({ permitStatus: 'none', hasAppointment: 'no' }));
+  assert.ok(noCita.actions.some(a => a.id === 'antecedentes-cita'), 'sin cita no debe pedirlos');
+
+  const far = RL.buildPlan(base({
+    permitStatus: 'none', hasAppointment: 'yes',
+    appointmentDate: RL.dates.addDays(RL.dates.today(), 120)
+  }));
+  assert.ok(far.actions.some(a => a.id === 'antecedentes-espera'), 'con cita lejana debe esperar');
+
+  const near = RL.buildPlan(base({
+    permitStatus: 'none', hasAppointment: 'yes',
+    appointmentDate: RL.dates.addDays(RL.dates.today(), 30)
+  }));
+  assert.ok(near.actions.some(a => a.id === 'antecedentes'), 'con cita cercana debe pedirlos');
+});
+
 test('un visado que caduca pronto genera una ventana', () => {
   const plan = RL.buildPlan(base({ visaExpiry: RL.dates.addDays(RL.dates.today(), 30) }));
   assert.ok(plan.windows.some(w => /caduca en 30 días/i.test(w.title)));

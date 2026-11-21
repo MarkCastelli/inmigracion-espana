@@ -122,6 +122,7 @@
     if (p.criminalSpain || p.criminalOrigin) {
       l.push('- Antecedentes declarados: España ' + (p.criminalSpain || 'no') + (p.criminalSpainWhen ? ' (' + p.criminalSpainWhen + ')' : '') + ', país de origen ' + (p.criminalOrigin || 'no') + (p.criminalOriginWhen ? ' (' + p.criminalOriginWhen + ')' : ''));
     }
+    if (p.hasAppointment) l.push('- Cita para presentar: ' + p.hasAppointment + (p.appointmentDate ? ' · ' + p.appointmentDate : ''));
     if (p.permitKind) l.push('- Tipo de autorización: ' + p.permitKind);
     if (p.permitYears) l.push('- Años de residencia concedidos: ' + p.permitYears);
     if (p.permitExpiry) l.push('- Vencimiento TIE: ' + p.permitExpiry);

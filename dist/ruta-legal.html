@@ -2027,6 +2027,20 @@ body.has-speech-bar { padding-bottom: 86px; }
             id: 'exitOrder', type: 'radio', label: '¿Tienes una orden de salida o prohibición de entrada?', showIf: inSpain,
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'dontknow', l: 'No lo sé' }]
           },
+          {
+            id: 'hasAppointment', type: 'select', label: '¿Tienes cita para presentar tu solicitud?', showIf: inSpain,
+            options: [
+              { v: 'yes', l: 'Sí, tengo cita' },
+              { v: 'no', l: 'Todavía no' },
+              { v: 'not_needed', l: 'No necesito cita / ya presenté' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'La fecha decide cuándo pedir antecedentes: caducan a los 3 meses. No los pidas si la cita está muy lejos.'
+          },
+          {
+            id: 'appointmentDate', type: 'date', label: '¿Para qué fecha es la cita?', showIf: function (p) { return inSpain(p) && p.hasAppointment === 'yes'; },
+            help: 'Si la cita es dentro de 3 meses, puedes pedir antecedentes ahora; si es más adelante, espera.'
+          },
 
           /* — fuera de España — */
           {
@@ -7572,6 +7586,8 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.overstayDays = d.overstay && d.monthsInSpain != null ? Math.round(d.monthsInSpain * 30.44 - 90) : null;
 
     d.exitOrder = p.exitOrder === 'yes';
+    d.hasAppointment = p.hasAppointment || '';
+    d.appointmentDate = p.appointmentDate || '';
     d.leftSpain = p.leftSpain || null;
     d.postRenunciation = p.postRenunciationOutcome || '';
     d.postRenunciationDate = p.postRenunciationDate || '';
@@ -8162,8 +8178,25 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (d.hasReturnAuth && p.returnAuthExpiry) add('regreso', 'Controla tu autorización de regreso',
       'Sirve para salir y volver mientras se renueva tu permiso. Mira la fecha y no la dejes caducar fuera de España.', 'Antes de viajar', 'plazo');
     if (!d.euCitizen && (!hasStableStatus || d.pendingNationality || d.pendingExtranjeria)) {
-      add('antecedentes', 'Pide antecedentes solo cuando tengas dónde presentarlos',
-        'España: certificado del Ministerio de Justicia (gratis, online o presencial). Tu país: consulado o ministerio, apostillado o legalizado. Suelen caducar a los 3 meses: no los pidas si aún no vas a presentar la solicitud.', 'Cuando tengas la solicitud preparada', 'documentos');
+      if (d.hasAppointment === 'yes' && d.appointmentDate) {
+        var apptDays = RL.dates.diff(RL.dates.today(), d.appointmentDate);
+        if (apptDays != null && apptDays > 90) {
+          add('antecedentes-espera', 'No pidas antecedentes todavía',
+            'Tu cita es el ' + RL.fmt.date(d.appointmentDate) + '. Los antecedentes suelen caducar a los 3 meses: pídelos a partir del ' + RL.fmt.date(RL.dates.addDays(d.appointmentDate, -90)) + '.', 'A partir de esa fecha', 'documentos');
+        } else if (apptDays != null && apptDays >= 0) {
+          add('antecedentes', 'Pide antecedentes para la cita',
+            'Tu cita es el ' + RL.fmt.date(d.appointmentDate) + ', dentro de los próximos 3 meses. Pide el certificado de España y, si te lo exigen, el de tu país; revisa que no caduque antes de la cita.', 'Ahora', 'documentos');
+        } else {
+          add('antecedentes-cita', 'Revisa la fecha de tu cita',
+            'La fecha indicada ya pasó. Si la cita se celebró, no pidas antecedentes nuevos hasta que tengas otra solicitud; si se canceló, pide una nueva cita.', 'Ahora', 'documentos');
+        }
+      } else if (d.hasAppointment === 'no' || d.hasAppointment === 'dontknow') {
+        add('antecedentes-cita', 'Primero consigue cita; no pidas antecedentes',
+          'Los antecedentes caducan a los 3 meses. Sin cita o solicitud concreta, no los pidas: espera a tener la fecha y pídelos dentro de los 3 meses anteriores.', 'Cuando tengas cita', 'documentos');
+      } else {
+        add('antecedentes', 'Pide antecedentes cuando tengas cita',
+          'España: certificado del Ministerio de Justicia (gratis, online o presencial). Tu país: consulado o ministerio, apostillado o legalizado. Caducan a los 3 meses: pídelos dentro de los 3 meses anteriores a la presentación.', 'Cuando tengas la cita', 'documentos');
+      }
     }
     if (d.hasAncestry && !d.ancestryDocsOK) add('partidas', 'Busca la partida de nacimiento española',
       'Empieza por el Registro Civil del municipio donde nació tu antepasado. Muchas partidas están digitalizadas; también puedes pedir una búsqueda registral. Sin ese papel no hay vía de nacionalidad.', 'Este mes', 'documentos');
@@ -9045,6 +9078,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (p.criminalSpain || p.criminalOrigin) {
       l.push('- Antecedentes declarados: España ' + (p.criminalSpain || 'no') + (p.criminalSpainWhen ? ' (' + p.criminalSpainWhen + ')' : '') + ', país de origen ' + (p.criminalOrigin || 'no') + (p.criminalOriginWhen ? ' (' + p.criminalOriginWhen + ')' : ''));
     }
+    if (p.hasAppointment) l.push('- Cita para presentar: ' + p.hasAppointment + (p.appointmentDate ? ' · ' + p.appointmentDate : ''));
     if (p.permitKind) l.push('- Tipo de autorización: ' + p.permitKind);
     if (p.permitYears) l.push('- Años de residencia concedidos: ' + p.permitYears);
     if (p.permitExpiry) l.push('- Vencimiento TIE: ' + p.permitExpiry);
@@ -9518,6 +9552,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       doc.kv('Después de la salida del asilo', (postText[d.postRenunciation] || d.postRenunciation) + (d.postRenunciationDateISO ? ' · ' + RL.fmt.monthYear(d.postRenunciationDateISO) : ''));
     }
     if (d.residenceApproved === 'yes') doc.kv('Residencia aprobada', (d.residenceApprovedYears ? d.residenceApprovedYears + ' años' : 'Sí') + (d.residenceApprovedDate ? ' · ' + RL.fmt.date(d.residenceApprovedDate) : '') + (d.tieWaitingExpiry === 'yes' ? ' · esperando vencimiento de TIE' : ''));
+    if (d.appointmentDate) doc.kv('Cita para presentar', RL.fmt.date(d.appointmentDate));
     if (d.permitExpiry) doc.kv('Vencimiento de la TIE', RL.fmt.date(d.permitExpiry));
     if (d.permitYears) doc.kv('Años de residencia concedidos', d.permitYears + ' años');
     if (d.renewalMercurio) doc.kv('Renovación por Mercurio/sede', d.renewalMercurio);
