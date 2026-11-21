@@ -60,10 +60,10 @@ test('la reagrupación no vale si el familiar ya está en España', () => {
 });
 
 test('la composición familiar crea fichas para las personas que conviven', () => {
-  const d = RL.derive(base({ householdSize: 4 }));
+  const d = RL.derive(base({ householdSize: 3 }));
   assert.strictEqual(d.extraPeople.length, 3);
   assert.strictEqual(d.householdOthers, 3);
-  const steps = RL.questions.visibleSteps(base({ householdSize: 4 })).map(s => s.id);
+  const steps = RL.questions.visibleSteps(base({ householdSize: 3 })).map(s => s.id);
   assert.ok(steps.includes('familia'));
 });
 

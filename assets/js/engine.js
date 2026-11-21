@@ -109,7 +109,7 @@
     d.extraPeople = [];
     var householdSize = Number(p.householdSize) || 0;
     var knownHousehold = (d.couple ? 1 : 0) + d.childrenCount;
-    var extraHousehold = Math.max(0, householdSize - 1 - knownHousehold);
+    var extraHousehold = Math.max(0, householdSize - knownHousehold);
     for (var ei = 1; ei <= extraHousehold; ei++) {
       d.extraPeople.push({
         index: ei,

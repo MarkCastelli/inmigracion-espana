@@ -288,7 +288,7 @@
 
     var size = Number(p.householdSize) || 0;
     var known = (d.couple ? 1 : 0) + total;
-    var extra = Math.max(0, size - 1 - known);
+    var extra = Math.max(0, size - known);
     if (extra > 0) {
       html += '<div class="block" style="margin-top:14px"><div class="block__head">' + icons.family(18) + '<h3>Otras personas que conviven (' + extra + ')</h3></div><div class="block__body">';
       for (var e = 1; e <= extra; e++) {

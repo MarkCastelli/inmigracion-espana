@@ -65,8 +65,8 @@
             help: 'Con esto adaptamos el directorio: concello, ayuntamiento, centro de salud…'
           },
           {
-            id: 'householdSize', type: 'number', label: '¿Cuántas personas vivís en casa, contando tú?', min: 1, max: 20, placeholder: 'Ej. 4',
-            help: 'Incluye pareja, hijos y cualquier familiar o amigo que conviva. Con este número calculamos cuántas fichas familiares mostrarte.'
+            id: 'householdSize', type: 'number', label: '¿Con cuántas personas vives, sin incluirte tú?', min: 0, max: 19, placeholder: 'Ej. 3',
+            help: 'Incluye pareja, hijos y cualquier familiar o amigo que conviva. No te cuentes a ti. Con este número calculamos cuántas fichas familiares mostrarte.'
           },
           {
             id: 'maritalStatus', type: 'select', label: '¿Cuál es tu situación real de pareja?',
@@ -208,7 +208,7 @@
         id: 'familia',
         title: 'Tu pareja y tus hijos',
         intro: 'Estos datos son de tu pareja y de cada hijo, no tuyos. Empieza por tu pareja y sigue por los hijos, preferiblemente de mayor a menor. Los usamos para el vínculo, la reagrupación, la nacionalidad y las ayudas. Si no convives con alguno, indícalo.',
-        showIf: function (p) { return p.location === 'spain' && (Number(p.householdSize) > 1 || couple(p) || hasKids(p)); },
+        showIf: function (p) { return p.location === 'spain' && (Number(p.householdSize) > 0 || couple(p) || hasKids(p)); },
         fields: [
           { id: 'familyMembers', type: 'family', label: 'Personas de tu familia' }
         ]
