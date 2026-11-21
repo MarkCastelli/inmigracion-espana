@@ -77,6 +77,13 @@ test('el certificado de padrón también depende de la cita', () => {
   assert.ok(near.actions.some(a => a.id === 'padron-cert'), 'con cita cercana debe pedirlo');
 });
 
+test('no se recomienda pagar homologación sin trámite concreto', () => {
+  const sin = RL.buildPlan(base({ degree: 'grado', hasAppointment: 'no' }));
+  assert.ok(!sin.actions.some(a => a.id === 'homologacion'), 'sin trámite no debe pedir homologación');
+  const con = RL.buildPlan(base({ degree: 'grado', hasAppointment: 'yes', appointmentDate: RL.dates.addDays(RL.dates.today(), 30) }));
+  assert.ok(con.actions.some(a => a.id === 'homologacion'), 'con trámite puedo valorarla');
+});
+
 test('un visado que caduca pronto genera una ventana', () => {
   const plan = RL.buildPlan(base({ visaExpiry: RL.dates.addDays(RL.dates.today(), 30) }));
   assert.ok(plan.windows.some(w => /caduca en 30 días/i.test(w.title)));

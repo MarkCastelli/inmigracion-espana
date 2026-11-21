@@ -1007,10 +1007,12 @@
     }
     if (d.hasAncestry && !d.ancestryDocsOK) add('partidas', 'Busca la partida de nacimiento española',
       'Empieza por el Registro Civil del municipio donde nació tu antepasado. Muchas partidas están digitalizadas; también puedes pedir una búsqueda registral. Sin ese papel no hay vía de nacionalidad.', 'Este mes', 'documentos');
-    if (d.hasDegree && !d.homologated) add('homologacion', 'Valora homologar tu título',
-      'Para trabajar en profesiones reguladas necesitas homologación o reconocimiento. Tarda meses: si tu vía la exige, empieza ya. Para otras vías basta el título traducido y apostillado.', 'Próximos 3 meses', 'documentos');
-    if (!d.hasInsurance && !d.euCitizen && !d.asylumInProcess && !d.asylumSoon) add('seguro', 'Contrata un seguro médico',
-      'Casi todos los visados y autorizaciones lo exigen, sin copagos y con cobertura en España. La sanidad pública no siempre cuenta para tu expediente.', 'Antes de solicitar', 'documentos');
+    if (d.hasDegree && !d.homologated && (d.hasAppointment === 'yes' || d.pendingNationality || d.pendingExtranjeria)) {
+      add('homologacion', 'Valora homologar tu título solo si tu vía lo exige',
+        'No lo pagues por defecto: confirma antes si tu profesión está regulada o si el trámite concreto pide homologación. Para otras vías puede bastar el título traducido y apostillado.', 'Cuando lo exija tu solicitud', 'documentos');
+    }
+    if (!d.hasInsurance && !d.euCitizen && !d.asylumInProcess && !d.asylumSoon && (d.hasAppointment === 'yes' || d.outside)) add('seguro', 'Contrata seguro solo si tu solicitud lo exige',
+      'No lo contrates por defecto. Confirma en la fuente oficial si tu visado o autorización pide seguro médico, qué cobertura y desde cuándo. La sanidad pública no siempre sustituye al seguro del expediente.', 'Antes de pagar', 'documentos');
     if (!d.euCitizen && !d.asylumInProcess && !d.asylumSoon && (d.ibero || d.spanishNative)) {
       if (!d.exams || d.exams === 'none' || d.exams === 'dele') add('ccse', 'Prepara solo el CCSE',
         'Por tu nacionalidad hispanohablante no necesitas DELE A2: solo el CCSE. Los hijos que cursaron y aprobaron la ESO en España no necesitan ninguno de los dos para la nacionalidad.', 'Cuando te falte poco para los 2 años', 'formación');

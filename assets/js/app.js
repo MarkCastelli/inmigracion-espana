@@ -620,6 +620,7 @@
     html += familyMembersHTML(plan);
     html += windowsHTML(plan);
     html += nextStepsHTML(plan, top);
+    html += spendGuardHTML();
 
     html += '<div class="plan-grid"><div class="plan-main">';
 
@@ -888,6 +889,10 @@
 
   function routeStepsFor(route, d) {
     return RL.routeStepsFor ? RL.routeStepsFor(route, d) : (route.steps || []);
+  }
+
+  function spendGuardHTML() {
+    return '<div class="callout callout--warn" style="margin:0 0 18px">' + icons.alert(18) + '<div><strong>Antes de pagar, confirma que el documento es exigible</strong><p>No pagues tasas, apostillas, traducciones, antecedentes, certificados médicos ni gestores hasta saber: qué trámite exacto lo pide, qué autoridad lo exige, si tu caso lo necesita, cuánto dura y si ya lo tienes. Si no puedes responder a eso, no lo pidas todavía.</p></div></div>';
   }
 
   function nextStepsHTML(plan, top) {
