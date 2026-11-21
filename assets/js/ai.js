@@ -18,7 +18,7 @@
     expired: 'Caducado', dontknow: 'No lo sé'
   };
   var DOCS = {
-    pasaporte: 'Pasaporte', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
+    pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
     certificado_digital: 'Certificado digital', cuenta_bancaria: 'Cuenta bancaria',
     seguridad_social: 'Nº Seguridad Social', vida_laboral: 'Vida laboral',
     tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',

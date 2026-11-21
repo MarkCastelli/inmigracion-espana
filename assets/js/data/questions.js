@@ -330,7 +330,7 @@
             ]
           },
           {
-            id: 'hasPassport', type: 'radio', label: '¿Tienes pasaporte en vigor?', showIf: function (p) { return !inSpain(p); },
+            id: 'hasPassport', type: 'radio', label: '¿Tienes pasaporte de tu país en vigor?', showIf: function (p) { return !inSpain(p); },
             options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'in_progress', l: 'Lo estoy tramitando' }],
             help: 'Sin pasaporte válido no se puede pedir visado ni iniciar casi ningún trámite.'
           },
@@ -355,7 +355,7 @@
             id: 'docsBase', type: 'checkboxes', label: 'Identidad y vida en España',
             help: 'Marca solo lo que tengas ahora. No comprobamos nada: es para afinar tu plan.',
             options: [
-              { v: 'pasaporte', l: 'Pasaporte en vigor' },
+              { v: 'pasaporte', l: 'Pasaporte de tu país (no español)' },
               { v: 'nie', l: 'NIE (el número)', h: 'No es un permiso, pero lo necesitas para casi todo' },
               { v: 'tie', l: 'TIE o tarjeta de residencia' },
               { v: 'tarjeta_ue', l: 'Tarjeta de familiar de la UE' },

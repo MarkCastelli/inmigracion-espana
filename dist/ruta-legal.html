@@ -1820,7 +1820,7 @@ body.has-speech-bar { padding-bottom: 86px; }
             ]
           },
           {
-            id: 'hasPassport', type: 'radio', label: '¿Tienes pasaporte en vigor?', showIf: function (p) { return !inSpain(p); },
+            id: 'hasPassport', type: 'radio', label: '¿Tienes pasaporte de tu país en vigor?', showIf: function (p) { return !inSpain(p); },
             options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'in_progress', l: 'Lo estoy tramitando' }],
             help: 'Sin pasaporte válido no se puede pedir visado ni iniciar casi ningún trámite.'
           },
@@ -1845,7 +1845,7 @@ body.has-speech-bar { padding-bottom: 86px; }
             id: 'docsBase', type: 'checkboxes', label: 'Identidad y vida en España',
             help: 'Marca solo lo que tengas ahora. No comprobamos nada: es para afinar tu plan.',
             options: [
-              { v: 'pasaporte', l: 'Pasaporte en vigor' },
+              { v: 'pasaporte', l: 'Pasaporte de tu país (no español)' },
               { v: 'nie', l: 'NIE (el número)', h: 'No es un permiso, pero lo necesitas para casi todo' },
               { v: 'tie', l: 'TIE o tarjeta de residencia' },
               { v: 'tarjeta_ue', l: 'Tarjeta de familiar de la UE' },
@@ -2403,7 +2403,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     nac_ext: { id: 'nac_nac_ext', name: 'Certificación literal de nacimiento (apostillada y traducida)', where: 'Registro civil de tu país' },
     nac_es: { id: 'nac_nac_es', name: 'Certificación literal de nacimiento española del progenitor o abuelo', where: 'Registro Civil español' },
     matrimonio: { id: 'nac_matrimonio', name: 'Certificado de matrimonio de tus padres', where: 'Registro civil correspondiente' },
-    pasaporte: { id: 'nac_pasaporte', name: 'Pasaporte completo (actual y anterior)', where: 'Tu país' },
+    pasaporte: { id: 'nac_pasaporte', name: 'Pasaporte de tu país (no español), completo (actual y anterior)', where: 'Tu país' },
     tie: { id: 'nac_tie', name: 'TIE o tarjeta de residencia', where: 'Extranjería' },
     ant: { id: 'nac_ant', name: 'Certificado de antecedentes penales', where: 'País de origen y España', note: 'Apostillado y traducido. Caduca a los 3-6 meses.' },
     padron: { id: 'nac_padron', name: 'Certificado de empadronamiento', where: 'Ayuntamiento' },
@@ -2822,7 +2822,7 @@ body.has-speech-bar { padding-bottom: 86px; }
 
   /* documentos compartidos (el checklist los agrupa por id) */
   var D = {
-    pasaporte: { id: 'doc_pasaporte', name: 'Pasaporte completo (todas las páginas)', where: 'Tu país / consulado' },
+    pasaporte: { id: 'doc_pasaporte', name: 'Pasaporte de tu país (no español), completo (todas las páginas)', where: 'Tu país / consulado' },
     ant_es: { id: 'doc_ant_es', name: 'Certificado de antecedentes penales de España', where: 'Ministerio de Justicia (gratis, online o presencial)', note: 'Suele caducar a los 3 meses.' },
     ant_origen: { id: 'doc_ant_origen', name: 'Certificado de antecedentes penales del país de origen', where: 'Consulado o ministerio de tu país', note: 'Apostillado o legalizado, y traducido si procede. Suele caducar a los 3 meses.' },
     padron: { id: 'doc_padron', name: 'Certificado de empadronamiento histórico', where: 'Ayuntamiento', note: 'Con altas y bajas de todos los municipios.' },
@@ -3691,7 +3691,7 @@ body.has-speech-bar { padding-bottom: 86px; }
   };
 
   var D = {
-    pasaporte: { id: 'v_pasaporte', name: 'Pasaporte en vigor (mínimo 1 año y 2 páginas libres)', where: 'Tu país' },
+    pasaporte: { id: 'v_pasaporte', name: 'Pasaporte de tu país (no español), en vigor (mínimo 1 año y 2 páginas libres)', where: 'Tu país' },
     formulario: { id: 'v_formulario', name: 'Formulario de visado nacional', where: 'Consulado / sede' },
     seguro: { id: 'v_seguro', name: 'Seguro médico privado sin copagos ni carencias', where: 'Aseguradora autorizada en España', note: 'No vale un seguro de viaje.' },
     ant: { id: 'v_ant', name: 'Certificado de antecedentes penales (últimos 5 años)', where: 'País de residencia', note: 'Apostillado o legalizado y traducido. Validez habitual: 6 meses.' },
@@ -4204,7 +4204,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       { q: 'Si obtengo la nacionalidad, ¿se regulariza mi familia?', a: 'No automáticamente. La nacionalidad no regulariza a tus familiares. Tendrás que usar reagrupación familiar o las vías de familiar de español, que tienen requisitos propios.' },
       { q: '¿Qué pasa si me deniegan?', a: 'Depende del trámite: puedes recurrir en reposición o ir a la vía contencioso-administrativa, con plazos distintos. En algunos casos, la denegación abre la puerta a otra vía (por ejemplo, de arraigo a circunstancias excepcionales). Guarda siempre la resolución y busca asesoramiento.' },
       { q: '¿Cuánto tarda todo?', a: 'Los plazos legales van de 3 meses (extranjería) a 1 año (nacionalidad), pero en la práctica se alargan. El cuello de botella suele ser conseguir cita. Planifica con meses de margen.' },
-      { q: '¿Qué documentos necesito siempre?', a: 'Pasaporte completo, certificado de antecedentes penales de tu país (apostillado y traducido), certificado de empadronamiento y prueba de medios económicos. Casi todo lo demás depende de la vía.' },
+      { q: '¿Qué documentos necesito siempre?', a: 'Pasaporte de tu país (no el español), completo; certificado de antecedentes penales de tu país (apostillado y traducido), certificado de empadronamiento y prueba de medios económicos. Casi todo lo demás depende de la vía.' },
       { q: '¿Esta app es fiable?', a: 'Está construida con normativa y fuentes oficiales, con fecha de revisión visible. Pero la ley cambia y cada caso tiene matices: úsala para entender tus opciones y confirmar antes de presentar nada. No sustituye a un profesional.' }
     ],
     myths: [
@@ -7928,7 +7928,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     expired: 'Caducado', dontknow: 'No lo sé'
   };
   var DOCS = {
-    pasaporte: 'Pasaporte', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
+    pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
     certificado_digital: 'Certificado digital', cuenta_bancaria: 'Cuenta bancaria',
     seguridad_social: 'Nº Seguridad Social', vida_laboral: 'Vida laboral',
     tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',
@@ -8394,7 +8394,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (p.notes) doc.kv('Notas', p.notes);
 
     var docLabels = {
-      pasaporte: 'Pasaporte', nie: 'NIE', tie: 'TIE o tarjeta de residencia', tarjeta_ue: 'Tarjeta de familiar de la UE',
+      pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE o tarjeta de residencia', tarjeta_ue: 'Tarjeta de familiar de la UE',
       certificado_digital: 'Certificado digital o Cl@ve', cuenta_bancaria: 'Cuenta bancaria',
       seguridad_social: 'Número de la Seguridad Social', vida_laboral: 'Informe de vida laboral',
       tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',
@@ -8577,7 +8577,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       ['Nombre', data.nombre], ['Apellidos', data.apellidos],
       ['Fecha de nacimiento', data.fechaNacimiento], ['Sexo', data.sexo],
       ['Nacionalidad', data.nacionalidad], ['NIE', data.nie],
-      ['Pasaporte', data.pasaporte], ['Fecha de entrada en España', data.fechaEntrada],
+      ['Pasaporte de tu país (no español)', data.pasaporte], ['Fecha de entrada en España', data.fechaEntrada],
       ['Número de expediente', data.expediente], ['Domicilio', data.domicilio],
       ['Código postal', data.cp], ['Municipio', data.municipio],
       ['Provincia', data.provincia], ['Teléfono', data.telefono], ['Email', data.email]
@@ -9708,7 +9708,7 @@ body.has-speech-bar { padding-bottom: 86px; }
 
   function ownedDocsHTML(d) {
     var labels = {
-      pasaporte: 'Pasaporte', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
+      pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
       certificado_digital: 'Certificado digital', cuenta_bancaria: 'Cuenta bancaria',
       seguridad_social: 'Nº Seguridad Social', vida_laboral: 'Vida laboral',
       tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',
@@ -10960,7 +10960,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       fdField('edadesHijos', 'Edades de los hijos', data.edadesHijos) +
       fdField('hijoEspanol', 'Hijo/a español y vínculo', data.hijoEspanol) +
       fdField('nie', 'NIE', data.nie) +
-      fdField('pasaporte', 'Pasaporte', data.pasaporte) +
+      fdField('pasaporte', 'Pasaporte de tu país (no español)', data.pasaporte) +
       fdField('expediente', 'Número de expediente (si lo tienes)', data.expediente) +
       fdField('domicilio', 'Domicilio', data.domicilio, 'text', true) +
       fdField('cp', 'Código postal', data.cp) +

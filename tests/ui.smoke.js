@@ -237,6 +237,7 @@ t('la checklist de documentos se genera con el perfil', () => {
   assert.ok(html.includes('Antecedentes penales') || html.includes('antecedentes penales'));
   assert.ok(html.includes('Formularios oficiales de tus vías'), 'faltan formularios oficiales');
   assert.ok(html.includes('EX-31'), 'falta el modelo de arraigo vigente');
+  assert.ok(html.includes('Pasaporte de tu país (no español)'), 'el pasaporte debe aclarar que no es español');
 });
 
 t('el plan no contiene marcadores sin sustituir', () => {

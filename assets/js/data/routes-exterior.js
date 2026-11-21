@@ -18,7 +18,7 @@
   };
 
   var D = {
-    pasaporte: { id: 'v_pasaporte', name: 'Pasaporte en vigor (mínimo 1 año y 2 páginas libres)', where: 'Tu país' },
+    pasaporte: { id: 'v_pasaporte', name: 'Pasaporte de tu país (no español), en vigor (mínimo 1 año y 2 páginas libres)', where: 'Tu país' },
     formulario: { id: 'v_formulario', name: 'Formulario de visado nacional', where: 'Consulado / sede' },
     seguro: { id: 'v_seguro', name: 'Seguro médico privado sin copagos ni carencias', where: 'Aseguradora autorizada en España', note: 'No vale un seguro de viaje.' },
     ant: { id: 'v_ant', name: 'Certificado de antecedentes penales (últimos 5 años)', where: 'País de residencia', note: 'Apostillado o legalizado y traducido. Validez habitual: 6 meses.' },

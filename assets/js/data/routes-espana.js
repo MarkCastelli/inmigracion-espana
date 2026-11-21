@@ -20,7 +20,7 @@
 
   /* documentos compartidos (el checklist los agrupa por id) */
   var D = {
-    pasaporte: { id: 'doc_pasaporte', name: 'Pasaporte completo (todas las páginas)', where: 'Tu país / consulado' },
+    pasaporte: { id: 'doc_pasaporte', name: 'Pasaporte de tu país (no español), completo (todas las páginas)', where: 'Tu país / consulado' },
     ant_es: { id: 'doc_ant_es', name: 'Certificado de antecedentes penales de España', where: 'Ministerio de Justicia (gratis, online o presencial)', note: 'Suele caducar a los 3 meses.' },
     ant_origen: { id: 'doc_ant_origen', name: 'Certificado de antecedentes penales del país de origen', where: 'Consulado o ministerio de tu país', note: 'Apostillado o legalizado, y traducido si procede. Suele caducar a los 3 meses.' },
     padron: { id: 'doc_padron', name: 'Certificado de empadronamiento histórico', where: 'Ayuntamiento', note: 'Con altas y bajas de todos los municipios.' },

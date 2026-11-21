@@ -92,7 +92,7 @@
       { q: 'Si obtengo la nacionalidad, ¿se regulariza mi familia?', a: 'No automáticamente. La nacionalidad no regulariza a tus familiares. Tendrás que usar reagrupación familiar o las vías de familiar de español, que tienen requisitos propios.' },
       { q: '¿Qué pasa si me deniegan?', a: 'Depende del trámite: puedes recurrir en reposición o ir a la vía contencioso-administrativa, con plazos distintos. En algunos casos, la denegación abre la puerta a otra vía (por ejemplo, de arraigo a circunstancias excepcionales). Guarda siempre la resolución y busca asesoramiento.' },
       { q: '¿Cuánto tarda todo?', a: 'Los plazos legales van de 3 meses (extranjería) a 1 año (nacionalidad), pero en la práctica se alargan. El cuello de botella suele ser conseguir cita. Planifica con meses de margen.' },
-      { q: '¿Qué documentos necesito siempre?', a: 'Pasaporte completo, certificado de antecedentes penales de tu país (apostillado y traducido), certificado de empadronamiento y prueba de medios económicos. Casi todo lo demás depende de la vía.' },
+      { q: '¿Qué documentos necesito siempre?', a: 'Pasaporte de tu país (no el español), completo; certificado de antecedentes penales de tu país (apostillado y traducido), certificado de empadronamiento y prueba de medios económicos. Casi todo lo demás depende de la vía.' },
       { q: '¿Esta app es fiable?', a: 'Está construida con normativa y fuentes oficiales, con fecha de revisión visible. Pero la ley cambia y cada caso tiene matices: úsala para entender tus opciones y confirmar antes de presentar nada. No sustituye a un profesional.' }
     ],
     myths: [

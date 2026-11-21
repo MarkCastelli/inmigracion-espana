@@ -21,7 +21,7 @@
     nac_ext: { id: 'nac_nac_ext', name: 'Certificación literal de nacimiento (apostillada y traducida)', where: 'Registro civil de tu país' },
     nac_es: { id: 'nac_nac_es', name: 'Certificación literal de nacimiento española del progenitor o abuelo', where: 'Registro Civil español' },
     matrimonio: { id: 'nac_matrimonio', name: 'Certificado de matrimonio de tus padres', where: 'Registro civil correspondiente' },
-    pasaporte: { id: 'nac_pasaporte', name: 'Pasaporte completo (actual y anterior)', where: 'Tu país' },
+    pasaporte: { id: 'nac_pasaporte', name: 'Pasaporte de tu país (no español), completo (actual y anterior)', where: 'Tu país' },
     tie: { id: 'nac_tie', name: 'TIE o tarjeta de residencia', where: 'Extranjería' },
     ant: { id: 'nac_ant', name: 'Certificado de antecedentes penales', where: 'País de origen y España', note: 'Apostillado y traducido. Caduca a los 3-6 meses.' },
     padron: { id: 'nac_padron', name: 'Certificado de empadronamiento', where: 'Ayuntamiento' },

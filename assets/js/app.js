@@ -651,7 +651,7 @@
 
   function ownedDocsHTML(d) {
     var labels = {
-      pasaporte: 'Pasaporte', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
+      pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
       certificado_digital: 'Certificado digital', cuenta_bancaria: 'Cuenta bancaria',
       seguridad_social: 'Nº Seguridad Social', vida_laboral: 'Vida laboral',
       tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',
@@ -1903,7 +1903,7 @@
       fdField('edadesHijos', 'Edades de los hijos', data.edadesHijos) +
       fdField('hijoEspanol', 'Hijo/a español y vínculo', data.hijoEspanol) +
       fdField('nie', 'NIE', data.nie) +
-      fdField('pasaporte', 'Pasaporte', data.pasaporte) +
+      fdField('pasaporte', 'Pasaporte de tu país (no español)', data.pasaporte) +
       fdField('expediente', 'Número de expediente (si lo tienes)', data.expediente) +
       fdField('domicilio', 'Domicilio', data.domicilio, 'text', true) +
       fdField('cp', 'Código postal', data.cp) +

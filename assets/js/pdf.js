@@ -220,7 +220,7 @@
     if (p.notes) doc.kv('Notas', p.notes);
 
     var docLabels = {
-      pasaporte: 'Pasaporte', nie: 'NIE', tie: 'TIE o tarjeta de residencia', tarjeta_ue: 'Tarjeta de familiar de la UE',
+      pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE o tarjeta de residencia', tarjeta_ue: 'Tarjeta de familiar de la UE',
       certificado_digital: 'Certificado digital o Cl@ve', cuenta_bancaria: 'Cuenta bancaria',
       seguridad_social: 'Número de la Seguridad Social', vida_laboral: 'Informe de vida laboral',
       tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',
@@ -403,7 +403,7 @@
       ['Nombre', data.nombre], ['Apellidos', data.apellidos],
       ['Fecha de nacimiento', data.fechaNacimiento], ['Sexo', data.sexo],
       ['Nacionalidad', data.nacionalidad], ['NIE', data.nie],
-      ['Pasaporte', data.pasaporte], ['Fecha de entrada en España', data.fechaEntrada],
+      ['Pasaporte de tu país (no español)', data.pasaporte], ['Fecha de entrada en España', data.fechaEntrada],
       ['Número de expediente', data.expediente], ['Domicilio', data.domicilio],
       ['Código postal', data.cp], ['Municipio', data.municipio],
       ['Provincia', data.provincia], ['Teléfono', data.telefono], ['Email', data.email]
