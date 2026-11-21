@@ -92,6 +92,11 @@
     d.foreignStudies = p.foreignStudies === 'yes';
     d.studiesLevel = p.studiesLevel || null;
     d.studiesHomologated = p.studiesHomologated || null;
+    d.degree = p.degree || '';
+    d.sepeCourses = Number(p.sepeCourses) || 0;
+    d.sepeCoursesInProgress = Number(p.sepeCoursesInProgress) || 0;
+    d.sepeCoursesDetails = p.sepeCoursesDetails || '';
+    d.hasSepeCourses = d.sepeCourses > 0 || d.sepeCoursesInProgress > 0;
     d.childRecognized = p.childRecognized === 'yes' ? true : (p.childRecognized === 'no' ? false : null);
     d.childLivesWith = p.childLivesWithYou || null;
     d.childSupport = p.childSupport === 'yes' ? true : (p.childSupport === 'no' ? false : null);
@@ -920,6 +925,19 @@
       deed: 'Escritura o hipoteca',
       none: 'Sin prueba de vivienda',
       dontknow: 'No lo sé'
+    }
+  };
+
+  RL.education = {
+    degree: {
+      none: 'Sin titulación',
+      eso: 'ESO o equivalente',
+      bachillerato: 'Bachillerato / secundaria superior',
+      fp_medio: 'Formación profesional media',
+      fp_superior: 'Formación profesional superior',
+      grado: 'Grado universitario o licenciatura',
+      master: 'Máster',
+      doctorado: 'Doctorado'
     }
   };
 })();

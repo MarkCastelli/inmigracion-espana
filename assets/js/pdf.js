@@ -203,6 +203,10 @@
     if (p.empadronado) doc.kv('Padrón', p.empadronado === 'yes' ? 'Sí' : 'No');
     if (d.housing) doc.kv('Vivienda', RL.housing.labels[d.housing] || d.housing);
     if (d.housingProof) doc.kv('Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof);
+    if (d.degree) doc.kv('Estudios', RL.education.degree[d.degree] || d.degree);
+    if (d.sepeCourses) doc.kv('Cursos SEPE terminados', String(d.sepeCourses));
+    if (d.sepeCoursesDetails) doc.kv('Detalle de cursos SEPE', d.sepeCoursesDetails);
+    if (d.sepeCoursesInProgress) doc.kv('Cursos SEPE en curso', String(d.sepeCoursesInProgress));
     if (d.partnerHasDisability) doc.kv('Pareja con discapacidad', 'Sí');
     if (d.partnerDependency) doc.kv('Pareja con dependencia', 'Sí');
     if (d.hasDisabledChild) doc.kv('Hijo/a con discapacidad', 'Sí');

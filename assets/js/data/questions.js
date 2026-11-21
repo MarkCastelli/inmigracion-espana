@@ -742,12 +742,25 @@
             options: [
               { v: 'none', l: 'Sin titulación' },
               { v: 'eso', l: 'ESO o equivalente' },
+              { v: 'bachillerato', l: 'Bachillerato / secundaria superior' },
               { v: 'fp_medio', l: 'Formación profesional media' },
               { v: 'fp_superior', l: 'Formación profesional superior' },
               { v: 'grado', l: 'Grado universitario o licenciatura' },
               { v: 'master', l: 'Máster' },
               { v: 'doctorado', l: 'Doctorado' }
             ]
+          },
+          {
+            id: 'sepeCourses', type: 'number', label: '¿Cuántos cursos del SEPE has terminado?', min: 0, max: 30, placeholder: 'Ej. 2', showIf: inSpain,
+            help: 'Cursos de formación para el empleo del SEPE o de la comunidad. Cuéntalos aunque no tengan título oficial.'
+          },
+          {
+            id: 'sepeCoursesDetails', type: 'textarea', label: '¿Cuáles y cuánto duraron?', showIf: function (p) { return inSpain(p) && Number(p.sepeCourses) > 0; },
+            placeholder: 'Ej. Soldador de TIG, 6 meses; Seguridad informática, 6 meses',
+            help: 'Nombre del curso, especialidad y duración. Si tienes certificado o diploma, guárdalo: puede servir para acreditar formación.'
+          },
+          {
+            id: 'sepeCoursesInProgress', type: 'number', label: '¿Cuántos cursos del SEPE tienes en curso?', min: 0, max: 30, placeholder: '0', showIf: inSpain
           },
           {
             id: 'degreeHomologated', type: 'radio', label: '¿Tu título está homologado o reconocido en España?', showIf: function (p) { return p.degree && p.degree !== 'none' && p.degree !== 'eso'; },

@@ -533,6 +533,8 @@
     }
     if (d.ibero) chips.push(chip(icons.globe(14), 'Nacionalidad con plazo de 2 años'));
     if (d.housing) chips.push(chip(icons.home(14), RL.housing.labels[d.housing] || d.housing));
+    if (d.degree) chips.push(chip(icons.book(14), RL.education.degree[d.degree] || d.degree));
+    if (d.sepeCourses) chips.push(chip(icons.book(14), d.sepeCourses + ' curso(s) SEPE'));
     if (d.partnerHasDisability) chips.push(chip(icons.family(14), 'Pareja con discapacidad'));
     if (d.hasDisabledChild) chips.push(chip(icons.family(14), 'Hijo/a con discapacidad'));
     if (d.householdOthers > 0) chips.push(chip(icons.family(14), d.householdOthers + ' persona(s) más en casa'));
@@ -846,6 +848,10 @@
     if (p.empadronado) rows.push(['Padrón', p.empadronado === 'yes' ? 'Sí' : 'No']);
     if (d.housing) rows.push(['Vivienda', RL.housing.labels[d.housing] || d.housing]);
     if (d.housingProof) rows.push(['Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof]);
+    if (d.degree) rows.push(['Estudios', RL.education.degree[d.degree] || d.degree]);
+    if (d.sepeCourses) rows.push(['Cursos SEPE terminados', String(d.sepeCourses)]);
+    if (d.sepeCoursesInProgress) rows.push(['Cursos SEPE en curso', String(d.sepeCoursesInProgress)]);
+    if (d.sepeCoursesDetails) rows.push(['Detalle de cursos SEPE', d.sepeCoursesDetails]);
     if (d.partnerHasDisability) rows.push(['Pareja con discapacidad', 'Sí']);
     if (d.partnerDependency) rows.push(['Pareja con dependencia', 'Sí']);
     if (d.hasDisabledChild) rows.push(['Hijo/a con discapacidad', 'Sí']);
@@ -1891,6 +1897,10 @@
       matrimonio: p.marriageType ? (RL.family.marriage[p.marriageType] || p.marriageType) : '',
       vivienda: d.housing ? (RL.housing.labels[d.housing] || d.housing) : '',
       pruebaVivienda: d.housingProof ? (RL.housing.proof[d.housingProof] || d.housingProof) : '',
+      estudios: d.degree ? (RL.education.degree[d.degree] || d.degree) : '',
+      cursosSepe: d.sepeCourses ? String(d.sepeCourses) : '',
+      detalleCursosSepe: d.sepeCoursesDetails || '',
+      cursosSepeEnCurso: d.sepeCoursesInProgress ? String(d.sepeCoursesInProgress) : '',
       parejaDiscapacidad: p.partnerDisability || '',
       parejaDependencia: p.partnerDependency || '',
       hijosDiscapacidad: p.childrenDisability || '',
@@ -1931,6 +1941,11 @@
       fdField('hijoEspanol', 'Hijo/a español y vínculo', data.hijoEspanol) +
       fdField('vivienda', 'Situación de vivienda', data.vivienda) +
       fdField('pruebaVivienda', 'Prueba de vivienda', data.pruebaVivienda) +
+      fdField('estudios', 'Nivel de estudios', data.estudios) +
+      fdField('cursosSepe', 'Cursos SEPE terminados', data.cursosSepe) +
+      '<div class="field field--full"><label class="field__label" for="fd-detalleCursosSepe">Cursos SEPE: especialidad y duración</label>' +
+      '<textarea class="textarea" id="fd-detalleCursosSepe" name="detalleCursosSepe" placeholder="Ej. Soldador TIG, 6 meses; Seguridad informática, 6 meses">' + esc(data.detalleCursosSepe || '') + '</textarea></div>' +
+      fdField('cursosSepeEnCurso', 'Cursos SEPE en curso', data.cursosSepeEnCurso) +
       fdField('parejaDiscapacidad', 'Discapacidad de la pareja', data.parejaDiscapacidad) +
       fdField('parejaDependencia', 'Dependencia de la pareja', data.parejaDependencia) +
       fdField('hijosDiscapacidad', 'Discapacidad de los hijos', data.hijosDiscapacidad) +

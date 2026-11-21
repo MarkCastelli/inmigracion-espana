@@ -75,6 +75,9 @@
       if (p.permitStatus) l.push('- Permiso: ' + (PERMIT[p.permitStatus] || p.permitStatus));
       if (p.empadronado) l.push('- Padrón: ' + (p.empadronado === 'yes' ? 'sí' : 'no'));
       if (d.housing) l.push('- Vivienda: ' + (RL.housing.labels[d.housing] || d.housing) + (d.housingProof ? ' · prueba: ' + (RL.housing.proof[d.housingProof] || d.housingProof) : ''));
+      if (d.degree) l.push('- Estudios: ' + (RL.education.degree[d.degree] || d.degree));
+      if (d.sepeCourses) l.push('- Cursos SEPE terminados: ' + d.sepeCourses + (d.sepeCoursesDetails ? ' · ' + d.sepeCoursesDetails : ''));
+      if (d.sepeCoursesInProgress) l.push('- Cursos SEPE en curso: ' + d.sepeCoursesInProgress);
       if (d.partnerHasDisability) l.push('- Pareja con discapacidad reconocida');
       if (d.partnerDependency) l.push('- Pareja con dependencia reconocida');
       if (d.hasDisabledChild) l.push('- Hijo/a con discapacidad');
