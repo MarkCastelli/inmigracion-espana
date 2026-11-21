@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **150 pruebas pasando**.
+- **151 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -41,6 +41,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 11. **Ficha familiar**: nuevo paso «Tu pareja y tus hijos» con ficha de pareja y una ficha por cada hijo (nombre, edad, nacionalidad, vínculo, discapacidad, convivencia y estudios: ESO, Bachillerato, FP Básica/Medio/Superior, Universidad).
 12. **Persistencia**: el perfil se guarda automáticamente en el navegador; se guarda el paso actual y se puede descargar/importar una copia JSON. Cambiar un dato no borra el resto.
 13. **Navegación**: botón Atrás probado de paso 3 a 2 y a 1; el paso actual se conserva y se puede reanudar.
+14. **TIE**: corregida la ficha. La foto (32 × 26 mm, fondo blanco) la lleva el solicitante; en comisaría solo se toman huellas. La TIE se recoge con una segunda cita, normalmente 30-45 días después, en la misma comisaría.
 
 ## Comandos
 

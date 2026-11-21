@@ -391,3 +391,5 @@ Las preguntas se inspiraron en dudas recurrentes de foros y consultas, pero **no
 **Comprobación de enlaces (20/11/2026):** ICPP vigente en `https://icp.administracionelectronica.gob.es/icpplus` (el antiguo directorio devuelve 503); Registro Civil y asistencia jurídica en `sede.mjusticia.gob.es`; modelos EX en `inclusion.gob.es/web/migraciones/modelos-generales`; UGE en `inclusion.gob.es/web/unidadgrandesempresas/sobre-nosotros`; Galicia empleo/social en `conselleriaemprego.xunta.gal` y `xunta.gal/politica-social`. [V]
 
 **Foros consultados como orientación:** migrar.org, foroinmigracion y consultas de entidades; no se usan como autoridad legal. Las respuestas finales se apoyan en BOE, ministerios y sede.
+
+**TIE y huellas:** la foto la aporta el solicitante (reciente, color, 32 × 26 mm, fondo blanco); en la comisaría se toman huellas, no fotografía. La TIE no se entrega el mismo día: se pide una segunda cita para recogerla, normalmente 30-45 días después (puede llegar a 60), en la misma oficina. [V/PV]

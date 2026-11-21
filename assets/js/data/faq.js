@@ -516,6 +516,23 @@
         ['Cita previa Policía · ICPP', 'https://icp.administracionelectronica.gob.es/icpplus'],
         ['Sede de Extranjería', 'https://sede.administracion.gob.es/']
       ]
+    },
+    {
+      id: 'tie_foto_recogida', cat: 'documentos',
+      q: '¿Me hacen la foto en la comisaría y cuándo recojo la TIE?',
+      short: 'No te hacen la foto: la llevas tú, reciente, en color, 32 × 26 mm y fondo blanco. La TIE no se entrega el día de las huellas: debes pedir otra cita para recogerla, normalmente 30-45 días después.',
+      detail: [
+        'La foto la aporta el solicitante. En la comisaría te toman las huellas, no la fotografía. Si no llevas la foto correcta, pueden rechazarte.',
+        'Formato habitual: 32 × 26 mm, color, fondo blanco, cabeza descubierta, sin gafas oscuras ni prendas que impidan identificarte.',
+        'El día de las huellas llevas pasaporte, EX-17 o EX-15, resolución, TIE anterior si procede, tasa 790-012 y la foto.',
+        'Después de las huellas, la tarjeta se fabrica. El plazo habitual es de 30-45 días; en picos de demanda puede llegar a 60.',
+        'Cuando esté disponible, pide una segunda cita ICPP para recogerla en la misma comisaría donde pusiste las huellas.',
+        'El día de la recogida lleva el resguardo de huellas, el pasaporte y la TIE anterior si te la pidieron. Revisa nombre, NIE, tipo y fechas antes de salir.'
+      ],
+      links: [
+        ['Cita previa Policía · ICPP', 'https://icp.administracionelectronica.gob.es/icpplus'],
+        ['Sede de Extranjería', 'https://sede.administracion.gob.es/']
+      ]
     }
   ];
 

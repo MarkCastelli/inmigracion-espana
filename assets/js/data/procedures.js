@@ -15,28 +15,57 @@
   var P = [
     {
       id: 'nie_tie', scope: 'national', cat: 'documentos', icon: 'shield',
-      title: 'NIE, TIE y toma de huellas',
-      when: 'Al llegar, al cambiar de estatus o al renovar. La cita previa es obligatoria.',
+      title: 'NIE, TIE, toma de huellas y recogida',
+      when: 'Al llegar, al cambiar de estatus o al renovar. La cita previa es obligatoria. La TIE no se entrega el mismo día de las huellas.',
       where: 'Comisaría de la Policía Nacional de tu provincia',
       appointment: ICPP,
       appointmentLabel: 'Pedir cita en ICPP',
       docs: [
         'Pasaporte completo y en vigor',
         'Impreso EX-15 (NIE) o EX-17 (TIE)',
-        'Foto reciente en color, fondo blanco',
+        'Foto reciente en color, 32 × 26 mm, fondo blanco: la llevas tú, en comisaría no te la hacen',
         'Tasa 790-012 pagada',
-        'Resolución, tarjeta anterior o documento que acredite el trámite'
+        'Resolución, tarjeta anterior o documento que acredite el trámite',
+        'Resguardo de la cita'
       ],
       steps: [
-        'Pide cita en el enlace ICPP: elige provincia, trámite y oficina.',
-        'Descarga y paga la tasa 790-012 (12-19,30 € según el caso).',
-        'Lleva originales y copias de todo; si vas por una resolución, llévala impresa.',
-        'En la comisaría te toman huellas y foto; guarda el resguardo.',
-        'Recoge la TIE cuando te avisen y revisa que los datos sean correctos.'
+        'Distingue qué necesitas: el NIE es un número (EX-15); la TIE es la tarjeta física que acredita tu autorización (EX-17).',
+        'Pide cita en ICPP: elige provincia, trámite de Policía y oficina. No vayas sin cita.',
+        'Descarga y paga la tasa 790-012: 16,08 € primera TIE; 19,30 € renovación (según el caso).',
+        'Lleva la foto tú: reciente, color, 32 × 26 mm, fondo blanco, cabeza descubierta y sin gafas oscuras.',
+        'En la comisaría te toman las huellas, no la foto. Guarda el resguardo que te entreguen.',
+        'Espera la fabricación: normalmente 30-45 días, y en picos de demanda puede llegar a 60.',
+        'Cuando esté disponible, pide una segunda cita ICPP para recogerla en la misma comisaría donde pusiste las huellas.',
+        'El día de la recogida lleva el resguardo, el pasaporte y la TIE anterior si te la pidieron. Revisa nombre, NIE, tipo y fechas antes de salir.'
       ],
-      fee: '790-012: 12-19,30 €',
-      note: 'El NIE es un número, no un permiso: no te legaliza. La TIE es la tarjeta que acredita tu autorización. Si te falta un documento, no faltes a la cita: puedes perderla.',
+      fee: '790-012: 16,08 € primera TIE; 19,30 € renovación',
+      note: 'No te dan la TIE el mismo día de las huellas y no te hacen la foto. Si vas sin foto o sin cita, pueden rechazarte. La recogida es una cita aparte y se hace en la misma oficina.',
       routeIds: ['arraigo_social', 'arraigo_sociolaboral', 'arraigo_socioformativo', 'arraigo_segunda_oportunidad', 'familiar_espanol', 'familiar_ue', 'reagrupacion', 'renovacion', 'estudios_a_trabajo', 'ciudadano_ue']
+    },
+    {
+      id: 'recogida_tie', scope: 'national', cat: 'documentos', icon: 'clock',
+      title: 'Recoger la TIE después de las huellas',
+      when: 'Normalmente 30-45 días después de la toma de huellas; en picos de demanda puede tardar hasta 60. No vayas el mismo día ni antes de que esté fabricada.',
+      where: 'La misma comisaría donde pusiste las huellas',
+      appointment: ICPP,
+      appointmentLabel: 'Pedir cita de recogida',
+      docs: [
+        'Resguardo de la toma de huellas',
+        'Pasaporte en vigor',
+        'TIE anterior, si te la pidieron',
+        'Autorización o poder si recoge otra persona'
+      ],
+      steps: [
+        'Espera el plazo habitual: 30-45 días desde las huellas; algunas provincias tardan más.',
+        'Comprueba que tu TIE está disponible antes de pedir cita; no todas avisan por SMS.',
+        'Pide cita ICPP para «Recogida de TIE» en la misma oficina donde pusiste las huellas.',
+        'Acude con el resguardo, el pasaporte y la TIE anterior si corresponde.',
+        'Revisa nombre, NIE, tipo de autorización, fecha de emisión y caducidad antes de salir.',
+        'Si hay un error, pide corrección en el mismo momento; no firmes conformidad si los datos no coinciden.'
+      ],
+      fee: 'Gratuito: la tasa 790-012 se pagó al iniciar la TIE',
+      note: 'La TIE no se entrega el día de las huellas. La recogida es una cita aparte y se hace en la misma comisaría; otra oficina no puede entregártela. Si no está fabricada, no te la dan aunque tengas cita.',
+      routeIds: []
     },
     {
       id: 'arraigo', scope: 'national', cat: 'documentos', icon: 'route',

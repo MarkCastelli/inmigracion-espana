@@ -59,7 +59,7 @@
       url: BASE + 'ex17-formulario-tarjeta-de-identidad-de-extranjero',
       where: 'Comisaría de Policía con cita previa',
       fee: 'Tasa 790-012: 16,08 € primera TIE; 19,30 € renovación',
-      note: 'No es una autorización de residencia: es el documento que acredita la que ya tienes. La renovación administrativa se presenta hasta 2 meses antes; las huellas y la TIE física solo desde el día del vencimiento, nunca antes.',
+      note: 'No es una autorización de residencia: es el documento que acredita la que ya tienes. La foto (32 × 26 mm, fondo blanco) la llevas tú; en comisaría no te la hacen. La TIE se recoge con otra cita, normalmente 30-45 días después de las huellas.',
       routeIds: []
     },
     {

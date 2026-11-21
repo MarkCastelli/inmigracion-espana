@@ -177,7 +177,7 @@ node tests/directorio.test.js # 5 pruebas de regiones y directorio
 node tests/procedures.test.js # 4 pruebas de trámites, citas y documentos
 node tests/timing.test.js     # 9 pruebas de ventanas de oportunidad
 node tests/aids.test.js       # 5 pruebas de derechos, discapacidad y ayudas
-node tests/faq.test.js        # 5 pruebas de preguntas frecuentes
+node tests/faq.test.js        # 6 pruebas de preguntas frecuentes
 node tests/online.test.js     # 3 pruebas de sedes y trámites online
 node tests/links.test.js      # 4 pruebas de enlaces y rutas muertas
 node tests/ai.test.js         # 4 pruebas de prompt y consultas
