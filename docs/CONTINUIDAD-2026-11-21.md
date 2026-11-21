@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **163 pruebas pasando**.
+- **165 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -50,6 +50,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 20. **Asilo histórico**: una hoja blanca o tarjeta roja en «terminados» no mantiene la vía de seguimiento activa; solo cuentan los documentos en curso o un `asylumStage` activo.
 21. **Familia individual**: cada miembro tiene situación legal, tiempo en España y necesidad; el plan muestra opciones separadas para pareja, cada hijo y otras personas.
 22. **DGT**: fichas de canje de permiso extranjero, permiso B, moto A1/A2/A y profesional C/D con CAP; aviso de que el marco es estatal y cambian Jefatura, centros y autorizaciones locales.
+23. **Asilo en una página**: todas las preguntas de asilo se agrupan en un paso propio después de «situación». Si renunciaste/desististe no se pregunta fecha de denegación ni recurso; el tiempo en España se pregunta una sola vez.
 
 ## Comandos
 

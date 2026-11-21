@@ -67,7 +67,7 @@ Muestra una URL de tu red local (`http://192.168.x.x:8765`). Ábrela en el móvi
 
 ## Qué hace
 
-1. **Diagnóstico guiado** (6 pasos si estás fuera y hasta 8 si estás en España, ~40 preguntas, muchas condicionales): nacionalidad, edad, ubicación, entrada, padrón, permiso, **documentos y trámites que ya tienes**, **ficha de pareja y de cada hijo**, ascendencia, familia, trabajo, estudios, medios, antecedentes y objetivo.
+1. **Diagnóstico guiado** (6 pasos si estás fuera y hasta 9 si estás en España, ~40 preguntas, muchas condicionales): nacionalidad, edad, ubicación, entrada, padrón, permiso, **documentos y trámites que ya tienes**, **ficha de pareja y de cada hijo**, **página única de asilo**, ascendencia, familia, trabajo, estudios, medios, antecedentes y objetivo.
 2. **Motor de reglas + capa de decisión** que evalúa el perfil contra **33 vías** y devuelve:
    - vías recomendadas, ordenadas por encaje y urgencia;
    - requisitos cumplidos, pendientes y por confirmar;
@@ -331,7 +331,7 @@ ruta-legal/
 │   ├── directorio.test.js      # 5 pruebas de regiones y directorio
 │   ├── ai.test.js              # 4 pruebas de prompt y consultas
 │   ├── procedures.test.js      # 4 pruebas de trámites, citas y documentos
-│   ├── timing.test.js          # 13 pruebas de ventanas e historial de asilo
+│   ├── timing.test.js          # 15 pruebas de ventanas, historial de asilo y página única
 │   ├── aids.test.js            # 5 pruebas de derechos, discapacidad y ayudas
 │   ├── faq.test.js             # 7 pruebas de preguntas frecuentes
 │   ├── online.test.js          # 3 pruebas de sedes y trámites online

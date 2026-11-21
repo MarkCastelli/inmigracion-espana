@@ -114,6 +114,26 @@ test('con residencia posterior no se recomienda seguir el asilo', () => {
   assert.ok(!plan.timeline.some(t => /Fin de los 90 días de turista/i.test(t.title)), 'no debe mostrar el fin de 90 días');
 });
 
+test('el asilo está en una sola página y no pregunta la denegación si renunciaste', () => {
+  const asylo = RL.questions.steps.find(s => s.id === 'asilo');
+  assert.ok(asylo, 'falta la página de asilo');
+  const ids = asylo.fields.map(f => f.id);
+  for (const id of ['asylumStage', 'asylumBefore90', 'asylumDeniedDate', 'postRenunciationOutcome']) {
+    assert.ok(ids.includes(id), 'falta ' + id);
+  }
+  const elsewhere = RL.questions.steps.filter(s => s.id !== 'asilo')
+    .flatMap(s => s.fields || []).map(f => f.id);
+  assert.ok(!elsewhere.includes('asylumStage'), 'el asilo no debe estar repartido');
+  const visible = RL.questions.visibleFields(asylo, base({ asylumStage: 'renunciado' })).map(f => f.id);
+  assert.ok(!visible.includes('asylumDeniedDate'), 'si renunció no se pregunta la fecha de denegación');
+  assert.ok(!visible.includes('asylumAppeal'), 'si renunció no se pregunta el recurso');
+});
+
+test('el tiempo en España se pregunta una sola vez', () => {
+  const ids = RL.questions.steps.flatMap(s => s.fields || []).map(f => f.id);
+  assert.strictEqual(ids.filter(id => id === 'timeInSpain').length, 1);
+});
+
 test('el turismo no abre la nacionalidad de 2 años', () => {
   const plan = RL.buildPlan(base({
     nationality: 'AR', entryMode: 'tourist_free', timeInSpain: '2to3y',

@@ -2632,6 +2632,40 @@ body.has-speech-bar { padding-bottom: 86px; }
       return typeof s.showIf !== 'function' || s.showIf(p);
     });
   };
+
+  /* Toda la investigación del asilo en una sola página, después de «situación». */
+  (function () {
+    var ids = [
+      'asylumStage', 'asylumBefore90',
+      'asylumRenouncedDay', 'asylumRenouncedMonth', 'asylumRenouncedYear',
+      'postRenunciationOutcome', 'postRenunciationDate',
+      'asylumCitaDate', 'asylumGrantedDate', 'hojaBlancaDate',
+      'tarjetaRojaExpiry', 'tarjetaRojaRenewed', 'asylumWorkPermit',
+      'asylumDeniedDate', 'asylumAppeal'
+    ];
+    var asylumFields = [];
+    RL.questions.steps.forEach(function (step) {
+      if (!step.fields) return;
+      step.fields = step.fields.filter(function (f) {
+        if (ids.indexOf(f.id) !== -1) { asylumFields.push(f); return false; }
+        return true;
+      });
+    });
+    var situation = RL.questions.steps.findIndex(function (s) { return s.id === 'situacion'; });
+    var asylumStep = {
+      id: 'asilo',
+      title: 'Todo sobre tu asilo',
+      intro: 'Página única de asilo: qué solicitaste, en qué punto está, qué pasó después y dónde estás ahora. Si no has pedido asilo, esta página no aparece.',
+      showIf: function (p) {
+        return p.asylumRequested === 'yes' || p.asylumRequested === 'soon' ||
+          asylumHistory(p) || !!(p.docsEnCurso && p.docsEnCurso.some(function (x) {
+            return ['cita_asilo', 'hoja_blanca', 'tarjeta_roja'].indexOf(x) !== -1;
+          }));
+      },
+      fields: asylumFields
+    };
+    RL.questions.steps.splice(situation + 1, 0, asylumStep);
+  })();
 })();
 
 </script>

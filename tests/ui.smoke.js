@@ -261,10 +261,14 @@ t('el paso de documentos despliega la tarjeta roja y su caducidad', () => {
     docsTramites: ['tarjeta_roja'], asylumStage: 'admitido', tarjetaRojaExpiry: '2026-12-20'
   };
   nav(app, 'diagnostico');
-  RL.ui.state.step = 2;
+  const steps = RL.questions.visibleSteps(RL.state.profile);
+  RL.ui.state.step = steps.findIndex(s => s.id === 'documentos');
   RL.ui.render();
-  const html = app.document.querySelector('#wizardFields').innerHTML;
+  let html = app.document.querySelector('#wizardFields').innerHTML;
   assert.ok(html.includes('name="docsBase"'), 'faltan documentos base');
+  RL.ui.state.step = steps.findIndex(s => s.id === 'asilo');
+  RL.ui.render();
+  html = app.document.querySelector('#wizardFields').innerHTML;
   assert.ok(html.includes('name="tarjetaRojaExpiry"'), 'falta la caducidad de la tarjeta');
   assert.ok(html.includes('name="tarjetaRojaRenewed"'), 'falta la renovación');
   assert.ok(html.includes('name="asylumStage"'), 'falta la fase de asilo');
