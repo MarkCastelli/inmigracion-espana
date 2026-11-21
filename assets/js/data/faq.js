@@ -570,6 +570,25 @@
         ['Ministerio de Universidades', 'https://www.universidades.gob.es/'],
         ['SEPE · empleo', 'https://www.sepe.es/']
       ]
+    },
+    {
+      id: 'dgt_canje_permisos', cat: 'documentos',
+      q: '¿Puedo canjear mi permiso de conducir extranjero y sacar el de camión o autobús?',
+      short: 'El canje depende del país y de la categoría: los permisos de la UE/EEE se canjean sin examen; los de países con convenio pueden exigir teoría o práctica; los de países sin convenio obligan a examinarse en España. Para camión C y autobús D, además del permiso hace falta el CAP.',
+      detail: [
+        'Los permisos de fuera de la UE/EEE suelen poder usarse solo 6 meses desde que obtienes la residencia. Después hay que canjearlos o dejar de conducir.',
+        'Canje: permiso original, traducción jurada si procede, TIE/residencia, certificado médico, foto y tasa DGT. La Jefatura de tu provincia confirma si tu país tiene convenio y qué pruebas exige.',
+        'Permiso B: 18 años, teórico y práctico, reconocimiento médico. Las pruebas son estatales; autoescuela, centro médico y fechas cambian por provincia.',
+        'Moto: A1 desde 16, A2 desde 18 y A desde 20 con 2 años de A2. No todas las motos valen con el mismo permiso.',
+        'Profesional: C1/C para camión y D1/D para autobús, con edades y requisitos propios. El CAP es obligatorio y tiene formación inicial y continua cada 5 años.',
+        'Si transportas mercancías peligrosas necesitas además el ADR. Para taxi o VTC, la autorización municipal o autonómica es aparte.',
+        'No hay un examen más fácil en otra comunidad: el marco es estatal. Lo que cambia es la Jefatura, los centros y las autorizaciones locales.'
+      ],
+      links: [
+        ['DGT · canjes de permisos extranjeros', 'https://sede.dgt.gob.es/'],
+        ['DGT · clases de permisos', 'https://www.dgt.es/nuestros-servicios/permisos-de-conducir/clases-de-permisos-de-conducir/'],
+        ['Ministerio de Transportes · CAP', 'https://www.transportes.gob.es/transporte-terrestre/examenes-y-formacion/examenes-de-formacion-de-conductores-profesionales-cap']
+      ]
     }
   ];
 

@@ -338,6 +338,11 @@ t('la guía de trámites muestra cita, documentos y pasos', () => {
   assert.ok(html.includes('Pedir cita'));
   assert.ok(html.includes('Qué llevar'));
   assert.ok(html.includes('Paso a paso'));
+  assert.ok(html.includes('Canjear el permiso de conducir extranjero'));
+  assert.ok(html.includes('Sacar el permiso B'));
+  assert.ok(html.includes('Permiso de moto'));
+  assert.ok(html.includes('Permiso profesional'));
+  assert.ok(html.includes('Jefatura Provincial de Tráfico de Madrid'));
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

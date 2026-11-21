@@ -4904,6 +4904,9 @@ body.has-speech-bar { padding-bottom: 86px; }
   var JUSTICIA = 'https://sede.mjusticia.gob.es/es/tramites/nacionalidad-espanola';
   var FNMT = 'https://www.sede.fnmt.gob.es/certificados/persona-fisica';
   var SS = 'https://www.seg-social.es/';
+  var DGT = 'https://sede.dgt.gob.es/';
+  var DGT_CANJE = 'https://sede.dgt.gob.es/es/permisos-de-conducir/canjes-de-permisos/canjes-de-permisos-extranjeros/';
+  var DGT_CAP = 'https://www.transportes.gob.es/transporte-terrestre/examenes-y-formacion/examenes-de-formacion-de-conductores-profesionales-cap';
 
   var P = [
     {
@@ -5090,6 +5093,109 @@ body.has-speech-bar { padding-bottom: 86px; }
       fee: '104,05 € + 85 € CCSE (+ 138 € DELE si no eres hispanohablante)',
       note: 'Solo cuenta la residencia legal: el tiempo como turista o solicitante de asilo no computa. El CCSE es obligatorio; los hispanohablantes están exentos del DELE A2, no del CCSE. La nacionalidad no regulariza automáticamente a tus familiares.',
       routeIds: ['nac_residencia_2', 'nac_residencia_1', 'nac_residencia_10', 'nac_22_2f', 'nac_origen', 'nac_opcion']
+    },
+    {
+      id: 'canje_permiso_extranjero', scope: 'national', cat: 'documentos', icon: 'route',
+      title: 'Canjear el permiso de conducir extranjero',
+      when: 'Si eres residente en España y tienes un permiso extranjero. Los permisos de fuera de la UE/EEE suelen poder usarse solo 6 meses desde que obtienes la residencia; después hay que canjearlos o dejar de conducir.',
+      where: function (c) { return 'Jefatura Provincial de Tráfico de ' + (c.province || c.regionName || 'tu provincia') + ' (DGT)'; },
+      appointment: DGT_CANJE,
+      appointmentLabel: 'Consultar canje en la DGT',
+      docs: [
+        'Permiso extranjero original y copia',
+        'Traducción jurada si no está en español o en un idioma aceptado',
+        'TIE/NIE o certificado de residencia',
+        'Certificado médico de aptitud psicofísica en centro autorizado',
+        'Fotografía reciente y tasa DGT',
+        'Cita o solicitud según la Jefatura'
+      ],
+      steps: [
+        'Comprueba si tu país tiene convenio de canje con España. No todos los permisos son canjeables.',
+        'Si hay convenio, mira si tu categoría exige teoría, práctica o ninguna prueba.',
+        'Pasa el reconocimiento médico en un centro autorizado de tu provincia.',
+        'Pide cita o inicia el canje en la sede de la DGT; paga la tasa y entrega el permiso original.',
+        'Si no hay convenio, tendrás que examinarte en España como cualquier solicitante.',
+        'Guarda el resguardo: hasta que salga el permiso español, no conduzcas si ya no tienes autorización.'
+      ],
+      fee: 'Tasa DGT según el grupo del permiso; el importe se confirma en la sede',
+      note: 'El canje es estatal (DGT), pero la cita, el centro médico y los exámenes se hacen en tu provincia. Los permisos profesionales pueden exigir pruebas adicionales y CAP. No conduzcas con un permiso extranjero caducado o fuera de plazo.',
+      routeIds: []
+    },
+    {
+      id: 'permiso_b', scope: 'national', cat: 'documentos', icon: 'route',
+      title: 'Sacar el permiso B (coche)',
+      when: 'Si tienes 18 años o más y no tienes un permiso de conducir español o canjeable. No hace falta residencia para examinarse, pero sí identificación y residencia para el permiso.',
+      where: function (c) { return 'Jefatura Provincial de Tráfico de ' + (c.province || c.regionName || 'tu provincia') + ' y autoescuela de tu provincia'; },
+      appointment: DGT,
+      appointmentLabel: 'Consultar permisos en la DGT',
+      docs: [
+        'DNI, NIE/TIE o pasaporte con residencia',
+        'Certificado médico de aptitud psicofísica',
+        'Fotografía reciente',
+        'Tasa DGT',
+        'Resguardo de matrícula de la autoescuela'
+      ],
+      steps: [
+        'Elige una autoescuela y comprueba que el examen teórico se convoca en tu provincia.',
+        'Pasa el reconocimiento médico en un centro autorizado.',
+        'Aprueba el teórico común y el específico de la categoría B.',
+        'Realiza las prácticas y aprueba el examen práctico en la Jefatura de tu provincia.',
+        'Recoge el permiso provisional y después el definitivo.'
+      ],
+      fee: 'Tasa DGT + autoescuela + reconocimiento médico',
+      note: 'Los requisitos de seguridad vial son estatales; lo que cambia por provincia es la autoescuela, el centro médico, las fechas de examen y la oficina. No hay un examen “más fácil” en otra comunidad.',
+      routeIds: []
+    },
+    {
+      id: 'permiso_moto', scope: 'national', cat: 'documentos', icon: 'route',
+      title: 'Permiso de moto: A1, A2 y A',
+      when: 'A1 desde los 16 años, A2 desde los 18 y A desde los 20 con 2 años de A2. También puedes acceder según tu antigüedad y prácticas.',
+      where: function (c) { return 'Jefatura Provincial de Tráfico de ' + (c.province || c.regionName || 'tu provincia') + ' y autoescuela de tu provincia'; },
+      appointment: DGT,
+      appointmentLabel: 'Consultar permisos de moto',
+      docs: [
+        'DNI, NIE/TIE o pasaporte',
+        'Certificado médico de aptitud psicofísica',
+        'Fotografía reciente',
+        'Tasa DGT',
+        'Permiso A2 si solicitas el A'
+      ],
+      steps: [
+        'Elige la categoría: A1 (16), A2 (18) o A (20 con 2 años de A2).',
+        'Aprueba el teórico específico de moto y el práctico de circuito y circulación.',
+        'Si ya tienes B, consulta qué motos puedes conducir y qué prácticas necesitas.',
+        'Pasa el reconocimiento médico y paga la tasa.',
+        'Recoge el permiso y revisa las limitaciones (potencia, antigüedad).'
+      ],
+      fee: 'Tasa DGT + autoescuela + reconocimiento médico',
+      note: 'Las edades y pruebas son estatales. La disponibilidad de autoescuelas, circuitos y fechas cambia por provincia. El A1 no es lo mismo que el A2 ni el A: no conduzcas una moto para la que no tengas la categoría.',
+      routeIds: []
+    },
+    {
+      id: 'permiso_profesional', scope: 'national', cat: 'trabajo', icon: 'route',
+      title: 'Permiso profesional: camión (C) y autobús (D) + CAP',
+      when: 'Para conducir camiones C1/C o autobuses D1/D. Además del permiso necesitas el CAP (certificado de aptitud profesional) y, para mercancías peligrosas, formación ADR.',
+      where: function (c) { return 'Jefatura Provincial de Tráfico de ' + (c.province || c.regionName || 'tu provincia') + ', centro CAP y centro médico de tu provincia'; },
+      appointment: DGT_CAP,
+      appointmentLabel: 'Consultar CAP y formación',
+      docs: [
+        'Permiso B en vigor',
+        'Certificado médico de aptitud psicofísica',
+        'Fotografía reciente',
+        'Tasa DGT',
+        'Certificado CAP o resguardo del curso',
+        'Formación ADR si transportas mercancías peligrosas'
+      ],
+      steps: [
+        'Comprueba la edad: C1 desde 18; C desde 21 (18 con CAP de cualificación inicial ordinaria); D1 desde 21; D desde 24 (con reducciones según CAP).',
+        'Aprueba el permiso C1/C o D1/D en la Jefatura de tu provincia.',
+        'Realiza el curso CAP inicial y aprueba su examen; después, formación continua cada 5 años.',
+        'Si vas a transportar mercancías peligrosas, añade el ADR.',
+        'Para taxi, VTC o transporte público local, comprueba además la autorización municipal o autonómica.'
+      ],
+      fee: 'Tasa DGT + autoescuela + CAP + reconocimiento médico (y ADR si procede)',
+      note: 'El permiso y el CAP son estatales, pero los centros de formación, los exámenes y las autorizaciones de taxi/VTC cambian por provincia o comunidad. No basta con el permiso B para conducir un camión o un autobús.',
+      routeIds: []
     },
     {
       id: 'renovacion', scope: 'national', cat: 'documentos', icon: 'clock',
@@ -6681,6 +6787,25 @@ body.has-speech-bar { padding-bottom: 86px; }
         ['Servicios consulares · visados', 'https://www.exteriores.gob.es/'],
         ['Ministerio de Universidades', 'https://www.universidades.gob.es/'],
         ['SEPE · empleo', 'https://www.sepe.es/']
+      ]
+    },
+    {
+      id: 'dgt_canje_permisos', cat: 'documentos',
+      q: '¿Puedo canjear mi permiso de conducir extranjero y sacar el de camión o autobús?',
+      short: 'El canje depende del país y de la categoría: los permisos de la UE/EEE se canjean sin examen; los de países con convenio pueden exigir teoría o práctica; los de países sin convenio obligan a examinarse en España. Para camión C y autobús D, además del permiso hace falta el CAP.',
+      detail: [
+        'Los permisos de fuera de la UE/EEE suelen poder usarse solo 6 meses desde que obtienes la residencia. Después hay que canjearlos o dejar de conducir.',
+        'Canje: permiso original, traducción jurada si procede, TIE/residencia, certificado médico, foto y tasa DGT. La Jefatura de tu provincia confirma si tu país tiene convenio y qué pruebas exige.',
+        'Permiso B: 18 años, teórico y práctico, reconocimiento médico. Las pruebas son estatales; autoescuela, centro médico y fechas cambian por provincia.',
+        'Moto: A1 desde 16, A2 desde 18 y A desde 20 con 2 años de A2. No todas las motos valen con el mismo permiso.',
+        'Profesional: C1/C para camión y D1/D para autobús, con edades y requisitos propios. El CAP es obligatorio y tiene formación inicial y continua cada 5 años.',
+        'Si transportas mercancías peligrosas necesitas además el ADR. Para taxi o VTC, la autorización municipal o autonómica es aparte.',
+        'No hay un examen más fácil en otra comunidad: el marco es estatal. Lo que cambia es la Jefatura, los centros y las autorizaciones locales.'
+      ],
+      links: [
+        ['DGT · canjes de permisos extranjeros', 'https://sede.dgt.gob.es/'],
+        ['DGT · clases de permisos', 'https://www.dgt.es/nuestros-servicios/permisos-de-conducir/clases-de-permisos-de-conducir/'],
+        ['Ministerio de Transportes · CAP', 'https://www.transportes.gob.es/transporte-terrestre/examenes-y-formacion/examenes-de-formacion-de-conductores-profesionales-cap']
       ]
     }
   ];
