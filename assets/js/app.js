@@ -411,6 +411,7 @@
       RL.state.meta.lastStep = ui.step;
       RL.store.save();
       renderWizard();
+      scrollToWizardTop();
     } else {
       RL.state.meta.completedSteps = steps.length;
       RL.state.meta.finishedAt = dates.today();
@@ -2170,8 +2171,15 @@
   }
 
   function wizardPrev() {
-    if (ui.step > 0) { ui.step--; ui.errors = {}; renderWizard(); }
+    if (ui.step > 0) { ui.step--; ui.errors = {}; renderWizard(); scrollToWizardTop(); }
     else go('inicio');
+  }
+
+  function scrollToWizardTop() {
+    var form = $('#wizardForm') || $('#view-diagnostico');
+    if (!form) return;
+    var top = form.getBoundingClientRect().top + window.pageYOffset - 16;
+    window.scrollTo(0, Math.max(0, top));
   }
 
   function exportData() {
