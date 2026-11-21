@@ -26,6 +26,23 @@ test('con residencia no se muestran avisos históricos de visa o turismo', () =>
   assert.ok(plan.windows.some(w => /TIE caduca/i.test(w.title)), 'sí debe mostrar el vencimiento actual de la TIE');
 });
 
+test('las acciones se adaptan a una familia con TIE, ESO y cónyuge peruana', () => {
+  const plan = RL.buildPlan(base({
+    nationality: 'AR', permitStatus: 'work', permitExpiry: RL.dates.addYears(RL.dates.today(), 1),
+    docsBase: ['tie'], empadronado: 'yes', exams: 'none',
+    maritalStatus: 'casado', partnerNationality: 'PE', partnerLegalStatus: 'residence',
+    partnerNeed: 'nacionalidad', childrenCommon: 2,
+    child1Education: 'eso', child2Education: 'eso'
+  }));
+  const ids = plan.actions.map(a => a.id);
+  assert.ok(!ids.includes('padron-cert'), 'con TIE no debe pedir padrón histórico');
+  assert.ok(!ids.includes('antecedentes'), 'sin trámite abierto no debe pedir antecedentes');
+  assert.ok(!ids.includes('dele'), 'un argentino no debe preparar DELE');
+  assert.ok(ids.includes('ccse'), 'debe preparar solo CCSE');
+  assert.ok(plan.d.familyAdvice.some(x => /solo necesita el CCSE/i.test(x.text)), 'la pareja peruana solo CCSE');
+  assert.ok(plan.d.familyAdvice.some(x => /ESO en España/i.test(x.text)), 'los hijos con ESO no necesitan exámenes');
+});
+
 test('un visado que caduca pronto genera una ventana', () => {
   const plan = RL.buildPlan(base({ visaExpiry: RL.dates.addDays(RL.dates.today(), 30) }));
   assert.ok(plan.windows.some(w => /caduca en 30 días/i.test(w.title)));

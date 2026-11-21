@@ -493,11 +493,17 @@
       if (disabled) second = 'Segunda opción a valorar: la discapacidad por sí sola no regulariza, pero puede influir en la valoración de vulnerabilidad, dependencia o ayudas. Revísalo con un abogado o servicios sociales antes de presentar nada.';
       d.familyAdvice.push({ role: role, name: name || 'Sin nombre', status: label, time: time || '', need: need || '', text: text, second: second });
     }
-    if (d.couple) addFamilyAdvice('pareja', d.partnerName, d.partnerLegalStatus, d.partnerTimeInSpain, d.partnerNeed, '', d.partnerHasDisability);
+    if (d.couple) {
+      var partnerExtra = '';
+      if (d.partnerNationality && RL.countryIsDosAnios(d.partnerNationality) && d.partnerNeed === 'nacionalidad') {
+        partnerExtra = 'Si es hispanohablante, para la nacionalidad solo necesita el CCSE, no el DELE A2.';
+      }
+      addFamilyAdvice('pareja', d.partnerName, d.partnerLegalStatus, d.partnerTimeInSpain, d.partnerNeed, partnerExtra, d.partnerHasDisability);
+    }
     (d.familyChildren || []).forEach(function (c) {
-      addFamilyAdvice('hijo', c.name, c.legalStatus, c.timeInSpain, c.need,
-        c.education ? 'Estudios: ' + (RL.education.child[c.education] || c.education) + '.' : '',
-        c.disability === 'yes');
+      var childExtra = c.education ? 'Estudios: ' + (RL.education.child[c.education] || c.education) + '.' : '';
+      if (c.education === 'eso') childExtra += ' Si cursó y aprobó la ESO en España, no necesita CCSE ni DELE para la nacionalidad.';
+      addFamilyAdvice('hijo', c.name, c.legalStatus, c.timeInSpain, c.need, childExtra, c.disability === 'yes');
     });
     (d.extraPeople || []).forEach(function (x) {
       addFamilyAdvice('otro', x.name, x.legalStatus, x.timeInSpain, x.need, x.relation ? 'Relación: ' + x.relation + '.' : '');
@@ -898,12 +904,13 @@
   function buildActions(p, d, best) {
     var acts = [];
     function add(id, title, body, when, tag) { acts.push({ id: id, title: title, body: body, when: when, tag: tag }); }
+    var hasStableStatus = d.hasPermit || d.residenceApproved === 'yes' || d.postRenunciationGranted;
 
     if (d.inSpain) {
       if (!d.empadronado) add('padron', 'Empadrónate cuanto antes',
         'Ve al ayuntamiento con tu pasaporte y, si puedes, un contrato de alquiler o una autorización del dueño. Pide el certificado de empadronamiento y guarda todos los recibos: es tu prueba de permanencia.', 'Esta semana', 'base');
-      else add('padron-cert', 'Consigue el certificado de empadronamiento histórico',
-        'Pide en el ayuntamiento un certificado con todas tus altas y bajas. Es el documento que más pesa para acreditar permanencia continuada.', 'Este mes', 'base');
+      else if (!hasStableStatus && d.irregular) add('padron-cert', 'Consigue el certificado de empadronamiento histórico',
+        'Pide en el ayuntamiento un certificado con todas tus altas y bajas. Es el documento que más pesa para acreditar permanencia continuada en un arraigo.', 'Este mes', 'base');
       if (p.hasNie !== 'yes') add('nie', 'Saca tu NIE si no lo tienes',
         'Se pide en comisaría con cita previa (o en el consulado, según el caso). No te legaliza, pero lo necesitas para trabajar, alquilar y casi cualquier trámite.', 'Este mes', 'base');
       if (!d.hasDigitalCert) add('digital', 'Saca el certificado digital o Cl@ve',
@@ -925,8 +932,10 @@
         else if (d.housing === 'propietario_hipoteca' || d.housing === 'propietario') housingMsg = 'Guarda la escritura, la hipoteca o el recibo del IBI. Si no vives solo, añade la autorización o el certificado de convivencia.';
         add('vivienda', 'Consigue una prueba de domicilio', housingMsg, 'Este mes', 'documentos');
       }
-      if (d.tieHuellasCita) add('tie-huellas', 'Prepara la cita de huellas de la TIE',
-        'Lleva pasaporte, TIE anterior, foto, resolución y tasa 790-012. La cita es para huellas; la tarjeta física no se puede adelantar al vencimiento.', 'Fecha de la cita', 'documentos');
+      if (d.tieHuellasCita) add('tie-huellas', 'Cita de huellas: no vayas antes de que venza tu TIE',
+        'La cita debe ser posterior al ' + (d.permitExpiry ? RL.fmt.date(d.permitExpiry) : 'vencimiento de tu TIE') + '. Lleva pasaporte, TIE anterior, foto, resolución y tasa 790-012. Antes de esa fecha no pueden tomarte las huellas.', 'Después del vencimiento', 'documentos');
+      else if (d.renewalApproved === 'yes' && d.huellasAppointment !== 'yes') add('tie-huellas-pedir', 'Pide cita de huellas para después del vencimiento',
+        'La cita solo sirve desde el ' + (d.permitExpiry ? RL.fmt.date(d.permitExpiry) : 'día en que vence tu TIE') + '. Si la consigues antes, no te la hacen. Pide ICPP para una fecha posterior.', 'Después del vencimiento', 'trámite');
       else if (d.tieInProcess) add('tie-en-tramite', 'Sigue la TIE física',
         'Ya tienes huellas tomadas o la tarjeta en tramitación. Guarda el resguardo y consulta el estado; no pidas otra cita de huellas.', 'Cada 2-3 semanas', 'trámite');
       if (d.tieCardPending) add('tie-retirar', 'Pide cita para retirar la TIE',
@@ -957,9 +966,9 @@
     }
     if (d.hasReturnAuth && p.returnAuthExpiry) add('regreso', 'Controla tu autorización de regreso',
       'Sirve para salir y volver mientras se renueva tu permiso. Mira la fecha y no la dejes caducar fuera de España.', 'Antes de viajar', 'plazo');
-    if (!d.euCitizen) {
-      add('antecedentes', 'Pide tus antecedentes penales',
-        'España: certificado del Ministerio de Justicia (gratis, online o presencial). Tu país: en el consulado o ministerio correspondiente, apostillado o legalizado. Suelen caducar a los 3 meses: no los pidas demasiado pronto.', 'Cuando tengas la vía clara', 'documentos');
+    if (!d.euCitizen && (!hasStableStatus || d.pendingNationality || d.pendingExtranjeria)) {
+      add('antecedentes', 'Pide antecedentes solo cuando tengas dónde presentarlos',
+        'España: certificado del Ministerio de Justicia (gratis, online o presencial). Tu país: consulado o ministerio, apostillado o legalizado. Suelen caducar a los 3 meses: no los pidas si aún no vas a presentar la solicitud.', 'Cuando tengas la solicitud preparada', 'documentos');
     }
     if (d.hasAncestry && !d.ancestryDocsOK) add('partidas', 'Busca la partida de nacimiento española',
       'Empieza por el Registro Civil del municipio donde nació tu antepasado. Muchas partidas están digitalizadas; también puedes pedir una búsqueda registral. Sin ese papel no hay vía de nacionalidad.', 'Este mes', 'documentos');
@@ -967,8 +976,13 @@
       'Para trabajar en profesiones reguladas necesitas homologación o reconocimiento. Tarda meses: si tu vía la exige, empieza ya. Para otras vías basta el título traducido y apostillado.', 'Próximos 3 meses', 'documentos');
     if (!d.hasInsurance && !d.euCitizen && !d.asylumInProcess && !d.asylumSoon) add('seguro', 'Contrata un seguro médico',
       'Casi todos los visados y autorizaciones lo exigen, sin copagos y con cobertura en España. La sanidad pública no siempre cuenta para tu expediente.', 'Antes de solicitar', 'documentos');
-    if (!d.spanishNative && !d.euCitizen && !d.asylumInProcess && !d.asylumSoon) add('dele', 'Prepara el DELE A2 y el CCSE',
-      'Si tu vía es la nacionalidad por residencia, necesitarás el diploma de español A2 y la prueba de conocimientos constitucionales (CCSE). Los nacionales de países hispanohablantes suelen estar exentos del DELE.', '6-12 meses', 'formación');
+    if (!d.euCitizen && !d.asylumInProcess && !d.asylumSoon && (d.ibero || d.spanishNative)) {
+      if (!d.exams || d.exams === 'none' || d.exams === 'dele') add('ccse', 'Prepara solo el CCSE',
+        'Por tu nacionalidad hispanohablante no necesitas DELE A2: solo el CCSE. Los hijos que cursaron y aprobaron la ESO en España no necesitan ninguno de los dos para la nacionalidad.', 'Cuando te falte poco para los 2 años', 'formación');
+    } else if (!d.euCitizen && !d.asylumInProcess && !d.asylumSoon && !d.spanishNative) {
+      add('dele', 'Prepara el DELE A2 y el CCSE',
+        'Si tu vía es la nacionalidad por residencia, necesitarás el DELE A2 y el CCSE. Si no eres hispanohablante, no hay exención del DELE.', '6-12 meses', 'formación');
+    }
     if (d.inSpain && d.irregular) add('no-salir', 'No salgas de España sin asesorarte',
       'Si estás irregular, salir puede activar una prohibición de entrada de 3 años o más. Si necesitas viajar, consulta antes con un abogado o con el consulado.', 'Siempre', 'riesgo');
     if (d.inSpain && d.irregular && d.arraigoMonths != null && d.arraigoMonths < 24) {
