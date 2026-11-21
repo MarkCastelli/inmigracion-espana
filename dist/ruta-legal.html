@@ -1959,9 +1959,26 @@ body.has-speech-bar { padding-bottom: 86px; }
             help: 'Si no es tu caso, elige la primera opción. Si ya tienes hoja blanca o tarjeta roja, tu situación cambia por completo. Si renunciaste, no estás en trámite.'
           },
           {
-            id: 'asylumRenouncedDate', type: 'month', label: '¿Cuándo renunciaste? Mes y año',
+            id: 'asylumRenouncedDay', type: 'number', label: 'Día de la renuncia (si lo recuerdas)', min: 1, max: 31, placeholder: 'Ej. 12',
             showIf: function (p) { return p.asylumStage === 'renunciado'; },
-            help: 'No hace falta el día exacto. Si no recuerdas el mes, pon el más aproximado. Es clave para calcular desde cuándo puede contar el arraigo.'
+            help: 'Opcional. Rellena solo lo que recuerdes. Si no sabes el día, déjalo vacío.'
+          },
+          {
+            id: 'asylumRenouncedMonth', type: 'select', label: 'Mes de la renuncia (si lo recuerdas)',
+            showIf: function (p) { return p.asylumStage === 'renunciado'; },
+            options: [
+              { v: 'unknown', l: 'No lo recuerdo' },
+              { v: '01', l: 'Enero' }, { v: '02', l: 'Febrero' }, { v: '03', l: 'Marzo' },
+              { v: '04', l: 'Abril' }, { v: '05', l: 'Mayo' }, { v: '06', l: 'Junio' },
+              { v: '07', l: 'Julio' }, { v: '08', l: 'Agosto' }, { v: '09', l: 'Septiembre' },
+              { v: '10', l: 'Octubre' }, { v: '11', l: 'Noviembre' }, { v: '12', l: 'Diciembre' }
+            ],
+            help: 'Opcional. Si no sabes el mes, elige «No lo recuerdo».'
+          },
+          {
+            id: 'asylumRenouncedYear', type: 'number', label: 'Año de la renuncia (si lo recuerdas)', min: 1900, max: 2100, placeholder: 'Ej. 2024',
+            showIf: function (p) { return p.asylumStage === 'renunciado'; },
+            help: 'Opcional. Rellena solo lo que recuerdes; no hace falta completar día, mes y año.'
           },
           {
             id: 'asylumCitaDate', type: 'date', label: '¿Para cuándo tienes la cita?',
@@ -6842,10 +6859,31 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.asylumGranted = stage === 'concedido';
     d.asylumDenied = stage === 'denegado';
     d.asylumRenounced = stage === 'renunciado';
-    d.asylumRenouncedDate = p.asylumRenouncedDate || '';
-    d.asylumRenouncedDateISO = d.asylumRenouncedDate && String(d.asylumRenouncedDate).length === 7
-      ? d.asylumRenouncedDate + '-01'
-      : d.asylumRenouncedDate;
+    var renDay = p.asylumRenouncedDay != null ? Number(p.asylumRenouncedDay) : null;
+    var renMonth = p.asylumRenouncedMonth && p.asylumRenouncedMonth !== 'unknown' ? p.asylumRenouncedMonth : '';
+    var renYear = p.asylumRenouncedYear != null ? Number(p.asylumRenouncedYear) : null;
+    var renLegacy = String(p.asylumRenouncedDate || '');
+    if (renDay == null && !renMonth && renYear == null && renLegacy) {
+      var lm = /^(\d{4})-(\d{2})(?:-(\d{2}))?/.exec(renLegacy);
+      if (lm) {
+        renYear = Number(lm[1]);
+        renMonth = lm[2];
+        renDay = lm[3] ? Number(lm[3]) : null;
+      }
+    }
+    d.asylumRenouncedDay = renDay;
+    d.asylumRenouncedMonth = renMonth;
+    d.asylumRenouncedYear = renYear;
+    var two = function (n) { return Number(n) < 10 ? '0' + Number(n) : String(n); };
+    d.asylumRenouncedDate = (renYear && renMonth)
+      ? renYear + '-' + renMonth + '-' + (renDay ? two(renDay) : '01')
+      : '';
+    d.asylumRenouncedDateISO = d.asylumRenouncedDate;
+    var renParts = [];
+    if (renDay) renParts.push(two(renDay));
+    if (renMonth) renParts.push(renMonth);
+    if (renYear) renParts.push(String(renYear));
+    d.asylumRenouncedDateText = renParts.length ? renParts.join('/') : 'fecha no indicada';
     d.hasRedCard = !d.asylumRenounced && (stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja') || d.redCardRenewalPending);
     d.hasWhitePaper = !d.asylumRenounced && (stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca'));
     d.hasAsylumAppointment = !d.asylumRenounced && (stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'));
@@ -7201,7 +7239,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     } else if (d.asylumRenounced) {
       add('warn', 'Renunciaste a la protección internacional',
         'No estás en trámite de asilo. El tiempo como solicitante no cuenta para el arraigo; la referencia es la fecha de renuncia' +
-        (d.asylumRenouncedDateISO ? ': ' + RL.fmt.monthYear(d.asylumRenouncedDateISO) : ' (no indicada)') +
+        (d.asylumRenouncedDateISO ? ': ' + d.asylumRenouncedDateText + ' (aproximada)' : ': ' + d.asylumRenouncedDateText) +
         '. Guarda el documento de renuncia y consulta con un abogado.', 'plazo');
     } else if (d.asylumDenied) {
       add('bad', 'Tu solicitud de asilo fue denegada',
@@ -7401,8 +7439,8 @@ body.has-speech-bar { padding-bottom: 86px; }
       if (d.tourist) add(RL.dates.addDays(d.entryDate, 90), 'Fin de los 90 días de turista', 'Si sigues aquí después de esta fecha, tu estancia pasa a ser irregular. No implica expulsión automática, pero sí impide trabajar.', 'soon');
       if (d.arraigoMonths != null && d.arraigoMonths < 24) {
         var arraigoBase = d.asylumDenied && d.asylumDeniedDate ? d.asylumDeniedDate
-          : (d.asylumRenounced && d.asylumRenouncedDateISO ? d.asylumRenouncedDateISO : d.entryDate);
-        add(RL.dates.addDays(arraigoBase, 730), 'Cumples 2 años computables para el arraigo', 'Fecha de referencia para el arraigo social (si mantienes permanencia continuada y padrón). El tiempo como solicitante de asilo no cuenta.', 'later');
+          : (d.asylumRenounced ? (d.asylumRenouncedDateISO || '') : d.entryDate);
+        if (arraigoBase) add(RL.dates.addDays(arraigoBase, 730), 'Cumples 2 años computables para el arraigo', 'Fecha de referencia para el arraigo social (si mantienes permanencia continuada y padrón). El tiempo como solicitante de asilo no cuenta.', 'later');
       }
       if (d.monthsInSpain != null && d.monthsInSpain < 60) add(RL.dates.addDays(d.entryDate, 1826), 'Cumples 5 años en España', 'Umbral para la residencia de larga duración.', 'later');
     } else if (d.inSpain && d.padronDate && d.arraigoMonths != null && d.arraigoMonths < 24) {
@@ -8143,7 +8181,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       if (currentDocs.length) l.push('- Trámites en curso o pendientes de resolución: ' + list(currentDocs, DOCS));
       if (d.asylumStage && d.asylumStage !== 'no') {
         var st = { cita: 'cita de asilo', solicitado: 'solicitud presentada', admitido: 'tarjeta roja', concedido: 'protección concedida', denegado: 'asilo denegado', renunciado: 'renuncia a la protección internacional' };
-        l.push('- Asilo: ' + (st[d.asylumStage] || d.asylumStage) + (d.asylumRenouncedDateISO ? ' (' + RL.fmt.monthYear(d.asylumRenouncedDateISO) + ')' : ''));
+        l.push('- Asilo: ' + (st[d.asylumStage] || d.asylumStage) + (d.asylumRenouncedDateText ? ' (' + d.asylumRenouncedDateText + ')' : ''));
       }
       if (d.pendingExtranjeria) l.push('- Expediente de extranjería abierto');
       if (d.pendingNationality) l.push('- Nacionalidad en trámite');
@@ -8583,7 +8621,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       currentDocs.forEach(function (x) { doc.bullet(x); });
     }
     var stageText = { cita: 'Cita de asilo', solicitado: 'Solicitud presentada (hoja blanca)', admitido: 'Admitida a trámite (tarjeta roja)', concedido: 'Protección internacional concedida', denegado: 'Denegada', renunciado: 'Renuncia a la protección internacional' };
-    if (d.asylumStage && stageText[d.asylumStage]) doc.kv('Protección internacional', stageText[d.asylumStage] + (d.asylumRenouncedDateISO ? ' · ' + RL.fmt.monthYear(d.asylumRenouncedDateISO) : ''));
+    if (d.asylumStage && stageText[d.asylumStage]) doc.kv('Protección internacional', stageText[d.asylumStage] + (d.asylumRenouncedDateText ? ' · ' + d.asylumRenouncedDateText : ''));
     if (d.pendingExtranjeria) doc.kv('Expediente abierto', 'Sí');
     if (d.pendingNationality) doc.kv('Nacionalidad en trámite', 'Sí');
 

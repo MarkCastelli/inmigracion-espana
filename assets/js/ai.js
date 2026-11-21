@@ -87,7 +87,7 @@
       if (currentDocs.length) l.push('- Trámites en curso o pendientes de resolución: ' + list(currentDocs, DOCS));
       if (d.asylumStage && d.asylumStage !== 'no') {
         var st = { cita: 'cita de asilo', solicitado: 'solicitud presentada', admitido: 'tarjeta roja', concedido: 'protección concedida', denegado: 'asilo denegado', renunciado: 'renuncia a la protección internacional' };
-        l.push('- Asilo: ' + (st[d.asylumStage] || d.asylumStage) + (d.asylumRenouncedDateISO ? ' (' + RL.fmt.monthYear(d.asylumRenouncedDateISO) + ')' : ''));
+        l.push('- Asilo: ' + (st[d.asylumStage] || d.asylumStage) + (d.asylumRenouncedDateText ? ' (' + d.asylumRenouncedDateText + ')' : ''));
       }
       if (d.pendingExtranjeria) l.push('- Expediente de extranjería abierto');
       if (d.pendingNationality) l.push('- Nacionalidad en trámite');

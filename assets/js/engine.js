@@ -207,10 +207,31 @@
     d.asylumGranted = stage === 'concedido';
     d.asylumDenied = stage === 'denegado';
     d.asylumRenounced = stage === 'renunciado';
-    d.asylumRenouncedDate = p.asylumRenouncedDate || '';
-    d.asylumRenouncedDateISO = d.asylumRenouncedDate && String(d.asylumRenouncedDate).length === 7
-      ? d.asylumRenouncedDate + '-01'
-      : d.asylumRenouncedDate;
+    var renDay = p.asylumRenouncedDay != null ? Number(p.asylumRenouncedDay) : null;
+    var renMonth = p.asylumRenouncedMonth && p.asylumRenouncedMonth !== 'unknown' ? p.asylumRenouncedMonth : '';
+    var renYear = p.asylumRenouncedYear != null ? Number(p.asylumRenouncedYear) : null;
+    var renLegacy = String(p.asylumRenouncedDate || '');
+    if (renDay == null && !renMonth && renYear == null && renLegacy) {
+      var lm = /^(\d{4})-(\d{2})(?:-(\d{2}))?/.exec(renLegacy);
+      if (lm) {
+        renYear = Number(lm[1]);
+        renMonth = lm[2];
+        renDay = lm[3] ? Number(lm[3]) : null;
+      }
+    }
+    d.asylumRenouncedDay = renDay;
+    d.asylumRenouncedMonth = renMonth;
+    d.asylumRenouncedYear = renYear;
+    var two = function (n) { return Number(n) < 10 ? '0' + Number(n) : String(n); };
+    d.asylumRenouncedDate = (renYear && renMonth)
+      ? renYear + '-' + renMonth + '-' + (renDay ? two(renDay) : '01')
+      : '';
+    d.asylumRenouncedDateISO = d.asylumRenouncedDate;
+    var renParts = [];
+    if (renDay) renParts.push(two(renDay));
+    if (renMonth) renParts.push(renMonth);
+    if (renYear) renParts.push(String(renYear));
+    d.asylumRenouncedDateText = renParts.length ? renParts.join('/') : 'fecha no indicada';
     d.hasRedCard = !d.asylumRenounced && (stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja') || d.redCardRenewalPending);
     d.hasWhitePaper = !d.asylumRenounced && (stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca'));
     d.hasAsylumAppointment = !d.asylumRenounced && (stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'));
@@ -566,7 +587,7 @@
     } else if (d.asylumRenounced) {
       add('warn', 'Renunciaste a la protección internacional',
         'No estás en trámite de asilo. El tiempo como solicitante no cuenta para el arraigo; la referencia es la fecha de renuncia' +
-        (d.asylumRenouncedDateISO ? ': ' + RL.fmt.monthYear(d.asylumRenouncedDateISO) : ' (no indicada)') +
+        (d.asylumRenouncedDateISO ? ': ' + d.asylumRenouncedDateText + ' (aproximada)' : ': ' + d.asylumRenouncedDateText) +
         '. Guarda el documento de renuncia y consulta con un abogado.', 'plazo');
     } else if (d.asylumDenied) {
       add('bad', 'Tu solicitud de asilo fue denegada',
@@ -766,8 +787,8 @@
       if (d.tourist) add(RL.dates.addDays(d.entryDate, 90), 'Fin de los 90 días de turista', 'Si sigues aquí después de esta fecha, tu estancia pasa a ser irregular. No implica expulsión automática, pero sí impide trabajar.', 'soon');
       if (d.arraigoMonths != null && d.arraigoMonths < 24) {
         var arraigoBase = d.asylumDenied && d.asylumDeniedDate ? d.asylumDeniedDate
-          : (d.asylumRenounced && d.asylumRenouncedDateISO ? d.asylumRenouncedDateISO : d.entryDate);
-        add(RL.dates.addDays(arraigoBase, 730), 'Cumples 2 años computables para el arraigo', 'Fecha de referencia para el arraigo social (si mantienes permanencia continuada y padrón). El tiempo como solicitante de asilo no cuenta.', 'later');
+          : (d.asylumRenounced ? (d.asylumRenouncedDateISO || '') : d.entryDate);
+        if (arraigoBase) add(RL.dates.addDays(arraigoBase, 730), 'Cumples 2 años computables para el arraigo', 'Fecha de referencia para el arraigo social (si mantienes permanencia continuada y padrón). El tiempo como solicitante de asilo no cuenta.', 'later');
       }
       if (d.monthsInSpain != null && d.monthsInSpain < 60) add(RL.dates.addDays(d.entryDate, 1826), 'Cumples 5 años en España', 'Umbral para la residencia de larga duración.', 'later');
     } else if (d.inSpain && d.padronDate && d.arraigoMonths != null && d.arraigoMonths < 24) {

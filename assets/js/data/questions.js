@@ -469,9 +469,26 @@
             help: 'Si no es tu caso, elige la primera opción. Si ya tienes hoja blanca o tarjeta roja, tu situación cambia por completo. Si renunciaste, no estás en trámite.'
           },
           {
-            id: 'asylumRenouncedDate', type: 'month', label: '¿Cuándo renunciaste? Mes y año',
+            id: 'asylumRenouncedDay', type: 'number', label: 'Día de la renuncia (si lo recuerdas)', min: 1, max: 31, placeholder: 'Ej. 12',
             showIf: function (p) { return p.asylumStage === 'renunciado'; },
-            help: 'No hace falta el día exacto. Si no recuerdas el mes, pon el más aproximado. Es clave para calcular desde cuándo puede contar el arraigo.'
+            help: 'Opcional. Rellena solo lo que recuerdes. Si no sabes el día, déjalo vacío.'
+          },
+          {
+            id: 'asylumRenouncedMonth', type: 'select', label: 'Mes de la renuncia (si lo recuerdas)',
+            showIf: function (p) { return p.asylumStage === 'renunciado'; },
+            options: [
+              { v: 'unknown', l: 'No lo recuerdo' },
+              { v: '01', l: 'Enero' }, { v: '02', l: 'Febrero' }, { v: '03', l: 'Marzo' },
+              { v: '04', l: 'Abril' }, { v: '05', l: 'Mayo' }, { v: '06', l: 'Junio' },
+              { v: '07', l: 'Julio' }, { v: '08', l: 'Agosto' }, { v: '09', l: 'Septiembre' },
+              { v: '10', l: 'Octubre' }, { v: '11', l: 'Noviembre' }, { v: '12', l: 'Diciembre' }
+            ],
+            help: 'Opcional. Si no sabes el mes, elige «No lo recuerdo».'
+          },
+          {
+            id: 'asylumRenouncedYear', type: 'number', label: 'Año de la renuncia (si lo recuerdas)', min: 1900, max: 2100, placeholder: 'Ej. 2024',
+            showIf: function (p) { return p.asylumStage === 'renunciado'; },
+            help: 'Opcional. Rellena solo lo que recuerdes; no hace falta completar día, mes y año.'
           },
           {
             id: 'asylumCitaDate', type: 'date', label: '¿Para cuándo tienes la cita?',

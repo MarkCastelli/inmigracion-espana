@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **139 pruebas pasando**.
+- **140 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -36,7 +36,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 6. **Vivienda**: pregunta si alquila piso, habitación, vive con familiar/amigo sin pagar, es propietario con/sin hipoteca u otra situación, y qué prueba de domicilio tiene. Se muestra en plan, PDF y hoja de datos.
 7. **Documentos**: `docsTramites` (terminados) y `docsEnCurso` (en curso/pendientes) están separados. El plan y el PDF no mezclan un certificado emitido con un trámite pendiente.
 8. **Familia y convivencia**: pareja, hijos y otras personas que conviven se cargan en el paso 1; la discapacidad/dependencia del titular se pregunta aparte y no se confunde con la de pareja o hijos.
-9. **Asilo**: añadida la opción «Renuncié a la protección internacional» y campo mes/año (`asylumRenouncedDate`). No se trata como asilo en trámite; el arraigo se referencia desde la renuncia.
+9. **Asilo**: añadida la opción «Renuncié a la protección internacional» y campos separados día/mes/año (`asylumRenouncedDay`, `asylumRenouncedMonth`, `asylumRenouncedYear`), todos opcionales. No se trata como asilo en trámite; el arraigo se referencia desde la renuncia cuando hay mes/año.
 
 ## Comandos
 

@@ -252,7 +252,7 @@
       currentDocs.forEach(function (x) { doc.bullet(x); });
     }
     var stageText = { cita: 'Cita de asilo', solicitado: 'Solicitud presentada (hoja blanca)', admitido: 'Admitida a trámite (tarjeta roja)', concedido: 'Protección internacional concedida', denegado: 'Denegada', renunciado: 'Renuncia a la protección internacional' };
-    if (d.asylumStage && stageText[d.asylumStage]) doc.kv('Protección internacional', stageText[d.asylumStage] + (d.asylumRenouncedDateISO ? ' · ' + RL.fmt.monthYear(d.asylumRenouncedDateISO) : ''));
+    if (d.asylumStage && stageText[d.asylumStage]) doc.kv('Protección internacional', stageText[d.asylumStage] + (d.asylumRenouncedDateText ? ' · ' + d.asylumRenouncedDateText : ''));
     if (d.pendingExtranjeria) doc.kv('Expediente abierto', 'Sí');
     if (d.pendingNationality) doc.kv('Nacionalidad en trámite', 'Sí');
 

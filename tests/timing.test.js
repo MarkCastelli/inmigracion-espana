@@ -36,16 +36,32 @@ test('la renovación administrativa y la TIE física tienen fechas distintas', (
 
 test('una renuncia a la protección internacional no cuenta como asilo en trámite', () => {
   const renounced = RL.dates.addMonths(RL.dates.today(), -6).slice(0, 7);
+  const [ry, rm] = renounced.split('-');
   const plan = RL.buildPlan(base({
     entryMode: 'asylum', permitStatus: 'asylum', asylumStage: 'renunciado',
-    asylumRenouncedDate: renounced, timeInSpain: '2to3y'
+    asylumRenouncedMonth: rm, asylumRenouncedYear: Number(ry), timeInSpain: '2to3y'
   }));
   assert.strictEqual(plan.d.asylumRenounced, true);
   assert.strictEqual(plan.d.asylumInProcess, false);
   assert.ok(plan.d.arraigoMonths != null && plan.d.arraigoMonths < 12);
   assert.ok(plan.alerts.some(a => /Renunciaste a la protección internacional/i.test(a.title)));
-  const field = RL.questions.steps.flatMap(s => s.fields || []).find(f => f.id === 'asylumRenouncedDate');
-  assert.ok(field && field.type === 'month', 'la fecha de renuncia debe ser mes/año');
+  const fields = RL.questions.steps.flatMap(s => s.fields || []);
+  for (const id of ['asylumRenouncedDay', 'asylumRenouncedMonth', 'asylumRenouncedYear']) {
+    const field = fields.find(f => f.id === id);
+    assert.ok(field, 'falta ' + id);
+    assert.ok(!field.required, id + ' no debe ser obligatorio');
+  }
+});
+
+test('la renuncia se guarda aunque solo se recuerde el año', () => {
+  const plan = RL.buildPlan(base({
+    entryMode: 'asylum', permitStatus: 'asylum', asylumStage: 'renunciado',
+    asylumRenouncedYear: 2024, entryDate: '2024-01-01'
+  }));
+  assert.strictEqual(plan.d.asylumRenouncedDateISO, '');
+  assert.strictEqual(plan.d.asylumRenouncedDateText, '2024');
+  assert.strictEqual(plan.d.arraigoMonths, null);
+  assert.ok(!plan.timeline.some(t => /2 años computables para el arraigo/i.test(t.title)), 'sin mes no debe inventar la fecha de arraigo');
 });
 
 test('un permiso caducado hace poco avisa de los 3 meses', () => {
