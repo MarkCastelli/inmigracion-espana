@@ -15,6 +15,17 @@ function base(extra) {
   }, extra || {});
 }
 
+test('con residencia no se muestran avisos históricos de visa o turismo', () => {
+  const plan = RL.buildPlan(base({
+    entryMode: 'tourist_free', visaExpiry: RL.dates.addDays(RL.dates.today(), -500),
+    permitStatus: 'work', permitExpiry: RL.dates.addDays(RL.dates.today(), 30),
+    residenceApproved: 'yes', residenceApprovedYears: 4
+  }));
+  assert.ok(!plan.windows.some(w => /visado\/estancia/i.test(w.title)), 'no debe mostrar la visa vieja');
+  assert.ok(!plan.windows.some(w => /Con turismo no puedes/i.test(w.title)), 'no debe mostrar el aviso turista');
+  assert.ok(plan.windows.some(w => /TIE caduca/i.test(w.title)), 'sí debe mostrar el vencimiento actual de la TIE');
+});
+
 test('un visado que caduca pronto genera una ventana', () => {
   const plan = RL.buildPlan(base({ visaExpiry: RL.dates.addDays(RL.dates.today(), 30) }));
   assert.ok(plan.windows.some(w => /caduca en 30 días/i.test(w.title)));

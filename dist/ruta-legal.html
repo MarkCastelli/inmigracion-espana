@@ -7784,8 +7784,9 @@ body.has-speech-bar { padding-bottom: 86px; }
     var today = RL.dates.today();
     function add(tone, title, body) { out.push({ tone: tone, title: title, body: body }); }
     function days(date) { return date ? RL.dates.diff(today, date) : null; }
+    var currentStatus = d.hasPermit || d.residenceApproved === 'yes' || d.postRenunciationGranted || d.asylumGranted;
 
-    var vd = days(p.visaExpiry);
+    var vd = currentStatus ? null : days(p.visaExpiry);
     if (vd != null) {
       if (vd >= 0 && vd <= 90) {
         add('warn', 'Tu visado/estancia caduca en ' + vd + ' días',
@@ -7828,7 +7829,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       }
     }
 
-    if (d.entryMode === 'tourist_free' || d.entryMode === 'tourist_visa') {
+    if ((d.entryMode === 'tourist_free' || d.entryMode === 'tourist_visa') && !currentStatus && !d.asylumHistory) {
       add('warn', 'Con turismo no puedes trabajar ni cambiar a residencia',
         'El turista no tiene una estancia que modificar. No dejes pasar los 90 días: la sobreestancia se registra y complica futuras solicitudes. Si tu pareja es española/UE, la vía familiar no exige 2 años.');
     }
