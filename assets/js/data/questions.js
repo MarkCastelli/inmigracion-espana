@@ -431,8 +431,8 @@
             id: 'permitExpiry', type: 'date', label: '¿Cuándo caduca o caducó tu permiso?', showIf: function (p) { return inSpain(p) && /studies|work|family|eu_family|longterm|expired/.test(p.permitStatus || ''); }
           },
           {
-            id: 'permitSince', type: 'date', label: '¿Desde cuándo tienes ese permiso? (opcional)', showIf: function (p) { return inSpain(p) && /studies|work|family|eu_family|longterm/.test(p.permitStatus || ''); },
-            help: 'Con esta fecha calculamos cuándo podrías pedir la nacionalidad por residencia.'
+            id: 'permitSince', type: 'date', label: '¿Desde cuándo tienes la residencia legal?', showIf: function (p) { return inSpain(p) && (/studies|work|family|eu_family|longterm|residencia_temporal/.test(p.permitStatus || '') || p.residenceApproved === 'yes' || owns(p, 'tie')); },
+            help: 'Es la fecha desde la que cuenta la residencia para la nacionalidad. No cuentan el tiempo como turista ni como solicitante de asilo.'
           },
           {
             id: 'hasNie', type: 'radio', label: '¿Tienes NIE (número de identidad de extranjero)?', showIf: function (p) { return inSpain(p) && !owns(p, 'nie') && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },
@@ -922,14 +922,15 @@
             options: [{ v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'no', l: 'No' }]
           },
           {
-            id: 'exams', type: 'select', label: '¿Has aprobado los exámenes de nacionalidad (DELE A2 y CCSE)?',
+            id: 'exams', type: 'select', label: '¿Has aprobado el CCSE y, si te corresponde, el DELE A2?',
             options: [
               { v: 'none', l: 'No, ninguno' },
+              { v: 'ccse', l: 'Solo el CCSE (hispanohablante)' },
               { v: 'dele', l: 'Solo el DELE A2' },
               { v: 'both', l: 'Los dos' },
               { v: 'not_needed', l: 'No me hacen falta' }
             ],
-            help: 'Solo se piden para la nacionalidad por residencia. Los nacionales de países hispanohablantes están exentos del DELE, pero no del CCSE.'
+            help: 'Para la nacionalidad por residencia el CCSE es obligatorio. Los nacionales de países hispanohablantes están exentos del DELE A2, pero no del CCSE.'
           },
           {
             id: 'hasDisability', type: 'radio', label: 'Sobre ti: ¿tienes alguna discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },

@@ -331,7 +331,7 @@
     d.hasTieDoc = d.owns('tie') || d.hasPermit;
     d.permitExpired = p.permitStatus === 'expired';
     d.permitExpiry = p.permitExpiry || '';
-    d.permitSince = p.permitSince || (d.asylumGranted ? d.asylumGrantedDate : '');
+    d.permitSince = p.permitSince || p.residenceApprovedDate || (d.asylumGranted ? d.asylumGrantedDate : '');
     d.monthsResident = d.permitSince ? (RL.dates.diff(d.permitSince, now) || 0) / 30.44 : null;
     d.residenceApproved = p.residenceApproved || '';
     d.residenceApprovedYears = p.residenceApprovedYears != null ? Number(p.residenceApprovedYears) : null;
@@ -403,7 +403,7 @@
     d.remoteClientsOutside = p.remoteClientsOutside || null;
     d.studiesAdmission = p.studiesAdmission || null;
     d.exams = p.exams || null;
-    d.examsOK = p.exams === 'both' || p.exams === 'not_needed';
+    d.examsOK = p.exams === 'both' || p.exams === 'not_needed' || (d.ibero && p.exams === 'ccse');
     d.examsPartial = p.exams === 'dele';
     d.outsideGoal = p.outsideGoal || null;
     d.degree = p.degree || null;

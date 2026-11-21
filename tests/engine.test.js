@@ -99,7 +99,10 @@ test('cubano con 2,5 años en España: arraigo social como vía principal', () =
 });
 
 test('cubano: los 2 años se calculan bien y la nacionalidad a 2 años queda a la vista', () => {
-  const p = base({ nationality: 'CU', timeInSpain: '2to3y', monthlyIncome: 900 });
+  const p = base({
+    nationality: 'CU', timeInSpain: '2to3y', monthlyIncome: 900,
+    permitStatus: 'residencia_temporal', permitSince: RL.dates.addMonths(RL.dates.today(), -25)
+  });
   const d = RL.derive(p);
   assert.ok(d.monthsInSpain >= 28 && d.monthsInSpain <= 32, 'meses: ' + d.monthsInSpain);
   assert.strictEqual(d.ibero, true);
@@ -107,6 +110,28 @@ test('cubano: los 2 años se calculan bien y la nacionalidad a 2 años queda a l
   const n2 = byId(plan, 'nac_residencia_2');
   assert.ok(n2, 'no existe nac_residencia_2');
   assert.notStrictEqual(n2.status, 'blocked');
+});
+
+test('para la nacionalidad no cuentan el turismo ni el asilo solicitado', () => {
+  const plan = RL.buildPlan(base({
+    nationality: 'CU', timeInSpain: '2to3y', permitStatus: 'none', asylumStage: 'denegado'
+  }));
+  const n2 = byId(plan, 'nac_residencia_2');
+  assert.ok(n2, 'no existe nac_residencia_2');
+  assert.match(n2.fit, /turista o solicitante de asilo|residencia legal/i);
+  assert.strictEqual(n2.status === 'ready', false);
+});
+
+test('un latino con CCSE y 2 años de residencia no necesita DELE', () => {
+  const plan = RL.buildPlan(base({
+    nationality: 'AR', monthlyIncome: 900,
+    permitStatus: 'residencia_temporal', permitSince: RL.dates.addMonths(RL.dates.today(), -25),
+    exams: 'ccse'
+  }));
+  const n2 = byId(plan, 'nac_residencia_2');
+  assert.ok(n2, 'no existe nac_residencia_2');
+  assert.notStrictEqual(n2.status, 'blocked');
+  assert.match(n2.fit, /Ya cumples el tiempo/i);
 });
 
 /* ───────────── perfil: nieto venezolano ───────────── */

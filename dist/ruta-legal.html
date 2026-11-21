@@ -1930,8 +1930,8 @@ body.has-speech-bar { padding-bottom: 86px; }
             id: 'permitExpiry', type: 'date', label: '¿Cuándo caduca o caducó tu permiso?', showIf: function (p) { return inSpain(p) && /studies|work|family|eu_family|longterm|expired/.test(p.permitStatus || ''); }
           },
           {
-            id: 'permitSince', type: 'date', label: '¿Desde cuándo tienes ese permiso? (opcional)', showIf: function (p) { return inSpain(p) && /studies|work|family|eu_family|longterm/.test(p.permitStatus || ''); },
-            help: 'Con esta fecha calculamos cuándo podrías pedir la nacionalidad por residencia.'
+            id: 'permitSince', type: 'date', label: '¿Desde cuándo tienes la residencia legal?', showIf: function (p) { return inSpain(p) && (/studies|work|family|eu_family|longterm|residencia_temporal/.test(p.permitStatus || '') || p.residenceApproved === 'yes' || owns(p, 'tie')); },
+            help: 'Es la fecha desde la que cuenta la residencia para la nacionalidad. No cuentan el tiempo como turista ni como solicitante de asilo.'
           },
           {
             id: 'hasNie', type: 'radio', label: '¿Tienes NIE (número de identidad de extranjero)?', showIf: function (p) { return inSpain(p) && !owns(p, 'nie') && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },
@@ -2421,14 +2421,15 @@ body.has-speech-bar { padding-bottom: 86px; }
             options: [{ v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'no', l: 'No' }]
           },
           {
-            id: 'exams', type: 'select', label: '¿Has aprobado los exámenes de nacionalidad (DELE A2 y CCSE)?',
+            id: 'exams', type: 'select', label: '¿Has aprobado el CCSE y, si te corresponde, el DELE A2?',
             options: [
               { v: 'none', l: 'No, ninguno' },
+              { v: 'ccse', l: 'Solo el CCSE (hispanohablante)' },
               { v: 'dele', l: 'Solo el DELE A2' },
               { v: 'both', l: 'Los dos' },
               { v: 'not_needed', l: 'No me hacen falta' }
             ],
-            help: 'Solo se piden para la nacionalidad por residencia. Los nacionales de países hispanohablantes están exentos del DELE, pero no del CCSE.'
+            help: 'Para la nacionalidad por residencia el CCSE es obligatorio. Los nacionales de países hispanohablantes están exentos del DELE A2, pero no del CCSE.'
           },
           {
             id: 'hasDisability', type: 'radio', label: 'Sobre ti: ¿tienes alguna discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },
@@ -2663,7 +2664,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     tie: { id: 'nac_tie', name: 'TIE o tarjeta de residencia', where: 'Extranjería' },
     ant: { id: 'nac_ant', name: 'Certificado de antecedentes penales', where: 'País de origen y España', note: 'Apostillado y traducido. Caduca a los 3-6 meses.' },
     padron: { id: 'nac_padron', name: 'Certificado de empadronamiento', where: 'Ayuntamiento' },
-    examenes: { id: 'nac_examenes', name: 'Diploma DELE A2 y certificado CCSE', where: 'Instituto Cervantes', note: 'DELE 138 € · CCSE 85 €. Deben estar aprobados antes de solicitar.' },
+    examenes: { id: 'nac_examenes', name: 'CCSE aprobado (y DELE A2 solo si no eres hispanohablante)', where: 'Instituto Cervantes', note: 'CCSE 85 € obligatorio. DELE A2 138 € solo para quienes no tienen el español como lengua materna. Deben estar aprobados antes de solicitar.' },
     tasa: { id: 'nac_tasa', name: 'Tasa 790-026 (104,05 €)', where: 'Sede del Ministerio de Justicia', note: 'Se paga antes y no se devuelve.' },
     jura: { id: 'nac_jura', name: 'Jura o promesa e inscripción', where: 'Registro Civil', note: 'Tras la concesión: 180 días para jurar o caduca.' }
   };
@@ -2681,19 +2682,30 @@ body.has-speech-bar { padding-bottom: 86px; }
     return 0;
   }
   function residenceAtLeast(need) {
-    return function (p, d) { return legalMonths(p, d) >= need; };
+    return function (p, d) {
+      var m = legalMonths(p, d);
+      return m == null ? null : m >= need;
+    };
   }
   function residenceFix(need) {
     return function (p, d) {
       if (p.permitStatus === 'studies') return 'El tiempo como estudiante no cuenta como residencia para la nacionalidad: necesitas una autorización de residencia (trabajo, familiar, etc.).';
-      if (!d.hasPermit) return 'Necesitas primero una residencia legal. Mira las vías para regularizarte o venir con visado.';
-      if (d.monthsResident == null) return 'Indica desde cuándo tienes tu permiso para calcular cuánto te falta.';
-      return 'Te faltan ' + RL.fmt.duration(need - d.monthsResident) + ' de residencia legal.';
+      if (!d.hasPermit && d.residenceApproved !== 'yes') return 'Necesitas primero una residencia legal. Mira las vías para regularizarte o venir con visado.';
+      var m = legalMonths(p, d);
+      if (m == null) return 'Indica desde cuándo tienes la residencia legal para calcular cuánto te falta.';
+      if (m <= 0) return 'El tiempo como turista o solicitante de asilo no cuenta. El plazo empieza con la residencia legal.';
+      return 'Te faltan ' + RL.fmt.duration(need - m) + ' de residencia legal.';
     };
   }
   function examsOK(p, d) {
     if (d.examsOK) return true;
     if (d.exams === 'none') return false;
+    return null;
+  }
+  function examsResidenceOK(p, d) {
+    if (d.exams === 'both') return true;
+    if (languageExempt(p, d) && d.exams === 'ccse') return true;
+    if (d.exams === 'none' || d.exams === 'dele' || d.exams === 'not_needed') return false;
     return null;
   }
   function languageExempt(p, d) {
@@ -2821,7 +2833,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       }, fix: 'Necesitas acreditar que el antepasado era español de origen (no nacionalizado después).' },
       { label: 'Llevas al menos 1 año de residencia legal', test: residenceAtLeast(12), fix: residenceFix(12) },
       { label: 'Tienes buena conducta cívica y antecedentes limpios', test: function (p, d) { if (d.criminalSpain === 'no' && d.criminalOrigin === 'no') return true; if (d.criminalSpain === 'yes' || d.criminalOrigin === 'yes') return false; return null; }, actionable: false },
-      { label: 'Acreditas integración (los exámenes, si te aplican)', test: examsOK, fix: 'Necesitas el CCSE y, si no eres hispanohablante nativo, el DELE A2. Deben estar aprobados antes de solicitar.' }
+      { label: 'Acreditas integración (los exámenes, si te aplican)', test: examsResidenceOK, fix: 'Necesitas el CCSE y, si no eres hispanohablante nativo, el DELE A2. Deben estar aprobados antes de solicitar.' }
     ],
     blockers: [
       { label: 'No tienes ascendencia española de origen.', test: function (p, d) { return !(d.spanishParent || d.spanishGrandparent); } },
@@ -2870,7 +2882,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       { label: 'Eres nacional de un país iberoamericano, Andorra, Filipinas, Guinea Ecuatorial o Portugal', test: function (p, d) { return d.ibero; }, actionable: false },
       { label: 'Llevas 2 años de residencia legal, continuada e inmediatamente anterior', test: residenceAtLeast(24), fix: residenceFix(24) },
       { label: 'Tienes buena conducta cívica y antecedentes limpios', test: function (p, d) { if (d.criminalSpain === 'no' && d.criminalOrigin === 'no') return true; if (d.criminalSpain === 'yes' || d.criminalOrigin === 'yes') return false; return null; }, actionable: false },
-      { label: 'Acreditas integración (CCSE y DELE si procede)', test: examsOK, fix: 'CCSE obligatorio; DELE A2 exento para nacionales de países hispanohablantes. Deben estar aprobados antes de solicitar.' }
+      { label: 'Acreditas integración (CCSE aprobado; DELE A2 solo si no eres hispanohablante)', test: examsResidenceOK, fix: 'El CCSE es obligatorio. Los nacionales de países hispanohablantes están exentos del DELE A2, pero no del CCSE.' }
     ],
     blockers: [
       { label: 'Tu nacionalidad no está en el supuesto de 2 años: el plazo general es de 10.', test: function (p, d) { return p.nationality && !d.ibero; } },
@@ -2889,11 +2901,18 @@ body.has-speech-bar { padding-bottom: 86px; }
     time: 'Resolución legal en 1 año; en la práctica, 7 meses a 2 años',
     risks: [
       'La estancia por estudios no cuenta como residencia.',
+      'El tiempo como turista o solicitante de asilo no cuenta: el plazo empieza con la residencia legal.',
       'Las ausencias largas rompen la continuidad.',
-      'El CCSE no se exime por nacionalidad.'
+      'El CCSE no se exime por nacionalidad; el DELE A2 sí para hispanohablantes.'
     ],
     links: [L.cc, L.mj, L.cerv],
-    fit: function (p, d) { return d.ibero ? 'Por tu nacionalidad, el plazo se reduce a 2 años de residencia legal.' : ''; }
+    fit: function (p, d) {
+      if (!d.ibero) return '';
+      var m = legalMonths(p, d);
+      if (m == null) return 'Por tu nacionalidad el plazo es de 2 años, pero falta la fecha desde la que tienes residencia legal. El tiempo como turista o solicitante de asilo no cuenta.';
+      if (m < 24) return 'Por tu nacionalidad el plazo es de 2 años, pero aún no los cumples: te faltan ' + RL.fmt.duration(24 - m) + ' desde tu residencia legal. El tiempo como turista o solicitante de asilo no cuenta.';
+      return 'Por tu nacionalidad, el plazo se reduce a 2 años de residencia legal. Ya cumples el tiempo; revisa CCSE y documentación.';
+    }
   });
 
   /* ══════════════════════════════════════════════════════════
@@ -2916,7 +2935,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       { label: 'Encajas en un supuesto de 1 año', test: function (p, d) { if (d.bornInSpain) return true; if (d.hasSpanishSpouse && p.maritalStatus === 'casado') return null; if (p.maritalStatus === 'viudo') return null; return null; }, fix: 'Nacido en España, casado con español/a un año, viudo/a de español/a, tutela o acogimiento español durante 2 años, u opción no ejercida.' },
       { label: 'Llevas 1 año de residencia legal', test: residenceAtLeast(12), fix: residenceFix(12) },
       { label: 'Tienes buena conducta y antecedentes limpios', test: function (p, d) { if (d.criminalSpain === 'no' && d.criminalOrigin === 'no') return true; if (d.criminalSpain === 'yes' || d.criminalOrigin === 'yes') return false; return null; }, actionable: false },
-      { label: 'Acreditas integración (CCSE y DELE si procede)', test: examsOK, fix: 'CCSE obligatorio; DELE A2 según tu lengua materna.' }
+      { label: 'Acreditas integración (CCSE y DELE si procede)', test: examsResidenceOK, fix: 'CCSE obligatorio; DELE A2 según tu lengua materna.' }
     ],
     blockers: [
       { label: 'No encajas en ninguno de los supuestos de 1 año.', test: function (p, d) { return !d.bornInSpain && !d.hasSpanishSpouse && p.maritalStatus !== 'viudo'; } },
@@ -2959,7 +2978,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     requirements: [
       { label: 'Llevas 10 años de residencia legal (5 si eres refugiado)', test: function (p, d) { if (d.asylumInProcess && !d.asylumGranted) return false; return legalMonths(p, d) >= (d.asylumGranted ? 60 : 120); }, actionable: false, fix: function (p, d) { return 'Te faltan ' + RL.fmt.duration(Math.max(0, (d.asylumGranted ? 60 : 120) - (legalMonths(p, d) || 0))) + ' de residencia legal.'; } },
       { label: 'Tienes buena conducta y antecedentes limpios', test: function (p, d) { if (d.criminalSpain === 'no' && d.criminalOrigin === 'no') return true; if (d.criminalSpain === 'yes' || d.criminalOrigin === 'yes') return false; return null; }, actionable: false },
-      { label: 'Acreditas integración (CCSE y DELE si procede)', test: examsOK, fix: 'CCSE obligatorio; DELE A2 según tu lengua materna.' }
+      { label: 'Acreditas integración (CCSE y DELE si procede)', test: examsResidenceOK, fix: 'CCSE obligatorio; DELE A2 según tu lengua materna.' }
     ],
     blockers: [
       { label: 'Solo se puede solicitar desde España, con residencia legal.', test: function (p, d) { return d.outside; } },
@@ -5048,7 +5067,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     {
       id: 'nacionalidad', scope: 'national', cat: 'documentos', icon: 'doc',
       title: 'Nacionalidad por residencia',
-      when: 'A los 10 años (regla general), 2 años si eres iberoamericano/a, Andorra, Filipinas, Guinea Ecuatorial o Portugal; 1 año en supuestos especiales.',
+      when: 'A los 10 años (regla general), 2 años si eres iberoamericano/a, Andorra, Filipinas, Guinea Ecuatorial o Portugal; 1 año en supuestos especiales. Solo cuenta la residencia legal: no el turismo ni el tiempo como solicitante de asilo.',
       where: 'Sede electrónica del Ministerio de Justicia',
       appointment: JUSTICIA,
       appointmentLabel: 'Abrir solicitud online',
@@ -5057,18 +5076,18 @@ body.has-speech-bar { padding-bottom: 86px; }
         'Certificado de nacimiento apostillado y traducido',
         'Certificado de antecedentes penales',
         'Prueba de residencia legal y continuada',
-        'CCSE y, si no eres hispanohablante, DELE A2',
+        'CCSE obligatorio; DELE A2 solo si no eres hispanohablante',
         'Tasa 790-026 (104,05 €)'
       ],
       steps: [
-        'Comprueba cuántos años de residencia legal tienes y si son continuos.',
-        'Inscríbete en el CCSE y, si procede, en el DELE A2 del Instituto Cervantes.',
+        'Comprueba cuántos años de residencia legal tienes y si son continuos. El turismo y el asilo solicitado no cuentan.',
+        'Inscríbete en el CCSE y, solo si no eres hispanohablante, en el DELE A2 del Instituto Cervantes.',
         'Reúne los documentos apostillados y traducidos.',
         'Paga la tasa 790-026 y presenta la solicitud online con certificado digital o Cl@ve.',
         'Cuando te concedan, tienes 180 días para jurar o prometer y luego inscribirte en el Registro Civil.'
       ],
-      fee: '104,05 € (790-026)',
-      note: 'El tiempo de estudios no cuenta al 100 % para la nacionalidad. La nacionalidad no regulariza automáticamente a tus familiares.',
+      fee: '104,05 € + 85 € CCSE (+ 138 € DELE si no eres hispanohablante)',
+      note: 'Solo cuenta la residencia legal: el tiempo como turista o solicitante de asilo no computa. El CCSE es obligatorio; los hispanohablantes están exentos del DELE A2, no del CCSE. La nacionalidad no regulariza automáticamente a tus familiares.',
       routeIds: ['nac_residencia_2', 'nac_residencia_1', 'nac_residencia_10', 'nac_22_2f', 'nac_origen', 'nac_opcion']
     },
     {
@@ -7249,7 +7268,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.hasTieDoc = d.owns('tie') || d.hasPermit;
     d.permitExpired = p.permitStatus === 'expired';
     d.permitExpiry = p.permitExpiry || '';
-    d.permitSince = p.permitSince || (d.asylumGranted ? d.asylumGrantedDate : '');
+    d.permitSince = p.permitSince || p.residenceApprovedDate || (d.asylumGranted ? d.asylumGrantedDate : '');
     d.monthsResident = d.permitSince ? (RL.dates.diff(d.permitSince, now) || 0) / 30.44 : null;
     d.residenceApproved = p.residenceApproved || '';
     d.residenceApprovedYears = p.residenceApprovedYears != null ? Number(p.residenceApprovedYears) : null;
@@ -7321,7 +7340,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.remoteClientsOutside = p.remoteClientsOutside || null;
     d.studiesAdmission = p.studiesAdmission || null;
     d.exams = p.exams || null;
-    d.examsOK = p.exams === 'both' || p.exams === 'not_needed';
+    d.examsOK = p.exams === 'both' || p.exams === 'not_needed' || (d.ibero && p.exams === 'ccse');
     d.examsPartial = p.exams === 'dele';
     d.outsideGoal = p.outsideGoal || null;
     d.degree = p.degree || null;

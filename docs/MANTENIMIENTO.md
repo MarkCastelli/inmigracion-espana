@@ -170,7 +170,7 @@ Reglas de redacción que ya sigue la app y conviene mantener:
 ## 7. Verificar antes de publicar
 
 ```bash
-node tests/engine.test.js     # 27 pruebas del motor
+node tests/engine.test.js     # 29 pruebas del motor
 node tests/decision.test.js   # 6 pruebas de la capa de decisión
 node tests/forms.test.js      # 7 pruebas del catálogo de formularios
 node tests/directorio.test.js # 5 pruebas de regiones y directorio

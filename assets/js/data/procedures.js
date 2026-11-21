@@ -175,7 +175,7 @@
     {
       id: 'nacionalidad', scope: 'national', cat: 'documentos', icon: 'doc',
       title: 'Nacionalidad por residencia',
-      when: 'A los 10 años (regla general), 2 años si eres iberoamericano/a, Andorra, Filipinas, Guinea Ecuatorial o Portugal; 1 año en supuestos especiales.',
+      when: 'A los 10 años (regla general), 2 años si eres iberoamericano/a, Andorra, Filipinas, Guinea Ecuatorial o Portugal; 1 año en supuestos especiales. Solo cuenta la residencia legal: no el turismo ni el tiempo como solicitante de asilo.',
       where: 'Sede electrónica del Ministerio de Justicia',
       appointment: JUSTICIA,
       appointmentLabel: 'Abrir solicitud online',
@@ -184,18 +184,18 @@
         'Certificado de nacimiento apostillado y traducido',
         'Certificado de antecedentes penales',
         'Prueba de residencia legal y continuada',
-        'CCSE y, si no eres hispanohablante, DELE A2',
+        'CCSE obligatorio; DELE A2 solo si no eres hispanohablante',
         'Tasa 790-026 (104,05 €)'
       ],
       steps: [
-        'Comprueba cuántos años de residencia legal tienes y si son continuos.',
-        'Inscríbete en el CCSE y, si procede, en el DELE A2 del Instituto Cervantes.',
+        'Comprueba cuántos años de residencia legal tienes y si son continuos. El turismo y el asilo solicitado no cuentan.',
+        'Inscríbete en el CCSE y, solo si no eres hispanohablante, en el DELE A2 del Instituto Cervantes.',
         'Reúne los documentos apostillados y traducidos.',
         'Paga la tasa 790-026 y presenta la solicitud online con certificado digital o Cl@ve.',
         'Cuando te concedan, tienes 180 días para jurar o prometer y luego inscribirte en el Registro Civil.'
       ],
-      fee: '104,05 € (790-026)',
-      note: 'El tiempo de estudios no cuenta al 100 % para la nacionalidad. La nacionalidad no regulariza automáticamente a tus familiares.',
+      fee: '104,05 € + 85 € CCSE (+ 138 € DELE si no eres hispanohablante)',
+      note: 'Solo cuenta la residencia legal: el tiempo como turista o solicitante de asilo no computa. El CCSE es obligatorio; los hispanohablantes están exentos del DELE A2, no del CCSE. La nacionalidad no regulariza automáticamente a tus familiares.',
       routeIds: ['nac_residencia_2', 'nac_residencia_1', 'nac_residencia_10', 'nac_22_2f', 'nac_origen', 'nac_opcion']
     },
     {

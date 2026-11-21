@@ -325,7 +325,7 @@ ruta-legal/
 ├── tests/
 │   ├── harness.js              # carga las fuentes en Node
 │   ├── check_links.py          # auditoría de enlaces (requiere red)
-│   ├── engine.test.js          # 27 pruebas del motor
+│   ├── engine.test.js          # 29 pruebas del motor
 │   ├── decision.test.js        # 6 pruebas de la capa de decisión
 │   ├── forms.test.js           # 7 pruebas del catálogo de formularios
 │   ├── directorio.test.js      # 5 pruebas de regiones y directorio
