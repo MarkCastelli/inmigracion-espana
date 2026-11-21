@@ -67,6 +67,9 @@
         nationality: p['child' + ci + 'Nationality'] || '',
         relation: p['child' + ci + 'Relation'] || '',
         disability: p['child' + ci + 'Disability'] || '',
+        disabilityRecognized: p['child' + ci + 'DisabilityRecognized'] || '',
+        disabilityDegree: p['child' + ci + 'DisabilityDegree'] || '',
+        disabilityExpiry: p['child' + ci + 'DisabilityExpiry'] || '',
         lives: p['child' + ci + 'Lives'] || '',
         education: p['child' + ci + 'Education'] || ''
       };
@@ -97,12 +100,19 @@
     d.permitKind = p.permitKind || '';
     d.studyWorkHours = p.studyWorkHours || null;
     d.familyAbroad = p.familyAbroad || '';
-    d.hasDisability = p.hasDisability === 'yes';
-    d.disabilityInProgress = p.hasDisability === 'in_progress';
+    var hasDisabilityDoc = Array.isArray(p.docsTramites) && p.docsTramites.indexOf('discapacidad') !== -1;
+    d.disabilityClaimed = p.hasDisability === 'yes' || p.hasDisability === 'in_progress';
+    d.disabilityRecognized = p.disabilityRecognized || (hasDisabilityDoc ? 'yes' : (p.hasDisability === 'yes' ? 'yes' : (p.hasDisability === 'in_progress' ? 'in_progress' : 'no')));
+    d.disabilityInProgress = p.hasDisability === 'in_progress' || d.disabilityRecognized === 'in_progress';
+    d.hasDisability = (p.hasDisability === 'yes' && d.disabilityRecognized !== 'no') || hasDisabilityDoc;
     d.disabilityDegree = p.disabilityDegree || null;
+    d.disabilityExpiry = p.disabilityExpiry || '';
     d.disabilityCertificate = p.disabilityCertificate || null;
     d.partnerDisability = p.partnerDisability || null;
-    d.partnerHasDisability = p.partnerDisability === 'yes';
+    d.partnerDisabilityRecognized = p.partnerDisabilityRecognized || (p.partnerDisability === 'yes' ? 'yes' : (p.partnerDisability === 'in_progress' ? 'in_progress' : 'no'));
+    d.partnerHasDisability = p.partnerDisability === 'yes' && d.partnerDisabilityRecognized !== 'no';
+    d.partnerDisabilityDegree = p.partnerDisabilityDegree || null;
+    d.partnerDisabilityExpiry = p.partnerDisabilityExpiry || '';
     d.partnerDependency = p.partnerDependency === 'yes';
     d.householdOthers = Number(p.householdOthers) || 0;
     d.householdDetails = p.householdDetails || '';
@@ -122,7 +132,10 @@
     d.dependency = p.dependency === 'yes';
     d.dependencyInProgress = p.dependency === 'in_progress';
     d.familyNumerosa = p.familyNumerosa === 'yes';
-    d.hasDisabledChild = p.childrenDisability === 'yes' || d.familyChildren.some(function (c) { return c.disability === 'yes'; });
+    d.childrenDisabilityRecognized = p.childrenDisabilityRecognized || (p.childrenDisability === 'yes' ? 'yes' : (p.childrenDisability === 'in_progress' ? 'in_progress' : 'no'));
+    d.childrenDisabilityDegree = p.childrenDisabilityDegree || null;
+    d.childrenDisabilityExpiry = p.childrenDisabilityExpiry || '';
+    d.hasDisabledChild = (p.childrenDisability === 'yes' && d.childrenDisabilityRecognized !== 'no') || d.familyChildren.some(function (c) { return c.disability === 'yes' && c.disabilityRecognized !== 'no'; });
     d.familyNumerosaConsistent = !d.familyNumerosa || d.childrenCount >= 3 || (d.childrenCount === 2 && d.hasDisabledChild);
     d.disabledChildInProgress = p.childrenDisability === 'in_progress' || d.familyChildren.some(function (c) { return c.disability === 'in_progress'; });
     d.foreignStudies = p.foreignStudies === 'yes';
@@ -212,7 +225,7 @@
     d.hasJobSeeker = d.owns('demandante_empleo');
     d.hasRentContract = d.owns('contrato_alquiler');
     d.hasPayslips = d.owns('nominas');
-    d.hasDisability = d.owns('discapacidad');
+    d.hasDisability = d.owns('discapacidad') || (p.hasDisability === 'yes' && d.disabilityRecognized !== 'no') || p.disabilityRecognized === 'yes';
     d.hasReturnAuth = d.owns('autorizacion_regreso');
     d.hasNieDoc = d.owns('nie') || d.owns('tie') || d.owns('tarjeta_ue') || p.hasNie === 'yes';
     d.hasPassportDoc = d.owns('pasaporte');
@@ -1041,6 +1054,23 @@
       universidad: 'Universidad',
       otro: 'Otro',
       dontknow: 'No lo sé'
+    }
+  };
+
+  RL.disability = {
+    degree: {
+      '33_44': '33 % a 44 %',
+      '45_64': '45 % a 64 %',
+      '65_mas': '65 % o más',
+      '33_64': '33 % a 64 %',
+      '65_plus': '65 % o más',
+      dontknow: 'No lo sabe'
+    },
+    recognized: {
+      yes: 'Reconocida',
+      in_progress: 'En trámite',
+      no: 'No reconocida',
+      dontknow: 'No lo sabe'
     }
   };
 })();

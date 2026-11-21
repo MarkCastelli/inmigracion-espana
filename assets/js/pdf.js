@@ -207,8 +207,10 @@
     if (d.sepeCourses) doc.kv('Cursos SEPE terminados', String(d.sepeCourses));
     if (d.sepeCoursesDetails) doc.kv('Detalle de cursos SEPE', d.sepeCoursesDetails);
     if (d.sepeCoursesInProgress) doc.kv('Cursos SEPE en curso', String(d.sepeCoursesInProgress));
-    if (d.partnerHasDisability) doc.kv('Pareja con discapacidad', 'Sí');
+    if (d.partnerHasDisability) doc.kv('Pareja con discapacidad', 'Sí' + (d.partnerDisabilityDegree ? ' · grado ' + (RL.disability.degree[d.partnerDisabilityDegree] || d.partnerDisabilityDegree) : '') + (d.partnerDisabilityExpiry ? ' · vence ' + RL.fmt.date(d.partnerDisabilityExpiry) : ''));
     if (d.partnerDependency) doc.kv('Pareja con dependencia', 'Sí');
+    if (d.hasDisability) doc.kv('Discapacidad del solicitante', 'Sí' + (d.disabilityDegree ? ' · grado ' + (RL.disability.degree[d.disabilityDegree] || d.disabilityDegree) : '') + (d.disabilityExpiry ? ' · vence ' + RL.fmt.date(d.disabilityExpiry) : ''));
+    if (d.hasDisabledChild) doc.kv('Hijo/a con discapacidad', 'Sí' + (d.childrenDisabilityDegree ? ' · grado ' + (RL.disability.degree[d.childrenDisabilityDegree] || d.childrenDisabilityDegree) : '') + (d.childrenDisabilityExpiry ? ' · vence ' + RL.fmt.date(d.childrenDisabilityExpiry) : ''));
     if (d.hasDisabledChild) doc.kv('Hijo/a con discapacidad', 'Sí');
     if (d.householdOthers > 0) doc.kv('Otras personas en casa', String(d.householdOthers));
     if (p.householdDetails) doc.kv('Detalle de convivientes', p.householdDetails);

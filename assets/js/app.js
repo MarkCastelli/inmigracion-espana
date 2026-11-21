@@ -272,6 +272,13 @@
           familySelect('child' + i + 'Disability', 'Discapacidad', p['child' + i + 'Disability'] || '', [
             ['', 'No indicado'], ['no', 'No'], ['yes', 'Sí'], ['in_progress', 'En trámite'], ['dontknow', 'No lo sé']
           ]) +
+          familySelect('child' + i + 'DisabilityRecognized', '¿Discapacidad reconocida?', p['child' + i + 'DisabilityRecognized'] || '', [
+            ['', 'No indicado'], ['yes', 'Sí'], ['in_progress', 'En trámite'], ['no', 'No'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('child' + i + 'DisabilityDegree', 'Grado de discapacidad', p['child' + i + 'DisabilityDegree'] || '', [
+            ['', 'No indicado'], ['33_44', '33-44 %'], ['45_64', '45-64 %'], ['65_mas', '65 % o más'], ['dontknow', 'No lo sé']
+          ]) +
+          familyInput('child' + i + 'DisabilityExpiry', 'Vencimiento del certificado (opcional)', p['child' + i + 'DisabilityExpiry'], 'date') +
           familySelect('child' + i + 'Lives', '¿Vive contigo?', p['child' + i + 'Lives'] || '', [
             ['', 'No indicado'], ['yes', 'Sí'], ['no', 'No'], ['compartida', 'Custodia compartida'], ['dontknow', 'No lo sé']
           ]) +
@@ -950,8 +957,10 @@
     if (d.sepeCourses) rows.push(['Cursos SEPE terminados', String(d.sepeCourses)]);
     if (d.sepeCoursesInProgress) rows.push(['Cursos SEPE en curso', String(d.sepeCoursesInProgress)]);
     if (d.sepeCoursesDetails) rows.push(['Detalle de cursos SEPE', d.sepeCoursesDetails]);
-    if (d.partnerHasDisability) rows.push(['Pareja con discapacidad', 'Sí']);
+    if (d.partnerHasDisability) rows.push(['Pareja con discapacidad', 'Sí' + (d.partnerDisabilityDegree ? ' · ' + (RL.disability.degree[d.partnerDisabilityDegree] || d.partnerDisabilityDegree) : '') + (d.partnerDisabilityExpiry ? ' · vence ' + fmt.date(d.partnerDisabilityExpiry) : '')]);
     if (d.partnerDependency) rows.push(['Pareja con dependencia', 'Sí']);
+    if (d.hasDisability) rows.push(['Tu discapacidad', 'Sí' + (d.disabilityDegree ? ' · ' + (RL.disability.degree[d.disabilityDegree] || d.disabilityDegree) : '') + (d.disabilityExpiry ? ' · vence ' + fmt.date(d.disabilityExpiry) : '')]);
+    if (d.hasDisabledChild) rows.push(['Hijo/a con discapacidad', 'Sí' + (d.childrenDisabilityDegree ? ' · ' + (RL.disability.degree[d.childrenDisabilityDegree] || d.childrenDisabilityDegree) : '') + (d.childrenDisabilityExpiry ? ' · vence ' + fmt.date(d.childrenDisabilityExpiry) : '')]);
     if (d.hasDisabledChild) rows.push(['Hijo/a con discapacidad', 'Sí']);
     if (d.householdOthers > 0) rows.push(['Otras personas en casa', String(d.householdOthers)]);
     rows.push(['Objetivo', goalLabel(p.goals)]);
@@ -962,7 +971,7 @@
       '<button class="btn btn--ghost btn--sm mt-3" data-action="edit" style="width:100%">Editar respuestas</button></div></div>';
   }
   function permitLabel(v) {
-    var m = { none: 'Ninguno', studies: 'Estudios', work: 'Trabajo', family: 'Familiar de español', eu_family: 'Familiar UE', longterm: 'Larga duración', asylum: 'Asilo', expired: 'Caducado', dontknow: 'No lo sé' };
+    var m = { none: 'Ninguno', studies: 'Estudios', residencia_temporal: 'Residencia temporal', work: 'Residencia y trabajo', family: 'Familiar de español', eu_family: 'Familiar UE', longterm: 'Larga duración', asylum: 'Asilo', expired: 'Caducado', dontknow: 'No lo sé' };
     return m[v] || 'No indicado';
   }
   function goalLabel(goals) {

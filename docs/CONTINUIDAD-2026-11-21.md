@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **153 pruebas pasando**.
+- **155 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -44,6 +44,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 14. **TIE**: corregida la ficha. La foto (32 × 26 mm, fondo blanco) la lleva el solicitante; en comisaría solo se toman huellas. La TIE se recoge con una segunda cita, normalmente 30-45 días después, en la misma comisaría.
 15. **Reagrupación**: se avisa en ficha, vía y FAQ de que solo vale si el familiar está fuera de España; si ya está aquí (turista, irregular o indocumentado), no se reagrupa.
 16. **Latinoamericanos**: FAQ con vías de estudio, trabajo y ambas; trabajo 30 h en estudios; no hay visado para buscar trabajo; nacionalidad a 2 años no es visado de entrada.
+17. **Residencia y discapacidad**: la situación distingue residencia temporal y larga duración. Si hay discapacidad, se pregunta reconocimiento, grado y vencimiento para el titular, la pareja, los hijos y cada ficha familiar.
 
 ## Comandos
 

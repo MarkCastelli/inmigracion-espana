@@ -155,9 +155,34 @@
             help: 'Para la pareja estable no registrada se piden 12 meses de convivencia, salvo que tengáis un hijo en común.'
           },
           {
-            id: 'partnerDisability', type: 'radio', label: 'Sobre tu pareja: ¿tiene discapacidad reconocida?', showIf: couple,
+            id: 'partnerDisability', type: 'radio', label: 'Sobre tu pareja: ¿tiene alguna discapacidad?', showIf: couple,
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'No es sobre ti. La discapacidad de tu pareja puede afectar a la reagrupación, la dependencia y las ayudas familiares.'
+          },
+          {
+            id: 'partnerDisabilityRecognized', type: 'select', label: 'Sobre tu pareja: ¿está reconocida?',
+            showIf: function (p) { return couple(p) && (p.partnerDisability === 'yes' || p.partnerDisability === 'in_progress'); },
+            options: [
+              { v: 'yes', l: 'Sí, reconocida' },
+              { v: 'in_progress', l: 'En trámite' },
+              { v: 'no', l: 'No está reconocida' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ]
+          },
+          {
+            id: 'partnerDisabilityDegree', type: 'select', label: 'Sobre tu pareja: ¿qué grado tiene?',
+            showIf: function (p) { return couple(p) && p.partnerDisabilityRecognized === 'yes'; },
+            options: [
+              { v: '33_44', l: 'Del 33 % al 44 %' },
+              { v: '45_64', l: 'Del 45 % al 64 %' },
+              { v: '65_mas', l: '65 % o más' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ]
+          },
+          {
+            id: 'partnerDisabilityExpiry', type: 'date', label: 'Sobre tu pareja: ¿cuándo vence el certificado? (opcional)',
+            showIf: function (p) { return couple(p) && p.partnerDisabilityRecognized === 'yes'; },
+            help: 'Si no caduca o no lo sabes, déjalo vacío.'
           },
           {
             id: 'partnerDependency', type: 'radio', label: 'Sobre tu pareja: ¿tiene reconocida la dependencia?', showIf: couple,
@@ -190,6 +215,32 @@
             id: 'childrenDisability', type: 'radio', label: 'Sobre los hijos: ¿alguno de los que conviven contigo tiene discapacidad?', showIf: hasKids,
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí, alguno' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'Incluye a los hijos solo de tu pareja que conviven contigo, aunque no sean hijos tuyos. No marques aquí tu propia discapacidad.'
+          },
+          {
+            id: 'childrenDisabilityRecognized', type: 'select', label: 'Sobre ese hijo/a: ¿está reconocida?',
+            showIf: function (p) { return hasKids(p) && (p.childrenDisability === 'yes' || p.childrenDisability === 'in_progress'); },
+            options: [
+              { v: 'yes', l: 'Sí, reconocida' },
+              { v: 'in_progress', l: 'En trámite' },
+              { v: 'no', l: 'No está reconocida' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ]
+          },
+          {
+            id: 'childrenDisabilityDegree', type: 'select', label: 'Sobre ese hijo/a: ¿qué grado tiene?',
+            showIf: function (p) { return hasKids(p) && p.childrenDisabilityRecognized === 'yes'; },
+            options: [
+              { v: '33_44', l: 'Del 33 % al 44 %' },
+              { v: '45_64', l: 'Del 45 % al 64 %' },
+              { v: '65_mas', l: '65 % o más' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'Si hay más de un hijo con discapacidad, indica el grado más alto y detállalos en la ficha de cada hijo.'
+          },
+          {
+            id: 'childrenDisabilityExpiry', type: 'date', label: 'Sobre ese hijo/a: ¿cuándo vence el certificado? (opcional)',
+            showIf: function (p) { return hasKids(p) && p.childrenDisabilityRecognized === 'yes'; },
+            help: 'Si no caduca o no lo sabes, déjalo vacío.'
           },
           {
             id: 'householdOthers', type: 'number', label: '¿Cuántas personas más conviven contigo, además de tu pareja e hijos?', min: 0, max: 20, placeholder: '0',
@@ -301,11 +352,12 @@
             help: 'Para el padrón y el arraigo no basta con decir que vives ahí: necesitas contrato, autorización, recibo o escritura. Si no lo tienes, pide al titular un documento firmado.'
           },
           {
-            id: 'permitStatus', type: 'select', label: '¿Qué documento de residencia tienes ahora?', showIf: function (p) { return inSpain(p) && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },
+            id: 'permitStatus', type: 'select', label: '¿Cuál es tu situación de residencia ahora?', showIf: function (p) { return inSpain(p) && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },
             options: [
-              { v: 'none', l: 'Ninguno' },
-              { v: 'studies', l: 'Permiso de estudios (estancia)' },
-              { v: 'work', l: 'Permiso de trabajo o residencia y trabajo' },
+              { v: 'none', l: 'Ninguna / estoy irregular' },
+              { v: 'studies', l: 'Estancia por estudios' },
+              { v: 'residencia_temporal', l: 'Residencia temporal (trabajo, familiar, no lucrativa…)' },
+              { v: 'work', l: 'Residencia y trabajo' },
               { v: 'family', l: 'Residencia por familiar de español' },
               { v: 'eu_family', l: 'Tarjeta de familiar de ciudadano de la UE' },
               { v: 'longterm', l: 'Residencia de larga duración' },
@@ -845,20 +897,37 @@
             help: 'Solo se piden para la nacionalidad por residencia. Los nacionales de países hispanohablantes están exentos del DELE, pero no del CCSE.'
           },
           {
-            id: 'hasDisability', type: 'radio', label: 'Sobre ti: ¿tienes reconocida una discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },
+            id: 'hasDisability', type: 'radio', label: 'Sobre ti: ¿tienes alguna discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
-            help: 'No incluyas aquí a tu pareja o hijos: eso se pregunta en «Sobre ti y tu familia». Esta pregunta es solo sobre ti.'
+            help: 'Aunque no esté reconocida. No incluyas aquí a tu pareja o hijos: eso se pregunta en «Sobre ti y tu familia».'
           },
           {
-            id: 'disabilityDegree', type: 'select', label: '¿Qué grado tienes reconocido?', showIf: function (p) { return owns(p, 'discapacidad') || p.hasDisability === 'yes'; },
+            id: 'disabilityRecognized', type: 'select', label: 'Sobre ti: ¿está reconocida oficialmente?',
+            showIf: function (p) { return p.hasDisability === 'yes' || p.hasDisability === 'in_progress'; },
             options: [
-              { v: '33_64', l: 'Del 33 % al 64 %' },
-              { v: '65_plus', l: '65 % o más' },
+              { v: 'yes', l: 'Sí, reconocida' },
+              { v: 'in_progress', l: 'En trámite' },
+              { v: 'no', l: 'No está reconocida' },
               { v: 'dontknow', l: 'No lo sé' }
             ]
           },
           {
-            id: 'disabilityCertificate', type: 'radio', label: '¿Tienes el certificado de discapacidad?', showIf: function (p) { return p.hasDisability === 'yes' || p.hasDisability === 'in_progress'; },
+            id: 'disabilityDegree', type: 'select', label: '¿Qué grado tienes reconocido?',
+            showIf: function (p) { return owns(p, 'discapacidad') || p.disabilityRecognized === 'yes' || (p.hasDisability === 'yes' && !p.disabilityRecognized); },
+            options: [
+              { v: '33_44', l: 'Del 33 % al 44 %' },
+              { v: '45_64', l: 'Del 45 % al 64 %' },
+              { v: '65_mas', l: '65 % o más' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ]
+          },
+          {
+            id: 'disabilityExpiry', type: 'date', label: '¿Cuándo vence el certificado? (opcional)',
+            showIf: function (p) { return owns(p, 'discapacidad') || p.disabilityRecognized === 'yes'; },
+            help: 'Si no caduca o no lo sabes, déjalo vacío.'
+          },
+          {
+            id: 'disabilityCertificate', type: 'radio', label: '¿Tienes el certificado de discapacidad?', showIf: function (p) { return owns(p, 'discapacidad') || p.hasDisability === 'yes' || p.hasDisability === 'in_progress' || p.disabilityRecognized === 'yes'; },
             options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }]
           },
           {

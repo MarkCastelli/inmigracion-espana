@@ -119,10 +119,11 @@
       l.push('- Antecedentes declarados: España ' + (p.criminalSpain || 'no') + (p.criminalSpainWhen ? ' (' + p.criminalSpainWhen + ')' : '') + ', país de origen ' + (p.criminalOrigin || 'no') + (p.criminalOriginWhen ? ' (' + p.criminalOriginWhen + ')' : ''));
     }
     if (p.permitKind) l.push('- Tipo de autorización: ' + p.permitKind);
-    if (p.hasDisability && p.hasDisability !== 'no') l.push('- Discapacidad: ' + (p.disabilityDegree || 'en trámite') + (p.disabilityCertificate ? '; certificado: ' + p.disabilityCertificate : ''));
+    if (p.hasDisability && p.hasDisability !== 'no') l.push('- Discapacidad: ' + (p.disabilityDegree || 'grado no indicado') + (p.disabilityRecognized ? '; reconocimiento: ' + p.disabilityRecognized : '') + (p.disabilityCertificate ? '; certificado: ' + p.disabilityCertificate : '') + (p.disabilityExpiry ? '; vence: ' + p.disabilityExpiry : ''));
     if (p.dependency && p.dependency !== 'no') l.push('- Dependencia: ' + p.dependency);
     if (p.familyNumerosa && p.familyNumerosa !== 'no') l.push('- Familia numerosa: ' + p.familyNumerosa);
-    if (p.childrenDisability && p.childrenDisability !== 'no') l.push('- Hijos con discapacidad: ' + p.childrenDisability);
+    if (p.partnerDisability && p.partnerDisability !== 'no') l.push('- Pareja con discapacidad: ' + (p.partnerDisabilityDegree || 'grado no indicado') + (p.partnerDisabilityExpiry ? '; vence: ' + p.partnerDisabilityExpiry : ''));
+    if (p.childrenDisability && p.childrenDisability !== 'no') l.push('- Hijos con discapacidad: ' + (p.childrenDisabilityDegree || 'grado no indicado') + (p.childrenDisabilityExpiry ? '; vence: ' + p.childrenDisabilityExpiry : ''));
     if (p.foreignStudies === 'yes') l.push('- Estudios extranjeros: ' + (p.studiesLevel || 'nivel no indicado') + '; homologación: ' + (p.studiesHomologated || 'no indicada'));
     if (p.goals && p.goals.length) l.push('- Objetivo: ' + list(p.goals, GOALS));
     if (opts.includeNotes && p.notes) l.push('- Notas del caso: ' + String(p.notes).slice(0, 600));

@@ -181,7 +181,7 @@ node tests/faq.test.js        # 7 pruebas de preguntas frecuentes
 node tests/online.test.js     # 3 pruebas de sedes y trámites online
 node tests/links.test.js      # 4 pruebas de enlaces y rutas muertas
 node tests/ai.test.js         # 4 pruebas de prompt y consultas
-node tests/familia.test.js    # 16 pruebas de matrimonio, pareja, hijos y reagrupación
+node tests/familia.test.js    # 18 pruebas de matrimonio, pareja, hijos y reagrupación
 node tests/housing.test.js    # 3 pruebas de vivienda y prueba de domicilio
 node tests/docs.test.js       # 7 pruebas de trámites terminados vs. en curso
 node tests/education.test.js  # 4 pruebas de Bachillerato, SEPE y estudios por hijo

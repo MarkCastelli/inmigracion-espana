@@ -59,6 +59,25 @@ test('la reagrupación no vale si el familiar ya está en España', () => {
   assert.match(r.fit || '', /No puedes reagrupar/i);
 });
 
+test('la situación de residencia distingue temporal y larga duración', () => {
+  const field = RL.questions.steps.flatMap(s => s.fields || []).find(f => f.id === 'permitStatus');
+  assert.ok(field, 'falta permitStatus');
+  assert.ok(field.options.some(o => o.v === 'residencia_temporal'), 'falta residencia temporal');
+  assert.ok(field.options.some(o => o.v === 'longterm' && /larga duración/i.test(o.l)), 'falta larga duración');
+});
+
+test('si hay discapacidad se pregunta reconocimiento, grado y vencimiento', () => {
+  const recursos = RL.questions.steps.find(s => s.id === 'recursos');
+  const ids = RL.questions.visibleFields(recursos, base({ hasDisability: 'yes', disabilityRecognized: 'yes' })).map(f => f.id);
+  for (const id of ['disabilityRecognized', 'disabilityDegree', 'disabilityExpiry', 'disabilityCertificate']) {
+    assert.ok(ids.includes(id), 'falta ' + id);
+  }
+  const d = RL.derive(base({ hasDisability: 'yes', disabilityRecognized: 'yes', disabilityDegree: '45_64', disabilityExpiry: '2027-05-01' }));
+  assert.strictEqual(d.hasDisability, true);
+  assert.strictEqual(d.disabilityDegree, '45_64');
+  assert.strictEqual(d.disabilityExpiry, '2027-05-01');
+});
+
 test('la composición familiar crea fichas para las personas que conviven', () => {
   const d = RL.derive(base({ householdSize: 3 }));
   assert.strictEqual(d.extraPeople.length, 3);

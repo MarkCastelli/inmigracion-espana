@@ -336,7 +336,7 @@ ruta-legal/
 │   ├── faq.test.js             # 7 pruebas de preguntas frecuentes
 │   ├── online.test.js          # 3 pruebas de sedes y trámites online
 │   ├── links.test.js           # 4 pruebas de enlaces y rutas muertas
-│   ├── familia.test.js         # 16 pruebas de pareja, matrimonio, hijos y reagrupación
+│   ├── familia.test.js         # 18 pruebas de pareja, matrimonio, hijos y reagrupación
 │   ├── housing.test.js         # 3 pruebas de vivienda y prueba de domicilio
 │   ├── docs.test.js            # 7 pruebas de trámites terminados/en curso
 │   ├── education.test.js       # 4 pruebas de Bachillerato, SEPE y estudios por hijo

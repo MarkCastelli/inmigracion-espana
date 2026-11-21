@@ -1654,9 +1654,34 @@ body.has-speech-bar { padding-bottom: 86px; }
             help: 'Para la pareja estable no registrada se piden 12 meses de convivencia, salvo que tengáis un hijo en común.'
           },
           {
-            id: 'partnerDisability', type: 'radio', label: 'Sobre tu pareja: ¿tiene discapacidad reconocida?', showIf: couple,
+            id: 'partnerDisability', type: 'radio', label: 'Sobre tu pareja: ¿tiene alguna discapacidad?', showIf: couple,
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'No es sobre ti. La discapacidad de tu pareja puede afectar a la reagrupación, la dependencia y las ayudas familiares.'
+          },
+          {
+            id: 'partnerDisabilityRecognized', type: 'select', label: 'Sobre tu pareja: ¿está reconocida?',
+            showIf: function (p) { return couple(p) && (p.partnerDisability === 'yes' || p.partnerDisability === 'in_progress'); },
+            options: [
+              { v: 'yes', l: 'Sí, reconocida' },
+              { v: 'in_progress', l: 'En trámite' },
+              { v: 'no', l: 'No está reconocida' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ]
+          },
+          {
+            id: 'partnerDisabilityDegree', type: 'select', label: 'Sobre tu pareja: ¿qué grado tiene?',
+            showIf: function (p) { return couple(p) && p.partnerDisabilityRecognized === 'yes'; },
+            options: [
+              { v: '33_44', l: 'Del 33 % al 44 %' },
+              { v: '45_64', l: 'Del 45 % al 64 %' },
+              { v: '65_mas', l: '65 % o más' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ]
+          },
+          {
+            id: 'partnerDisabilityExpiry', type: 'date', label: 'Sobre tu pareja: ¿cuándo vence el certificado? (opcional)',
+            showIf: function (p) { return couple(p) && p.partnerDisabilityRecognized === 'yes'; },
+            help: 'Si no caduca o no lo sabes, déjalo vacío.'
           },
           {
             id: 'partnerDependency', type: 'radio', label: 'Sobre tu pareja: ¿tiene reconocida la dependencia?', showIf: couple,
@@ -1689,6 +1714,32 @@ body.has-speech-bar { padding-bottom: 86px; }
             id: 'childrenDisability', type: 'radio', label: 'Sobre los hijos: ¿alguno de los que conviven contigo tiene discapacidad?', showIf: hasKids,
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí, alguno' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'Incluye a los hijos solo de tu pareja que conviven contigo, aunque no sean hijos tuyos. No marques aquí tu propia discapacidad.'
+          },
+          {
+            id: 'childrenDisabilityRecognized', type: 'select', label: 'Sobre ese hijo/a: ¿está reconocida?',
+            showIf: function (p) { return hasKids(p) && (p.childrenDisability === 'yes' || p.childrenDisability === 'in_progress'); },
+            options: [
+              { v: 'yes', l: 'Sí, reconocida' },
+              { v: 'in_progress', l: 'En trámite' },
+              { v: 'no', l: 'No está reconocida' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ]
+          },
+          {
+            id: 'childrenDisabilityDegree', type: 'select', label: 'Sobre ese hijo/a: ¿qué grado tiene?',
+            showIf: function (p) { return hasKids(p) && p.childrenDisabilityRecognized === 'yes'; },
+            options: [
+              { v: '33_44', l: 'Del 33 % al 44 %' },
+              { v: '45_64', l: 'Del 45 % al 64 %' },
+              { v: '65_mas', l: '65 % o más' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'Si hay más de un hijo con discapacidad, indica el grado más alto y detállalos en la ficha de cada hijo.'
+          },
+          {
+            id: 'childrenDisabilityExpiry', type: 'date', label: 'Sobre ese hijo/a: ¿cuándo vence el certificado? (opcional)',
+            showIf: function (p) { return hasKids(p) && p.childrenDisabilityRecognized === 'yes'; },
+            help: 'Si no caduca o no lo sabes, déjalo vacío.'
           },
           {
             id: 'householdOthers', type: 'number', label: '¿Cuántas personas más conviven contigo, además de tu pareja e hijos?', min: 0, max: 20, placeholder: '0',
@@ -1800,11 +1851,12 @@ body.has-speech-bar { padding-bottom: 86px; }
             help: 'Para el padrón y el arraigo no basta con decir que vives ahí: necesitas contrato, autorización, recibo o escritura. Si no lo tienes, pide al titular un documento firmado.'
           },
           {
-            id: 'permitStatus', type: 'select', label: '¿Qué documento de residencia tienes ahora?', showIf: function (p) { return inSpain(p) && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },
+            id: 'permitStatus', type: 'select', label: '¿Cuál es tu situación de residencia ahora?', showIf: function (p) { return inSpain(p) && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },
             options: [
-              { v: 'none', l: 'Ninguno' },
-              { v: 'studies', l: 'Permiso de estudios (estancia)' },
-              { v: 'work', l: 'Permiso de trabajo o residencia y trabajo' },
+              { v: 'none', l: 'Ninguna / estoy irregular' },
+              { v: 'studies', l: 'Estancia por estudios' },
+              { v: 'residencia_temporal', l: 'Residencia temporal (trabajo, familiar, no lucrativa…)' },
+              { v: 'work', l: 'Residencia y trabajo' },
               { v: 'family', l: 'Residencia por familiar de español' },
               { v: 'eu_family', l: 'Tarjeta de familiar de ciudadano de la UE' },
               { v: 'longterm', l: 'Residencia de larga duración' },
@@ -2344,20 +2396,37 @@ body.has-speech-bar { padding-bottom: 86px; }
             help: 'Solo se piden para la nacionalidad por residencia. Los nacionales de países hispanohablantes están exentos del DELE, pero no del CCSE.'
           },
           {
-            id: 'hasDisability', type: 'radio', label: 'Sobre ti: ¿tienes reconocida una discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },
+            id: 'hasDisability', type: 'radio', label: 'Sobre ti: ¿tienes alguna discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
-            help: 'No incluyas aquí a tu pareja o hijos: eso se pregunta en «Sobre ti y tu familia». Esta pregunta es solo sobre ti.'
+            help: 'Aunque no esté reconocida. No incluyas aquí a tu pareja o hijos: eso se pregunta en «Sobre ti y tu familia».'
           },
           {
-            id: 'disabilityDegree', type: 'select', label: '¿Qué grado tienes reconocido?', showIf: function (p) { return owns(p, 'discapacidad') || p.hasDisability === 'yes'; },
+            id: 'disabilityRecognized', type: 'select', label: 'Sobre ti: ¿está reconocida oficialmente?',
+            showIf: function (p) { return p.hasDisability === 'yes' || p.hasDisability === 'in_progress'; },
             options: [
-              { v: '33_64', l: 'Del 33 % al 64 %' },
-              { v: '65_plus', l: '65 % o más' },
+              { v: 'yes', l: 'Sí, reconocida' },
+              { v: 'in_progress', l: 'En trámite' },
+              { v: 'no', l: 'No está reconocida' },
               { v: 'dontknow', l: 'No lo sé' }
             ]
           },
           {
-            id: 'disabilityCertificate', type: 'radio', label: '¿Tienes el certificado de discapacidad?', showIf: function (p) { return p.hasDisability === 'yes' || p.hasDisability === 'in_progress'; },
+            id: 'disabilityDegree', type: 'select', label: '¿Qué grado tienes reconocido?',
+            showIf: function (p) { return owns(p, 'discapacidad') || p.disabilityRecognized === 'yes' || (p.hasDisability === 'yes' && !p.disabilityRecognized); },
+            options: [
+              { v: '33_44', l: 'Del 33 % al 44 %' },
+              { v: '45_64', l: 'Del 45 % al 64 %' },
+              { v: '65_mas', l: '65 % o más' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ]
+          },
+          {
+            id: 'disabilityExpiry', type: 'date', label: '¿Cuándo vence el certificado? (opcional)',
+            showIf: function (p) { return owns(p, 'discapacidad') || p.disabilityRecognized === 'yes'; },
+            help: 'Si no caduca o no lo sabes, déjalo vacío.'
+          },
+          {
+            id: 'disabilityCertificate', type: 'radio', label: '¿Tienes el certificado de discapacidad?', showIf: function (p) { return owns(p, 'discapacidad') || p.hasDisability === 'yes' || p.hasDisability === 'in_progress' || p.disabilityRecognized === 'yes'; },
             options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }]
           },
           {
@@ -6873,6 +6942,9 @@ body.has-speech-bar { padding-bottom: 86px; }
         nationality: p['child' + ci + 'Nationality'] || '',
         relation: p['child' + ci + 'Relation'] || '',
         disability: p['child' + ci + 'Disability'] || '',
+        disabilityRecognized: p['child' + ci + 'DisabilityRecognized'] || '',
+        disabilityDegree: p['child' + ci + 'DisabilityDegree'] || '',
+        disabilityExpiry: p['child' + ci + 'DisabilityExpiry'] || '',
         lives: p['child' + ci + 'Lives'] || '',
         education: p['child' + ci + 'Education'] || ''
       };
@@ -6903,12 +6975,19 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.permitKind = p.permitKind || '';
     d.studyWorkHours = p.studyWorkHours || null;
     d.familyAbroad = p.familyAbroad || '';
-    d.hasDisability = p.hasDisability === 'yes';
-    d.disabilityInProgress = p.hasDisability === 'in_progress';
+    var hasDisabilityDoc = Array.isArray(p.docsTramites) && p.docsTramites.indexOf('discapacidad') !== -1;
+    d.disabilityClaimed = p.hasDisability === 'yes' || p.hasDisability === 'in_progress';
+    d.disabilityRecognized = p.disabilityRecognized || (hasDisabilityDoc ? 'yes' : (p.hasDisability === 'yes' ? 'yes' : (p.hasDisability === 'in_progress' ? 'in_progress' : 'no')));
+    d.disabilityInProgress = p.hasDisability === 'in_progress' || d.disabilityRecognized === 'in_progress';
+    d.hasDisability = (p.hasDisability === 'yes' && d.disabilityRecognized !== 'no') || hasDisabilityDoc;
     d.disabilityDegree = p.disabilityDegree || null;
+    d.disabilityExpiry = p.disabilityExpiry || '';
     d.disabilityCertificate = p.disabilityCertificate || null;
     d.partnerDisability = p.partnerDisability || null;
-    d.partnerHasDisability = p.partnerDisability === 'yes';
+    d.partnerDisabilityRecognized = p.partnerDisabilityRecognized || (p.partnerDisability === 'yes' ? 'yes' : (p.partnerDisability === 'in_progress' ? 'in_progress' : 'no'));
+    d.partnerHasDisability = p.partnerDisability === 'yes' && d.partnerDisabilityRecognized !== 'no';
+    d.partnerDisabilityDegree = p.partnerDisabilityDegree || null;
+    d.partnerDisabilityExpiry = p.partnerDisabilityExpiry || '';
     d.partnerDependency = p.partnerDependency === 'yes';
     d.householdOthers = Number(p.householdOthers) || 0;
     d.householdDetails = p.householdDetails || '';
@@ -6928,7 +7007,10 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.dependency = p.dependency === 'yes';
     d.dependencyInProgress = p.dependency === 'in_progress';
     d.familyNumerosa = p.familyNumerosa === 'yes';
-    d.hasDisabledChild = p.childrenDisability === 'yes' || d.familyChildren.some(function (c) { return c.disability === 'yes'; });
+    d.childrenDisabilityRecognized = p.childrenDisabilityRecognized || (p.childrenDisability === 'yes' ? 'yes' : (p.childrenDisability === 'in_progress' ? 'in_progress' : 'no'));
+    d.childrenDisabilityDegree = p.childrenDisabilityDegree || null;
+    d.childrenDisabilityExpiry = p.childrenDisabilityExpiry || '';
+    d.hasDisabledChild = (p.childrenDisability === 'yes' && d.childrenDisabilityRecognized !== 'no') || d.familyChildren.some(function (c) { return c.disability === 'yes' && c.disabilityRecognized !== 'no'; });
     d.familyNumerosaConsistent = !d.familyNumerosa || d.childrenCount >= 3 || (d.childrenCount === 2 && d.hasDisabledChild);
     d.disabledChildInProgress = p.childrenDisability === 'in_progress' || d.familyChildren.some(function (c) { return c.disability === 'in_progress'; });
     d.foreignStudies = p.foreignStudies === 'yes';
@@ -7018,7 +7100,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.hasJobSeeker = d.owns('demandante_empleo');
     d.hasRentContract = d.owns('contrato_alquiler');
     d.hasPayslips = d.owns('nominas');
-    d.hasDisability = d.owns('discapacidad');
+    d.hasDisability = d.owns('discapacidad') || (p.hasDisability === 'yes' && d.disabilityRecognized !== 'no') || p.disabilityRecognized === 'yes';
     d.hasReturnAuth = d.owns('autorizacion_regreso');
     d.hasNieDoc = d.owns('nie') || d.owns('tie') || d.owns('tarjeta_ue') || p.hasNie === 'yes';
     d.hasPassportDoc = d.owns('pasaporte');
@@ -7849,6 +7931,23 @@ body.has-speech-bar { padding-bottom: 86px; }
       dontknow: 'No lo sé'
     }
   };
+
+  RL.disability = {
+    degree: {
+      '33_44': '33 % a 44 %',
+      '45_64': '45 % a 64 %',
+      '65_mas': '65 % o más',
+      '33_64': '33 % a 64 %',
+      '65_plus': '65 % o más',
+      dontknow: 'No lo sabe'
+    },
+    recognized: {
+      yes: 'Reconocida',
+      in_progress: 'En trámite',
+      no: 'No reconocida',
+      dontknow: 'No lo sabe'
+    }
+  };
 })();
 
 </script>
@@ -8488,10 +8587,11 @@ body.has-speech-bar { padding-bottom: 86px; }
       l.push('- Antecedentes declarados: España ' + (p.criminalSpain || 'no') + (p.criminalSpainWhen ? ' (' + p.criminalSpainWhen + ')' : '') + ', país de origen ' + (p.criminalOrigin || 'no') + (p.criminalOriginWhen ? ' (' + p.criminalOriginWhen + ')' : ''));
     }
     if (p.permitKind) l.push('- Tipo de autorización: ' + p.permitKind);
-    if (p.hasDisability && p.hasDisability !== 'no') l.push('- Discapacidad: ' + (p.disabilityDegree || 'en trámite') + (p.disabilityCertificate ? '; certificado: ' + p.disabilityCertificate : ''));
+    if (p.hasDisability && p.hasDisability !== 'no') l.push('- Discapacidad: ' + (p.disabilityDegree || 'grado no indicado') + (p.disabilityRecognized ? '; reconocimiento: ' + p.disabilityRecognized : '') + (p.disabilityCertificate ? '; certificado: ' + p.disabilityCertificate : '') + (p.disabilityExpiry ? '; vence: ' + p.disabilityExpiry : ''));
     if (p.dependency && p.dependency !== 'no') l.push('- Dependencia: ' + p.dependency);
     if (p.familyNumerosa && p.familyNumerosa !== 'no') l.push('- Familia numerosa: ' + p.familyNumerosa);
-    if (p.childrenDisability && p.childrenDisability !== 'no') l.push('- Hijos con discapacidad: ' + p.childrenDisability);
+    if (p.partnerDisability && p.partnerDisability !== 'no') l.push('- Pareja con discapacidad: ' + (p.partnerDisabilityDegree || 'grado no indicado') + (p.partnerDisabilityExpiry ? '; vence: ' + p.partnerDisabilityExpiry : ''));
+    if (p.childrenDisability && p.childrenDisability !== 'no') l.push('- Hijos con discapacidad: ' + (p.childrenDisabilityDegree || 'grado no indicado') + (p.childrenDisabilityExpiry ? '; vence: ' + p.childrenDisabilityExpiry : ''));
     if (p.foreignStudies === 'yes') l.push('- Estudios extranjeros: ' + (p.studiesLevel || 'nivel no indicado') + '; homologación: ' + (p.studiesHomologated || 'no indicada'));
     if (p.goals && p.goals.length) l.push('- Objetivo: ' + list(p.goals, GOALS));
     if (opts.includeNotes && p.notes) l.push('- Notas del caso: ' + String(p.notes).slice(0, 600));
@@ -8865,8 +8965,10 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (d.sepeCourses) doc.kv('Cursos SEPE terminados', String(d.sepeCourses));
     if (d.sepeCoursesDetails) doc.kv('Detalle de cursos SEPE', d.sepeCoursesDetails);
     if (d.sepeCoursesInProgress) doc.kv('Cursos SEPE en curso', String(d.sepeCoursesInProgress));
-    if (d.partnerHasDisability) doc.kv('Pareja con discapacidad', 'Sí');
+    if (d.partnerHasDisability) doc.kv('Pareja con discapacidad', 'Sí' + (d.partnerDisabilityDegree ? ' · grado ' + (RL.disability.degree[d.partnerDisabilityDegree] || d.partnerDisabilityDegree) : '') + (d.partnerDisabilityExpiry ? ' · vence ' + RL.fmt.date(d.partnerDisabilityExpiry) : ''));
     if (d.partnerDependency) doc.kv('Pareja con dependencia', 'Sí');
+    if (d.hasDisability) doc.kv('Discapacidad del solicitante', 'Sí' + (d.disabilityDegree ? ' · grado ' + (RL.disability.degree[d.disabilityDegree] || d.disabilityDegree) : '') + (d.disabilityExpiry ? ' · vence ' + RL.fmt.date(d.disabilityExpiry) : ''));
+    if (d.hasDisabledChild) doc.kv('Hijo/a con discapacidad', 'Sí' + (d.childrenDisabilityDegree ? ' · grado ' + (RL.disability.degree[d.childrenDisabilityDegree] || d.childrenDisabilityDegree) : '') + (d.childrenDisabilityExpiry ? ' · vence ' + RL.fmt.date(d.childrenDisabilityExpiry) : ''));
     if (d.hasDisabledChild) doc.kv('Hijo/a con discapacidad', 'Sí');
     if (d.householdOthers > 0) doc.kv('Otras personas en casa', String(d.householdOthers));
     if (p.householdDetails) doc.kv('Detalle de convivientes', p.householdDetails);
@@ -9859,6 +9961,13 @@ body.has-speech-bar { padding-bottom: 86px; }
           familySelect('child' + i + 'Disability', 'Discapacidad', p['child' + i + 'Disability'] || '', [
             ['', 'No indicado'], ['no', 'No'], ['yes', 'Sí'], ['in_progress', 'En trámite'], ['dontknow', 'No lo sé']
           ]) +
+          familySelect('child' + i + 'DisabilityRecognized', '¿Discapacidad reconocida?', p['child' + i + 'DisabilityRecognized'] || '', [
+            ['', 'No indicado'], ['yes', 'Sí'], ['in_progress', 'En trámite'], ['no', 'No'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('child' + i + 'DisabilityDegree', 'Grado de discapacidad', p['child' + i + 'DisabilityDegree'] || '', [
+            ['', 'No indicado'], ['33_44', '33-44 %'], ['45_64', '45-64 %'], ['65_mas', '65 % o más'], ['dontknow', 'No lo sé']
+          ]) +
+          familyInput('child' + i + 'DisabilityExpiry', 'Vencimiento del certificado (opcional)', p['child' + i + 'DisabilityExpiry'], 'date') +
           familySelect('child' + i + 'Lives', '¿Vive contigo?', p['child' + i + 'Lives'] || '', [
             ['', 'No indicado'], ['yes', 'Sí'], ['no', 'No'], ['compartida', 'Custodia compartida'], ['dontknow', 'No lo sé']
           ]) +
@@ -10537,8 +10646,10 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (d.sepeCourses) rows.push(['Cursos SEPE terminados', String(d.sepeCourses)]);
     if (d.sepeCoursesInProgress) rows.push(['Cursos SEPE en curso', String(d.sepeCoursesInProgress)]);
     if (d.sepeCoursesDetails) rows.push(['Detalle de cursos SEPE', d.sepeCoursesDetails]);
-    if (d.partnerHasDisability) rows.push(['Pareja con discapacidad', 'Sí']);
+    if (d.partnerHasDisability) rows.push(['Pareja con discapacidad', 'Sí' + (d.partnerDisabilityDegree ? ' · ' + (RL.disability.degree[d.partnerDisabilityDegree] || d.partnerDisabilityDegree) : '') + (d.partnerDisabilityExpiry ? ' · vence ' + fmt.date(d.partnerDisabilityExpiry) : '')]);
     if (d.partnerDependency) rows.push(['Pareja con dependencia', 'Sí']);
+    if (d.hasDisability) rows.push(['Tu discapacidad', 'Sí' + (d.disabilityDegree ? ' · ' + (RL.disability.degree[d.disabilityDegree] || d.disabilityDegree) : '') + (d.disabilityExpiry ? ' · vence ' + fmt.date(d.disabilityExpiry) : '')]);
+    if (d.hasDisabledChild) rows.push(['Hijo/a con discapacidad', 'Sí' + (d.childrenDisabilityDegree ? ' · ' + (RL.disability.degree[d.childrenDisabilityDegree] || d.childrenDisabilityDegree) : '') + (d.childrenDisabilityExpiry ? ' · vence ' + fmt.date(d.childrenDisabilityExpiry) : '')]);
     if (d.hasDisabledChild) rows.push(['Hijo/a con discapacidad', 'Sí']);
     if (d.householdOthers > 0) rows.push(['Otras personas en casa', String(d.householdOthers)]);
     rows.push(['Objetivo', goalLabel(p.goals)]);
@@ -10549,7 +10660,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       '<button class="btn btn--ghost btn--sm mt-3" data-action="edit" style="width:100%">Editar respuestas</button></div></div>';
   }
   function permitLabel(v) {
-    var m = { none: 'Ninguno', studies: 'Estudios', work: 'Trabajo', family: 'Familiar de español', eu_family: 'Familiar UE', longterm: 'Larga duración', asylum: 'Asilo', expired: 'Caducado', dontknow: 'No lo sé' };
+    var m = { none: 'Ninguno', studies: 'Estudios', residencia_temporal: 'Residencia temporal', work: 'Residencia y trabajo', family: 'Familiar de español', eu_family: 'Familiar UE', longterm: 'Larga duración', asylum: 'Asilo', expired: 'Caducado', dontknow: 'No lo sé' };
     return m[v] || 'No indicado';
   }
   function goalLabel(goals) {

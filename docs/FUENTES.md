@@ -397,3 +397,5 @@ Las preguntas se inspiraron en dudas recurrentes de foros y consultas, pero **no
 **Reagrupación familiar:** arts. 65-70 RD 1155/2024. Solo para familiares que están fuera de España: el reagrupante solicita autorización y el familiar pide visado en el consulado. Si el familiar ya está en España, aunque sea de turismo o en situación irregular, no se reagrupa; hay que valorar familiar de español/UE, arraigo u otra vía. [V]
 
 **Latinoamericanos:** visado de estudios (trabajo compatible hasta 30 h/semana), visado de trabajo con oferta/contrato, altamente cualificado, nómada digital o emprendedor. No hay visado para buscar trabajo; el turismo no habilita a trabajar. La nacionalidad por 2 años de residencia legal es un derecho posterior, no una vía de entrada. [V]
+
+**Discapacidad:** el reconocimiento, el grado y la vigencia los determina la comunidad autónoma; el certificado puede tener fecha de vencimiento o revisión. No se presume por diagnosticar una enfermedad. [V/PV]
