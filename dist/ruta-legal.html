@@ -2887,6 +2887,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     blockers: [
       { label: 'Tu nacionalidad no está en el supuesto de 2 años: el plazo general es de 10.', test: function (p, d) { return p.nationality && !d.ibero; } },
       { label: 'Solo se puede solicitar desde España, con residencia legal.', test: function (p, d) { return d.outside; } },
+      { label: 'No tienes residencia legal: el tiempo como turista o solicitante de asilo no cuenta para la nacionalidad.', test: function (p, d) { return legalMonths(p, d) === 0 && !d.hasPermit && d.residenceApproved !== 'yes'; } },
       { label: 'El tiempo como solicitante de asilo no cuenta como residencia para la nacionalidad; espera a la resolución.', test: function (p, d) { return d.asylumInProcess || d.asylumSoon; } },
       { label: 'Es una vía para mayores de edad.', test: function (p, d) { return d.minor; } }
     ],
@@ -7323,6 +7324,13 @@ body.has-speech-bar { padding-bottom: 86px; }
       d.pendingExtranjeria = true;
     }
     if (d.postRenunciationGranted) d.arraigoMonths = null;
+    if (d.hasPermit || d.residenceApproved === 'yes' || d.postRenunciationGranted) {
+      d.asylumInProcess = false;
+      d.asylumSoon = false;
+      d.hasRedCard = false;
+      d.hasWhitePaper = false;
+      d.hasAsylumAppointment = false;
+    }
     if (d.hasPermit || d.postRenunciationGranted || d.residenceApproved === 'yes' || d.asylumBefore90 === 'yes') {
       d.overstay = false;
       d.overstayDays = null;
@@ -7841,7 +7849,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     }
 
     if (d.inSpain && d.entryDate) {
-      if (d.tourist) add(RL.dates.addDays(d.entryDate, 90), 'Fin de los 90 días de turista', 'Si sigues aquí después de esta fecha, tu estancia pasa a ser irregular. No implica expulsión automática, pero sí impide trabajar.', 'soon');
+      if (d.tourist && !d.hasPermit && !d.asylumHistory && d.asylumBefore90 !== 'yes') add(RL.dates.addDays(d.entryDate, 90), 'Fin de los 90 días de turista', 'Si sigues aquí después de esta fecha, tu estancia pasa a ser irregular. No implica expulsión automática, pero sí impide trabajar.', 'soon');
       if (d.arraigoMonths != null && d.arraigoMonths < 24) {
         var arraigoBase = d.asylumDenied && d.asylumDeniedDate ? d.asylumDeniedDate
           : (d.asylumExited ? (d.asylumRenouncedDateISO || '') : d.entryDate);

@@ -111,6 +111,17 @@ test('con residencia posterior no se recomienda seguir el asilo', () => {
   assert.ok(r, 'falta la ficha de seguimiento');
   assert.ok(r.blockers.some(b => /no estás en trámite|autorización posterior/i.test(b)), 'debe bloquear el seguimiento');
   assert.match(r.fit || '', /No es tu vía/i);
+  assert.ok(!plan.timeline.some(t => /Fin de los 90 días de turista/i.test(t.title)), 'no debe mostrar el fin de 90 días');
+});
+
+test('el turismo no abre la nacionalidad de 2 años', () => {
+  const plan = RL.buildPlan(base({
+    nationality: 'AR', entryMode: 'tourist_free', timeInSpain: '2to3y',
+    permitStatus: 'none', goals: ['nacionalidad']
+  }));
+  const n2 = plan.results.find(x => x.route.id === 'nac_residencia_2');
+  assert.ok(n2, 'falta nacionalidad de 2 años');
+  assert.strictEqual(n2.status, 'blocked');
 });
 
 test('desistir del asilo no se registra como denegación', () => {

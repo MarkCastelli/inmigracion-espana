@@ -386,6 +386,13 @@
       d.pendingExtranjeria = true;
     }
     if (d.postRenunciationGranted) d.arraigoMonths = null;
+    if (d.hasPermit || d.residenceApproved === 'yes' || d.postRenunciationGranted) {
+      d.asylumInProcess = false;
+      d.asylumSoon = false;
+      d.hasRedCard = false;
+      d.hasWhitePaper = false;
+      d.hasAsylumAppointment = false;
+    }
     if (d.hasPermit || d.postRenunciationGranted || d.residenceApproved === 'yes' || d.asylumBefore90 === 'yes') {
       d.overstay = false;
       d.overstayDays = null;
@@ -904,7 +911,7 @@
     }
 
     if (d.inSpain && d.entryDate) {
-      if (d.tourist) add(RL.dates.addDays(d.entryDate, 90), 'Fin de los 90 días de turista', 'Si sigues aquí después de esta fecha, tu estancia pasa a ser irregular. No implica expulsión automática, pero sí impide trabajar.', 'soon');
+      if (d.tourist && !d.hasPermit && !d.asylumHistory && d.asylumBefore90 !== 'yes') add(RL.dates.addDays(d.entryDate, 90), 'Fin de los 90 días de turista', 'Si sigues aquí después de esta fecha, tu estancia pasa a ser irregular. No implica expulsión automática, pero sí impide trabajar.', 'soon');
       if (d.arraigoMonths != null && d.arraigoMonths < 24) {
         var arraigoBase = d.asylumDenied && d.asylumDeniedDate ? d.asylumDeniedDate
           : (d.asylumExited ? (d.asylumRenouncedDateISO || '') : d.entryDate);

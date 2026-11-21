@@ -248,6 +248,7 @@
     blockers: [
       { label: 'Tu nacionalidad no está en el supuesto de 2 años: el plazo general es de 10.', test: function (p, d) { return p.nationality && !d.ibero; } },
       { label: 'Solo se puede solicitar desde España, con residencia legal.', test: function (p, d) { return d.outside; } },
+      { label: 'No tienes residencia legal: el tiempo como turista o solicitante de asilo no cuenta para la nacionalidad.', test: function (p, d) { return legalMonths(p, d) === 0 && !d.hasPermit && d.residenceApproved !== 'yes'; } },
       { label: 'El tiempo como solicitante de asilo no cuenta como residencia para la nacionalidad; espera a la resolución.', test: function (p, d) { return d.asylumInProcess || d.asylumSoon; } },
       { label: 'Es una vía para mayores de edad.', test: function (p, d) { return d.minor; } }
     ],
