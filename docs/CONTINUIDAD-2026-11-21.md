@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **171 pruebas pasando**.
+- **172 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -58,6 +58,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 28. **Nacionalidad calculada**: si faltan meses, el paso 1 dice cuántos y la fecha en que cumple; si ya cumple, lo dice. También se refleja en el PDF.
 29. **Acciones condicionadas**: con TIE no se pide padrón histórico; antecedentes solo si hay trámite; huellas solo después del vencimiento; argentinos/peruanos solo CCSE; hijos con ESO en España no necesitan CCSE ni DELE.
 30. **Antecedentes por cita**: se pregunta si hay cita y la fecha; si falta más de 3 meses, la app dice esperar; si está cerca, pide el certificado; sin cita, no lo pide.
+31. **Padrón por cita**: mismo criterio; con TIE no se pide certificado histórico, y sin cita o con cita a más de 3 meses no se pide el certificado actual.
 
 ## Comandos
 

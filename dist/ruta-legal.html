@@ -8120,8 +8120,24 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (d.inSpain) {
       if (!d.empadronado) add('padron', 'Empadrónate cuanto antes',
         'Ve al ayuntamiento con tu pasaporte y, si puedes, un contrato de alquiler o una autorización del dueño. Pide el certificado de empadronamiento y guarda todos los recibos: es tu prueba de permanencia.', 'Esta semana', 'base');
-      else if (!hasStableStatus && d.irregular) add('padron-cert', 'Consigue el certificado de empadronamiento histórico',
-        'Pide en el ayuntamiento un certificado con todas tus altas y bajas. Es el documento que más pesa para acreditar permanencia continuada en un arraigo.', 'Este mes', 'base');
+      else if (!hasStableStatus) {
+        if (d.hasAppointment === 'yes' && d.appointmentDate) {
+          var padDays = RL.dates.diff(RL.dates.today(), d.appointmentDate);
+          if (padDays != null && padDays > 90) {
+            add('padron-espera', 'No pidas el certificado de padrón todavía',
+              'Tu cita es el ' + RL.fmt.date(d.appointmentDate) + '. El certificado de empadronamiento suele caducar a los 3 meses: pídelo a partir del ' + RL.fmt.date(RL.dates.addDays(d.appointmentDate, -90)) + '.', 'A partir de esa fecha', 'base');
+          } else if (padDays != null && padDays >= 0) {
+            add('padron-cert', 'Pide el certificado de empadronamiento para la cita',
+              'Tu cita es el ' + RL.fmt.date(d.appointmentDate) + ', dentro de los próximos 3 meses. Pide el certificado actual en el ayuntamiento y guarda también el histórico si tu vía acredita permanencia.', 'Ahora', 'base');
+          } else {
+            add('padron-cita', 'Revisa la fecha de tu cita antes de pedir el padrón',
+              'La fecha indicada ya pasó. Si la cita se celebró, no pidas un certificado nuevo hasta otra solicitud; si se canceló, pide cita nueva.', 'Ahora', 'base');
+          }
+        } else if (d.hasAppointment === 'no' || d.hasAppointment === 'dontknow') {
+          add('padron-cita', 'Primero consigue cita; no pidas el certificado todavía',
+            'El certificado de empadronamiento caduca a los 3 meses. Sin cita o solicitud concreta, no lo pidas: espera a tener la fecha y pídelo dentro de los 3 meses anteriores.', 'Cuando tengas cita', 'base');
+        }
+      }
       if (p.hasNie !== 'yes') add('nie', 'Saca tu NIE si no lo tienes',
         'Se pide en comisaría con cita previa (o en el consulado, según el caso). No te legaliza, pero lo necesitas para trabajar, alquilar y casi cualquier trámite.', 'Este mes', 'base');
       if (!d.hasDigitalCert) add('digital', 'Saca el certificado digital o Cl@ve',

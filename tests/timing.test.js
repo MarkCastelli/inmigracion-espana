@@ -60,6 +60,23 @@ test('los antecedentes dependen de la fecha de la cita', () => {
   assert.ok(near.actions.some(a => a.id === 'antecedentes'), 'con cita cercana debe pedirlos');
 });
 
+test('el certificado de padrón también depende de la cita', () => {
+  const noCita = RL.buildPlan(base({ permitStatus: 'none', empadronado: 'yes', hasAppointment: 'no' }));
+  assert.ok(noCita.actions.some(a => a.id === 'padron-cita'), 'sin cita no debe pedir padrón');
+
+  const far = RL.buildPlan(base({
+    permitStatus: 'none', empadronado: 'yes', hasAppointment: 'yes',
+    appointmentDate: RL.dates.addDays(RL.dates.today(), 120)
+  }));
+  assert.ok(far.actions.some(a => a.id === 'padron-espera'), 'con cita lejana debe esperar');
+
+  const near = RL.buildPlan(base({
+    permitStatus: 'none', empadronado: 'yes', hasAppointment: 'yes',
+    appointmentDate: RL.dates.addDays(RL.dates.today(), 30)
+  }));
+  assert.ok(near.actions.some(a => a.id === 'padron-cert'), 'con cita cercana debe pedirlo');
+});
+
 test('un visado que caduca pronto genera una ventana', () => {
   const plan = RL.buildPlan(base({ visaExpiry: RL.dates.addDays(RL.dates.today(), 30) }));
   assert.ok(plan.windows.some(w => /caduca en 30 días/i.test(w.title)));
