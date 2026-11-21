@@ -64,6 +64,27 @@ test('la renuncia se guarda aunque solo se recuerde el año', () => {
   assert.ok(!plan.timeline.some(t => /2 años computables para el arraigo/i.test(t.title)), 'sin mes no debe inventar la fecha de arraigo');
 });
 
+test('después de renunciar se distingue arraigo concedido de seguir irregular', () => {
+  const granted = RL.buildPlan(base({
+    entryMode: 'asylum', permitStatus: 'asylum', asylumStage: 'renunciado',
+    asylumRenouncedYear: 2024, asylumRenouncedMonth: '03',
+    postRenunciationOutcome: 'arraigo_granted', postRenunciationDate: '2025-06'
+  }));
+  assert.strictEqual(granted.d.postRenunciationGranted, true);
+  assert.strictEqual(granted.d.hasPermit, true);
+  assert.strictEqual(granted.d.irregular, false);
+  assert.strictEqual(granted.d.arraigoMonths, null);
+  assert.ok(granted.alerts.some(a => /Después de renunciar obtuviste/i.test(a.title)));
+
+  const irregular = RL.buildPlan(base({
+    entryMode: 'asylum', permitStatus: 'asylum', asylumStage: 'renunciado',
+    asylumRenouncedYear: 2024, asylumRenouncedMonth: '03',
+    postRenunciationOutcome: 'irregular'
+  }));
+  assert.strictEqual(irregular.d.irregular, true);
+  assert.ok(irregular.d.arraigoMonths != null);
+});
+
 test('un permiso caducado hace poco avisa de los 3 meses', () => {
   const plan = RL.buildPlan(base({
     permitStatus: 'work', permitExpiry: RL.dates.addDays(RL.dates.today(), -20)

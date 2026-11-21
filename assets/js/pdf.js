@@ -274,6 +274,15 @@
     }
     var stageText = { cita: 'Cita de asilo', solicitado: 'Solicitud presentada (hoja blanca)', admitido: 'Admitida a trámite (tarjeta roja)', concedido: 'Protección internacional concedida', denegado: 'Denegada', renunciado: 'Renuncia a la protección internacional' };
     if (d.asylumStage && stageText[d.asylumStage]) doc.kv('Protección internacional', stageText[d.asylumStage] + (d.asylumRenouncedDateText ? ' · ' + d.asylumRenouncedDateText : ''));
+    if (d.postRenunciation) {
+      var postText = {
+        irregular: 'Siguió irregular', arraigo_pending: 'Arraigo pendiente', arraigo_granted: 'Arraigo concedido',
+        arraigo_denied: 'Arraigo denegado', reg2026_pending: 'Regularización 2026 pendiente',
+        reg2026_granted: 'Regularización 2026 concedida', reg2026_denied: 'Regularización 2026 denegada',
+        other_permit: 'Otro permiso obtenido', left_spain: 'Salió de España', dontknow: 'No lo sabe'
+      };
+      doc.kv('Después de la renuncia', (postText[d.postRenunciation] || d.postRenunciation) + (d.postRenunciationDateISO ? ' · ' + RL.fmt.monthYear(d.postRenunciationDateISO) : ''));
+    }
     if (d.pendingExtranjeria) doc.kv('Expediente abierto', 'Sí');
     if (d.pendingNationality) doc.kv('Nacionalidad en trámite', 'Sí');
 

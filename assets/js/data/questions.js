@@ -502,6 +502,28 @@
             help: 'Opcional. Rellena solo lo que recuerdes; no hace falta completar día, mes y año.'
           },
           {
+            id: 'postRenunciationOutcome', type: 'select', label: 'Después de renunciar, ¿qué pasó?',
+            showIf: function (p) { return p.asylumStage === 'renunciado'; },
+            options: [
+              { v: 'irregular', l: 'Seguí en situación irregular' },
+              { v: 'arraigo_pending', l: 'Solicité arraigo, pendiente de resolución' },
+              { v: 'arraigo_granted', l: 'Me concedieron el arraigo' },
+              { v: 'arraigo_denied', l: 'El arraigo fue denegado' },
+              { v: 'reg2026_pending', l: 'Solicité la regularización de 2026, pendiente' },
+              { v: 'reg2026_granted', l: 'Me concedieron la regularización de 2026' },
+              { v: 'reg2026_denied', l: 'La regularización de 2026 fue denegada' },
+              { v: 'other_permit', l: 'Obtuve otro permiso o autorización' },
+              { v: 'left_spain', l: 'Salí de España' },
+              { v: 'dontknow', l: 'No lo sé / no quiero decirlo' }
+            ],
+            help: 'No es lo mismo seguir irregular que haber obtenido arraigo, la regularización de 2026 u otro permiso. Esto cambia el diagnóstico y lo que te falta.'
+          },
+          {
+            id: 'postRenunciationDate', type: 'month', label: '¿Cuándo ocurrió? Mes y año (opcional)',
+            showIf: function (p) { return p.asylumStage === 'renunciado' && p.postRenunciationOutcome && p.postRenunciationOutcome !== 'dontknow'; },
+            help: 'Si no recuerdas el mes exacto, pon el más aproximado. Sirve para ordenar los hechos, no para inventar una fecha.'
+          },
+          {
             id: 'asylumCitaDate', type: 'date', label: '¿Para cuándo tienes la cita?',
             showIf: function (p) { return p.asylumStage === 'cita'; },
             help: 'Si es en los próximos días, es prioritario: no faltes y lleva tu documentación.'

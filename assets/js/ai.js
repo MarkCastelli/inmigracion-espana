@@ -98,6 +98,10 @@
       if (d.asylumStage && d.asylumStage !== 'no') {
         var st = { cita: 'cita de asilo', solicitado: 'solicitud presentada', admitido: 'tarjeta roja', concedido: 'protección concedida', denegado: 'asilo denegado', renunciado: 'renuncia a la protección internacional' };
         l.push('- Asilo: ' + (st[d.asylumStage] || d.asylumStage) + (d.asylumRenouncedDateText ? ' (' + d.asylumRenouncedDateText + ')' : ''));
+        if (d.postRenunciation) {
+          var postText = { irregular: 'siguió irregular', arraigo_pending: 'arraigo pendiente', arraigo_granted: 'arraigo concedido', arraigo_denied: 'arraigo denegado', reg2026_pending: 'regularización 2026 pendiente', reg2026_granted: 'regularización 2026 concedida', reg2026_denied: 'regularización 2026 denegada', other_permit: 'otro permiso', left_spain: 'salió de España', dontknow: 'no lo sabe' };
+          l.push('- Después de renunciar: ' + (postText[d.postRenunciation] || d.postRenunciation) + (d.postRenunciationDateISO ? ' (' + RL.fmt.monthYear(d.postRenunciationDateISO) + ')' : ''));
+        }
       }
       if (d.pendingExtranjeria) l.push('- Expediente de extranjería abierto');
       if (d.pendingNationality) l.push('- Nacionalidad en trámite');

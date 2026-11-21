@@ -295,9 +295,14 @@
       if (d.asylumAppeal === 'yes' || !d.asylumDeniedDate) d.arraigoMonths = null;
       else d.arraigoMonths = Math.max(0, (RL.dates.diff(d.asylumDeniedDate, now) || 0) / 30.44);
     } else if (d.asylumRenounced) {
-      d.arraigoMonths = d.asylumRenouncedDateISO
-        ? Math.max(0, (RL.dates.diff(d.asylumRenouncedDateISO, now) || 0) / 30.44)
-        : null;
+      if (d.postRenunciationGranted) {
+        d.arraigoMonths = null;
+      } else {
+        var postBase = d.postRenunciationDateISO || d.asylumRenouncedDateISO;
+        d.arraigoMonths = postBase
+          ? Math.max(0, (RL.dates.diff(postBase, now) || 0) / 30.44)
+          : null;
+      }
     }
 
     /* permisos de residencia */
@@ -324,9 +329,37 @@
 
     d.exitOrder = p.exitOrder === 'yes';
     d.leftSpain = p.leftSpain || null;
+    d.postRenunciation = p.postRenunciationOutcome || '';
+    d.postRenunciationDate = p.postRenunciationDate || '';
+    d.postRenunciationDateISO = d.postRenunciationDate && String(d.postRenunciationDate).length === 7
+      ? d.postRenunciationDate + '-01'
+      : d.postRenunciationDate;
+    d.postRenunciationGranted = ['arraigo_granted', 'reg2026_granted', 'other_permit'].indexOf(d.postRenunciation) !== -1;
+    d.postRenunciationPending = ['arraigo_pending', 'reg2026_pending'].indexOf(d.postRenunciation) !== -1;
+    d.postRenunciationDenied = ['arraigo_denied', 'reg2026_denied'].indexOf(d.postRenunciation) !== -1;
     d.regularization = p.regularizationApplied || 'none';
     d.regularizationGranted = p.regularizationApplied === 'granted';
     d.regularizationPending = p.regularizationApplied === 'pending';
+    if (d.postRenunciation === 'reg2026_granted') {
+      d.regularization = 'granted';
+      d.regularizationGranted = true;
+      d.regularizationPending = false;
+    } else if (d.postRenunciation === 'reg2026_pending') {
+      d.regularization = 'pending';
+      d.regularizationGranted = false;
+      d.regularizationPending = true;
+    }
+    if (d.postRenunciationGranted) {
+      d.hasPermit = true;
+      d.irregular = false;
+    } else if (d.postRenunciation === 'irregular') {
+      d.hasPermit = false;
+      d.irregular = true;
+    } else if (d.postRenunciationPending) {
+      d.irregular = false;
+      d.pendingExtranjeria = true;
+    }
+    if (d.asylumRenounced && d.postRenunciationGranted) d.arraigoMonths = null;
 
     d.workedMonths = Number(p.monthsWorked) || 0;
     d.hasCotizaciones = p.cotizaciones === 'yes' || p.cotizaciones === 'some';
@@ -632,6 +665,19 @@
     } else if (d.asylumDenied) {
       add('bad', 'Tu solicitud de asilo fue denegada',
         'Revisa el plazo de recurso con un abogado o una entidad especializada. También puedes valorar arraigo o circunstancias excepcionales.', 'riesgo');
+    }
+    if (d.asylumRenounced && d.postRenunciationGranted) {
+      add('ok', 'Después de renunciar obtuviste una autorización',
+        'Ya no estás en trámite de asilo ni en situación irregular. Revisa la vigencia y el tipo de permiso; el tiempo como solicitante no cuenta para el arraigo.', 'info');
+    } else if (d.asylumRenounced && d.postRenunciationPending) {
+      add('info', 'Tienes una solicitud posterior en trámite',
+        'Después de renunciar al asilo presentaste arraigo o regularización. No puedes pedir otro arraigo mientras el expediente esté abierto; controla requerimientos y resolución.', 'trámite');
+    } else if (d.asylumRenounced && d.postRenunciation === 'irregular') {
+      add('warn', 'Sigues irregular después de renunciar al asilo',
+        'El tiempo como solicitante no cuenta para el arraigo. La referencia es la fecha de renuncia o, si la tienes, la de la resolución posterior. Valora arraigo, regularización cerrada o vía familiar.', 'riesgo');
+    } else if (d.asylumRenounced && d.postRenunciationDenied) {
+      add('warn', 'Tu solicitud posterior fue denegada',
+        'Revisa el plazo de recurso y las alternativas. No presentes otra solicitud sin comprobar antes si hay un expediente abierto o una prohibición.', 'riesgo');
     }
 
     if (d.familyNumerosa && !d.familyNumerosaConsistent) {
