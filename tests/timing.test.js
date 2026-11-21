@@ -101,6 +101,18 @@ test('el asilo antes de 90 días y la residencia posterior no se tratan como sob
   assert.ok(plan.alerts.some(a => /Después del asilo/i.test(a.title)));
 });
 
+test('con residencia posterior no se recomienda seguir el asilo', () => {
+  const plan = RL.buildPlan(base({
+    entryMode: 'tourist_free', timeInSpain: '3plus', asylumStage: 'denegado',
+    asylumBefore90: 'yes', postRenunciationOutcome: 'arraigo_formacion_granted',
+    residenceApproved: 'yes', residenceApprovedYears: 4, docsBase: ['tie']
+  }));
+  const r = plan.results.find(x => x.route.id === 'asilo_seguimiento');
+  assert.ok(r, 'falta la ficha de seguimiento');
+  assert.ok(r.blockers.some(b => /no estás en trámite|autorización posterior/i.test(b)), 'debe bloquear el seguimiento');
+  assert.match(r.fit || '', /No es tu vía/i);
+});
+
 test('desistir del asilo no se registra como denegación', () => {
   const d = RL.derive(base({ asylumStage: 'desistido', asylumBefore90: 'yes' }));
   assert.strictEqual(d.asylumWithdrawn, true);

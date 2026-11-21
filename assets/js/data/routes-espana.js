@@ -600,6 +600,9 @@
     ],
     blockers: [
       { label: 'No tienes una solicitud de asilo en curso.', test: function (p, d) { return !(d.asylumInProcess || d.asylumSoon || d.asylumDenied); } },
+      { label: 'Ya no estás en trámite de asilo: tienes una autorización posterior o una residencia aprobada. Esta vía de seguimiento ya no aplica.', test: function (p, d) { return d.postRenunciationGranted || d.residenceApproved === 'yes' || (d.hasPermit && !d.asylumInProcess); } },
+      { label: 'Desististe o renunciaste al asilo: no hay solicitud en curso que seguir.', test: function (p, d) { return d.asylumExited && !d.asylumInProcess; } },
+      { label: 'Tu asilo fue denegado y no consta que hayas recurrido: no es una vía de seguimiento, es un recurso urgente.', test: function (p, d) { return d.asylumDenied && p.asylumAppeal !== 'yes'; } },
       { label: 'Ya tienes la protección internacional concedida: tu vía es la residencia y la nacionalidad.', test: function (p, d) { return d.asylumGranted; } },
       { label: 'Es una vía para mayores de edad.', test: function (p, d) { return d.minor; } }
     ],
@@ -624,6 +627,11 @@
     ],
     links: [{ t: 'ACNUR España', u: 'https://www.acnur.org/es-es/' }, { t: 'CEAR', u: 'https://www.cear.es/' }, L.min],
     fit: function (p, d) {
+      if (d.postRenunciationGranted || d.residenceApproved === 'yes' || (d.hasPermit && !d.asylumInProcess)) {
+        return 'No es tu vía: ya tienes una autorización posterior o una residencia aprobada. Controla la vigencia de tu TIE.';
+      }
+      if (d.asylumExited) return 'Desististe o renunciaste al asilo: no hay solicitud en curso que seguir. Revisa la vía que abriste después.';
+      if (d.asylumDenied && p.asylumAppeal !== 'yes') return 'Tu asilo fue denegado y no consta recurso: habla con un abogado hoy; esta ficha no es para seguir la solicitud.';
       if (d.asylumSoon) return 'Tienes una cita de asilo: es lo más urgente de tu plan. No faltes.';
       if (d.hasRedCard) return 'Tu tarjeta roja está en curso: controla la caducidad y el permiso de trabajo.';
       return 'Tu solicitud está en curso: controla la caducidad y el permiso de trabajo.';
