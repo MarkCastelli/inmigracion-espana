@@ -333,7 +333,7 @@ ruta-legal/
 │   ├── procedures.test.js      # 4 pruebas de trámites, citas y documentos
 │   ├── timing.test.js          # 9 pruebas de ventanas de oportunidad
 │   ├── aids.test.js            # 5 pruebas de derechos, discapacidad y ayudas
-│   ├── faq.test.js             # 6 pruebas de preguntas frecuentes
+│   ├── faq.test.js             # 7 pruebas de preguntas frecuentes
 │   ├── online.test.js          # 3 pruebas de sedes y trámites online
 │   ├── links.test.js           # 4 pruebas de enlaces y rutas muertas
 │   ├── familia.test.js         # 16 pruebas de pareja, matrimonio, hijos y reagrupación

@@ -395,3 +395,5 @@ Las preguntas se inspiraron en dudas recurrentes de foros y consultas, pero **no
 **TIE y huellas:** la foto la aporta el solicitante (reciente, color, 32 × 26 mm, fondo blanco); en la comisaría se toman huellas, no fotografía. La TIE no se entrega el mismo día: se pide una segunda cita para recogerla, normalmente 30-45 días después (puede llegar a 60), en la misma oficina. [V/PV]
 
 **Reagrupación familiar:** arts. 65-70 RD 1155/2024. Solo para familiares que están fuera de España: el reagrupante solicita autorización y el familiar pide visado en el consulado. Si el familiar ya está en España, aunque sea de turismo o en situación irregular, no se reagrupa; hay que valorar familiar de español/UE, arraigo u otra vía. [V]
+
+**Latinoamericanos:** visado de estudios (trabajo compatible hasta 30 h/semana), visado de trabajo con oferta/contrato, altamente cualificado, nómada digital o emprendedor. No hay visado para buscar trabajo; el turismo no habilita a trabajar. La nacionalidad por 2 años de residencia legal es un derecho posterior, no una vía de entrada. [V]
