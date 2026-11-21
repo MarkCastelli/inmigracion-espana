@@ -240,9 +240,9 @@
     d.hasPassportDoc = d.owns('pasaporte');
     d.pendingExtranjeria = d.owns('resguardo_extranjeria') || d.ownsCurrent('resguardo_extranjeria') || !!p.extranjeriaPendingType;
     d.pendingNationality = d.owns('resguardo_nacionalidad') || d.ownsCurrent('resguardo_nacionalidad') || !!p.nationalityPendingStage;
-    d.tieHuellasCita = d.ownsCurrent('cita_huellas');
+    d.tieHuellasCita = d.ownsCurrent('cita_huellas') || d.huellasAppointment === 'yes';
     d.tieInProcess = d.tieHuellasCita || d.ownsCurrent('tie_en_tramite');
-    d.tieCardPending = d.ownsCurrent('cita_retirar_tie');
+    d.tieCardPending = d.ownsCurrent('cita_retirar_tie') || d.tiePickupAppointment === 'yes';
     d.tieRenewed = d.owns('tie_renovada');
     d.redCardRenewalPending = d.ownsCurrent('renovacion_tarjeta_roja');
     d.titleValidationPending = d.ownsCurrent('homologacion_titulo');
@@ -340,6 +340,20 @@
     d.hasTieDoc = d.owns('tie') || d.hasPermit;
     d.permitExpired = p.permitStatus === 'expired';
     d.permitExpiry = p.permitExpiry || '';
+    d.permitYears = p.permitYears || '';
+    d.renewalMercurio = p.renewalMercurio || '';
+    d.renewalApproved = p.renewalApproved || '';
+    d.huellasAppointment = p.huellasAppointment || '';
+    d.tiePickupAppointment = p.tiePickupAppointment || '';
+    if (d.huellasAppointment === 'yes') d.tieHuellasCita = true;
+    if (d.tiePickupAppointment === 'yes') d.tieCardPending = true;
+    if (d.permitExpiry) {
+      var expiryDays = RL.dates.diff(RL.dates.today(), d.permitExpiry);
+      d.permitExpired = d.permitExpired || (expiryDays != null && expiryDays < 0);
+      d.renewalDue = expiryDays != null && expiryDays <= 60;
+    } else {
+      d.renewalDue = false;
+    }
     d.permitSince = p.permitSince || p.residenceApprovedDate || (d.asylumGranted ? d.asylumGrantedDate : '');
     d.monthsResident = d.permitSince ? (RL.dates.diff(d.permitSince, now) || 0) / 30.44 : null;
     d.residenceApproved = p.residenceApproved || '';
@@ -639,7 +653,7 @@
         'El embarazo no te regulariza. Cuando nazca, si el padre español reconoce al hijo, podrías solicitar como progenitor de menor español si el niño queda a tu cargo. Ve preparando el reconocimiento y la documentación.');
     }
 
-    return out.slice(0, 6);
+    return out.slice(0, 8);
   }
 
   /* ─────────── plan completo ─────────── */
@@ -817,6 +831,22 @@
     if (d.permitExpired) {
       add('warn', 'Tu permiso está caducado',
         'Renovar fuera de plazo es posible en algunos supuestos (incluida la «segunda oportunidad»), pero el silencio y los efectos cambian. Revisa la fecha exacta.', 'plazo');
+    }
+    if (d.renewalDue && d.renewalMercurio === 'no') {
+      add('warn', 'No has presentado la renovación y tu TIE vence pronto',
+        'La renovación administrativa se presenta por Mercurio o sede hasta 2 meses antes. No esperes al vencimiento: si caduca sin renovación, puedes quedarte sin autorización mientras se resuelve.', 'plazo');
+    } else if (d.renewalApproved === 'pending') {
+      add('info', 'Renovación presentada: pendiente de aprobación',
+        'Controla la resolución y los requerimientos. La TIE física y las huellas solo se piden desde el día en que vence la tarjeta, nunca antes.', 'trámite');
+    } else if (d.renewalApproved === 'yes' && d.huellasAppointment !== 'yes') {
+      add('info', 'Renovación aprobada: pide cita para huellas desde el vencimiento',
+        'No pidas huellas antes de que venza la TIE: la policía no puede tramitarlas. Desde el día del vencimiento, pide cita ICPP y lleva resolución, TIE vieja, foto y tasa 790-012.', 'plazo');
+    } else if (d.huellasAppointment === 'yes' && d.tiePickupAppointment !== 'yes') {
+      add('info', 'Huellas hechas: prepara la cita de retirada de la TIE',
+        'La tarjeta suele tardar 30-45 días. Cuando esté disponible, pide otra cita ICPP en la misma comisaría; lleva el resguardo, el pasaporte y la TIE anterior.', 'plazo');
+    } else if (d.tiePickupAppointment === 'yes') {
+      add('ok', 'Tienes cita para retirar la nueva TIE',
+        'Acude con el resguardo de huellas, el pasaporte y la TIE anterior si te la pidieron. Revisa nombre, NIE, tipo y fechas antes de salir.', 'info');
     }
     if (d.criminalSpain === 'yes' || d.criminalOrigin === 'yes') {
       var whenTxt = d.criminalOriginWhen || d.criminalSpainWhen;

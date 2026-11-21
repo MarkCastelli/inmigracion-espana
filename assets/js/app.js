@@ -1020,6 +1020,12 @@
     rows.push(['Ubicación', p.location === 'spain' ? 'España' : (p.location === 'origin' ? 'País de origen' : 'Otro país')]);
     if (d.inSpain && d.monthsInSpain != null) rows.push(['Tiempo en España', fmt.duration(d.monthsInSpain)]);
     if (d.inSpain) rows.push(['Permiso', permitLabel(p.permitStatus)]);
+    if (d.permitExpiry) rows.push(['Vence la TIE', fmt.date(d.permitExpiry)]);
+    if (d.permitYears) rows.push(['Años de residencia', d.permitYears]);
+    if (d.renewalMercurio) rows.push(['Renovación presentada', d.renewalMercurio]);
+    if (d.renewalApproved) rows.push(['Renovación aprobada', d.renewalApproved]);
+    if (d.huellasAppointment) rows.push(['Cita de huellas', d.huellasAppointment]);
+    if (d.tiePickupAppointment) rows.push(['Cita de retirada TIE', d.tiePickupAppointment]);
     if (d.residenceApproved === 'yes') rows.push(['Residencia aprobada', (d.residenceApprovedYears ? d.residenceApprovedYears + ' años' : 'Sí') + (d.tieWaitingExpiry === 'yes' ? ' · esperando vencimiento de TIE' : '')]);
     if (p.empadronado) rows.push(['Padrón', p.empadronado === 'yes' ? 'Sí' : 'No']);
     if (d.housing) rows.push(['Vivienda', RL.housing.labels[d.housing] || d.housing]);

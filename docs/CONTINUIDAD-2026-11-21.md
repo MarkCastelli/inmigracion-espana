@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **166 pruebas pasando**.
+- **167 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -53,6 +53,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 23. **Asilo en una página**: todas las preguntas de asilo se agrupan en un paso propio después de «situación». Si renunciaste/desististe no se pregunta fecha de denegación ni recurso; el tiempo en España se pregunta una sola vez.
 24. **Discapacidad de hijos**: grado, vencimiento y reconocimiento solo aparecen en la ficha del hijo cuando se marca que tiene discapacidad o está en trámite; al cambiar a “No”, se ocultan.
 25. **Orden del formulario**: titular → datos generales de familia → pareja/hijos → objetivo → resto. El informe final incluye a todos y, si un hijo tiene discapacidad, añade una segunda opción a valorar.
+26. **Renovación dinámica**: residencia → años/vencimiento → Mercurio → aprobación → huellas → retirada TIE, con avisos solo en el paso que corresponde.
 
 ## Comandos
 

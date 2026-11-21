@@ -28,6 +28,15 @@
   var hasAsylumDoc = function (p) { return owns(p, 'cita_asilo') || owns(p, 'hoja_blanca') || owns(p, 'tarjeta_roja') || ownsCurrent(p, 'cita_asilo') || ownsCurrent(p, 'hoja_blanca') || ownsCurrent(p, 'tarjeta_roja'); };
   var asylumHistory = function (p) { return ['solicitado', 'admitido', 'concedido', 'denegado', 'renunciado', 'desistido'].indexOf(p.asylumStage) !== -1; };
   var postAsylumPath = function (p) { return ['renunciado', 'desistido', 'denegado'].indexOf(p.asylumStage) !== -1; };
+  var hasResidenceNow = function (p) {
+    return p.residenceApproved === 'yes' || owns(p, 'tie') || owns(p, 'tarjeta_ue') ||
+      ['studies', 'work', 'family', 'eu_family', 'longterm', 'residencia_temporal', 'expired'].indexOf(p.permitStatus) !== -1;
+  };
+  var permitExpiringSoon = function (p) {
+    if (!p.permitExpiry) return false;
+    var days = RL.dates.diff(RL.dates.today(), p.permitExpiry);
+    return days != null && days <= 60;
+  };
 
   RL.questions = {
     steps: [
@@ -428,11 +437,64 @@
             help: 'El límite general es 30 h/semana y el trabajo debe ser compatible con los estudios.'
           },
           {
-            id: 'permitExpiry', type: 'date', label: '¿Cuándo caduca o caducó tu permiso?', showIf: function (p) { return inSpain(p) && /studies|work|family|eu_family|longterm|expired/.test(p.permitStatus || ''); }
+            id: 'permitYears', type: 'select', label: '¿Por cuántos años te concedieron la residencia?', showIf: function (p) { return inSpain(p) && hasResidenceNow(p); },
+            options: [
+              { v: '1', l: '1 año (autorización inicial)' },
+              { v: '2', l: '2 años' },
+              { v: '4', l: '4 años' },
+              { v: '5', l: '5 años' },
+              { v: 'other', l: 'Otro / no lo sé' }
+            ],
+            help: 'Mira la resolución o el reverso de la TIE. La primera autorización suele ser de 1 año; las renovaciones pueden ser de 2 o 4.'
+          },
+          {
+            id: 'permitExpiry', type: 'date', label: '¿Cuándo vence tu residencia o TIE?', showIf: function (p) { return inSpain(p) && hasResidenceNow(p); },
+            help: 'Es la fecha que aparece en la TIE. Si ya venció, indícalo igual.'
           },
           {
             id: 'permitSince', type: 'date', label: '¿Desde cuándo tienes la residencia legal?', showIf: function (p) { return inSpain(p) && (/studies|work|family|eu_family|longterm|residencia_temporal/.test(p.permitStatus || '') || p.residenceApproved === 'yes' || owns(p, 'tie')); },
             help: 'Es la fecha desde la que cuenta la residencia para la nacionalidad. No cuentan el tiempo como turista ni como solicitante de asilo.'
+          },
+          {
+            id: 'renewalMercurio', type: 'select', label: '¿Has presentado la renovación por Mercurio o sede?',
+            showIf: function (p) { return inSpain(p) && hasResidenceNow(p) && permitExpiringSoon(p); },
+            options: [
+              { v: 'yes', l: 'Sí, ya la presenté' },
+              { v: 'pending', l: 'La estoy preparando' },
+              { v: 'no', l: 'No' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'La renovación administrativa se puede presentar hasta 2 meses antes del vencimiento. No es la toma de huellas.'
+          },
+          {
+            id: 'renewalApproved', type: 'select', label: '¿Tienes aprobada la renovación?',
+            showIf: function (p) { return p.renewalMercurio === 'yes' || p.renewalMercurio === 'pending'; },
+            options: [
+              { v: 'yes', l: 'Sí, aprobada' },
+              { v: 'pending', l: 'Todavía pendiente' },
+              { v: 'no', l: 'No / denegada' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ]
+          },
+          {
+            id: 'huellasAppointment', type: 'select', label: '¿Has pedido cita para la toma de huellas?',
+            showIf: function (p) { return p.renewalApproved === 'yes'; },
+            options: [
+              { v: 'yes', l: 'Sí, ya tengo cita' },
+              { v: 'no', l: 'Todavía no' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'La cita de huellas solo puede ser desde el día en que vence la TIE, nunca antes. Si la pides antes, la policía no puede tramitarla.'
+          },
+          {
+            id: 'tiePickupAppointment', type: 'select', label: '¿Has pedido cita para retirar la nueva TIE?',
+            showIf: function (p) { return p.huellasAppointment === 'yes'; },
+            options: [
+              { v: 'yes', l: 'Sí, ya tengo cita' },
+              { v: 'no', l: 'Todavía no' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'Se pide después de las huellas, normalmente cuando la tarjeta está disponible (30-45 días). Es otra cita distinta.'
           },
           {
             id: 'hasNie', type: 'radio', label: '¿Tienes NIE (número de identidad de extranjero)?', showIf: function (p) { return inSpain(p) && !owns(p, 'nie') && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },

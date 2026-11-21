@@ -1527,6 +1527,15 @@ body.has-speech-bar { padding-bottom: 86px; }
   var hasAsylumDoc = function (p) { return owns(p, 'cita_asilo') || owns(p, 'hoja_blanca') || owns(p, 'tarjeta_roja') || ownsCurrent(p, 'cita_asilo') || ownsCurrent(p, 'hoja_blanca') || ownsCurrent(p, 'tarjeta_roja'); };
   var asylumHistory = function (p) { return ['solicitado', 'admitido', 'concedido', 'denegado', 'renunciado', 'desistido'].indexOf(p.asylumStage) !== -1; };
   var postAsylumPath = function (p) { return ['renunciado', 'desistido', 'denegado'].indexOf(p.asylumStage) !== -1; };
+  var hasResidenceNow = function (p) {
+    return p.residenceApproved === 'yes' || owns(p, 'tie') || owns(p, 'tarjeta_ue') ||
+      ['studies', 'work', 'family', 'eu_family', 'longterm', 'residencia_temporal', 'expired'].indexOf(p.permitStatus) !== -1;
+  };
+  var permitExpiringSoon = function (p) {
+    if (!p.permitExpiry) return false;
+    var days = RL.dates.diff(RL.dates.today(), p.permitExpiry);
+    return days != null && days <= 60;
+  };
 
   RL.questions = {
     steps: [
@@ -1927,11 +1936,64 @@ body.has-speech-bar { padding-bottom: 86px; }
             help: 'El límite general es 30 h/semana y el trabajo debe ser compatible con los estudios.'
           },
           {
-            id: 'permitExpiry', type: 'date', label: '¿Cuándo caduca o caducó tu permiso?', showIf: function (p) { return inSpain(p) && /studies|work|family|eu_family|longterm|expired/.test(p.permitStatus || ''); }
+            id: 'permitYears', type: 'select', label: '¿Por cuántos años te concedieron la residencia?', showIf: function (p) { return inSpain(p) && hasResidenceNow(p); },
+            options: [
+              { v: '1', l: '1 año (autorización inicial)' },
+              { v: '2', l: '2 años' },
+              { v: '4', l: '4 años' },
+              { v: '5', l: '5 años' },
+              { v: 'other', l: 'Otro / no lo sé' }
+            ],
+            help: 'Mira la resolución o el reverso de la TIE. La primera autorización suele ser de 1 año; las renovaciones pueden ser de 2 o 4.'
+          },
+          {
+            id: 'permitExpiry', type: 'date', label: '¿Cuándo vence tu residencia o TIE?', showIf: function (p) { return inSpain(p) && hasResidenceNow(p); },
+            help: 'Es la fecha que aparece en la TIE. Si ya venció, indícalo igual.'
           },
           {
             id: 'permitSince', type: 'date', label: '¿Desde cuándo tienes la residencia legal?', showIf: function (p) { return inSpain(p) && (/studies|work|family|eu_family|longterm|residencia_temporal/.test(p.permitStatus || '') || p.residenceApproved === 'yes' || owns(p, 'tie')); },
             help: 'Es la fecha desde la que cuenta la residencia para la nacionalidad. No cuentan el tiempo como turista ni como solicitante de asilo.'
+          },
+          {
+            id: 'renewalMercurio', type: 'select', label: '¿Has presentado la renovación por Mercurio o sede?',
+            showIf: function (p) { return inSpain(p) && hasResidenceNow(p) && permitExpiringSoon(p); },
+            options: [
+              { v: 'yes', l: 'Sí, ya la presenté' },
+              { v: 'pending', l: 'La estoy preparando' },
+              { v: 'no', l: 'No' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'La renovación administrativa se puede presentar hasta 2 meses antes del vencimiento. No es la toma de huellas.'
+          },
+          {
+            id: 'renewalApproved', type: 'select', label: '¿Tienes aprobada la renovación?',
+            showIf: function (p) { return p.renewalMercurio === 'yes' || p.renewalMercurio === 'pending'; },
+            options: [
+              { v: 'yes', l: 'Sí, aprobada' },
+              { v: 'pending', l: 'Todavía pendiente' },
+              { v: 'no', l: 'No / denegada' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ]
+          },
+          {
+            id: 'huellasAppointment', type: 'select', label: '¿Has pedido cita para la toma de huellas?',
+            showIf: function (p) { return p.renewalApproved === 'yes'; },
+            options: [
+              { v: 'yes', l: 'Sí, ya tengo cita' },
+              { v: 'no', l: 'Todavía no' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'La cita de huellas solo puede ser desde el día en que vence la TIE, nunca antes. Si la pides antes, la policía no puede tramitarla.'
+          },
+          {
+            id: 'tiePickupAppointment', type: 'select', label: '¿Has pedido cita para retirar la nueva TIE?',
+            showIf: function (p) { return p.huellasAppointment === 'yes'; },
+            options: [
+              { v: 'yes', l: 'Sí, ya tengo cita' },
+              { v: 'no', l: 'Todavía no' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'Se pide después de las huellas, normalmente cuando la tarjeta está disponible (30-45 días). Es otra cita distinta.'
           },
           {
             id: 'hasNie', type: 'radio', label: '¿Tienes NIE (número de identidad de extranjero)?', showIf: function (p) { return inSpain(p) && !owns(p, 'nie') && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },
@@ -7373,9 +7435,9 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.hasPassportDoc = d.owns('pasaporte');
     d.pendingExtranjeria = d.owns('resguardo_extranjeria') || d.ownsCurrent('resguardo_extranjeria') || !!p.extranjeriaPendingType;
     d.pendingNationality = d.owns('resguardo_nacionalidad') || d.ownsCurrent('resguardo_nacionalidad') || !!p.nationalityPendingStage;
-    d.tieHuellasCita = d.ownsCurrent('cita_huellas');
+    d.tieHuellasCita = d.ownsCurrent('cita_huellas') || d.huellasAppointment === 'yes';
     d.tieInProcess = d.tieHuellasCita || d.ownsCurrent('tie_en_tramite');
-    d.tieCardPending = d.ownsCurrent('cita_retirar_tie');
+    d.tieCardPending = d.ownsCurrent('cita_retirar_tie') || d.tiePickupAppointment === 'yes';
     d.tieRenewed = d.owns('tie_renovada');
     d.redCardRenewalPending = d.ownsCurrent('renovacion_tarjeta_roja');
     d.titleValidationPending = d.ownsCurrent('homologacion_titulo');
@@ -7473,6 +7535,20 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.hasTieDoc = d.owns('tie') || d.hasPermit;
     d.permitExpired = p.permitStatus === 'expired';
     d.permitExpiry = p.permitExpiry || '';
+    d.permitYears = p.permitYears || '';
+    d.renewalMercurio = p.renewalMercurio || '';
+    d.renewalApproved = p.renewalApproved || '';
+    d.huellasAppointment = p.huellasAppointment || '';
+    d.tiePickupAppointment = p.tiePickupAppointment || '';
+    if (d.huellasAppointment === 'yes') d.tieHuellasCita = true;
+    if (d.tiePickupAppointment === 'yes') d.tieCardPending = true;
+    if (d.permitExpiry) {
+      var expiryDays = RL.dates.diff(RL.dates.today(), d.permitExpiry);
+      d.permitExpired = d.permitExpired || (expiryDays != null && expiryDays < 0);
+      d.renewalDue = expiryDays != null && expiryDays <= 60;
+    } else {
+      d.renewalDue = false;
+    }
     d.permitSince = p.permitSince || p.residenceApprovedDate || (d.asylumGranted ? d.asylumGrantedDate : '');
     d.monthsResident = d.permitSince ? (RL.dates.diff(d.permitSince, now) || 0) / 30.44 : null;
     d.residenceApproved = p.residenceApproved || '';
@@ -7772,7 +7848,7 @@ body.has-speech-bar { padding-bottom: 86px; }
         'El embarazo no te regulariza. Cuando nazca, si el padre español reconoce al hijo, podrías solicitar como progenitor de menor español si el niño queda a tu cargo. Ve preparando el reconocimiento y la documentación.');
     }
 
-    return out.slice(0, 6);
+    return out.slice(0, 8);
   }
 
   /* ─────────── plan completo ─────────── */
@@ -7950,6 +8026,22 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (d.permitExpired) {
       add('warn', 'Tu permiso está caducado',
         'Renovar fuera de plazo es posible en algunos supuestos (incluida la «segunda oportunidad»), pero el silencio y los efectos cambian. Revisa la fecha exacta.', 'plazo');
+    }
+    if (d.renewalDue && d.renewalMercurio === 'no') {
+      add('warn', 'No has presentado la renovación y tu TIE vence pronto',
+        'La renovación administrativa se presenta por Mercurio o sede hasta 2 meses antes. No esperes al vencimiento: si caduca sin renovación, puedes quedarte sin autorización mientras se resuelve.', 'plazo');
+    } else if (d.renewalApproved === 'pending') {
+      add('info', 'Renovación presentada: pendiente de aprobación',
+        'Controla la resolución y los requerimientos. La TIE física y las huellas solo se piden desde el día en que vence la tarjeta, nunca antes.', 'trámite');
+    } else if (d.renewalApproved === 'yes' && d.huellasAppointment !== 'yes') {
+      add('info', 'Renovación aprobada: pide cita para huellas desde el vencimiento',
+        'No pidas huellas antes de que venza la TIE: la policía no puede tramitarlas. Desde el día del vencimiento, pide cita ICPP y lleva resolución, TIE vieja, foto y tasa 790-012.', 'plazo');
+    } else if (d.huellasAppointment === 'yes' && d.tiePickupAppointment !== 'yes') {
+      add('info', 'Huellas hechas: prepara la cita de retirada de la TIE',
+        'La tarjeta suele tardar 30-45 días. Cuando esté disponible, pide otra cita ICPP en la misma comisaría; lleva el resguardo, el pasaporte y la TIE anterior.', 'plazo');
+    } else if (d.tiePickupAppointment === 'yes') {
+      add('ok', 'Tienes cita para retirar la nueva TIE',
+        'Acude con el resguardo de huellas, el pasaporte y la TIE anterior si te la pidieron. Revisa nombre, NIE, tipo y fechas antes de salir.', 'info');
     }
     if (d.criminalSpain === 'yes' || d.criminalOrigin === 'yes') {
       var whenTxt = d.criminalOriginWhen || d.criminalSpainWhen;
@@ -8916,6 +9008,12 @@ body.has-speech-bar { padding-bottom: 86px; }
       l.push('- Antecedentes declarados: España ' + (p.criminalSpain || 'no') + (p.criminalSpainWhen ? ' (' + p.criminalSpainWhen + ')' : '') + ', país de origen ' + (p.criminalOrigin || 'no') + (p.criminalOriginWhen ? ' (' + p.criminalOriginWhen + ')' : ''));
     }
     if (p.permitKind) l.push('- Tipo de autorización: ' + p.permitKind);
+    if (p.permitYears) l.push('- Años de residencia concedidos: ' + p.permitYears);
+    if (p.permitExpiry) l.push('- Vencimiento TIE: ' + p.permitExpiry);
+    if (p.renewalMercurio) l.push('- Renovación por Mercurio/sede: ' + p.renewalMercurio);
+    if (p.renewalApproved) l.push('- Renovación aprobada: ' + p.renewalApproved);
+    if (p.huellasAppointment) l.push('- Cita de huellas: ' + p.huellasAppointment);
+    if (p.tiePickupAppointment) l.push('- Cita de retirada TIE: ' + p.tiePickupAppointment);
     if (p.hasDisability && p.hasDisability !== 'no') l.push('- Discapacidad: ' + (p.disabilityDegree || 'grado no indicado') + (p.disabilityRecognized ? '; reconocimiento: ' + p.disabilityRecognized : '') + (p.disabilityCertificate ? '; certificado: ' + p.disabilityCertificate : '') + (p.disabilityExpiry ? '; vence: ' + p.disabilityExpiry : ''));
     if (p.dependency && p.dependency !== 'no') l.push('- Dependencia: ' + p.dependency);
     if (p.familyNumerosa && p.familyNumerosa !== 'no') l.push('- Familia numerosa: ' + p.familyNumerosa);
@@ -9382,6 +9480,12 @@ body.has-speech-bar { padding-bottom: 86px; }
       doc.kv('Después de la salida del asilo', (postText[d.postRenunciation] || d.postRenunciation) + (d.postRenunciationDateISO ? ' · ' + RL.fmt.monthYear(d.postRenunciationDateISO) : ''));
     }
     if (d.residenceApproved === 'yes') doc.kv('Residencia aprobada', (d.residenceApprovedYears ? d.residenceApprovedYears + ' años' : 'Sí') + (d.residenceApprovedDate ? ' · ' + RL.fmt.date(d.residenceApprovedDate) : '') + (d.tieWaitingExpiry === 'yes' ? ' · esperando vencimiento de TIE' : ''));
+    if (d.permitExpiry) doc.kv('Vencimiento de la TIE', RL.fmt.date(d.permitExpiry));
+    if (d.permitYears) doc.kv('Años de residencia concedidos', d.permitYears + ' años');
+    if (d.renewalMercurio) doc.kv('Renovación por Mercurio/sede', d.renewalMercurio);
+    if (d.renewalApproved) doc.kv('Renovación aprobada', d.renewalApproved);
+    if (d.huellasAppointment) doc.kv('Cita de huellas', d.huellasAppointment);
+    if (d.tiePickupAppointment) doc.kv('Cita de retirada TIE', d.tiePickupAppointment);
     if (d.pendingExtranjeria) doc.kv('Expediente abierto', 'Sí');
     if (d.pendingNationality) doc.kv('Nacionalidad en trámite', 'Sí');
 
@@ -11048,6 +11152,12 @@ body.has-speech-bar { padding-bottom: 86px; }
     rows.push(['Ubicación', p.location === 'spain' ? 'España' : (p.location === 'origin' ? 'País de origen' : 'Otro país')]);
     if (d.inSpain && d.monthsInSpain != null) rows.push(['Tiempo en España', fmt.duration(d.monthsInSpain)]);
     if (d.inSpain) rows.push(['Permiso', permitLabel(p.permitStatus)]);
+    if (d.permitExpiry) rows.push(['Vence la TIE', fmt.date(d.permitExpiry)]);
+    if (d.permitYears) rows.push(['Años de residencia', d.permitYears]);
+    if (d.renewalMercurio) rows.push(['Renovación presentada', d.renewalMercurio]);
+    if (d.renewalApproved) rows.push(['Renovación aprobada', d.renewalApproved]);
+    if (d.huellasAppointment) rows.push(['Cita de huellas', d.huellasAppointment]);
+    if (d.tiePickupAppointment) rows.push(['Cita de retirada TIE', d.tiePickupAppointment]);
     if (d.residenceApproved === 'yes') rows.push(['Residencia aprobada', (d.residenceApprovedYears ? d.residenceApprovedYears + ' años' : 'Sí') + (d.tieWaitingExpiry === 'yes' ? ' · esperando vencimiento de TIE' : '')]);
     if (p.empadronado) rows.push(['Padrón', p.empadronado === 'yes' ? 'Sí' : 'No']);
     if (d.housing) rows.push(['Vivienda', RL.housing.labels[d.housing] || d.housing]);

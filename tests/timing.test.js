@@ -151,6 +151,37 @@ test('desistir del asilo no se registra como denegación', () => {
   assert.strictEqual(d.asylumExited, true);
 });
 
+test('la renovación de la TIE es dinámica: Mercurio, aprobación, huellas y retirada', () => {
+  const expiring = RL.dates.addDays(RL.dates.today(), 30);
+  const baseProfile = {
+    location: 'spain',
+    permitStatus: 'residencia_temporal', permitYears: '4', permitExpiry: expiring,
+    renewalMercurio: 'yes', renewalApproved: 'pending'
+  };
+  const situacion = RL.questions.steps.find(s => s.id === 'situacion');
+  let ids = RL.questions.visibleFields(situacion, baseProfile).map(f => f.id);
+  assert.ok(ids.includes('renewalMercurio'));
+  assert.ok(ids.includes('renewalApproved'));
+  assert.ok(!ids.includes('huellasAppointment'), 'sin aprobación no se piden huellas');
+
+  const planPending = RL.buildPlan(base(baseProfile));
+  assert.ok(planPending.alerts.some(a => /pendiente de aprobación/i.test(a.title)));
+
+  const approved = Object.assign({}, baseProfile, { renewalApproved: 'yes', huellasAppointment: 'no' });
+  ids = RL.questions.visibleFields(situacion, approved).map(f => f.id);
+  assert.ok(ids.includes('huellasAppointment'));
+  const planApproved = RL.buildPlan(base(approved));
+  assert.ok(planApproved.alerts.some(a => /pide cita para huellas/i.test(a.title)));
+
+  const fingerprints = Object.assign({}, approved, { huellasAppointment: 'yes', tiePickupAppointment: 'no' });
+  const planFingerprints = RL.buildPlan(base(fingerprints));
+  assert.strictEqual(planFingerprints.d.tieHuellasCita, true);
+  assert.ok(planFingerprints.alerts.some(a => /cita de retirada/i.test(a.title)));
+
+  const pickup = Object.assign({}, fingerprints, { tiePickupAppointment: 'yes' });
+  assert.strictEqual(RL.derive(base(pickup)).tieCardPending, true);
+});
+
 test('un permiso caducado hace poco avisa de los 3 meses', () => {
   const plan = RL.buildPlan(base({
     permitStatus: 'work', permitExpiry: RL.dates.addDays(RL.dates.today(), -20)

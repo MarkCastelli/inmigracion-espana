@@ -331,7 +331,7 @@ ruta-legal/
 │   ├── directorio.test.js      # 5 pruebas de regiones y directorio
 │   ├── ai.test.js              # 4 pruebas de prompt y consultas
 │   ├── procedures.test.js      # 4 pruebas de trámites, citas y documentos
-│   ├── timing.test.js          # 15 pruebas de ventanas, historial de asilo y página única
+│   ├── timing.test.js          # 16 pruebas de ventanas, asilo y renovación dinámica
 │   ├── aids.test.js            # 5 pruebas de derechos, discapacidad y ayudas
 │   ├── faq.test.js             # 7 pruebas de preguntas frecuentes
 │   ├── online.test.js          # 3 pruebas de sedes y trámites online

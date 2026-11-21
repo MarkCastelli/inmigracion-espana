@@ -123,6 +123,12 @@
       l.push('- Antecedentes declarados: España ' + (p.criminalSpain || 'no') + (p.criminalSpainWhen ? ' (' + p.criminalSpainWhen + ')' : '') + ', país de origen ' + (p.criminalOrigin || 'no') + (p.criminalOriginWhen ? ' (' + p.criminalOriginWhen + ')' : ''));
     }
     if (p.permitKind) l.push('- Tipo de autorización: ' + p.permitKind);
+    if (p.permitYears) l.push('- Años de residencia concedidos: ' + p.permitYears);
+    if (p.permitExpiry) l.push('- Vencimiento TIE: ' + p.permitExpiry);
+    if (p.renewalMercurio) l.push('- Renovación por Mercurio/sede: ' + p.renewalMercurio);
+    if (p.renewalApproved) l.push('- Renovación aprobada: ' + p.renewalApproved);
+    if (p.huellasAppointment) l.push('- Cita de huellas: ' + p.huellasAppointment);
+    if (p.tiePickupAppointment) l.push('- Cita de retirada TIE: ' + p.tiePickupAppointment);
     if (p.hasDisability && p.hasDisability !== 'no') l.push('- Discapacidad: ' + (p.disabilityDegree || 'grado no indicado') + (p.disabilityRecognized ? '; reconocimiento: ' + p.disabilityRecognized : '') + (p.disabilityCertificate ? '; certificado: ' + p.disabilityCertificate : '') + (p.disabilityExpiry ? '; vence: ' + p.disabilityExpiry : ''));
     if (p.dependency && p.dependency !== 'no') l.push('- Dependencia: ' + p.dependency);
     if (p.familyNumerosa && p.familyNumerosa !== 'no') l.push('- Familia numerosa: ' + p.familyNumerosa);
