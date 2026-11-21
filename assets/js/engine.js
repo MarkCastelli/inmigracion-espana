@@ -168,7 +168,7 @@
     d.hasPayslips = d.owns('nominas');
     d.hasDisability = d.owns('discapacidad');
     d.hasReturnAuth = d.owns('autorizacion_regreso');
-    d.hasNieDoc = d.owns('nie') || p.hasNie === 'yes';
+    d.hasNieDoc = d.owns('nie') || d.owns('tie') || d.owns('tarjeta_ue') || p.hasNie === 'yes';
     d.hasPassportDoc = d.owns('pasaporte');
     d.pendingExtranjeria = d.owns('resguardo_extranjeria') || d.ownsCurrent('resguardo_extranjeria') || !!p.extranjeriaPendingType;
     d.pendingNationality = d.owns('resguardo_nacionalidad') || d.ownsCurrent('resguardo_nacionalidad') || !!p.nationalityPendingStage;
@@ -181,11 +181,17 @@
     d.titleValidated = d.owns('titulo_homologado');
     d.nationalityStage = p.nationalityPendingStage || null;
     d.extranjeriaType = p.extranjeriaPendingType || null;
+    d.foreignStudies = d.foreignStudies || d.owns('titulo_homologado') || d.ownsCurrent('homologacion_titulo');
+    if (d.owns('titulo_homologado')) d.studiesHomologated = 'yes';
+    else if (d.ownsCurrent('homologacion_titulo')) d.studiesHomologated = 'in_progress';
 
     /* protección internacional */
     var stage = p.asylumStage;
     if (!stage) {
-      if (p.asylumRequested === 'yes') stage = 'solicitado';
+      if (d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca')) stage = 'solicitado';
+      else if (d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja')) stage = 'admitido';
+      else if (d.owns('cita_asilo') || d.ownsCurrent('cita_asilo')) stage = 'cita';
+      else if (p.asylumRequested === 'yes') stage = 'solicitado';
       else if (p.asylumRequested === 'soon') stage = 'cita';
       else if (p.permitStatus === 'asylum') stage = 'solicitado';
       else stage = 'no';
@@ -221,8 +227,8 @@
 
     /* permisos de residencia */
     d.permit = p.permitStatus || null;
-    d.hasPermit = d.inSpain && !!p.permitStatus && p.permitStatus !== 'none' &&
-      p.permitStatus !== 'expired' && p.permitStatus !== 'asylum';
+    d.hasPermit = d.inSpain && ((!!p.permitStatus && p.permitStatus !== 'none' &&
+      p.permitStatus !== 'expired' && p.permitStatus !== 'asylum') || d.owns('tie') || d.owns('tarjeta_ue'));
     if (d.asylumGranted) d.hasPermit = true;
     d.hasTieDoc = d.owns('tie') || d.hasPermit;
     d.permitExpired = p.permitStatus === 'expired';

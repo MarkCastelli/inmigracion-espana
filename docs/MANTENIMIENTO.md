@@ -183,7 +183,7 @@ node tests/links.test.js      # 4 pruebas de enlaces y rutas muertas
 node tests/ai.test.js         # 4 pruebas de prompt y consultas
 node tests/familia.test.js    # 12 pruebas de matrimonio, pareja, hijos y embarazo
 node tests/housing.test.js    # 3 pruebas de vivienda y prueba de domicilio
-node tests/docs.test.js       # 6 pruebas de trámites terminados vs. en curso
+node tests/docs.test.js       # 7 pruebas de trámites terminados vs. en curso
 node tests/pdf.test.js        # 10 pruebas del PDF
 node tests/speech.test.js     # 5 pruebas del lector de voz
 node tests/speech.mock.test.js # 3 pruebas con API simulada

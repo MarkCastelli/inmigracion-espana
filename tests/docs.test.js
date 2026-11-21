@@ -72,6 +72,35 @@ test('el plan muestra el siguiente paso de cada trámite en curso', () => {
   }
 });
 
+test('los documentos marcados evitan preguntas posteriores redundantes', () => {
+  const situacion = RL.questions.steps.find(s => s.id === 'situacion');
+  const recursos = RL.questions.steps.find(s => s.id === 'recursos');
+
+  const tie = base({ docsBase: ['tie'], permitStatus: 'none' });
+  const tieFields = RL.questions.visibleFields(situacion, tie).map(f => f.id);
+  assert.ok(!tieFields.includes('permitStatus'), 'con TIE no debe preguntar si tiene permiso');
+  assert.ok(tieFields.includes('permitKind'), 'debe preguntar solo el tipo de autorización');
+  assert.strictEqual(RL.derive(tie).hasPermit, true);
+  const nieFields = RL.questions.visibleFields(situacion, base({ docsBase: ['nie'] })).map(f => f.id);
+  assert.ok(!nieFields.includes('hasNie'), 'con NIE no debe repetir si lo tiene');
+
+  const disc = base({ docsTramites: ['discapacidad'] });
+  const discFields = RL.questions.visibleFields(recursos, disc).map(f => f.id);
+  assert.ok(!discFields.includes('hasDisability'), 'con certificado no debe repetir si tiene discapacidad');
+  assert.ok(discFields.includes('disabilityDegree'), 'debe preguntar el grado');
+
+  const title = base({ docsTramites: ['titulo_homologado'] });
+  const titleFields = RL.questions.visibleFields(recursos, title).map(f => f.id);
+  assert.ok(!titleFields.includes('foreignStudies'), 'con título no debe repetir si tiene estudios');
+  assert.ok(!titleFields.includes('studiesHomologated'), 'con título no debe repetir si está homologado');
+  assert.ok(titleFields.includes('studiesLevel'), 'debe conservar el nivel');
+
+  const asylum = base({ docsEnCurso: ['hoja_blanca'] });
+  const asylumFields = RL.questions.visibleFields(situacion, asylum).map(f => f.id);
+  assert.ok(!asylumFields.includes('asylumRequested'), 'con hoja blanca no debe repetir si pidió asilo');
+  assert.strictEqual(RL.derive(asylum).asylumInProcess, true);
+});
+
 test('un certificado en curso no se cuenta como certificado ya emitido', () => {
   const d = RL.derive(base({ docsEnCurso: ['antecedentes', 'discapacidad'] }));
   assert.strictEqual(d.hasAntecedentesCert, false);

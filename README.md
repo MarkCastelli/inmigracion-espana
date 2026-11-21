@@ -338,7 +338,7 @@ ruta-legal/
 │   ├── links.test.js           # 4 pruebas de enlaces y rutas muertas
 │   ├── familia.test.js         # 12 pruebas de pareja, matrimonio, hijos y embarazo
 │   ├── housing.test.js         # 3 pruebas de vivienda y prueba de domicilio
-│   ├── docs.test.js            # 6 pruebas de trámites terminados/en curso
+│   ├── docs.test.js            # 7 pruebas de trámites terminados/en curso
 │   ├── pdf.test.js             # 10 pruebas del PDF
 │   ├── speech.test.js          # 5 pruebas del lector de voz
 │   ├── speech.mock.test.js     # 3 pruebas con Web Speech API simulada

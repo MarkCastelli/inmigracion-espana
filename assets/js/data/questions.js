@@ -267,7 +267,7 @@
             help: 'Para el padrón y el arraigo no basta con decir que vives ahí: necesitas contrato, autorización, recibo o escritura. Si no lo tienes, pide al titular un documento firmado.'
           },
           {
-            id: 'permitStatus', type: 'select', label: '¿Qué documento de residencia tienes ahora?', showIf: inSpain,
+            id: 'permitStatus', type: 'select', label: '¿Qué documento de residencia tienes ahora?', showIf: function (p) { return inSpain(p) && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },
             options: [
               { v: 'none', l: 'Ninguno' },
               { v: 'studies', l: 'Permiso de estudios (estancia)' },
@@ -281,9 +281,10 @@
             ]
           },
           {
-            id: 'permitKind', type: 'select', label: '¿Qué tipo de autorización es?', showIf: function (p) { return inSpain(p) && p.permitStatus && p.permitStatus !== 'none' && p.permitStatus !== 'dontknow'; },
+            id: 'permitKind', type: 'select', label: '¿Qué tipo de autorización es?', showIf: function (p) { return inSpain(p) && ((p.permitStatus && p.permitStatus !== 'none' && p.permitStatus !== 'dontknow') || owns(p, 'tie') || owns(p, 'tarjeta_ue')); },
             options: [
               { v: 'familiar_espanol', l: 'Familiar de persona con nacionalidad española' },
+              { v: 'familiar_ue', l: 'Familiar de ciudadano de la UE' },
               { v: 'reagrupacion', l: 'Reagrupación familiar' },
               { v: 'no_lucrativa', l: 'Residencia no lucrativa' },
               { v: 'trabajo_ajena', l: 'Trabajo por cuenta ajena' },
@@ -313,7 +314,7 @@
             help: 'Con esta fecha calculamos cuándo podrías pedir la nacionalidad por residencia.'
           },
           {
-            id: 'hasNie', type: 'radio', label: '¿Tienes NIE (número de identidad de extranjero)?', showIf: inSpain,
+            id: 'hasNie', type: 'radio', label: '¿Tienes NIE (número de identidad de extranjero)?', showIf: function (p) { return inSpain(p) && !owns(p, 'nie') && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },
             options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'El NIE no es un permiso: es un número. Tenerlo no te legaliza, pero hace falta para casi todo.'
           },
@@ -328,7 +329,7 @@
             help: 'La ventana de solicitud fue del 16 de abril al 30 de junio de 2026. Si la pediste, tu plan cambia.'
           },
           {
-            id: 'asylumRequested', type: 'radio', label: '¿Has solicitado asilo o protección internacional?', showIf: inSpain,
+            id: 'asylumRequested', type: 'radio', label: '¿Has solicitado asilo o protección internacional?', showIf: function (p) { return inSpain(p) && !hasAsylumDoc(p) && (!p.asylumStage || p.asylumStage === 'no'); },
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'soon', l: 'Estoy pensando en solicitarlo' }, { v: 'dontknow', l: 'No lo sé' }]
           },
           {
@@ -377,7 +378,7 @@
       {
         id: 'documentos',
         title: 'Lo que ya tienes',
-        intro: 'No empiezas de cero. Marca primero los documentos y trámites que ya terminaste; después, los que están en curso o esperando resolución. Lo pasado explica tu proceso; lo actual dice qué te falta de verdad. Si no tienes ninguno, puedes continuar sin marcar nada.',
+        intro: 'No empiezas de cero. Marca primero los documentos y trámites que ya terminaste; después, los que están en curso o esperando resolución. Lo pasado explica tu proceso; lo actual dice qué te falta de verdad. Si marcas un documento aquí, la app lo usa para no volver a preguntarte si lo tienes. Si no tienes ninguno, puedes continuar sin marcar nada.',
         showIf: function (p) { return p.location === 'spain'; },
         fields: [
           {
@@ -465,7 +466,7 @@
           },
           {
             id: 'tarjetaRojaRenewed', type: 'radio', label: '¿Has renovado ya la tarjeta roja?',
-            showIf: function (p) { return p.asylumStage === 'admitido' || owns(p, 'tarjeta_roja'); },
+            showIf: function (p) { return (p.asylumStage === 'admitido' || owns(p, 'tarjeta_roja')) && !owns(p, 'tarjeta_roja_renovada'); },
             options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'dontknow', l: 'No lo sé' }]
           },
           {
@@ -742,12 +743,12 @@
             help: 'Solo se piden para la nacionalidad por residencia. Los nacionales de países hispanohablantes están exentos del DELE, pero no del CCSE.'
           },
           {
-            id: 'hasDisability', type: 'radio', label: '¿Tienes reconocida una discapacidad?',
+            id: 'hasDisability', type: 'radio', label: '¿Tienes reconocida una discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'No es un permiso de residencia, pero cambia ayudas, renovaciones y derechos. El certificado lo da la comunidad autónoma.'
           },
           {
-            id: 'disabilityDegree', type: 'select', label: '¿Qué grado tienes reconocido?', showIf: function (p) { return p.hasDisability === 'yes'; },
+            id: 'disabilityDegree', type: 'select', label: '¿Qué grado tienes reconocido?', showIf: function (p) { return owns(p, 'discapacidad') || p.hasDisability === 'yes'; },
             options: [
               { v: '33_64', l: 'Del 33 % al 64 %' },
               { v: '65_plus', l: '65 % o más' },
@@ -774,12 +775,12 @@
             help: 'La discapacidad de un hijo puede cambiar la renovación, la reagrupación y las ayudas.'
           },
           {
-            id: 'foreignStudies', type: 'radio', label: '¿Tienes estudios terminados fuera de España que quieras reconocer?',
+            id: 'foreignStudies', type: 'radio', label: '¿Tienes estudios terminados fuera de España que quieras reconocer?', showIf: function (p) { return !owns(p, 'titulo_homologado') && !ownsCurrent(p, 'homologacion_titulo'); },
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'Sirve para orientarte sobre homologación, convalidación o acceso a la universidad. El reconocimiento no regulariza tu situación.'
           },
           {
-            id: 'studiesLevel', type: 'select', label: '¿Qué nivel terminaste?', showIf: function (p) { return p.foreignStudies === 'yes'; },
+            id: 'studiesLevel', type: 'select', label: '¿Qué nivel terminaste?', showIf: function (p) { return p.foreignStudies === 'yes' || owns(p, 'titulo_homologado') || ownsCurrent(p, 'homologacion_titulo'); },
             options: [
               { v: 'eso', l: 'ESO / secundaria obligatoria' },
               { v: 'bachillerato', l: 'Bachillerato / secundaria superior' },
@@ -792,7 +793,7 @@
             ]
           },
           {
-            id: 'studiesHomologated', type: 'radio', label: '¿Ya están homologados o reconocidos en España?', showIf: function (p) { return p.foreignStudies === 'yes'; },
+            id: 'studiesHomologated', type: 'radio', label: '¿Ya están homologados o reconocidos en España?', showIf: function (p) { return p.foreignStudies === 'yes' && !owns(p, 'titulo_homologado') && !ownsCurrent(p, 'homologacion_titulo'); },
             options: [{ v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'no', l: 'No' }, { v: 'dontknow', l: 'No lo sé' }]
           }
         ]
