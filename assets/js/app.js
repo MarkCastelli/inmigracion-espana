@@ -285,6 +285,23 @@
       }
       html += '</div></div>';
     }
+
+    var size = Number(p.householdSize) || 0;
+    var known = (d.couple ? 1 : 0) + total;
+    var extra = Math.max(0, size - 1 - known);
+    if (extra > 0) {
+      html += '<div class="block" style="margin-top:14px"><div class="block__head">' + icons.family(18) + '<h3>Otras personas que conviven (' + extra + ')</h3></div><div class="block__body">';
+      for (var e = 1; e <= extra; e++) {
+        html += '<div class="family-child"><p class="eyebrow">Persona adicional ' + e + '</p><div class="form-grid">' +
+          familyInput('extra' + e + 'Name', 'Nombre y apellidos', p['extra' + e + 'Name']) +
+          familyInput('extra' + e + 'Age', 'Edad', p['extra' + e + 'Age'], 'number') +
+          familySelect('extra' + e + 'Relation', 'Relación con vosotros', p['extra' + e + 'Relation'] || '', [
+            ['', 'No indicado'], ['familiar', 'Familiar'], ['amigo', 'Amigo/a'], ['otro', 'Otro']
+          ]) +
+          '</div></div>';
+      }
+      html += '</div></div>';
+    }
     html += '</div>';
     return html;
   }
@@ -2271,7 +2288,7 @@
     if (action === 'export') { exportData(); return; }
     if (action === 'import') { importData(); return; }
     if (action === 'reset') { resetData(); return; }
-    if (action === 'edit') { ui.step = 0; go('diagnostico'); return; }
+    if (action === 'edit') { ui.step = RL.state.meta.lastStep || 0; go('diagnostico'); return; }
     if (action === 'demo') {
       if (RL.hasSavedProfile() && !window.confirm('Esto sustituirá tus respuestas guardadas por un perfil de ejemplo. ¿Quieres continuar?')) return;
       RL.state.profile = Object.assign({}, DEMO);
@@ -2315,7 +2332,8 @@
   function scrollToWizardTop() {
     var form = $('#wizardForm') || $('#view-diagnostico');
     if (!form) return;
-    var top = form.getBoundingClientRect().top + window.pageYOffset - 16;
+    var rect = form.getBoundingClientRect ? form.getBoundingClientRect() : { top: 0 };
+    var top = rect.top + (window.pageYOffset || 0) - 16;
     window.scrollTo(0, Math.max(0, top));
   }
 
@@ -2398,5 +2416,5 @@
   });
 
   /* exponer para depuración y tests */
-  RL.ui = { go: go, render: render, state: ui, handleAction: handleAction };
+  RL.ui = { go: go, render: render, state: ui, handleAction: handleAction, wizardNext: wizardNext, wizardPrev: wizardPrev };
 })();

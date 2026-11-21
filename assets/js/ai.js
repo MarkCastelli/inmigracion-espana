@@ -86,6 +86,9 @@
       (d.familyChildren || []).forEach(function (c) {
         l.push('- Hijo/a ' + c.index + (c.name ? ': ' + c.name : '') + (c.age != null ? ', ' + c.age + ' años' : '') + (c.relation ? ', ' + (RL.family.relations[c.relation] || c.relation) : '') + (c.disability === 'yes' ? ', discapacidad' : '') + (c.education ? ', estudios: ' + (RL.education.child[c.education] || c.education) : ''));
       });
+      (d.extraPeople || []).forEach(function (x) {
+        l.push('- Otra persona en casa: ' + (x.name || 'sin nombre') + (x.age != null ? ', ' + x.age + ' años' : '') + (x.relation ? ', ' + x.relation : ''));
+      });
     }
     if (opts.includeDocs) {
       var docs = (d.docsBase || []).concat(d.docsTramites || []);

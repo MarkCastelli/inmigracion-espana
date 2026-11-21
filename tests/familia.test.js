@@ -48,6 +48,14 @@ test('el cuestionario pregunta el desglose real de hijos y pareja', () => {
   assert.ok(!ids.includes('childrenAges'), 'la edad global se sustituye por una ficha por hijo');
 });
 
+test('la composición familiar crea fichas para las personas que conviven', () => {
+  const d = RL.derive(base({ householdSize: 4 }));
+  assert.strictEqual(d.extraPeople.length, 3);
+  assert.strictEqual(d.householdOthers, 3);
+  const steps = RL.questions.visibleSteps(base({ householdSize: 4 })).map(s => s.id);
+  assert.ok(steps.includes('familia'));
+});
+
 test('la discapacidad del titular no se confunde con la de pareja o hijos', () => {
   const d = RL.derive(base({
     hasDisability: 'no',

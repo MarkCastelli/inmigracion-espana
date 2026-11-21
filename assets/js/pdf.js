@@ -223,6 +223,12 @@
           (c.education ? ' · estudios: ' + (RL.education.child[c.education] || c.education) : ''));
       });
     }
+    if (d.extraPeople && d.extraPeople.length) {
+      doc.p('Otras personas que conviven:', true);
+      d.extraPeople.forEach(function (x) {
+        doc.bullet('Persona ' + x.index + (x.name ? ' · ' + x.name : '') + (x.age != null ? ' · ' + x.age + ' años' : '') + (x.relation ? ' · ' + x.relation : ''));
+      });
+    }
     if (p.maritalStatus) {
       doc.kv('Situación de pareja', RL.family.status[p.maritalStatus] || p.maritalStatus);
       if (p.marriageType) doc.kv('Matrimonio', RL.family.marriage[p.marriageType] || p.marriageType);

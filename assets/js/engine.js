@@ -105,6 +105,19 @@
     d.partnerDependency = p.partnerDependency === 'yes';
     d.householdOthers = Number(p.householdOthers) || 0;
     d.householdDetails = p.householdDetails || '';
+    d.extraPeople = [];
+    var householdSize = Number(p.householdSize) || 0;
+    var knownHousehold = (d.couple ? 1 : 0) + d.childrenCount;
+    var extraHousehold = Math.max(0, householdSize - 1 - knownHousehold);
+    for (var ei = 1; ei <= extraHousehold; ei++) {
+      d.extraPeople.push({
+        index: ei,
+        name: p['extra' + ei + 'Name'] || '',
+        age: p['extra' + ei + 'Age'] != null ? Number(p['extra' + ei + 'Age']) : null,
+        relation: p['extra' + ei + 'Relation'] || ''
+      });
+    }
+    if (extraHousehold > d.householdOthers) d.householdOthers = extraHousehold;
     d.dependency = p.dependency === 'yes';
     d.dependencyInProgress = p.dependency === 'in_progress';
     d.familyNumerosa = p.familyNumerosa === 'yes';

@@ -426,4 +426,21 @@ t('el paso de familia carga pareja y una ficha por hijo', () => {
   nav(app, 'inicio');
 });
 
+t('se puede retroceder paso a paso hasta el inicio', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = {
+    nationality: 'AR', age: 36, location: 'spain', permitStatus: 'none',
+    empadronado: 'yes', docsBase: [], docsTramites: [], goals: ['regularizar']
+  };
+  nav(app, 'diagnostico');
+  RL.ui.state.step = 2;
+  RL.ui.render();
+  RL.ui.wizardPrev();
+  assert.strictEqual(RL.ui.state.step, 1, 'debe bajar de 3 a 2');
+  RL.ui.wizardPrev();
+  assert.strictEqual(RL.ui.state.step, 0, 'debe llegar al inicio');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

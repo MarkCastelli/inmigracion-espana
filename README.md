@@ -336,7 +336,7 @@ ruta-legal/
 │   ├── faq.test.js             # 5 pruebas de preguntas frecuentes
 │   ├── online.test.js          # 3 pruebas de sedes y trámites online
 │   ├── links.test.js           # 4 pruebas de enlaces y rutas muertas
-│   ├── familia.test.js         # 14 pruebas de pareja, matrimonio, hijos y embarazo
+│   ├── familia.test.js         # 15 pruebas de pareja, matrimonio, hijos y convivencia
 │   ├── housing.test.js         # 3 pruebas de vivienda y prueba de domicilio
 │   ├── docs.test.js            # 7 pruebas de trámites terminados/en curso
 │   ├── education.test.js       # 4 pruebas de Bachillerato, SEPE y estudios por hijo
@@ -344,7 +344,7 @@ ruta-legal/
 │   ├── pdf.test.js             # 10 pruebas del PDF
 │   ├── speech.test.js          # 5 pruebas del lector de voz
 │   ├── speech.mock.test.js     # 3 pruebas con Web Speech API simulada
-│   └── ui.smoke.js             # 21 pruebas de interfaz con DOM mínimo
+│   └── ui.smoke.js             # 22 pruebas de interfaz con DOM mínimo
 ├── docs/
 │   ├── FUENTES.md              # normativa, enlaces y fecha de consulta
 │   ├── MANTENIMIENTO.md        # qué revisar, cuándo y dónde tocarlo
