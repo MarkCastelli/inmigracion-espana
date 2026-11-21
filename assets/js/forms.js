@@ -59,7 +59,7 @@
       url: BASE + 'ex17-formulario-tarjeta-de-identidad-de-extranjero',
       where: 'Comisaría de Policía con cita previa',
       fee: 'Tasa 790-012: 16,08 € primera TIE; 19,30 € renovación',
-      note: 'No es una autorización de residencia: es el documento que acredita la que ya tienes.',
+      note: 'No es una autorización de residencia: es el documento que acredita la que ya tienes. La renovación administrativa se presenta hasta 2 meses antes; las huellas y la TIE física solo desde el día del vencimiento, nunca antes.',
       routeIds: []
     },
     {
@@ -173,7 +173,7 @@
     {
       id: 'tasa012', code: '790-012', type: 'tasa',
       title: 'Tasa de la TIE',
-      purpose: 'Pago de la tasa de la Tarjeta de Identidad de Extranjero (primera TIE, renovación o modificación).',
+      purpose: 'Pago de la tasa de la Tarjeta de Identidad de Extranjero (primera TIE, renovación o modificación). Se paga para la cita de huellas, que solo puede ser desde el vencimiento de la TIE anterior.',
       url: 'https://sede.policia.gob.es/Tasa790_012/',
       where: 'Sede de la Policía Nacional / banco',
       fee: '16,08 € primera TIE; 19,30 € renovación; 21,87 € larga duración',

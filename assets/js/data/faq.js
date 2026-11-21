@@ -499,6 +499,23 @@
         ['AEAT · Renta', 'https://sede.agenciatributaria.gob.es/'],
         ['AEAT · obligación de declarar', 'https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c01-campana-declaracion-renta/quienes-estan-obligados-presentar-declaracion-irpf.html']
       ]
+    },
+    {
+      id: 'tie_renovacion', cat: 'documentos',
+      q: '¿Puedo renovar la TIE antes de que caduque?',
+      short: 'Sí puedes presentar la renovación administrativa hasta 2 meses antes, por Mercurio o sede. Pero la TIE física y la toma de huellas NO se pueden hacer antes del día del vencimiento: solo desde esa fecha, nunca antes.',
+      detail: [
+        'Renovación administrativa: se presenta en los 2 meses anteriores al vencimiento por Mercurio o sede electrónica. Sirve para que evalúen si aprueban la renovación y por cuánto tiempo.',
+        'TIE física: la toma de huellas y la emisión de la tarjeta solo se hacen desde el día en que vence la TIE. Aunque la renovación esté aprobada antes, no puedes adelantar la tarjeta.',
+        'Si la policía te cita antes de la fecha de vencimiento, no puede tomar huellas ni renovar la TIE. No pierdas el viaje: espera al día del vencimiento.',
+        'Desde el vencimiento, pide cita ICPP y lleva pasaporte, TIE vieja, foto, resolución favorable y tasa 790-012.',
+        'Si la TIE ya caducó, la renovación administrativa y la TIE física ya están dentro de plazo; presenta cuanto antes y no esperes al día 91.',
+        'No confundas autorización de residencia con tarjeta: puedes tener la renovación aprobada y seguir con la TIE vieja hasta que te tomen las huellas.'
+      ],
+      links: [
+        ['Cita previa Policía · ICPP', 'https://icp.administracionelectronica.gob.es/icpplus'],
+        ['Sede de Extranjería', 'https://sede.administracion.gob.es/']
+      ]
     }
   ];
 

@@ -20,6 +20,20 @@ test('un visado que caduca pronto genera una ventana', () => {
   assert.ok(plan.windows.some(w => /caduca en 30 días/i.test(w.title)));
 });
 
+test('la renovación administrativa y la TIE física tienen fechas distintas', () => {
+  const expiry = RL.dates.addDays(RL.dates.today(), 45);
+  const plan = RL.buildPlan(base({ permitStatus: 'work', permitExpiry: expiry }));
+  const admin = plan.timeline.find(w => /Mercurio\/sede/i.test(w.title));
+  const physical = plan.timeline.find(w => /huellas y TIE f[ií]sica/i.test(w.title));
+  assert.ok(admin, 'falta la ventana administrativa');
+  assert.ok(physical, 'falta la ventana de huellas/TIE');
+  assert.ok(/NO habilita la TIE f[ií]sica/i.test(admin.detail));
+  assert.ok(/nunca antes/i.test(physical.detail));
+  assert.strictEqual(physical.date, expiry);
+  const alert = plan.windows.find(a => /TIE caduca/i.test(a.title));
+  assert.ok(alert && /nunca antes/i.test(alert.body));
+});
+
 test('un permiso caducado hace poco avisa de los 3 meses', () => {
   const plan = RL.buildPlan(base({
     permitStatus: 'work', permitExpiry: RL.dates.addDays(RL.dates.today(), -20)

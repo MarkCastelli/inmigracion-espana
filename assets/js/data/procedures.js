@@ -170,9 +170,9 @@
     },
     {
       id: 'renovacion', scope: 'national', cat: 'documentos', icon: 'clock',
-      title: 'Renovar o prorrogar tu autorización',
-      when: 'Dos meses antes de que caduque o, como máximo, tres meses después. Presentar en plazo prorroga la validez anterior hasta la resolución.',
-      where: 'Oficina de Extranjería o sede electrónica',
+      title: 'Renovar la autorización y la TIE: dos pasos distintos',
+      when: 'Renovación administrativa: en los 2 meses anteriores al vencimiento, por Mercurio o sede. Huellas/TIE física: solo desde el día en que vence la tarjeta, nunca antes.',
+      where: 'Mercurio/sede para la renovación; comisaría (ICPP) para huellas y TIE física',
       appointment: SEDE,
       appointmentLabel: 'Abrir sede de Extranjería',
       docs: [
@@ -180,17 +180,19 @@
         'Formulario de renovación o EX-26 si es modificación',
         'Medios económicos, contrato o nóminas',
         'Seguro médico si tu autorización lo exige',
-        'Tasa 790-052 (16,40 € para renovación)'
+        'Tasa 790-052 de renovación',
+        'Resolución favorable y tasa 790-012 para la TIE física'
       ],
       steps: [
-        'Mira la fecha de caducidad de tu TIE y apunta 60 días antes.',
-        'Reúne los documentos que acrediten que mantienes los requisitos.',
-        'Paga la tasa y presenta la renovación.',
-        'Si caducó hace menos de 3 meses, aún puedes presentar; no esperes más.',
-        'Guarda el resguardo y comprueba que la nueva TIE llega con los datos correctos.'
+        'Mira la fecha de caducidad de tu TIE y apunta el día exacto del vencimiento.',
+        'Hasta 2 meses antes, presenta la renovación por Mercurio o sede; guarda el resguardo.',
+        'Espera la resolución: pueden aprobarla antes de que caduque, pero eso no adelanta la tarjeta.',
+        'La toma de huellas y la TIE física solo se piden desde el día del vencimiento. Nunca antes.',
+        'Desde esa fecha, pide cita ICPP y lleva pasaporte, TIE vieja, foto, resolución y 790-012.',
+        'Si ya caducó, presenta la renovación cuanto antes; no esperes al día 91.'
       ],
-      fee: '16,40 € (renovación)',
-      note: 'No dejes que caduque sin presentar nada: la situación irregular complica la renovación y el arraigo. Si ya caducó, actúa dentro de los 3 meses.',
+      fee: '790-052 (renovación) + 790-012 (TIE física)',
+      note: 'No confundas los dos plazos: Mercurio evalúa la renovación hasta 2 meses antes; las huellas y la tarjeta física solo desde el vencimiento. Si la policía te cita antes de esa fecha, no puede tomar huellas ni renovar la TIE.',
       routeIds: ['renovacion', 'larga_duracion']
     },
     {

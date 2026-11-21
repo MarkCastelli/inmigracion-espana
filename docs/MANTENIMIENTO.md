@@ -175,7 +175,7 @@ node tests/decision.test.js   # 6 pruebas de la capa de decisión
 node tests/forms.test.js      # 7 pruebas del catálogo de formularios
 node tests/directorio.test.js # 5 pruebas de regiones y directorio
 node tests/procedures.test.js # 4 pruebas de trámites, citas y documentos
-node tests/timing.test.js     # 5 pruebas de ventanas de oportunidad
+node tests/timing.test.js     # 6 pruebas de ventanas de oportunidad
 node tests/aids.test.js       # 5 pruebas de derechos, discapacidad y ayudas
 node tests/faq.test.js        # 5 pruebas de preguntas frecuentes
 node tests/online.test.js     # 3 pruebas de sedes y trámites online
@@ -395,7 +395,7 @@ La app no promete porcentajes de concesión. `decision.js` añade `reality()` co
 - **Ubicación:** `where` puede ser función de `{localLabel, municipality, province}`. `urlKey` resuelve `portal`, `health`, `education`, `social` o `employment` de `regions.js`.
 - **Ventanas:** `engine.js` → `buildWindows(p,d)` devuelve avisos por fecha de visado/permiso, meses para el arraigo, estudios, turismo, asilo y vía familiar. Se muestran en el plan y en el PDF.
 - **Plazos que no se deben tocar sin verificar:**
-  - Renovación: **2 meses antes** o **3 meses después** (60/90 días); presentar en plazo prorroga la validez anterior hasta la resolución.
+  - Renovación: **2 meses antes** por Mercurio/sede para la parte administrativa; la **TIE física y las huellas solo desde el día del vencimiento**, nunca antes. Presentar en plazo prorroga la validez anterior hasta la resolución.
   - Estudios: trabajo compatible hasta 30 h/semana; modificación a trabajo antes de caducar o dentro de los 3 meses posteriores.
   - Turismo: 90/180; no se puede trabajar ni modificar a residencia desde turismo.
   - Arraigo: 2 años; ausencias ≤90 días; no tener permiso ni expediente abierto.
@@ -490,6 +490,7 @@ Tres procedimientos en `procedures.js` + una entrada en `aids.js`:
 - **Concello/Xunta/Gobierno:** `concello_xunta_gobierno` separa padrón y servicios sociales (Concello), sanidad/educación/dependencia/empleo/vivienda (Xunta/CCAA) y extranjería/asilo/sanciones (Delegación/Subdelegación del Gobierno).
 - **Discapacidad/dependencia/incapacidad:** `discapacidad_dependencia_incapacidad` y `ayuda_23_discapacidad` explican quién expide cada reconocimiento, requisitos de residencia (PNC 5/10 años), asilo y qué se puede pedir con 1 año.
 - **Transporte:** `transporte_descuentos` y el trámite `tarjeta_transporte` explican abonos locales/metro, tarjeta de discapacidad, familia numerosa y descuentos de media/larga distancia; precios y requisitos varían por comunidad.
+- **Renovación de TIE:** `tie_renovacion` y el trámite `renovacion` distinguen la renovación administrativa (Mercurio/sede, hasta 2 meses antes) de la TIE física/huellas (solo desde el vencimiento, nunca antes). El plan y el PDF muestran ambas fechas por separado.
 - **Nacionalidad:** `ccse_dele` y `nacionalidad_plazos_paises` explican CCSE (25 preguntas, 45 min, 85 €), DELE A2 (unas 2,5 h, ~138 €), exenciones, inscripción y plazos de 1/2/5/10 años. Los trámites `examen_ccse` y `examen_dele` enlazan al Instituto Cervantes.
 - **Renta:** `declaracion_renta` y el trámite homónimo explican umbrales (22.000/15.876 €), campaña 8 abril-30 junio, residencia fiscal (183 días/centro de intereses) y el caso de 3 meses trabajados. No confundir residencia legal con fiscal.
 

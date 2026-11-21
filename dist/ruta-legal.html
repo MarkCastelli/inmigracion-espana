@@ -4774,9 +4774,9 @@ body.has-speech-bar { padding-bottom: 86px; }
     },
     {
       id: 'renovacion', scope: 'national', cat: 'documentos', icon: 'clock',
-      title: 'Renovar o prorrogar tu autorización',
-      when: 'Dos meses antes de que caduque o, como máximo, tres meses después. Presentar en plazo prorroga la validez anterior hasta la resolución.',
-      where: 'Oficina de Extranjería o sede electrónica',
+      title: 'Renovar la autorización y la TIE: dos pasos distintos',
+      when: 'Renovación administrativa: en los 2 meses anteriores al vencimiento, por Mercurio o sede. Huellas/TIE física: solo desde el día en que vence la tarjeta, nunca antes.',
+      where: 'Mercurio/sede para la renovación; comisaría (ICPP) para huellas y TIE física',
       appointment: SEDE,
       appointmentLabel: 'Abrir sede de Extranjería',
       docs: [
@@ -4784,17 +4784,19 @@ body.has-speech-bar { padding-bottom: 86px; }
         'Formulario de renovación o EX-26 si es modificación',
         'Medios económicos, contrato o nóminas',
         'Seguro médico si tu autorización lo exige',
-        'Tasa 790-052 (16,40 € para renovación)'
+        'Tasa 790-052 de renovación',
+        'Resolución favorable y tasa 790-012 para la TIE física'
       ],
       steps: [
-        'Mira la fecha de caducidad de tu TIE y apunta 60 días antes.',
-        'Reúne los documentos que acrediten que mantienes los requisitos.',
-        'Paga la tasa y presenta la renovación.',
-        'Si caducó hace menos de 3 meses, aún puedes presentar; no esperes más.',
-        'Guarda el resguardo y comprueba que la nueva TIE llega con los datos correctos.'
+        'Mira la fecha de caducidad de tu TIE y apunta el día exacto del vencimiento.',
+        'Hasta 2 meses antes, presenta la renovación por Mercurio o sede; guarda el resguardo.',
+        'Espera la resolución: pueden aprobarla antes de que caduque, pero eso no adelanta la tarjeta.',
+        'La toma de huellas y la TIE física solo se piden desde el día del vencimiento. Nunca antes.',
+        'Desde esa fecha, pide cita ICPP y lleva pasaporte, TIE vieja, foto, resolución y 790-012.',
+        'Si ya caducó, presenta la renovación cuanto antes; no esperes al día 91.'
       ],
-      fee: '16,40 € (renovación)',
-      note: 'No dejes que caduque sin presentar nada: la situación irregular complica la renovación y el arraigo. Si ya caducó, actúa dentro de los 3 meses.',
+      fee: '790-052 (renovación) + 790-012 (TIE física)',
+      note: 'No confundas los dos plazos: Mercurio evalúa la renovación hasta 2 meses antes; las huellas y la tarjeta física solo desde el vencimiento. Si la policía te cita antes de esa fecha, no puede tomar huellas ni renovar la TIE.',
       routeIds: ['renovacion', 'larga_duracion']
     },
     {
@@ -6290,6 +6292,23 @@ body.has-speech-bar { padding-bottom: 86px; }
         ['AEAT · Renta', 'https://sede.agenciatributaria.gob.es/'],
         ['AEAT · obligación de declarar', 'https://sede.agenciatributaria.gob.es/Sede/ayuda/manuales-videos-folletos/manuales-practicos/irpf-2025/c01-campana-declaracion-renta/quienes-estan-obligados-presentar-declaracion-irpf.html']
       ]
+    },
+    {
+      id: 'tie_renovacion', cat: 'documentos',
+      q: '¿Puedo renovar la TIE antes de que caduque?',
+      short: 'Sí puedes presentar la renovación administrativa hasta 2 meses antes, por Mercurio o sede. Pero la TIE física y la toma de huellas NO se pueden hacer antes del día del vencimiento: solo desde esa fecha, nunca antes.',
+      detail: [
+        'Renovación administrativa: se presenta en los 2 meses anteriores al vencimiento por Mercurio o sede electrónica. Sirve para que evalúen si aprueban la renovación y por cuánto tiempo.',
+        'TIE física: la toma de huellas y la emisión de la tarjeta solo se hacen desde el día en que vence la TIE. Aunque la renovación esté aprobada antes, no puedes adelantar la tarjeta.',
+        'Si la policía te cita antes de la fecha de vencimiento, no puede tomar huellas ni renovar la TIE. No pierdas el viaje: espera al día del vencimiento.',
+        'Desde el vencimiento, pide cita ICPP y lleva pasaporte, TIE vieja, foto, resolución favorable y tasa 790-012.',
+        'Si la TIE ya caducó, la renovación administrativa y la TIE física ya están dentro de plazo; presenta cuanto antes y no esperes al día 91.',
+        'No confundas autorización de residencia con tarjeta: puedes tener la renovación aprobada y seguir con la TIE vieja hasta que te tomen las huellas.'
+      ],
+      links: [
+        ['Cita previa Policía · ICPP', 'https://icp.administracionelectronica.gob.es/icpplus'],
+        ['Sede de Extranjería', 'https://sede.administracion.gob.es/']
+      ]
     }
   ];
 
@@ -6930,13 +6949,13 @@ body.has-speech-bar { padding-bottom: 86px; }
     var pd = days(p.permitExpiry);
     if (pd != null) {
       if (pd >= 0 && pd <= 60) {
-        add('warn', 'Tu permiso caduca en ' + pd + ' días: renueva ahora',
-          'Puedes solicitar la renovación desde 2 meses antes. Presentar en plazo prorroga la validez anterior hasta la resolución; no lo dejes para el último día.');
+        add('warn', 'Tu TIE caduca en ' + pd + ' días: ya puedes presentar la renovación',
+          'Puedes presentar la renovación administrativa por Mercurio o sede hasta 2 meses antes del vencimiento. Eso NO es la TIE física: la toma de huellas y la tarjeta solo se pueden hacer desde el día en que vence la tarjeta, nunca antes. Si te citan antes de esa fecha, no te la hacen.');
       } else if (pd < 0 && pd >= -90) {
-        add('warn', 'Tu permiso caducó hace ' + Math.abs(pd) + ' días: aún estás dentro de los 3 meses',
-          'Presenta la renovación cuanto antes. Si esperas al día 91, el plazo ordinario se complica y puedes quedarte sin cobertura.');
+        add('warn', 'Tu TIE caducó hace ' + Math.abs(pd) + ' días: aún estás dentro de los 3 meses',
+          'Presenta la renovación cuanto antes. La toma de huellas y la TIE física ya se pueden hacer desde que venció; pide cita ICPP y lleva la resolución, la TIE vieja y la tasa 790-012. Si esperas al día 91, el plazo ordinario se complica.');
       } else if (pd < -90) {
-        add('bad', 'Tu permiso caducó hace más de 90 días',
+        add('bad', 'Tu TIE caducó hace más de 90 días',
           'El plazo ordinario de renovación pasó. Revisa la vía de «segunda oportunidad» y consulta con un abogado; no presentes cualquier cosa.');
       }
     }
@@ -7292,8 +7311,10 @@ body.has-speech-bar { padding-bottom: 86px; }
     }
 
     if (d.permitExpiry) {
-      add(RL.dates.addDays(d.permitExpiry, -60), 'Ventana de renovación', 'Puedes renovar desde 60 días antes del vencimiento. Hacerlo a tiempo evita líos y conserva tu situación.', 'soon');
-      add(d.permitExpiry, 'Caduca tu permiso', 'Si no lo renuevas, entras en situación irregular. Después hay 90 días para reaccionar (con matices).', 'now');
+      var adminStart = RL.dates.addDays(d.permitExpiry, -60);
+      var adminOpen = RL.dates.diff(now, adminStart) < 0;
+      add(adminOpen ? now : adminStart, 'Puedes presentar la renovación por Mercurio/sede', 'Se abre la ventana administrativa: puedes presentar la renovación hasta 2 meses antes del vencimiento. Esto NO habilita la TIE física ni la toma de huellas; solo evalúan la renovación y su duración.', 'soon');
+      add(d.permitExpiry, 'Desde hoy: huellas y TIE física', 'La toma de huellas y la tarjeta física solo se pueden hacer desde el día en que vence la TIE, nunca antes. Si la renovación ya está aprobada, pide cita ICPP; lleva la resolución, la TIE vieja y la tasa 790-012.', 'now');
     }
 
     if (d.monthsResident != null && d.monthsResident < 24) {
@@ -7712,7 +7733,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       url: BASE + 'ex17-formulario-tarjeta-de-identidad-de-extranjero',
       where: 'Comisaría de Policía con cita previa',
       fee: 'Tasa 790-012: 16,08 € primera TIE; 19,30 € renovación',
-      note: 'No es una autorización de residencia: es el documento que acredita la que ya tienes.',
+      note: 'No es una autorización de residencia: es el documento que acredita la que ya tienes. La renovación administrativa se presenta hasta 2 meses antes; las huellas y la TIE física solo desde el día del vencimiento, nunca antes.',
       routeIds: []
     },
     {
@@ -7826,7 +7847,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     {
       id: 'tasa012', code: '790-012', type: 'tasa',
       title: 'Tasa de la TIE',
-      purpose: 'Pago de la tasa de la Tarjeta de Identidad de Extranjero (primera TIE, renovación o modificación).',
+      purpose: 'Pago de la tasa de la Tarjeta de Identidad de Extranjero (primera TIE, renovación o modificación). Se paga para la cita de huellas, que solo puede ser desde el vencimiento de la TIE anterior.',
       url: 'https://sede.policia.gob.es/Tasa790_012/',
       where: 'Sede de la Policía Nacional / banco',
       fee: '16,08 € primera TIE; 19,30 € renovación; 21,87 € larga duración',

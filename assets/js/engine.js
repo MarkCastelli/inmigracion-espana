@@ -384,13 +384,13 @@
     var pd = days(p.permitExpiry);
     if (pd != null) {
       if (pd >= 0 && pd <= 60) {
-        add('warn', 'Tu permiso caduca en ' + pd + ' días: renueva ahora',
-          'Puedes solicitar la renovación desde 2 meses antes. Presentar en plazo prorroga la validez anterior hasta la resolución; no lo dejes para el último día.');
+        add('warn', 'Tu TIE caduca en ' + pd + ' días: ya puedes presentar la renovación',
+          'Puedes presentar la renovación administrativa por Mercurio o sede hasta 2 meses antes del vencimiento. Eso NO es la TIE física: la toma de huellas y la tarjeta solo se pueden hacer desde el día en que vence la tarjeta, nunca antes. Si te citan antes de esa fecha, no te la hacen.');
       } else if (pd < 0 && pd >= -90) {
-        add('warn', 'Tu permiso caducó hace ' + Math.abs(pd) + ' días: aún estás dentro de los 3 meses',
-          'Presenta la renovación cuanto antes. Si esperas al día 91, el plazo ordinario se complica y puedes quedarte sin cobertura.');
+        add('warn', 'Tu TIE caducó hace ' + Math.abs(pd) + ' días: aún estás dentro de los 3 meses',
+          'Presenta la renovación cuanto antes. La toma de huellas y la TIE física ya se pueden hacer desde que venció; pide cita ICPP y lleva la resolución, la TIE vieja y la tasa 790-012. Si esperas al día 91, el plazo ordinario se complica.');
       } else if (pd < -90) {
-        add('bad', 'Tu permiso caducó hace más de 90 días',
+        add('bad', 'Tu TIE caducó hace más de 90 días',
           'El plazo ordinario de renovación pasó. Revisa la vía de «segunda oportunidad» y consulta con un abogado; no presentes cualquier cosa.');
       }
     }
@@ -746,8 +746,10 @@
     }
 
     if (d.permitExpiry) {
-      add(RL.dates.addDays(d.permitExpiry, -60), 'Ventana de renovación', 'Puedes renovar desde 60 días antes del vencimiento. Hacerlo a tiempo evita líos y conserva tu situación.', 'soon');
-      add(d.permitExpiry, 'Caduca tu permiso', 'Si no lo renuevas, entras en situación irregular. Después hay 90 días para reaccionar (con matices).', 'now');
+      var adminStart = RL.dates.addDays(d.permitExpiry, -60);
+      var adminOpen = RL.dates.diff(now, adminStart) < 0;
+      add(adminOpen ? now : adminStart, 'Puedes presentar la renovación por Mercurio/sede', 'Se abre la ventana administrativa: puedes presentar la renovación hasta 2 meses antes del vencimiento. Esto NO habilita la TIE física ni la toma de huellas; solo evalúan la renovación y su duración.', 'soon');
+      add(d.permitExpiry, 'Desde hoy: huellas y TIE física', 'La toma de huellas y la tarjeta física solo se pueden hacer desde el día en que vence la TIE, nunca antes. Si la renovación ya está aprobada, pide cita ICPP; lleva la resolución, la TIE vieja y la tasa 790-012.', 'now');
     }
 
     if (d.monthsResident != null && d.monthsResident < 24) {

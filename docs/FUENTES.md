@@ -244,7 +244,8 @@ Base: **arts. 93-99 RD 1155/2024** (residencia de familiares de personas con nac
 **Plazos que la app usa**
 | Trámite | Regla | Fuente |
 |---|---|---|
-| Renovación de residencia | **2 meses antes** o **3 meses después** (60/90 días); presentar en plazo prorroga la validez anterior hasta la resolución | RD 1155/2024, arts. 95.4 y 190.6 [V] |
+| Renovación de la autorización | **2 meses antes** o **3 meses después** (60/90 días); presentar en plazo prorroga la validez anterior hasta la resolución | RD 1155/2024, arts. 95.4 y 190.6 [V] |
+| **TIE física (huellas)** | **Solo desde el día del vencimiento de la TIE**, nunca antes; la renovación administrativa puede estar aprobada antes, pero no adelanta la tarjeta | Práctica policial confirmada por el usuario (21/11/2026); ICPP [V/PV] |
 | Estudios → trabajo | Antes de caducar o dentro de los **3 meses** posteriores; trabajo compatible hasta **30 h/semana**; el tiempo de estudios computa al **50 %** para nacionalidad si se solicita en residencia | RD 1155/2024 / RD 316/2026 [V para el plazo; PV para el cómputo exacto] |
 | Turismo | **90/180**; no se puede trabajar ni modificar a residencia desde turismo; la sobreestancia es infracción administrativa, no delito penal | Reglamento UE 2016/399; LO 4/2000 [V] |
 | Arraigo | **2 años** de permanencia; ausencias **≤90 días**; no tener permiso ni expediente abierto | RD 1155/2024, arts. 126-127 [V] |

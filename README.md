@@ -166,6 +166,14 @@ La pestaña **Trámites** convierte el plan en una guía ejecutable:
 
 La app distingue **«ilegal»** de **«irregular»**: no existe una persona «ilegal»; lo ilegal es una conducta (entrar sin autorización, trabajar sin permiso). La situación administrativa es **irregular** cuando no hay autorización vigente. Estar irregular no es un delito penal: es una infracción administrativa que puede tener consecuencias y complicar solicitudes futuras.
 
+### Renovación de la TIE: dos fechas distintas
+
+- **Renovación administrativa:** se puede presentar por **Mercurio o sede** hasta **2 meses antes** del vencimiento. Sirve para que evalúen si aprueban la renovación y por cuánto tiempo.
+- **TIE física y toma de huellas:** solo desde **el día en que vence la tarjeta**, nunca antes. Aunque la renovación esté aprobada, no se puede adelantar la tarjeta. La cita es por ICPP.
+- Si la policía te cita antes del vencimiento, no puede tomar huellas ni renovar la TIE.
+
+No confundas los dos trámites: **Mercurio evalúa; la Policía emite la tarjeta después del vencimiento**.
+
 ### Preguntas frecuentes
 
 La pestaña **Preguntas** recoge dudas recurrentes de foros y consultas, pero **las respuestas están contrastadas con la norma**, no con la opinión del foro. Se pueden buscar por palabra y filtrar por tema:
@@ -323,7 +331,7 @@ ruta-legal/
 │   ├── directorio.test.js      # 5 pruebas de regiones y directorio
 │   ├── ai.test.js              # 4 pruebas de prompt y consultas
 │   ├── procedures.test.js      # 4 pruebas de trámites, citas y documentos
-│   ├── timing.test.js          # 5 pruebas de ventanas de oportunidad
+│   ├── timing.test.js          # 6 pruebas de ventanas de oportunidad
 │   ├── aids.test.js            # 5 pruebas de derechos, discapacidad y ayudas
 │   ├── faq.test.js             # 5 pruebas de preguntas frecuentes
 │   ├── online.test.js          # 3 pruebas de sedes y trámites online

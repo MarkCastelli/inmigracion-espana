@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **125 pruebas pasando**.
+- **126 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -25,9 +25,14 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
    - El PDF y la hoja de datos muestran el desglose.
 3. **Enlaces**:
    - ICPP corregido a `https://icp.administracionelectronica.gob.es/icpplus`.
-   - Corregidos MITES/ITSS, Cervantes CCSE/DELE, homologación, Registro Civil, justicia gratuita, modelos EX, UGE, Xunta, RAIMadrina, sedes autonómicas.
+   - Corregidos MITES/ITSS, Cervantes CCSE/DELE, homologación, Registro Civil, justicia gratuita, modelos EX, UGE, Xunta, RAIS/Madrina, sedes autonómicas.
    - Auditor: `python tests/check_links.py --all`.
-4. **Contenido**: nacionalidad (CCSE/DELE, plazos por país), renta, servicios sociales, ONG, ayudas, discapacidad/dependencia/incapacidad, transporte, fraude laboral.
+4. **Renovación TIE (corrección importante)**:
+   - Renovación administrativa por Mercurio/sede: hasta **2 meses antes** del vencimiento.
+   - TIE física y huellas: **solo desde el día del vencimiento**, nunca antes.
+   - Si la policía cita antes, no puede tomar huellas ni renovar la tarjeta.
+   - Cambiados `engine.js` (ventanas/avisos), `procedures.js`, `faq.js` y `forms.js`.
+5. **Contenido**: nacionalidad (CCSE/DELE, plazos por país), renta, servicios sociales, ONG, ayudas, discapacidad/dependencia/incapacidad, transporte, fraude laboral.
 
 ## Comandos
 
