@@ -583,6 +583,29 @@
     return { p: p, d: d, results: results };
   };
 
+  /* Pasos dinámicos: la nacionalidad calcula el tiempo restante real. */
+  RL.routeStepsFor = function (route, d) {
+    var base = route.steps || [];
+    if (route.id !== 'nac_residencia_2') return base;
+    var months = d.permitStatus === 'longterm' ? 60 : d.monthsResident;
+    var left = months == null ? null : Math.max(0, 24 - months);
+    var first;
+    if (left == null) {
+      first = { title: 'Falta la fecha de tu residencia legal', detail: 'Indica desde cuándo tienes la residencia para calcular cuánto te falta. El tiempo como turista o solicitante de asilo no cuenta.', when: 'Ahora' };
+    } else if (left <= 0) {
+      first = { title: 'Ya cumples los 2 años de residencia legal', detail: 'Desde ' + RL.fmt.date(d.permitSince) + '. Revisa que no haya ausencias largas y prepara el CCSE y los documentos.', when: 'Ahora' };
+    } else {
+      first = { title: 'Te faltan ' + RL.fmt.duration(left) + ' de residencia legal', detail: 'Cumples los 2 años el ' + RL.fmt.date(RL.dates.addYears(d.permitSince, 2)) + '. Hasta entonces no puedes presentar la nacionalidad por residencia; el tiempo de turismo o asilo solicitado no cuenta.', when: 'En ' + RL.fmt.duration(left) };
+    }
+    var second;
+    if (d.exams === 'ccse' || d.exams === 'both') {
+      second = { title: 'Ya tienes el CCSE', detail: 'Revisa que no caduque y guarda el certificado. Si no eres hispanohablante, necesitas además el DELE A2.', when: 'Hecho' };
+    } else {
+      second = { title: 'Prepara el CCSE', detail: 'Inscríbete en el Instituto Cervantes. El CCSE es obligatorio; el DELE A2 solo si no eres hispanohablante nativo.', when: left == null || left > 6 ? 'Mes -6' : 'Ahora' };
+    }
+    return [first, second].concat(base.slice(2));
+  };
+
   /* ─────────── ventanas de oportunidad ─────────── */
   function buildWindows(p, d) {
     var out = [];

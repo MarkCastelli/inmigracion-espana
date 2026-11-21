@@ -471,4 +471,21 @@ t('las preguntas de discapacidad de un hijo solo salen si tiene discapacidad', (
   nav(app, 'inicio');
 });
 
+t('la nacionalidad calcula los meses que faltan', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = {
+    nationality: 'AR', age: 34, location: 'spain', entryMode: 'tourist_free',
+    timeInSpain: '2to3y', empadronado: 'yes', criminalSpain: 'no', criminalOrigin: 'no',
+    permitStatus: 'residencia_temporal', permitSince: RL.dates.addMonths(RL.dates.today(), -23),
+    permitExpiry: RL.dates.addYears(RL.dates.today(), 2), exams: 'ccse',
+    monthlyIncome: 900, goals: ['nacionalidad']
+  };
+  nav(app, 'plan');
+  const html = app.document.querySelector('#view-plan').innerHTML;
+  assert.ok(!html.includes('Comprueba tus 2 años de residencia'), 'no debe mostrar el paso genérico');
+  assert.ok(html.includes('Te faltan') || html.includes('Ya cumples'), 'debe calcular el tiempo real');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

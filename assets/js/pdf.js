@@ -364,7 +364,7 @@
 
       if (route.steps && route.steps.length) {
         doc.p('Pasos:', true);
-        route.steps.forEach(function (s, i) {
+        RL.routeStepsFor(route, d).forEach(function (s, i) {
           doc.bullet((i + 1) + '. ' + s.title + ' — ' + s.detail + (s.when ? ' [' + s.when + ']' : ''));
         });
       }

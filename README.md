@@ -344,7 +344,7 @@ ruta-legal/
 │   ├── pdf.test.js             # 10 pruebas del PDF
 │   ├── speech.test.js          # 5 pruebas del lector de voz
 │   ├── speech.mock.test.js     # 3 pruebas con Web Speech API simulada
-│   └── ui.smoke.js             # 23 pruebas de interfaz con DOM mínimo
+│   └── ui.smoke.js             # 24 pruebas de interfaz con DOM mínimo
 ├── docs/
 │   ├── FUENTES.md              # normativa, enlaces y fecha de consulta
 │   ├── MANTENIMIENTO.md        # qué revisar, cuándo y dónde tocarlo

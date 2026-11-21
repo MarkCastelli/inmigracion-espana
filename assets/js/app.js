@@ -645,7 +645,7 @@
         '<button class="btn btn--soft btn--sm" data-nav="inicio">Volver al inicio</button></div></div>';
     }
 
-    plan.recommended.forEach(function (r, i) { html += routeCardHTML(r, i === 0); });
+    plan.recommended.forEach(function (r, i) { html += routeCardHTML(r, i === 0, plan.d); });
 
     if (!plan.d.isSpanish) {
       if (plan.timeline.length) html += timelineHTML(plan.timeline);
@@ -886,13 +886,17 @@
     }).join('');
   }
 
+  function routeStepsFor(route, d) {
+    return RL.routeStepsFor ? RL.routeStepsFor(route, d) : (route.steps || []);
+  }
+
   function nextStepsHTML(plan, top) {
     var steps = [];
     plan.actions.forEach(function (a) {
       if (/semana|ahora/i.test(a.when) && steps.length < 2) steps.push({ t: a.title, d: a.body, w: a.when });
     });
     if (top) {
-      top.route.steps.slice(0, 2).forEach(function (s) {
+      routeStepsFor(top.route, plan.d).slice(0, 2).forEach(function (s) {
         if (steps.length < 3) steps.push({ t: s.title, d: s.detail, w: s.when });
       });
     }
@@ -907,8 +911,9 @@
       '</div></div></div>';
   }
 
-  function routeCardHTML(r, isTop) {
+  function routeCardHTML(r, isTop, d) {
     var route = r.route;
+    d = d || {};
     var st = RL.statusOf(r.status);
     var badgeCls = r.status === 'ready' || r.status === 'likely' ? 'badge--ok' : (r.status === 'almost' ? 'badge--warn' : 'badge--neutral');
     var iconFn = icons[route.icon] || icons.doc;
@@ -923,7 +928,7 @@
         (doc.note ? '<span class="doc__where">' + esc(doc.note) + '</span>' : '') + '</span></li>';
     }).join('');
 
-    var stepsHTML = (route.steps || []).map(function (s, i) {
+    var stepsHTML = routeStepsFor(route, d).map(function (s, i) {
       return '<div class="step"><div class="step__num">' + (i + 1) + '</div><div class="step__body"><h4>' + esc(s.title) + '</h4><p>' + esc(s.detail) + '</p>' +
         (s.when ? '<div class="step__meta"><span>' + icons.clock(13) + ' ' + esc(s.when) + '</span></div>' : '') + '</div></div>';
     }).join('');

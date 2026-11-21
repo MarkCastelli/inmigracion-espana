@@ -7778,6 +7778,29 @@ body.has-speech-bar { padding-bottom: 86px; }
     return { p: p, d: d, results: results };
   };
 
+  /* Pasos dinámicos: la nacionalidad calcula el tiempo restante real. */
+  RL.routeStepsFor = function (route, d) {
+    var base = route.steps || [];
+    if (route.id !== 'nac_residencia_2') return base;
+    var months = d.permitStatus === 'longterm' ? 60 : d.monthsResident;
+    var left = months == null ? null : Math.max(0, 24 - months);
+    var first;
+    if (left == null) {
+      first = { title: 'Falta la fecha de tu residencia legal', detail: 'Indica desde cuándo tienes la residencia para calcular cuánto te falta. El tiempo como turista o solicitante de asilo no cuenta.', when: 'Ahora' };
+    } else if (left <= 0) {
+      first = { title: 'Ya cumples los 2 años de residencia legal', detail: 'Desde ' + RL.fmt.date(d.permitSince) + '. Revisa que no haya ausencias largas y prepara el CCSE y los documentos.', when: 'Ahora' };
+    } else {
+      first = { title: 'Te faltan ' + RL.fmt.duration(left) + ' de residencia legal', detail: 'Cumples los 2 años el ' + RL.fmt.date(RL.dates.addYears(d.permitSince, 2)) + '. Hasta entonces no puedes presentar la nacionalidad por residencia; el tiempo de turismo o asilo solicitado no cuenta.', when: 'En ' + RL.fmt.duration(left) };
+    }
+    var second;
+    if (d.exams === 'ccse' || d.exams === 'both') {
+      second = { title: 'Ya tienes el CCSE', detail: 'Revisa que no caduque y guarda el certificado. Si no eres hispanohablante, necesitas además el DELE A2.', when: 'Hecho' };
+    } else {
+      second = { title: 'Prepara el CCSE', detail: 'Inscríbete en el Instituto Cervantes. El CCSE es obligatorio; el DELE A2 solo si no eres hispanohablante nativo.', when: left == null || left > 6 ? 'Mes -6' : 'Ahora' };
+    }
+    return [first, second].concat(base.slice(2));
+  };
+
   /* ─────────── ventanas de oportunidad ─────────── */
   function buildWindows(p, d) {
     var out = [];
@@ -9550,7 +9573,7 @@ body.has-speech-bar { padding-bottom: 86px; }
 
       if (route.steps && route.steps.length) {
         doc.p('Pasos:', true);
-        route.steps.forEach(function (s, i) {
+        RL.routeStepsFor(route, d).forEach(function (s, i) {
           doc.bullet((i + 1) + '. ' + s.title + ' — ' + s.detail + (s.when ? ' [' + s.when + ']' : ''));
         });
       }
@@ -10778,7 +10801,7 @@ body.has-speech-bar { padding-bottom: 86px; }
         '<button class="btn btn--soft btn--sm" data-nav="inicio">Volver al inicio</button></div></div>';
     }
 
-    plan.recommended.forEach(function (r, i) { html += routeCardHTML(r, i === 0); });
+    plan.recommended.forEach(function (r, i) { html += routeCardHTML(r, i === 0, plan.d); });
 
     if (!plan.d.isSpanish) {
       if (plan.timeline.length) html += timelineHTML(plan.timeline);
@@ -11019,13 +11042,17 @@ body.has-speech-bar { padding-bottom: 86px; }
     }).join('');
   }
 
+  function routeStepsFor(route, d) {
+    return RL.routeStepsFor ? RL.routeStepsFor(route, d) : (route.steps || []);
+  }
+
   function nextStepsHTML(plan, top) {
     var steps = [];
     plan.actions.forEach(function (a) {
       if (/semana|ahora/i.test(a.when) && steps.length < 2) steps.push({ t: a.title, d: a.body, w: a.when });
     });
     if (top) {
-      top.route.steps.slice(0, 2).forEach(function (s) {
+      routeStepsFor(top.route, plan.d).slice(0, 2).forEach(function (s) {
         if (steps.length < 3) steps.push({ t: s.title, d: s.detail, w: s.when });
       });
     }
@@ -11040,8 +11067,9 @@ body.has-speech-bar { padding-bottom: 86px; }
       '</div></div></div>';
   }
 
-  function routeCardHTML(r, isTop) {
+  function routeCardHTML(r, isTop, d) {
     var route = r.route;
+    d = d || {};
     var st = RL.statusOf(r.status);
     var badgeCls = r.status === 'ready' || r.status === 'likely' ? 'badge--ok' : (r.status === 'almost' ? 'badge--warn' : 'badge--neutral');
     var iconFn = icons[route.icon] || icons.doc;
@@ -11056,7 +11084,7 @@ body.has-speech-bar { padding-bottom: 86px; }
         (doc.note ? '<span class="doc__where">' + esc(doc.note) + '</span>' : '') + '</span></li>';
     }).join('');
 
-    var stepsHTML = (route.steps || []).map(function (s, i) {
+    var stepsHTML = routeStepsFor(route, d).map(function (s, i) {
       return '<div class="step"><div class="step__num">' + (i + 1) + '</div><div class="step__body"><h4>' + esc(s.title) + '</h4><p>' + esc(s.detail) + '</p>' +
         (s.when ? '<div class="step__meta"><span>' + icons.clock(13) + ' ' + esc(s.when) + '</span></div>' : '') + '</div></div>';
     }).join('');
