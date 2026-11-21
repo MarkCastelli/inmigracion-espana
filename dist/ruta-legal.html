@@ -1523,7 +1523,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       {
         id: 'yo',
         title: 'Sobre ti y tu familia',
-        intro: 'Empezamos por lo básico. Estos datos son los que más cambian el resultado: tu nacionalidad, tu edad, dónde estás y con quién vives.',
+        intro: 'Empezamos por lo básico. Estos datos son los que más cambian el resultado: tu nacionalidad, tu edad, dónde estás y con quién vives. Aquí cargas pareja, hijos y otras personas que conviven contigo; las preguntas de salud posteriores son solo sobre ti.',
         fields: [
           {
             id: 'nationality', type: 'country', label: '¿Cuál es tu nacionalidad?', required: true,
@@ -1645,6 +1645,15 @@ body.has-speech-bar { padding-bottom: 86px; }
             help: 'Para la pareja estable no registrada se piden 12 meses de convivencia, salvo que tengáis un hijo en común.'
           },
           {
+            id: 'partnerDisability', type: 'radio', label: 'Sobre tu pareja: ¿tiene discapacidad reconocida?', showIf: couple,
+            options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
+            help: 'No es sobre ti. La discapacidad de tu pareja puede afectar a la reagrupación, la dependencia y las ayudas familiares.'
+          },
+          {
+            id: 'partnerDependency', type: 'radio', label: 'Sobre tu pareja: ¿tiene reconocida la dependencia?', showIf: couple,
+            options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }]
+          },
+          {
             id: 'pregnant', type: 'radio', label: '¿Hay un embarazo en curso (tú o tu pareja)?', showIf: inSpain,
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'El embarazo no regulariza por sí solo. Sirve para explicarte qué pasa con la nacionalidad y la residencia del hijo.'
@@ -1666,6 +1675,20 @@ body.has-speech-bar { padding-bottom: 86px; }
           {
             id: 'childSupport', type: 'radio', label: '¿Estás al corriente de las obligaciones (alimentos, visitas)?', showIf: function (p) { return ownSpanishChild(p) && p.childLivesWithYou === 'no'; },
             options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'dontknow', l: 'No lo sé' }]
+          },
+          {
+            id: 'childrenDisability', type: 'radio', label: 'Sobre los hijos: ¿alguno de los que conviven contigo tiene discapacidad?', showIf: hasKids,
+            options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí, alguno' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
+            help: 'Incluye a los hijos solo de tu pareja que conviven contigo, aunque no sean hijos tuyos. No marques aquí tu propia discapacidad.'
+          },
+          {
+            id: 'householdOthers', type: 'number', label: '¿Cuántas personas más conviven contigo, además de tu pareja e hijos?', min: 0, max: 20, placeholder: '0',
+            help: 'Ejemplo: tu madre, un hermano, un amigo. Sirve para valorar la unidad familiar y los medios.'
+          },
+          {
+            id: 'householdDetails', type: 'textarea', label: '¿Quiénes son y qué necesitan? (opcional)', showIf: function (p) { return Number(p.householdOthers) > 0; },
+            placeholder: 'Ej. mi madre de 70 años, depende de mí; un hermano de 19 años que estudia; el hijo de mi pareja de 8 años con discapacidad.',
+            help: 'Nombre, edad, relación, si tienen discapacidad o dependencia y si dependen económicamente de ti. Se guarda solo en este dispositivo.'
           }
         ]
       },
@@ -2233,9 +2256,9 @@ body.has-speech-bar { padding-bottom: 86px; }
             help: 'Solo se piden para la nacionalidad por residencia. Los nacionales de países hispanohablantes están exentos del DELE, pero no del CCSE.'
           },
           {
-            id: 'hasDisability', type: 'radio', label: '¿Tienes reconocida una discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },
+            id: 'hasDisability', type: 'radio', label: 'Sobre ti: ¿tienes reconocida una discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
-            help: 'No es un permiso de residencia, pero cambia ayudas, renovaciones y derechos. El certificado lo da la comunidad autónoma.'
+            help: 'No incluyas aquí a tu pareja o hijos: eso se pregunta en «Sobre ti y tu familia». Esta pregunta es solo sobre ti.'
           },
           {
             id: 'disabilityDegree', type: 'select', label: '¿Qué grado tienes reconocido?', showIf: function (p) { return owns(p, 'discapacidad') || p.hasDisability === 'yes'; },
@@ -2250,19 +2273,14 @@ body.has-speech-bar { padding-bottom: 86px; }
             options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }]
           },
           {
-            id: 'dependency', type: 'radio', label: '¿Tienes reconocida la situación de dependencia?',
+            id: 'dependency', type: 'radio', label: 'Sobre ti: ¿tienes reconocida la situación de dependencia?',
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
-            help: 'Es distinto de la discapacidad y de la incapacidad laboral. Se reconoce por la comunidad autónoma.'
+            help: 'Es distinto de la discapacidad y de la incapacidad laboral. Se reconoce por la comunidad autónoma. No incluyas aquí a tu pareja o hijos.'
           },
           {
             id: 'familyNumerosa', type: 'radio', label: '¿Tenéis título de familia numerosa?',
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'Se solicita en la comunidad autónoma. Da ventajas en educación, transporte, vivienda y tasas.'
-          },
-          {
-            id: 'childrenDisability', type: 'radio', label: '¿Alguno de tus hijos tiene discapacidad reconocida?', showIf: hasKids,
-            options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí, todos o alguno' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
-            help: 'La discapacidad de un hijo puede cambiar la renovación, la reagrupación y las ayudas.'
           },
           {
             id: 'foreignStudies', type: 'radio', label: '¿Tienes estudios terminados fuera de España que quieras reconocer?', showIf: function (p) { return !owns(p, 'titulo_homologado') && !ownsCurrent(p, 'homologacion_titulo'); },
@@ -6690,6 +6708,11 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.disabilityInProgress = p.hasDisability === 'in_progress';
     d.disabilityDegree = p.disabilityDegree || null;
     d.disabilityCertificate = p.disabilityCertificate || null;
+    d.partnerDisability = p.partnerDisability || null;
+    d.partnerHasDisability = p.partnerDisability === 'yes';
+    d.partnerDependency = p.partnerDependency === 'yes';
+    d.householdOthers = Number(p.householdOthers) || 0;
+    d.householdDetails = p.householdDetails || '';
     d.dependency = p.dependency === 'yes';
     d.dependencyInProgress = p.dependency === 'in_progress';
     d.familyNumerosa = p.familyNumerosa === 'yes';
@@ -8087,6 +8110,10 @@ body.has-speech-bar { padding-bottom: 86px; }
       if (p.permitStatus) l.push('- Permiso: ' + (PERMIT[p.permitStatus] || p.permitStatus));
       if (p.empadronado) l.push('- Padrón: ' + (p.empadronado === 'yes' ? 'sí' : 'no'));
       if (d.housing) l.push('- Vivienda: ' + (RL.housing.labels[d.housing] || d.housing) + (d.housingProof ? ' · prueba: ' + (RL.housing.proof[d.housingProof] || d.housingProof) : ''));
+      if (d.partnerHasDisability) l.push('- Pareja con discapacidad reconocida');
+      if (d.partnerDependency) l.push('- Pareja con dependencia reconocida');
+      if (d.hasDisabledChild) l.push('- Hijo/a con discapacidad');
+      if (d.householdOthers > 0) l.push('- Otras personas en casa: ' + d.householdOthers + (p.householdDetails ? ' · ' + p.householdDetails : ''));
     }
     if (opts.includeDocs) {
       var docs = (d.docsBase || []).concat(d.docsTramites || []);
@@ -8486,6 +8513,11 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (p.empadronado) doc.kv('Padrón', p.empadronado === 'yes' ? 'Sí' : 'No');
     if (d.housing) doc.kv('Vivienda', RL.housing.labels[d.housing] || d.housing);
     if (d.housingProof) doc.kv('Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof);
+    if (d.partnerHasDisability) doc.kv('Pareja con discapacidad', 'Sí');
+    if (d.partnerDependency) doc.kv('Pareja con dependencia', 'Sí');
+    if (d.hasDisabledChild) doc.kv('Hijo/a con discapacidad', 'Sí');
+    if (d.householdOthers > 0) doc.kv('Otras personas en casa', String(d.householdOthers));
+    if (p.householdDetails) doc.kv('Detalle de convivientes', p.householdDetails);
     if (p.maritalStatus) {
       doc.kv('Situación de pareja', RL.family.status[p.maritalStatus] || p.maritalStatus);
       if (p.marriageType) doc.kv('Matrimonio', RL.family.marriage[p.marriageType] || p.marriageType);
@@ -9710,6 +9742,9 @@ body.has-speech-bar { padding-bottom: 86px; }
     }
     if (d.ibero) chips.push(chip(icons.globe(14), 'Nacionalidad con plazo de 2 años'));
     if (d.housing) chips.push(chip(icons.home(14), RL.housing.labels[d.housing] || d.housing));
+    if (d.partnerHasDisability) chips.push(chip(icons.family(14), 'Pareja con discapacidad'));
+    if (d.hasDisabledChild) chips.push(chip(icons.family(14), 'Hijo/a con discapacidad'));
+    if (d.householdOthers > 0) chips.push(chip(icons.family(14), d.householdOthers + ' persona(s) más en casa'));
     if (p.maritalStatus) chips.push(chip(icons.family(14), RL.family.status[p.maritalStatus] || p.maritalStatus));
     if (d.hasKids) chips.push(chip(icons.family(14), 'Hijos: ' + d.childrenCount + ' (' + RL.family.childrenText(d) + ')'));
     if (d.hasAncestry) chips.push(chip(icons.family(14), 'Ascendencia española'));
@@ -10020,6 +10055,10 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (p.empadronado) rows.push(['Padrón', p.empadronado === 'yes' ? 'Sí' : 'No']);
     if (d.housing) rows.push(['Vivienda', RL.housing.labels[d.housing] || d.housing]);
     if (d.housingProof) rows.push(['Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof]);
+    if (d.partnerHasDisability) rows.push(['Pareja con discapacidad', 'Sí']);
+    if (d.partnerDependency) rows.push(['Pareja con dependencia', 'Sí']);
+    if (d.hasDisabledChild) rows.push(['Hijo/a con discapacidad', 'Sí']);
+    if (d.householdOthers > 0) rows.push(['Otras personas en casa', String(d.householdOthers)]);
     rows.push(['Objetivo', goalLabel(p.goals)]);
     return '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Tu perfil</h2></div><div class="block__body">' +
       '<dl class="kv">' + rows.map(function (r) {
@@ -11061,6 +11100,11 @@ body.has-speech-bar { padding-bottom: 86px; }
       matrimonio: p.marriageType ? (RL.family.marriage[p.marriageType] || p.marriageType) : '',
       vivienda: d.housing ? (RL.housing.labels[d.housing] || d.housing) : '',
       pruebaVivienda: d.housingProof ? (RL.housing.proof[d.housingProof] || d.housingProof) : '',
+      parejaDiscapacidad: p.partnerDisability || '',
+      parejaDependencia: p.partnerDependency || '',
+      hijosDiscapacidad: p.childrenDisability || '',
+      convivientes: d.householdOthers ? String(d.householdOthers) : '',
+      detalleConvivientes: p.householdDetails || '',
       hijos: d.hasKids ? RL.family.childrenText(d) : 'Sin hijos',
       edadesHijos: p.childrenAges || '',
       hijoEspanol: d.hasSpanishChildInHousehold ? (RL.family.spanishChild[d.spanishChildType] || '') : ''
@@ -11096,6 +11140,12 @@ body.has-speech-bar { padding-bottom: 86px; }
       fdField('hijoEspanol', 'Hijo/a español y vínculo', data.hijoEspanol) +
       fdField('vivienda', 'Situación de vivienda', data.vivienda) +
       fdField('pruebaVivienda', 'Prueba de vivienda', data.pruebaVivienda) +
+      fdField('parejaDiscapacidad', 'Discapacidad de la pareja', data.parejaDiscapacidad) +
+      fdField('parejaDependencia', 'Dependencia de la pareja', data.parejaDependencia) +
+      fdField('hijosDiscapacidad', 'Discapacidad de los hijos', data.hijosDiscapacidad) +
+      fdField('convivientes', 'Otras personas que conviven', data.convivientes) +
+      '<div class="field field--full"><label class="field__label" for="fd-detalleConvivientes">Detalle de las personas que conviven</label>' +
+      '<textarea class="textarea" id="fd-detalleConvivientes" name="detalleConvivientes" placeholder="Nombre, edad, relación, discapacidad/dependencia…">' + esc(data.detalleConvivientes || '') + '</textarea></div>' +
       fdField('nie', 'NIE', data.nie) +
       fdField('pasaporte', 'Pasaporte de tu país (no español)', data.pasaporte) +
       fdField('expediente', 'Número de expediente (si lo tienes)', data.expediente) +

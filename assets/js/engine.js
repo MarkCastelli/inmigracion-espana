@@ -79,6 +79,11 @@
     d.disabilityInProgress = p.hasDisability === 'in_progress';
     d.disabilityDegree = p.disabilityDegree || null;
     d.disabilityCertificate = p.disabilityCertificate || null;
+    d.partnerDisability = p.partnerDisability || null;
+    d.partnerHasDisability = p.partnerDisability === 'yes';
+    d.partnerDependency = p.partnerDependency === 'yes';
+    d.householdOthers = Number(p.householdOthers) || 0;
+    d.householdDetails = p.householdDetails || '';
     d.dependency = p.dependency === 'yes';
     d.dependencyInProgress = p.dependency === 'in_progress';
     d.familyNumerosa = p.familyNumerosa === 'yes';

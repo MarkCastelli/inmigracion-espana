@@ -47,6 +47,35 @@ test('el cuestionario pregunta el desglose real de hijos y pareja', () => {
   assert.ok(!ids.includes('childrenCount'), 'no debe volver el campo ambiguo childrenCount');
 });
 
+test('la discapacidad del titular no se confunde con la de pareja o hijos', () => {
+  const d = RL.derive(base({
+    hasDisability: 'no',
+    partnerDisability: 'yes',
+    partnerDependency: 'yes',
+    childrenPartner: 1,
+    childrenDisability: 'yes',
+    householdOthers: 1,
+    householdDetails: 'Madre de 70 años'
+  }));
+  assert.strictEqual(d.hasDisability, false);
+  assert.strictEqual(d.partnerHasDisability, true);
+  assert.strictEqual(d.partnerDependency, true);
+  assert.strictEqual(d.hasDisabledChild, true);
+  assert.strictEqual(d.householdOthers, 1);
+});
+
+test('las preguntas de discapacidad y convivencia están en la familia', () => {
+  const yo = RL.questions.steps.find(s => s.id === 'yo');
+  const recursos = RL.questions.steps.find(s => s.id === 'recursos');
+  const familyIds = RL.questions.visibleFields(yo, base({ childrenPartner: 1, maritalStatus: 'pareja_estable', householdOthers: 1 })).map(f => f.id);
+  for (const id of ['partnerDisability', 'partnerDependency', 'childrenDisability', 'householdOthers', 'householdDetails']) {
+    assert.ok(familyIds.includes(id), 'falta ' + id);
+  }
+  const healthIds = RL.questions.visibleFields(recursos, base({})).map(f => f.id);
+  assert.ok(healthIds.includes('hasDisability'));
+  assert.ok(!healthIds.includes('childrenDisability'), 'la discapacidad de los hijos no debe estar en la salud del titular');
+});
+
 test('tres hijos: uno común y dos de la pareja no se mezclan', () => {
   const plan = RL.buildPlan(base({
     maritalStatus: 'pareja_estable', spouseSpanish: 'yes', cohabitation: 'no',

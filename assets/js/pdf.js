@@ -203,6 +203,11 @@
     if (p.empadronado) doc.kv('Padrón', p.empadronado === 'yes' ? 'Sí' : 'No');
     if (d.housing) doc.kv('Vivienda', RL.housing.labels[d.housing] || d.housing);
     if (d.housingProof) doc.kv('Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof);
+    if (d.partnerHasDisability) doc.kv('Pareja con discapacidad', 'Sí');
+    if (d.partnerDependency) doc.kv('Pareja con dependencia', 'Sí');
+    if (d.hasDisabledChild) doc.kv('Hijo/a con discapacidad', 'Sí');
+    if (d.householdOthers > 0) doc.kv('Otras personas en casa', String(d.householdOthers));
+    if (p.householdDetails) doc.kv('Detalle de convivientes', p.householdDetails);
     if (p.maritalStatus) {
       doc.kv('Situación de pareja', RL.family.status[p.maritalStatus] || p.maritalStatus);
       if (p.marriageType) doc.kv('Matrimonio', RL.family.marriage[p.marriageType] || p.marriageType);

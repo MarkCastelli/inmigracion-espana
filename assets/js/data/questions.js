@@ -33,7 +33,7 @@
       {
         id: 'yo',
         title: 'Sobre ti y tu familia',
-        intro: 'Empezamos por lo básico. Estos datos son los que más cambian el resultado: tu nacionalidad, tu edad, dónde estás y con quién vives.',
+        intro: 'Empezamos por lo básico. Estos datos son los que más cambian el resultado: tu nacionalidad, tu edad, dónde estás y con quién vives. Aquí cargas pareja, hijos y otras personas que conviven contigo; las preguntas de salud posteriores son solo sobre ti.',
         fields: [
           {
             id: 'nationality', type: 'country', label: '¿Cuál es tu nacionalidad?', required: true,
@@ -155,6 +155,15 @@
             help: 'Para la pareja estable no registrada se piden 12 meses de convivencia, salvo que tengáis un hijo en común.'
           },
           {
+            id: 'partnerDisability', type: 'radio', label: 'Sobre tu pareja: ¿tiene discapacidad reconocida?', showIf: couple,
+            options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
+            help: 'No es sobre ti. La discapacidad de tu pareja puede afectar a la reagrupación, la dependencia y las ayudas familiares.'
+          },
+          {
+            id: 'partnerDependency', type: 'radio', label: 'Sobre tu pareja: ¿tiene reconocida la dependencia?', showIf: couple,
+            options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }]
+          },
+          {
             id: 'pregnant', type: 'radio', label: '¿Hay un embarazo en curso (tú o tu pareja)?', showIf: inSpain,
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'El embarazo no regulariza por sí solo. Sirve para explicarte qué pasa con la nacionalidad y la residencia del hijo.'
@@ -176,6 +185,20 @@
           {
             id: 'childSupport', type: 'radio', label: '¿Estás al corriente de las obligaciones (alimentos, visitas)?', showIf: function (p) { return ownSpanishChild(p) && p.childLivesWithYou === 'no'; },
             options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'dontknow', l: 'No lo sé' }]
+          },
+          {
+            id: 'childrenDisability', type: 'radio', label: 'Sobre los hijos: ¿alguno de los que conviven contigo tiene discapacidad?', showIf: hasKids,
+            options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí, alguno' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
+            help: 'Incluye a los hijos solo de tu pareja que conviven contigo, aunque no sean hijos tuyos. No marques aquí tu propia discapacidad.'
+          },
+          {
+            id: 'householdOthers', type: 'number', label: '¿Cuántas personas más conviven contigo, además de tu pareja e hijos?', min: 0, max: 20, placeholder: '0',
+            help: 'Ejemplo: tu madre, un hermano, un amigo. Sirve para valorar la unidad familiar y los medios.'
+          },
+          {
+            id: 'householdDetails', type: 'textarea', label: '¿Quiénes son y qué necesitan? (opcional)', showIf: function (p) { return Number(p.householdOthers) > 0; },
+            placeholder: 'Ej. mi madre de 70 años, depende de mí; un hermano de 19 años que estudia; el hijo de mi pareja de 8 años con discapacidad.',
+            help: 'Nombre, edad, relación, si tienen discapacidad o dependencia y si dependen económicamente de ti. Se guarda solo en este dispositivo.'
           }
         ]
       },
@@ -743,9 +766,9 @@
             help: 'Solo se piden para la nacionalidad por residencia. Los nacionales de países hispanohablantes están exentos del DELE, pero no del CCSE.'
           },
           {
-            id: 'hasDisability', type: 'radio', label: '¿Tienes reconocida una discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },
+            id: 'hasDisability', type: 'radio', label: 'Sobre ti: ¿tienes reconocida una discapacidad?', showIf: function (p) { return !owns(p, 'discapacidad'); },
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
-            help: 'No es un permiso de residencia, pero cambia ayudas, renovaciones y derechos. El certificado lo da la comunidad autónoma.'
+            help: 'No incluyas aquí a tu pareja o hijos: eso se pregunta en «Sobre ti y tu familia». Esta pregunta es solo sobre ti.'
           },
           {
             id: 'disabilityDegree', type: 'select', label: '¿Qué grado tienes reconocido?', showIf: function (p) { return owns(p, 'discapacidad') || p.hasDisability === 'yes'; },
@@ -760,19 +783,14 @@
             options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }]
           },
           {
-            id: 'dependency', type: 'radio', label: '¿Tienes reconocida la situación de dependencia?',
+            id: 'dependency', type: 'radio', label: 'Sobre ti: ¿tienes reconocida la situación de dependencia?',
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
-            help: 'Es distinto de la discapacidad y de la incapacidad laboral. Se reconoce por la comunidad autónoma.'
+            help: 'Es distinto de la discapacidad y de la incapacidad laboral. Se reconoce por la comunidad autónoma. No incluyas aquí a tu pareja o hijos.'
           },
           {
             id: 'familyNumerosa', type: 'radio', label: '¿Tenéis título de familia numerosa?',
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
             help: 'Se solicita en la comunidad autónoma. Da ventajas en educación, transporte, vivienda y tasas.'
-          },
-          {
-            id: 'childrenDisability', type: 'radio', label: '¿Alguno de tus hijos tiene discapacidad reconocida?', showIf: hasKids,
-            options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí, todos o alguno' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
-            help: 'La discapacidad de un hijo puede cambiar la renovación, la reagrupación y las ayudas.'
           },
           {
             id: 'foreignStudies', type: 'radio', label: '¿Tienes estudios terminados fuera de España que quieras reconocer?', showIf: function (p) { return !owns(p, 'titulo_homologado') && !ownsCurrent(p, 'homologacion_titulo'); },

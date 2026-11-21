@@ -533,6 +533,9 @@
     }
     if (d.ibero) chips.push(chip(icons.globe(14), 'Nacionalidad con plazo de 2 años'));
     if (d.housing) chips.push(chip(icons.home(14), RL.housing.labels[d.housing] || d.housing));
+    if (d.partnerHasDisability) chips.push(chip(icons.family(14), 'Pareja con discapacidad'));
+    if (d.hasDisabledChild) chips.push(chip(icons.family(14), 'Hijo/a con discapacidad'));
+    if (d.householdOthers > 0) chips.push(chip(icons.family(14), d.householdOthers + ' persona(s) más en casa'));
     if (p.maritalStatus) chips.push(chip(icons.family(14), RL.family.status[p.maritalStatus] || p.maritalStatus));
     if (d.hasKids) chips.push(chip(icons.family(14), 'Hijos: ' + d.childrenCount + ' (' + RL.family.childrenText(d) + ')'));
     if (d.hasAncestry) chips.push(chip(icons.family(14), 'Ascendencia española'));
@@ -843,6 +846,10 @@
     if (p.empadronado) rows.push(['Padrón', p.empadronado === 'yes' ? 'Sí' : 'No']);
     if (d.housing) rows.push(['Vivienda', RL.housing.labels[d.housing] || d.housing]);
     if (d.housingProof) rows.push(['Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof]);
+    if (d.partnerHasDisability) rows.push(['Pareja con discapacidad', 'Sí']);
+    if (d.partnerDependency) rows.push(['Pareja con dependencia', 'Sí']);
+    if (d.hasDisabledChild) rows.push(['Hijo/a con discapacidad', 'Sí']);
+    if (d.householdOthers > 0) rows.push(['Otras personas en casa', String(d.householdOthers)]);
     rows.push(['Objetivo', goalLabel(p.goals)]);
     return '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Tu perfil</h2></div><div class="block__body">' +
       '<dl class="kv">' + rows.map(function (r) {
@@ -1884,6 +1891,11 @@
       matrimonio: p.marriageType ? (RL.family.marriage[p.marriageType] || p.marriageType) : '',
       vivienda: d.housing ? (RL.housing.labels[d.housing] || d.housing) : '',
       pruebaVivienda: d.housingProof ? (RL.housing.proof[d.housingProof] || d.housingProof) : '',
+      parejaDiscapacidad: p.partnerDisability || '',
+      parejaDependencia: p.partnerDependency || '',
+      hijosDiscapacidad: p.childrenDisability || '',
+      convivientes: d.householdOthers ? String(d.householdOthers) : '',
+      detalleConvivientes: p.householdDetails || '',
       hijos: d.hasKids ? RL.family.childrenText(d) : 'Sin hijos',
       edadesHijos: p.childrenAges || '',
       hijoEspanol: d.hasSpanishChildInHousehold ? (RL.family.spanishChild[d.spanishChildType] || '') : ''
@@ -1919,6 +1931,12 @@
       fdField('hijoEspanol', 'Hijo/a español y vínculo', data.hijoEspanol) +
       fdField('vivienda', 'Situación de vivienda', data.vivienda) +
       fdField('pruebaVivienda', 'Prueba de vivienda', data.pruebaVivienda) +
+      fdField('parejaDiscapacidad', 'Discapacidad de la pareja', data.parejaDiscapacidad) +
+      fdField('parejaDependencia', 'Dependencia de la pareja', data.parejaDependencia) +
+      fdField('hijosDiscapacidad', 'Discapacidad de los hijos', data.hijosDiscapacidad) +
+      fdField('convivientes', 'Otras personas que conviven', data.convivientes) +
+      '<div class="field field--full"><label class="field__label" for="fd-detalleConvivientes">Detalle de las personas que conviven</label>' +
+      '<textarea class="textarea" id="fd-detalleConvivientes" name="detalleConvivientes" placeholder="Nombre, edad, relación, discapacidad/dependencia…">' + esc(data.detalleConvivientes || '') + '</textarea></div>' +
       fdField('nie', 'NIE', data.nie) +
       fdField('pasaporte', 'Pasaporte de tu país (no español)', data.pasaporte) +
       fdField('expediente', 'Número de expediente (si lo tienes)', data.expediente) +
