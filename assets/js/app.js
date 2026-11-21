@@ -132,7 +132,13 @@
   function go(view) {
     if (VIEWS.indexOf(view) === -1) view = 'inicio';
     if (RL.speech && RL.speech.isSpeaking()) RL.speech.stop();
-    if (view === 'diagnostico' && ui.view !== 'diagnostico') ui.step = 0;
+    if (ui.view === 'diagnostico' && view !== 'diagnostico') {
+      RL.state.meta.lastStep = ui.step;
+      RL.store.save();
+    }
+    if (view === 'diagnostico' && ui.view !== 'diagnostico') {
+      ui.step = RL.state.meta.lastStep || 0;
+    }
     ui.view = view;
     ui.errors = {};
     if (location.hash !== '#/' + view) {
@@ -268,6 +274,12 @@
           ]) +
           familySelect('child' + i + 'Lives', '¿Vive contigo?', p['child' + i + 'Lives'] || '', [
             ['', 'No indicado'], ['yes', 'Sí'], ['no', 'No'], ['compartida', 'Custodia compartida'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('child' + i + 'Education', 'Estudios actuales (si es menor o adolescente)', p['child' + i + 'Education'] || '', [
+            ['', 'No indicado'], ['no', 'No estudia'], ['infantil_primaria', 'Infantil / Primaria'],
+            ['eso', 'ESO'], ['bachillerato', 'Bachillerato'], ['fp_basica', 'FP Básica'],
+            ['fp_medio', 'FP de Grado Medio'], ['fp_superior', 'FP de Grado Superior (2 años)'],
+            ['universidad', 'Universidad'], ['otro', 'Otro'], ['dontknow', 'No lo sé']
           ]) +
           '</div></div>';
       }
@@ -427,6 +439,7 @@
       value = el.value;
     }
     p[id] = value;
+    RL.state.meta.lastStep = ui.step;
     if (ui.errors[id]) { delete ui.errors[id]; }
     RL.store.save();
   }
@@ -2289,8 +2302,14 @@
   }
 
   function wizardPrev() {
-    if (ui.step > 0) { ui.step--; ui.errors = {}; renderWizard(); scrollToWizardTop(); }
-    else go('inicio');
+    if (ui.step > 0) {
+      ui.step--;
+      ui.errors = {};
+      RL.state.meta.lastStep = ui.step;
+      RL.store.save();
+      renderWizard();
+      scrollToWizardTop();
+    } else go('inicio');
   }
 
   function scrollToWizardTop() {

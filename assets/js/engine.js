@@ -67,7 +67,8 @@
         nationality: p['child' + ci + 'Nationality'] || '',
         relation: p['child' + ci + 'Relation'] || '',
         disability: p['child' + ci + 'Disability'] || '',
-        lives: p['child' + ci + 'Lives'] || ''
+        lives: p['child' + ci + 'Lives'] || '',
+        education: p['child' + ci + 'Education'] || ''
       };
       d.familyChildren.push(child);
       if (child.age != null) childAges.push(String(child.age));
@@ -968,6 +969,18 @@
       grado: 'Grado universitario o licenciatura',
       master: 'Máster',
       doctorado: 'Doctorado'
+    },
+    child: {
+      no: 'No estudia',
+      infantil_primaria: 'Infantil / Primaria',
+      eso: 'ESO',
+      bachillerato: 'Bachillerato',
+      fp_basica: 'FP Básica',
+      fp_medio: 'FP de Grado Medio',
+      fp_superior: 'FP de Grado Superior (2 años)',
+      universidad: 'Universidad',
+      otro: 'Otro',
+      dontknow: 'No lo sé'
     }
   };
 })();

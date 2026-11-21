@@ -420,6 +420,8 @@ t('el paso de familia carga pareja y una ficha por hijo', () => {
   assert.ok(html.includes('Tu pareja'), 'falta la ficha de pareja');
   assert.ok(html.includes('Hijo/a 1') && html.includes('Hijo/a 2') && html.includes('Hijo/a 3'), 'faltan fichas de hijos');
   assert.ok(html.includes('name="child1Name"') && html.includes('name="child3Name"'), 'faltan campos por hijo');
+  assert.ok(html.includes('name="child1Education"'), 'falta el nivel de estudios del hijo');
+  assert.ok(html.includes('FP de Grado Superior'), 'falta FP de Grado Superior');
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

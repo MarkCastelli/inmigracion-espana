@@ -219,7 +219,8 @@
         doc.bullet('Hijo/a ' + c.index + (c.name ? ' · ' + c.name : '') + (c.age != null ? ' · ' + c.age + ' años' : '') +
           (c.relation ? ' · ' + (RL.family.relations[c.relation] || c.relation) : '') +
           (c.disability === 'yes' ? ' · discapacidad reconocida' : '') +
-          (c.lives ? ' · convivencia: ' + c.lives : ''));
+          (c.lives ? ' · convivencia: ' + c.lives : '') +
+          (c.education ? ' · estudios: ' + (RL.education.child[c.education] || c.education) : ''));
       });
     }
     if (p.maritalStatus) {

@@ -339,7 +339,8 @@ ruta-legal/
 │   ├── familia.test.js         # 14 pruebas de pareja, matrimonio, hijos y embarazo
 │   ├── housing.test.js         # 3 pruebas de vivienda y prueba de domicilio
 │   ├── docs.test.js            # 7 pruebas de trámites terminados/en curso
-│   ├── education.test.js       # 3 pruebas de Bachillerato y cursos SEPE
+│   ├── education.test.js       # 4 pruebas de Bachillerato, SEPE y estudios por hijo
+│   ├── persistence.test.js     # 2 pruebas de copia JSON y reanudación
 │   ├── pdf.test.js             # 10 pruebas del PDF
 │   ├── speech.test.js          # 5 pruebas del lector de voz
 │   ├── speech.mock.test.js     # 3 pruebas con Web Speech API simulada
@@ -375,7 +376,8 @@ node tests/links.test.js      # rutas de enlaces muertas
 node tests/familia.test.js    # matrimonio, pareja estable, embarazo e hijo español
 node tests/housing.test.js    # vivienda: piso, habitación, familiar, propiedad
 node tests/docs.test.js       # trámites terminados vs. en curso
-node tests/education.test.js  # Bachillerato y cursos del SEPE
+node tests/education.test.js  # Bachillerato, SEPE y estudios por hijo
+node tests/persistence.test.js # copia JSON y reanudación
 node tests/pdf.test.js        # generación del PDF y hoja de datos
 node tests/speech.test.js     # guion y troceado de la voz
 node tests/speech.mock.test.js # cola de lectura con API simulada

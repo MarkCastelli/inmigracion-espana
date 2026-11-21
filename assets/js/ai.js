@@ -84,7 +84,7 @@
       if (d.householdOthers > 0) l.push('- Otras personas en casa: ' + d.householdOthers + (p.householdDetails ? ' · ' + p.householdDetails : ''));
       if (d.partnerName) l.push('- Pareja: ' + d.partnerName + (d.partnerAge != null ? ', ' + d.partnerAge + ' años' : '') + (d.partnerNationality ? ', ' + d.partnerNationality : ''));
       (d.familyChildren || []).forEach(function (c) {
-        l.push('- Hijo/a ' + c.index + (c.name ? ': ' + c.name : '') + (c.age != null ? ', ' + c.age + ' años' : '') + (c.relation ? ', ' + (RL.family.relations[c.relation] || c.relation) : '') + (c.disability === 'yes' ? ', discapacidad' : ''));
+        l.push('- Hijo/a ' + c.index + (c.name ? ': ' + c.name : '') + (c.age != null ? ', ' + c.age + ' años' : '') + (c.relation ? ', ' + (RL.family.relations[c.relation] || c.relation) : '') + (c.disability === 'yes' ? ', discapacidad' : '') + (c.education ? ', estudios: ' + (RL.education.child[c.education] || c.education) : ''));
       });
     }
     if (opts.includeDocs) {

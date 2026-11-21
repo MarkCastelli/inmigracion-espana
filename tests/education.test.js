@@ -46,3 +46,13 @@ test('el motor guarda dos cursos SEPE y su especialidad', () => {
   assert.ok(/Soldador TIG/.test(d.sepeCoursesDetails));
   assert.strictEqual(d.hasSepeCourses, true);
 });
+
+test('cada hijo guarda su nivel de estudios', () => {
+  const d = RL.derive(base({
+    childrenCommon: 1,
+    child1Age: 17,
+    child1Education: 'fp_superior'
+  }));
+  assert.strictEqual(d.familyChildren[0].education, 'fp_superior');
+  assert.strictEqual(RL.education.child.fp_superior, 'FP de Grado Superior (2 años)');
+});

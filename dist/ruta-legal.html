@@ -945,8 +945,9 @@ body.has-speech-bar { padding-bottom: 86px; }
         </div>
         <p class="wizard__privacy">
           <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 10V8a6 6 0 1 1 12 0v2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="10" width="16" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-          Tus respuestas se guardan solo en este navegador. No hay servidor, no hay cuentas y no compartimos nada.
+          Tus respuestas se guardan automáticamente en este navegador. Si quieres una copia, descarga el JSON; puedes volver y cambiar solo lo que necesites.
         </p>
+        <p style="text-align:center;margin:8px 0 0"><button class="btn btn--ghost btn--sm" type="button" data-action="export">Descargar copia JSON</button></p>
       </form>
     </div>
   </section>
@@ -6747,7 +6748,8 @@ body.has-speech-bar { padding-bottom: 86px; }
         nationality: p['child' + ci + 'Nationality'] || '',
         relation: p['child' + ci + 'Relation'] || '',
         disability: p['child' + ci + 'Disability'] || '',
-        lives: p['child' + ci + 'Lives'] || ''
+        lives: p['child' + ci + 'Lives'] || '',
+        education: p['child' + ci + 'Education'] || ''
       };
       d.familyChildren.push(child);
       if (child.age != null) childAges.push(String(child.age));
@@ -7648,6 +7650,18 @@ body.has-speech-bar { padding-bottom: 86px; }
       grado: 'Grado universitario o licenciatura',
       master: 'Máster',
       doctorado: 'Doctorado'
+    },
+    child: {
+      no: 'No estudia',
+      infantil_primaria: 'Infantil / Primaria',
+      eso: 'ESO',
+      bachillerato: 'Bachillerato',
+      fp_basica: 'FP Básica',
+      fp_medio: 'FP de Grado Medio',
+      fp_superior: 'FP de Grado Superior (2 años)',
+      universidad: 'Universidad',
+      otro: 'Otro',
+      dontknow: 'No lo sé'
     }
   };
 })();
@@ -8254,7 +8268,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       if (d.householdOthers > 0) l.push('- Otras personas en casa: ' + d.householdOthers + (p.householdDetails ? ' · ' + p.householdDetails : ''));
       if (d.partnerName) l.push('- Pareja: ' + d.partnerName + (d.partnerAge != null ? ', ' + d.partnerAge + ' años' : '') + (d.partnerNationality ? ', ' + d.partnerNationality : ''));
       (d.familyChildren || []).forEach(function (c) {
-        l.push('- Hijo/a ' + c.index + (c.name ? ': ' + c.name : '') + (c.age != null ? ', ' + c.age + ' años' : '') + (c.relation ? ', ' + (RL.family.relations[c.relation] || c.relation) : '') + (c.disability === 'yes' ? ', discapacidad' : ''));
+        l.push('- Hijo/a ' + c.index + (c.name ? ': ' + c.name : '') + (c.age != null ? ', ' + c.age + ' años' : '') + (c.relation ? ', ' + (RL.family.relations[c.relation] || c.relation) : '') + (c.disability === 'yes' ? ', discapacidad' : '') + (c.education ? ', estudios: ' + (RL.education.child[c.education] || c.education) : ''));
       });
     }
     if (opts.includeDocs) {
@@ -8671,7 +8685,8 @@ body.has-speech-bar { padding-bottom: 86px; }
         doc.bullet('Hijo/a ' + c.index + (c.name ? ' · ' + c.name : '') + (c.age != null ? ' · ' + c.age + ' años' : '') +
           (c.relation ? ' · ' + (RL.family.relations[c.relation] || c.relation) : '') +
           (c.disability === 'yes' ? ' · discapacidad reconocida' : '') +
-          (c.lives ? ' · convivencia: ' + c.lives : ''));
+          (c.lives ? ' · convivencia: ' + c.lives : '') +
+          (c.education ? ' · estudios: ' + (RL.education.child[c.education] || c.education) : ''));
       });
     }
     if (p.maritalStatus) {
@@ -9497,7 +9512,13 @@ body.has-speech-bar { padding-bottom: 86px; }
   function go(view) {
     if (VIEWS.indexOf(view) === -1) view = 'inicio';
     if (RL.speech && RL.speech.isSpeaking()) RL.speech.stop();
-    if (view === 'diagnostico' && ui.view !== 'diagnostico') ui.step = 0;
+    if (ui.view === 'diagnostico' && view !== 'diagnostico') {
+      RL.state.meta.lastStep = ui.step;
+      RL.store.save();
+    }
+    if (view === 'diagnostico' && ui.view !== 'diagnostico') {
+      ui.step = RL.state.meta.lastStep || 0;
+    }
     ui.view = view;
     ui.errors = {};
     if (location.hash !== '#/' + view) {
@@ -9633,6 +9654,12 @@ body.has-speech-bar { padding-bottom: 86px; }
           ]) +
           familySelect('child' + i + 'Lives', '¿Vive contigo?', p['child' + i + 'Lives'] || '', [
             ['', 'No indicado'], ['yes', 'Sí'], ['no', 'No'], ['compartida', 'Custodia compartida'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('child' + i + 'Education', 'Estudios actuales (si es menor o adolescente)', p['child' + i + 'Education'] || '', [
+            ['', 'No indicado'], ['no', 'No estudia'], ['infantil_primaria', 'Infantil / Primaria'],
+            ['eso', 'ESO'], ['bachillerato', 'Bachillerato'], ['fp_basica', 'FP Básica'],
+            ['fp_medio', 'FP de Grado Medio'], ['fp_superior', 'FP de Grado Superior (2 años)'],
+            ['universidad', 'Universidad'], ['otro', 'Otro'], ['dontknow', 'No lo sé']
           ]) +
           '</div></div>';
       }
@@ -9792,6 +9819,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       value = el.value;
     }
     p[id] = value;
+    RL.state.meta.lastStep = ui.step;
     if (ui.errors[id]) { delete ui.errors[id]; }
     RL.store.save();
   }
@@ -11654,8 +11682,14 @@ body.has-speech-bar { padding-bottom: 86px; }
   }
 
   function wizardPrev() {
-    if (ui.step > 0) { ui.step--; ui.errors = {}; renderWizard(); scrollToWizardTop(); }
-    else go('inicio');
+    if (ui.step > 0) {
+      ui.step--;
+      ui.errors = {};
+      RL.state.meta.lastStep = ui.step;
+      RL.store.save();
+      renderWizard();
+      scrollToWizardTop();
+    } else go('inicio');
   }
 
   function scrollToWizardTop() {

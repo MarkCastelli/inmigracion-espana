@@ -184,7 +184,8 @@ node tests/ai.test.js         # 4 pruebas de prompt y consultas
 node tests/familia.test.js    # 14 pruebas de matrimonio, pareja, hijos y embarazo
 node tests/housing.test.js    # 3 pruebas de vivienda y prueba de domicilio
 node tests/docs.test.js       # 7 pruebas de trámites terminados vs. en curso
-node tests/education.test.js  # 3 pruebas de Bachillerato y cursos SEPE
+node tests/education.test.js  # 4 pruebas de Bachillerato, SEPE y estudios por hijo
+node tests/persistence.test.js # 2 pruebas de copia JSON y reanudación
 node tests/pdf.test.js        # 10 pruebas del PDF
 node tests/speech.test.js     # 5 pruebas del lector de voz
 node tests/speech.mock.test.js # 3 pruebas con API simulada
