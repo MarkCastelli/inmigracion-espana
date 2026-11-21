@@ -229,6 +229,10 @@
       nominas: 'Nóminas o contrato de trabajo', cita_asilo: 'Cita de asilo', hoja_blanca: 'Hoja blanca',
       tarjeta_roja: 'Tarjeta roja', resguardo_nacionalidad: 'Resguardo de nacionalidad',
       resguardo_extranjeria: 'Resguardo de extranjería', autorizacion_regreso: 'Autorización de regreso',
+      cita_huellas: 'Cita de huellas TIE', tie_en_tramite: 'TIE en tramitación',
+      cita_retirar_tie: 'Cita para retirar TIE', renovacion_tarjeta_roja: 'Renovación de tarjeta roja',
+      homologacion_titulo: 'Homologación o validación de título', tie_renovada: 'TIE renovada',
+      tarjeta_roja_renovada: 'Tarjeta roja renovada', titulo_homologado: 'Título homologado o validado',
       antecedentes: 'Certificado de antecedentes penales', libro_familia: 'Libro de familia',
       demandante_empleo: 'Demandante de empleo', discapacidad: 'Certificado de discapacidad', otro: 'Otro'
     };

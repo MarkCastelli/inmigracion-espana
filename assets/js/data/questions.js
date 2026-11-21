@@ -406,6 +406,9 @@
               { v: 'libro_familia', l: 'Libro de familia', h: 'Documento ya emitido' },
               { v: 'demandante_empleo', l: 'Inscripción como demandante de empleo', h: 'Inscripción ya hecha' },
               { v: 'discapacidad', l: 'Certificado de discapacidad', h: 'Certificado ya emitido' },
+              { v: 'tie_renovada', l: 'TIE renovada o recibida', h: 'Tarjeta física ya entregada' },
+              { v: 'tarjeta_roja_renovada', l: 'Tarjeta roja renovada', h: 'Renovación ya resuelta' },
+              { v: 'titulo_homologado', l: 'Título homologado, equivalente o validado', h: 'Resolución ya emitida' },
               { v: 'otro', l: 'Otro trámite terminado' }
             ]
           },
@@ -416,8 +419,13 @@
               { v: 'cita_asilo', l: 'Cita en policía para solicitar asilo', h: 'Cita pendiente, aún no presentada' },
               { v: 'hoja_blanca', l: 'Hoja blanca (solicitud de asilo presentada)', h: 'En trámite' },
               { v: 'tarjeta_roja', l: 'Tarjeta roja (asilo admitido a trámite)', h: 'En trámite' },
+              { v: 'renovacion_tarjeta_roja', l: 'Renovación de tarjeta roja en curso', h: 'Presentada y pendiente de resolución' },
               { v: 'resguardo_nacionalidad', l: 'Resguardo de solicitud de nacionalidad', h: 'Pendiente de resolución' },
               { v: 'resguardo_extranjeria', l: 'Resguardo de un trámite de extranjería', h: 'Pendiente de resolución' },
+              { v: 'cita_huellas', l: 'Cita para toma de huellas (TIE)', h: 'Cita pedida, aún sin huellas' },
+              { v: 'tie_en_tramite', l: 'Huellas tomadas, esperando la TIE física', h: 'Tarjeta en fabricación o pendiente de entrega' },
+              { v: 'cita_retirar_tie', l: 'Esperando cita para retirar la TIE', h: 'TIE aprobada, pendiente de recogida' },
+              { v: 'homologacion_titulo', l: 'Homologación o validación de título en curso', h: 'Estudios: pendiente de resolución' },
               { v: 'otro', l: 'Otro trámite en curso' }
             ]
           },

@@ -19,6 +19,10 @@
   };
   var DOCS = {
     pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
+    cita_huellas: 'Cita de huellas TIE', tie_en_tramite: 'TIE en tramitación',
+    cita_retirar_tie: 'Cita para retirar TIE', renovacion_tarjeta_roja: 'Renovación de tarjeta roja',
+    homologacion_titulo: 'Homologación/validación de título', tie_renovada: 'TIE renovada',
+    tarjeta_roja_renovada: 'Tarjeta roja renovada', titulo_homologado: 'Título homologado/validado',
     certificado_digital: 'Certificado digital', cuenta_bancaria: 'Cuenta bancaria',
     seguridad_social: 'Nº Seguridad Social', vida_laboral: 'Vida laboral',
     tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',

@@ -172,6 +172,13 @@
     d.hasPassportDoc = d.owns('pasaporte');
     d.pendingExtranjeria = d.owns('resguardo_extranjeria') || d.ownsCurrent('resguardo_extranjeria') || !!p.extranjeriaPendingType;
     d.pendingNationality = d.owns('resguardo_nacionalidad') || d.ownsCurrent('resguardo_nacionalidad') || !!p.nationalityPendingStage;
+    d.tieHuellasCita = d.ownsCurrent('cita_huellas');
+    d.tieInProcess = d.tieHuellasCita || d.ownsCurrent('tie_en_tramite');
+    d.tieCardPending = d.ownsCurrent('cita_retirar_tie');
+    d.tieRenewed = d.owns('tie_renovada');
+    d.redCardRenewalPending = d.ownsCurrent('renovacion_tarjeta_roja');
+    d.titleValidationPending = d.ownsCurrent('homologacion_titulo');
+    d.titleValidated = d.owns('titulo_homologado');
     d.nationalityStage = p.nationalityPendingStage || null;
     d.extranjeriaType = p.extranjeriaPendingType || null;
 
@@ -188,7 +195,7 @@
     d.asylumSoon = stage === 'cita';
     d.asylumGranted = stage === 'concedido';
     d.asylumDenied = stage === 'denegado';
-    d.hasRedCard = stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja');
+    d.hasRedCard = stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja') || d.redCardRenewalPending;
     d.hasWhitePaper = stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca');
     d.hasAsylumAppointment = stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo');
     d.asylumInProcess = !d.asylumGranted && !d.asylumDenied &&
@@ -647,6 +654,16 @@
         else if (d.housing === 'propietario_hipoteca' || d.housing === 'propietario') housingMsg = 'Guarda la escritura, la hipoteca o el recibo del IBI. Si no vives solo, añade la autorización o el certificado de convivencia.';
         add('vivienda', 'Consigue una prueba de domicilio', housingMsg, 'Este mes', 'documentos');
       }
+      if (d.tieHuellasCita) add('tie-huellas', 'Prepara la cita de huellas de la TIE',
+        'Lleva pasaporte, TIE anterior, foto, resolución y tasa 790-012. La cita es para huellas; la tarjeta física no se puede adelantar al vencimiento.', 'Fecha de la cita', 'documentos');
+      else if (d.tieInProcess) add('tie-en-tramite', 'Sigue la TIE física',
+        'Ya tienes huellas tomadas o la tarjeta en tramitación. Guarda el resguardo y consulta el estado; no pidas otra cita de huellas.', 'Cada 2-3 semanas', 'trámite');
+      if (d.tieCardPending) add('tie-retirar', 'Pide cita para retirar la TIE',
+        'La TIE está aprobada y pendiente de recogida. Pide cita ICPP y lleva pasaporte, resguardo y la TIE anterior si te la pidieron.', 'Cuando esté disponible', 'trámite');
+      if (d.redCardRenewalPending) add('roja-renovacion', 'Sigue la renovación de la tarjeta roja',
+        'Guarda el resguardo de la renovación y controla la resolución. Sin tarjeta en vigor se bloquean trámites y trabajo.', 'Cada 2-3 semanas', 'plazo');
+      if (d.titleValidationPending) add('titulo-validacion', 'Sigue la homologación o validación del título',
+        'Guarda el resguardo, atiende requerimientos y controla el plazo. No pagues gestores que prometan resolverlo antes.', 'Cada 4-6 semanas', 'formación');
       if (d.workedMonths > 0 && !d.hasPayslips) add('nominas', 'Guarda nóminas y contrato',
         'Las nóminas, el contrato y los justificantes de pago son la prueba de medios y de trabajo que más se usa en extranjería.', 'Continuo', 'documentos');
     }

@@ -660,6 +660,10 @@
       nominas: 'Nóminas / contrato', cita_asilo: 'Cita de asilo', hoja_blanca: 'Hoja blanca',
       tarjeta_roja: 'Tarjeta roja', resguardo_nacionalidad: 'Resguardo nacionalidad',
       resguardo_extranjeria: 'Resguardo extranjería', autorizacion_regreso: 'Autorización de regreso',
+      cita_huellas: 'Cita de huellas TIE', tie_en_tramite: 'TIE en tramitación',
+      cita_retirar_tie: 'Cita para retirar TIE', renovacion_tarjeta_roja: 'Renovación tarjeta roja',
+      homologacion_titulo: 'Homologación/validación de título', tie_renovada: 'TIE renovada',
+      tarjeta_roja_renovada: 'Tarjeta roja renovada', titulo_homologado: 'Título homologado/validado',
       antecedentes: 'Antecedentes penales', libro_familia: 'Libro de familia',
       demandante_empleo: 'Demandante de empleo', discapacidad: 'Certificado de discapacidad',
       otro: 'Otro'

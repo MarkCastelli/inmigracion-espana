@@ -1896,6 +1896,9 @@ body.has-speech-bar { padding-bottom: 86px; }
               { v: 'libro_familia', l: 'Libro de familia', h: 'Documento ya emitido' },
               { v: 'demandante_empleo', l: 'Inscripción como demandante de empleo', h: 'Inscripción ya hecha' },
               { v: 'discapacidad', l: 'Certificado de discapacidad', h: 'Certificado ya emitido' },
+              { v: 'tie_renovada', l: 'TIE renovada o recibida', h: 'Tarjeta física ya entregada' },
+              { v: 'tarjeta_roja_renovada', l: 'Tarjeta roja renovada', h: 'Renovación ya resuelta' },
+              { v: 'titulo_homologado', l: 'Título homologado, equivalente o validado', h: 'Resolución ya emitida' },
               { v: 'otro', l: 'Otro trámite terminado' }
             ]
           },
@@ -1906,8 +1909,13 @@ body.has-speech-bar { padding-bottom: 86px; }
               { v: 'cita_asilo', l: 'Cita en policía para solicitar asilo', h: 'Cita pendiente, aún no presentada' },
               { v: 'hoja_blanca', l: 'Hoja blanca (solicitud de asilo presentada)', h: 'En trámite' },
               { v: 'tarjeta_roja', l: 'Tarjeta roja (asilo admitido a trámite)', h: 'En trámite' },
+              { v: 'renovacion_tarjeta_roja', l: 'Renovación de tarjeta roja en curso', h: 'Presentada y pendiente de resolución' },
               { v: 'resguardo_nacionalidad', l: 'Resguardo de solicitud de nacionalidad', h: 'Pendiente de resolución' },
               { v: 'resguardo_extranjeria', l: 'Resguardo de un trámite de extranjería', h: 'Pendiente de resolución' },
+              { v: 'cita_huellas', l: 'Cita para toma de huellas (TIE)', h: 'Cita pedida, aún sin huellas' },
+              { v: 'tie_en_tramite', l: 'Huellas tomadas, esperando la TIE física', h: 'Tarjeta en fabricación o pendiente de entrega' },
+              { v: 'cita_retirar_tie', l: 'Esperando cita para retirar la TIE', h: 'TIE aprobada, pendiente de recogida' },
+              { v: 'homologacion_titulo', l: 'Homologación o validación de título en curso', h: 'Estudios: pendiente de resolución' },
               { v: 'otro', l: 'Otro trámite en curso' }
             ]
           },
@@ -6774,6 +6782,13 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.hasPassportDoc = d.owns('pasaporte');
     d.pendingExtranjeria = d.owns('resguardo_extranjeria') || d.ownsCurrent('resguardo_extranjeria') || !!p.extranjeriaPendingType;
     d.pendingNationality = d.owns('resguardo_nacionalidad') || d.ownsCurrent('resguardo_nacionalidad') || !!p.nationalityPendingStage;
+    d.tieHuellasCita = d.ownsCurrent('cita_huellas');
+    d.tieInProcess = d.tieHuellasCita || d.ownsCurrent('tie_en_tramite');
+    d.tieCardPending = d.ownsCurrent('cita_retirar_tie');
+    d.tieRenewed = d.owns('tie_renovada');
+    d.redCardRenewalPending = d.ownsCurrent('renovacion_tarjeta_roja');
+    d.titleValidationPending = d.ownsCurrent('homologacion_titulo');
+    d.titleValidated = d.owns('titulo_homologado');
     d.nationalityStage = p.nationalityPendingStage || null;
     d.extranjeriaType = p.extranjeriaPendingType || null;
 
@@ -6790,7 +6805,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.asylumSoon = stage === 'cita';
     d.asylumGranted = stage === 'concedido';
     d.asylumDenied = stage === 'denegado';
-    d.hasRedCard = stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja');
+    d.hasRedCard = stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja') || d.redCardRenewalPending;
     d.hasWhitePaper = stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca');
     d.hasAsylumAppointment = stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo');
     d.asylumInProcess = !d.asylumGranted && !d.asylumDenied &&
@@ -7249,6 +7264,16 @@ body.has-speech-bar { padding-bottom: 86px; }
         else if (d.housing === 'propietario_hipoteca' || d.housing === 'propietario') housingMsg = 'Guarda la escritura, la hipoteca o el recibo del IBI. Si no vives solo, añade la autorización o el certificado de convivencia.';
         add('vivienda', 'Consigue una prueba de domicilio', housingMsg, 'Este mes', 'documentos');
       }
+      if (d.tieHuellasCita) add('tie-huellas', 'Prepara la cita de huellas de la TIE',
+        'Lleva pasaporte, TIE anterior, foto, resolución y tasa 790-012. La cita es para huellas; la tarjeta física no se puede adelantar al vencimiento.', 'Fecha de la cita', 'documentos');
+      else if (d.tieInProcess) add('tie-en-tramite', 'Sigue la TIE física',
+        'Ya tienes huellas tomadas o la tarjeta en tramitación. Guarda el resguardo y consulta el estado; no pidas otra cita de huellas.', 'Cada 2-3 semanas', 'trámite');
+      if (d.tieCardPending) add('tie-retirar', 'Pide cita para retirar la TIE',
+        'La TIE está aprobada y pendiente de recogida. Pide cita ICPP y lleva pasaporte, resguardo y la TIE anterior si te la pidieron.', 'Cuando esté disponible', 'trámite');
+      if (d.redCardRenewalPending) add('roja-renovacion', 'Sigue la renovación de la tarjeta roja',
+        'Guarda el resguardo de la renovación y controla la resolución. Sin tarjeta en vigor se bloquean trámites y trabajo.', 'Cada 2-3 semanas', 'plazo');
+      if (d.titleValidationPending) add('titulo-validacion', 'Sigue la homologación o validación del título',
+        'Guarda el resguardo, atiende requerimientos y controla el plazo. No pagues gestores que prometan resolverlo antes.', 'Cada 4-6 semanas', 'formación');
       if (d.workedMonths > 0 && !d.hasPayslips) add('nominas', 'Guarda nóminas y contrato',
         'Las nóminas, el contrato y los justificantes de pago son la prueba de medios y de trabajo que más se usa en extranjería.', 'Continuo', 'documentos');
     }
@@ -7999,6 +8024,10 @@ body.has-speech-bar { padding-bottom: 86px; }
   };
   var DOCS = {
     pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
+    cita_huellas: 'Cita de huellas TIE', tie_en_tramite: 'TIE en tramitación',
+    cita_retirar_tie: 'Cita para retirar TIE', renovacion_tarjeta_roja: 'Renovación de tarjeta roja',
+    homologacion_titulo: 'Homologación/validación de título', tie_renovada: 'TIE renovada',
+    tarjeta_roja_renovada: 'Tarjeta roja renovada', titulo_homologado: 'Título homologado/validado',
     certificado_digital: 'Certificado digital', cuenta_bancaria: 'Cuenta bancaria',
     seguridad_social: 'Nº Seguridad Social', vida_laboral: 'Vida laboral',
     tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',
@@ -8476,6 +8505,10 @@ body.has-speech-bar { padding-bottom: 86px; }
       nominas: 'Nóminas o contrato de trabajo', cita_asilo: 'Cita de asilo', hoja_blanca: 'Hoja blanca',
       tarjeta_roja: 'Tarjeta roja', resguardo_nacionalidad: 'Resguardo de nacionalidad',
       resguardo_extranjeria: 'Resguardo de extranjería', autorizacion_regreso: 'Autorización de regreso',
+      cita_huellas: 'Cita de huellas TIE', tie_en_tramite: 'TIE en tramitación',
+      cita_retirar_tie: 'Cita para retirar TIE', renovacion_tarjeta_roja: 'Renovación de tarjeta roja',
+      homologacion_titulo: 'Homologación o validación de título', tie_renovada: 'TIE renovada',
+      tarjeta_roja_renovada: 'Tarjeta roja renovada', titulo_homologado: 'Título homologado o validado',
       antecedentes: 'Certificado de antecedentes penales', libro_familia: 'Libro de familia',
       demandante_empleo: 'Demandante de empleo', discapacidad: 'Certificado de discapacidad', otro: 'Otro'
     };
@@ -9797,6 +9830,10 @@ body.has-speech-bar { padding-bottom: 86px; }
       nominas: 'Nóminas / contrato', cita_asilo: 'Cita de asilo', hoja_blanca: 'Hoja blanca',
       tarjeta_roja: 'Tarjeta roja', resguardo_nacionalidad: 'Resguardo nacionalidad',
       resguardo_extranjeria: 'Resguardo extranjería', autorizacion_regreso: 'Autorización de regreso',
+      cita_huellas: 'Cita de huellas TIE', tie_en_tramite: 'TIE en tramitación',
+      cita_retirar_tie: 'Cita para retirar TIE', renovacion_tarjeta_roja: 'Renovación tarjeta roja',
+      homologacion_titulo: 'Homologación/validación de título', tie_renovada: 'TIE renovada',
+      tarjeta_roja_renovada: 'Tarjeta roja renovada', titulo_homologado: 'Título homologado/validado',
       antecedentes: 'Antecedentes penales', libro_familia: 'Libro de familia',
       demandante_empleo: 'Demandante de empleo', discapacidad: 'Certificado de discapacidad',
       otro: 'Otro'
