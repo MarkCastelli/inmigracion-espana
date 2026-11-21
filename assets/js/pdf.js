@@ -234,8 +234,13 @@
     };
     var owned = (d.docsBase || []).concat(d.docsTramites || []).map(function (k) { return docLabels[k]; }).filter(Boolean);
     if (owned.length) {
-      doc.p('Documentos que ya tienes:', true);
+      doc.p('Documentos y trámites terminados:', true);
       owned.forEach(function (x) { doc.bullet(x); });
+    }
+    var currentDocs = (d.docsEnCurso || []).map(function (k) { return docLabels[k]; }).filter(Boolean);
+    if (currentDocs.length) {
+      doc.p('Trámites en curso o pendientes de resolución:', true);
+      currentDocs.forEach(function (x) { doc.bullet(x); });
     }
     var stageText = { cita: 'Cita de asilo', solicitado: 'Solicitud presentada (hoja blanca)', admitido: 'Admitida a trámite (tarjeta roja)', concedido: 'Protección internacional concedida', denegado: 'Denegada' };
     if (d.asylumStage && stageText[d.asylumStage]) doc.kv('Protección internacional', stageText[d.asylumStage]);

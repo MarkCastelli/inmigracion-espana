@@ -183,6 +183,7 @@ node tests/links.test.js      # 4 pruebas de enlaces y rutas muertas
 node tests/ai.test.js         # 4 pruebas de prompt y consultas
 node tests/familia.test.js    # 12 pruebas de matrimonio, pareja, hijos y embarazo
 node tests/housing.test.js    # 3 pruebas de vivienda y prueba de domicilio
+node tests/docs.test.js       # 4 pruebas de trámites terminados vs. en curso
 node tests/pdf.test.js        # 10 pruebas del PDF
 node tests/speech.test.js     # 5 pruebas del lector de voz
 node tests/speech.mock.test.js # 3 pruebas con API simulada
@@ -492,6 +493,7 @@ Tres procedimientos en `procedures.js` + una entrada en `aids.js`:
 - **Discapacidad/dependencia/incapacidad:** `discapacidad_dependencia_incapacidad` y `ayuda_23_discapacidad` explican quién expide cada reconocimiento, requisitos de residencia (PNC 5/10 años), asilo y qué se puede pedir con 1 año.
 - **Transporte:** `transporte_descuentos` y el trámite `tarjeta_transporte` explican abonos locales/metro, tarjeta de discapacidad, familia numerosa y descuentos de media/larga distancia; precios y requisitos varían por comunidad.
 - **Renovación de TIE:** `tie_renovacion` y el trámite `renovacion` distinguen la renovación administrativa (Mercurio/sede, hasta 2 meses antes) de la TIE física/huellas (solo desde el vencimiento, nunca antes). El plan y el PDF muestran ambas fechas por separado.
+- **Trámites terminados vs. en curso:** `docsTramites` = ya resueltos/emitidos; `docsEnCurso` = presentados y pendientes. Solo los primeros cuentan como certificado/documento existente; los segundos marcan expediente/nacionalidad pendiente y no se presentan como resueltos. El plan y el PDF los muestran en bloques separados.
 - **Nacionalidad:** `ccse_dele` y `nacionalidad_plazos_paises` explican CCSE (25 preguntas, 45 min, 85 €), DELE A2 (unas 2,5 h, ~138 €), exenciones, inscripción y plazos de 1/2/5/10 años. Los trámites `examen_ccse` y `examen_dele` enlazan al Instituto Cervantes.
 - **Renta:** `declaracion_renta` y el trámite homónimo explican umbrales (22.000/15.876 €), campaña 8 abril-30 junio, residencia fiscal (183 días/centro de intereses) y el caso de 3 meses trabajados. No confundir residencia legal con fiscal.
 

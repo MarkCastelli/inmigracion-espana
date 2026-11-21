@@ -149,8 +149,12 @@
     /* documentos y trámites que ya tiene */
     d.docsBase = Array.isArray(p.docsBase) ? p.docsBase : [];
     d.docsTramites = Array.isArray(p.docsTramites) ? p.docsTramites : [];
+    d.docsEnCurso = Array.isArray(p.docsEnCurso) ? p.docsEnCurso : [];
     d.owns = function (k) {
       return d.docsBase.indexOf(k) !== -1 || d.docsTramites.indexOf(k) !== -1;
+    };
+    d.ownsCurrent = function (k) {
+      return d.docsEnCurso.indexOf(k) !== -1;
     };
     d.hasDigitalCert = d.owns('certificado_digital');
     d.hasBankAccount = d.owns('cuenta_bancaria');
@@ -166,8 +170,8 @@
     d.hasReturnAuth = d.owns('autorizacion_regreso');
     d.hasNieDoc = d.owns('nie') || p.hasNie === 'yes';
     d.hasPassportDoc = d.owns('pasaporte');
-    d.pendingExtranjeria = d.owns('resguardo_extranjeria') || !!p.extranjeriaPendingType;
-    d.pendingNationality = d.owns('resguardo_nacionalidad') || !!p.nationalityPendingStage;
+    d.pendingExtranjeria = d.owns('resguardo_extranjeria') || d.ownsCurrent('resguardo_extranjeria') || !!p.extranjeriaPendingType;
+    d.pendingNationality = d.owns('resguardo_nacionalidad') || d.ownsCurrent('resguardo_nacionalidad') || !!p.nationalityPendingStage;
     d.nationalityStage = p.nationalityPendingStage || null;
     d.extranjeriaType = p.extranjeriaPendingType || null;
 
@@ -184,12 +188,12 @@
     d.asylumSoon = stage === 'cita';
     d.asylumGranted = stage === 'concedido';
     d.asylumDenied = stage === 'denegado';
-    d.hasRedCard = stage === 'admitido' || d.owns('tarjeta_roja');
-    d.hasWhitePaper = stage === 'solicitado' || d.owns('hoja_blanca');
-    d.hasAsylumAppointment = stage === 'cita' || d.owns('cita_asilo');
+    d.hasRedCard = stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja');
+    d.hasWhitePaper = stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca');
+    d.hasAsylumAppointment = stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo');
     d.asylumInProcess = !d.asylumGranted && !d.asylumDenied &&
       (d.asylum || d.hasRedCard || d.hasWhitePaper || p.permitStatus === 'asylum');
-    if (!d.asylumInProcess && !d.asylumDenied && d.owns('cita_asilo')) d.asylumSoon = true;
+    if (!d.asylumInProcess && !d.asylumDenied && (d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'))) d.asylumSoon = true;
     d.asylumProtected = d.asylumInProcess;
     d.asylumGrantedDate = p.asylumGrantedDate || '';
     d.tarjetaRojaExpiry = p.tarjetaRojaExpiry || (stage === 'admitido' ? (p.permitExpiry || '') : '');

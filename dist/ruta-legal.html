@@ -1512,7 +1512,10 @@ body.has-speech-bar { padding-bottom: 86px; }
     return (Array.isArray(p.docsBase) && p.docsBase.indexOf(k) !== -1) ||
       (Array.isArray(p.docsTramites) && p.docsTramites.indexOf(k) !== -1);
   };
-  var hasAsylumDoc = function (p) { return owns(p, 'cita_asilo') || owns(p, 'hoja_blanca') || owns(p, 'tarjeta_roja'); };
+  var ownsCurrent = function (p, k) {
+    return Array.isArray(p.docsEnCurso) && p.docsEnCurso.indexOf(k) !== -1;
+  };
+  var hasAsylumDoc = function (p) { return owns(p, 'cita_asilo') || owns(p, 'hoja_blanca') || owns(p, 'tarjeta_roja') || ownsCurrent(p, 'cita_asilo') || ownsCurrent(p, 'hoja_blanca') || ownsCurrent(p, 'tarjeta_roja'); };
 
   RL.questions = {
     steps: [
@@ -1864,7 +1867,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       {
         id: 'documentos',
         title: 'Lo que ya tienes',
-        intro: 'No empiezas de cero. Marca los documentos y trámites que ya tienes: sirven para no repetir pasos y para saber qué te falta de verdad. Si no tienes ninguno, puedes continuar sin marcar nada.',
+        intro: 'No empiezas de cero. Marca primero los documentos y trámites que ya terminaste; después, los que están en curso o esperando resolución. Lo pasado explica tu proceso; lo actual dice qué te falta de verdad. Si no tienes ninguno, puedes continuar sin marcar nada.',
         showIf: function (p) { return p.location === 'spain'; },
         fields: [
           {
@@ -1885,19 +1888,27 @@ body.has-speech-bar { padding-bottom: 86px; }
             ]
           },
           {
-            id: 'docsTramites', type: 'checkboxes', label: 'Trámites, protección y familia',
+            id: 'docsTramites', type: 'checkboxes', label: 'Trámites terminados (ya con resolución o documento)',
+            help: 'Marca solo lo que ya está hecho o emitido. Si presentaste algo y aún esperas resolución, no lo marques aquí: va en el bloque siguiente.',
             options: [
-              { v: 'cita_asilo', l: 'Cita en policía para solicitar asilo' },
-              { v: 'hoja_blanca', l: 'Hoja blanca (resguardo de asilo)' },
-              { v: 'tarjeta_roja', l: 'Tarjeta roja (solicitante de asilo)' },
-              { v: 'resguardo_nacionalidad', l: 'Resguardo de solicitud de nacionalidad' },
-              { v: 'resguardo_extranjeria', l: 'Resguardo de un trámite de extranjería' },
-              { v: 'autorizacion_regreso', l: 'Autorización de regreso' },
-              { v: 'antecedentes', l: 'Certificado de antecedentes penales' },
-              { v: 'libro_familia', l: 'Libro de familia' },
-              { v: 'demandante_empleo', l: 'Inscripción como demandante de empleo' },
-              { v: 'discapacidad', l: 'Certificado de discapacidad' },
-              { v: 'otro', l: 'Otro documento o trámite' }
+              { v: 'autorizacion_regreso', l: 'Autorización de regreso', h: 'Documento ya emitido' },
+              { v: 'antecedentes', l: 'Certificado de antecedentes penales', h: 'Certificado ya emitido' },
+              { v: 'libro_familia', l: 'Libro de familia', h: 'Documento ya emitido' },
+              { v: 'demandante_empleo', l: 'Inscripción como demandante de empleo', h: 'Inscripción ya hecha' },
+              { v: 'discapacidad', l: 'Certificado de discapacidad', h: 'Certificado ya emitido' },
+              { v: 'otro', l: 'Otro trámite terminado' }
+            ]
+          },
+          {
+            id: 'docsEnCurso', type: 'checkboxes', label: 'Trámites en curso o esperando resolución',
+            help: 'Marca lo que ya presentaste y está pendiente. No marques lo que solo estás pensando hacer. Esto sirve para saber qué te falta y qué no debes duplicar.',
+            options: [
+              { v: 'cita_asilo', l: 'Cita en policía para solicitar asilo', h: 'Cita pendiente, aún no presentada' },
+              { v: 'hoja_blanca', l: 'Hoja blanca (solicitud de asilo presentada)', h: 'En trámite' },
+              { v: 'tarjeta_roja', l: 'Tarjeta roja (asilo admitido a trámite)', h: 'En trámite' },
+              { v: 'resguardo_nacionalidad', l: 'Resguardo de solicitud de nacionalidad', h: 'Pendiente de resolución' },
+              { v: 'resguardo_extranjeria', l: 'Resguardo de un trámite de extranjería', h: 'Pendiente de resolución' },
+              { v: 'otro', l: 'Otro trámite en curso' }
             ]
           },
           {
@@ -6740,8 +6751,12 @@ body.has-speech-bar { padding-bottom: 86px; }
     /* documentos y trámites que ya tiene */
     d.docsBase = Array.isArray(p.docsBase) ? p.docsBase : [];
     d.docsTramites = Array.isArray(p.docsTramites) ? p.docsTramites : [];
+    d.docsEnCurso = Array.isArray(p.docsEnCurso) ? p.docsEnCurso : [];
     d.owns = function (k) {
       return d.docsBase.indexOf(k) !== -1 || d.docsTramites.indexOf(k) !== -1;
+    };
+    d.ownsCurrent = function (k) {
+      return d.docsEnCurso.indexOf(k) !== -1;
     };
     d.hasDigitalCert = d.owns('certificado_digital');
     d.hasBankAccount = d.owns('cuenta_bancaria');
@@ -6757,8 +6772,8 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.hasReturnAuth = d.owns('autorizacion_regreso');
     d.hasNieDoc = d.owns('nie') || p.hasNie === 'yes';
     d.hasPassportDoc = d.owns('pasaporte');
-    d.pendingExtranjeria = d.owns('resguardo_extranjeria') || !!p.extranjeriaPendingType;
-    d.pendingNationality = d.owns('resguardo_nacionalidad') || !!p.nationalityPendingStage;
+    d.pendingExtranjeria = d.owns('resguardo_extranjeria') || d.ownsCurrent('resguardo_extranjeria') || !!p.extranjeriaPendingType;
+    d.pendingNationality = d.owns('resguardo_nacionalidad') || d.ownsCurrent('resguardo_nacionalidad') || !!p.nationalityPendingStage;
     d.nationalityStage = p.nationalityPendingStage || null;
     d.extranjeriaType = p.extranjeriaPendingType || null;
 
@@ -6775,12 +6790,12 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.asylumSoon = stage === 'cita';
     d.asylumGranted = stage === 'concedido';
     d.asylumDenied = stage === 'denegado';
-    d.hasRedCard = stage === 'admitido' || d.owns('tarjeta_roja');
-    d.hasWhitePaper = stage === 'solicitado' || d.owns('hoja_blanca');
-    d.hasAsylumAppointment = stage === 'cita' || d.owns('cita_asilo');
+    d.hasRedCard = stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja');
+    d.hasWhitePaper = stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca');
+    d.hasAsylumAppointment = stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo');
     d.asylumInProcess = !d.asylumGranted && !d.asylumDenied &&
       (d.asylum || d.hasRedCard || d.hasWhitePaper || p.permitStatus === 'asylum');
-    if (!d.asylumInProcess && !d.asylumDenied && d.owns('cita_asilo')) d.asylumSoon = true;
+    if (!d.asylumInProcess && !d.asylumDenied && (d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'))) d.asylumSoon = true;
     d.asylumProtected = d.asylumInProcess;
     d.asylumGrantedDate = p.asylumGrantedDate || '';
     d.tarjetaRojaExpiry = p.tarjetaRojaExpiry || (stage === 'admitido' ? (p.permitExpiry || '') : '');
@@ -8039,7 +8054,9 @@ body.has-speech-bar { padding-bottom: 86px; }
     }
     if (opts.includeDocs) {
       var docs = (d.docsBase || []).concat(d.docsTramites || []);
-      if (docs.length) l.push('- Documentos que ya tiene: ' + list(docs, DOCS));
+      if (docs.length) l.push('- Documentos y trámites terminados: ' + list(docs, DOCS));
+      var currentDocs = d.docsEnCurso || [];
+      if (currentDocs.length) l.push('- Trámites en curso o pendientes de resolución: ' + list(currentDocs, DOCS));
       if (d.asylumStage && d.asylumStage !== 'no') {
         var st = { cita: 'cita de asilo', solicitado: 'solicitud presentada', admitido: 'tarjeta roja', concedido: 'protección concedida', denegado: 'asilo denegado' };
         l.push('- Asilo: ' + (st[d.asylumStage] || d.asylumStage));
@@ -8464,8 +8481,13 @@ body.has-speech-bar { padding-bottom: 86px; }
     };
     var owned = (d.docsBase || []).concat(d.docsTramites || []).map(function (k) { return docLabels[k]; }).filter(Boolean);
     if (owned.length) {
-      doc.p('Documentos que ya tienes:', true);
+      doc.p('Documentos y trámites terminados:', true);
       owned.forEach(function (x) { doc.bullet(x); });
+    }
+    var currentDocs = (d.docsEnCurso || []).map(function (k) { return docLabels[k]; }).filter(Boolean);
+    if (currentDocs.length) {
+      doc.p('Trámites en curso o pendientes de resolución:', true);
+      currentDocs.forEach(function (x) { doc.bullet(x); });
     }
     var stageText = { cita: 'Cita de asilo', solicitado: 'Solicitud presentada (hoja blanca)', admitido: 'Admitida a trámite (tarjeta roja)', concedido: 'Protección internacional concedida', denegado: 'Denegada' };
     if (d.asylumStage && stageText[d.asylumStage]) doc.kv('Protección internacional', stageText[d.asylumStage]);
@@ -9780,21 +9802,26 @@ body.has-speech-bar { padding-bottom: 86px; }
       otro: 'Otro'
     };
     var keys = (d.docsBase || []).concat(d.docsTramites || []);
-    var chips = keys.map(function (k) {
+    var done = keys.map(function (k) {
       return labels[k] ? '<span class="chip chip--ok">' + icons.check(12) + ' ' + esc(labels[k]) + '</span>' : '';
+    }).filter(Boolean);
+    var current = (d.docsEnCurso || []).map(function (k) {
+      return labels[k] ? '<span class="chip chip--warn">' + icons.clock(12) + ' ' + esc(labels[k]) + '</span>' : '';
     }).filter(Boolean);
 
     if (d.asylumStage && d.asylumStage !== 'no') {
       var st = { cita: 'Cita de asilo', solicitado: 'Solicitud de asilo presentada', admitido: 'Tarjeta roja', concedido: 'Protección concedida', denegado: 'Asilo denegado' };
-      chips.push('<span class="chip chip--warn">' + icons.shield(12) + ' ' + esc(st[d.asylumStage] || 'Asilo') + '</span>');
+      current.push('<span class="chip chip--warn">' + icons.shield(12) + ' ' + esc(st[d.asylumStage] || 'Asilo') + '</span>');
     }
-    if (d.pendingExtranjeria) chips.push('<span class="chip chip--warn">' + icons.clock(12) + ' Expediente de extranjería abierto</span>');
-    if (d.pendingNationality) chips.push('<span class="chip chip--warn">' + icons.clock(12) + ' Nacionalidad en trámite</span>');
+    if (d.pendingExtranjeria && !d.ownsCurrent('resguardo_extranjeria')) current.push('<span class="chip chip--warn">' + icons.clock(12) + ' Expediente de extranjería abierto</span>');
+    if (d.pendingNationality && !d.ownsCurrent('resguardo_nacionalidad')) current.push('<span class="chip chip--warn">' + icons.clock(12) + ' Nacionalidad en trámite</span>');
 
-    if (!chips.length) return '';
+    if (!done.length && !current.length) return '';
     return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.doc(18) + '<h2>Lo que ya tienes</h2></div>' +
-      '<div class="block__body"><div class="profile-chips" style="margin:0">' + chips.join('') + '</div>' +
-      '<p class="muted" style="font-size:.8rem;margin:10px 0 0">Lo usamos para no pedirte lo que ya tienes y para afinar el plan. Puedes cambiarlo en «Editar respuestas».</p></div></div>';
+      '<div class="block__body">' +
+      (done.length ? '<p class="muted" style="font-size:.78rem;margin:0 0 6px"><strong>Terminados</strong> · documentos y trámites ya resueltos</p><div class="profile-chips" style="margin:0 0 12px">' + done.join('') + '</div>' : '') +
+      (current.length ? '<p class="muted" style="font-size:.78rem;margin:0 0 6px"><strong>En curso</strong> · presentados y pendientes de resolución</p><div class="profile-chips" style="margin:0">' + current.join('') + '</div>' : '') +
+      '<p class="muted" style="font-size:.8rem;margin:10px 0 0">Lo usamos para no pedirte lo que ya tienes y para afinar el plan. Lo que está en curso no se cuenta como resuelto. Puedes cambiarlo en «Editar respuestas».</p></div></div>';
   }
 
   function alertsHTML(alerts) {

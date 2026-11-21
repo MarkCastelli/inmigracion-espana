@@ -665,21 +665,26 @@
       otro: 'Otro'
     };
     var keys = (d.docsBase || []).concat(d.docsTramites || []);
-    var chips = keys.map(function (k) {
+    var done = keys.map(function (k) {
       return labels[k] ? '<span class="chip chip--ok">' + icons.check(12) + ' ' + esc(labels[k]) + '</span>' : '';
+    }).filter(Boolean);
+    var current = (d.docsEnCurso || []).map(function (k) {
+      return labels[k] ? '<span class="chip chip--warn">' + icons.clock(12) + ' ' + esc(labels[k]) + '</span>' : '';
     }).filter(Boolean);
 
     if (d.asylumStage && d.asylumStage !== 'no') {
       var st = { cita: 'Cita de asilo', solicitado: 'Solicitud de asilo presentada', admitido: 'Tarjeta roja', concedido: 'Protección concedida', denegado: 'Asilo denegado' };
-      chips.push('<span class="chip chip--warn">' + icons.shield(12) + ' ' + esc(st[d.asylumStage] || 'Asilo') + '</span>');
+      current.push('<span class="chip chip--warn">' + icons.shield(12) + ' ' + esc(st[d.asylumStage] || 'Asilo') + '</span>');
     }
-    if (d.pendingExtranjeria) chips.push('<span class="chip chip--warn">' + icons.clock(12) + ' Expediente de extranjería abierto</span>');
-    if (d.pendingNationality) chips.push('<span class="chip chip--warn">' + icons.clock(12) + ' Nacionalidad en trámite</span>');
+    if (d.pendingExtranjeria && !d.ownsCurrent('resguardo_extranjeria')) current.push('<span class="chip chip--warn">' + icons.clock(12) + ' Expediente de extranjería abierto</span>');
+    if (d.pendingNationality && !d.ownsCurrent('resguardo_nacionalidad')) current.push('<span class="chip chip--warn">' + icons.clock(12) + ' Nacionalidad en trámite</span>');
 
-    if (!chips.length) return '';
+    if (!done.length && !current.length) return '';
     return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.doc(18) + '<h2>Lo que ya tienes</h2></div>' +
-      '<div class="block__body"><div class="profile-chips" style="margin:0">' + chips.join('') + '</div>' +
-      '<p class="muted" style="font-size:.8rem;margin:10px 0 0">Lo usamos para no pedirte lo que ya tienes y para afinar el plan. Puedes cambiarlo en «Editar respuestas».</p></div></div>';
+      '<div class="block__body">' +
+      (done.length ? '<p class="muted" style="font-size:.78rem;margin:0 0 6px"><strong>Terminados</strong> · documentos y trámites ya resueltos</p><div class="profile-chips" style="margin:0 0 12px">' + done.join('') + '</div>' : '') +
+      (current.length ? '<p class="muted" style="font-size:.78rem;margin:0 0 6px"><strong>En curso</strong> · presentados y pendientes de resolución</p><div class="profile-chips" style="margin:0">' + current.join('') + '</div>' : '') +
+      '<p class="muted" style="font-size:.8rem;margin:10px 0 0">Lo usamos para no pedirte lo que ya tienes y para afinar el plan. Lo que está en curso no se cuenta como resuelto. Puedes cambiarlo en «Editar respuestas».</p></div></div>';
   }
 
   function alertsHTML(alerts) {

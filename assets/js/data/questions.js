@@ -22,7 +22,10 @@
     return (Array.isArray(p.docsBase) && p.docsBase.indexOf(k) !== -1) ||
       (Array.isArray(p.docsTramites) && p.docsTramites.indexOf(k) !== -1);
   };
-  var hasAsylumDoc = function (p) { return owns(p, 'cita_asilo') || owns(p, 'hoja_blanca') || owns(p, 'tarjeta_roja'); };
+  var ownsCurrent = function (p, k) {
+    return Array.isArray(p.docsEnCurso) && p.docsEnCurso.indexOf(k) !== -1;
+  };
+  var hasAsylumDoc = function (p) { return owns(p, 'cita_asilo') || owns(p, 'hoja_blanca') || owns(p, 'tarjeta_roja') || ownsCurrent(p, 'cita_asilo') || ownsCurrent(p, 'hoja_blanca') || ownsCurrent(p, 'tarjeta_roja'); };
 
   RL.questions = {
     steps: [
@@ -374,7 +377,7 @@
       {
         id: 'documentos',
         title: 'Lo que ya tienes',
-        intro: 'No empiezas de cero. Marca los documentos y trámites que ya tienes: sirven para no repetir pasos y para saber qué te falta de verdad. Si no tienes ninguno, puedes continuar sin marcar nada.',
+        intro: 'No empiezas de cero. Marca primero los documentos y trámites que ya terminaste; después, los que están en curso o esperando resolución. Lo pasado explica tu proceso; lo actual dice qué te falta de verdad. Si no tienes ninguno, puedes continuar sin marcar nada.',
         showIf: function (p) { return p.location === 'spain'; },
         fields: [
           {
@@ -395,19 +398,27 @@
             ]
           },
           {
-            id: 'docsTramites', type: 'checkboxes', label: 'Trámites, protección y familia',
+            id: 'docsTramites', type: 'checkboxes', label: 'Trámites terminados (ya con resolución o documento)',
+            help: 'Marca solo lo que ya está hecho o emitido. Si presentaste algo y aún esperas resolución, no lo marques aquí: va en el bloque siguiente.',
             options: [
-              { v: 'cita_asilo', l: 'Cita en policía para solicitar asilo' },
-              { v: 'hoja_blanca', l: 'Hoja blanca (resguardo de asilo)' },
-              { v: 'tarjeta_roja', l: 'Tarjeta roja (solicitante de asilo)' },
-              { v: 'resguardo_nacionalidad', l: 'Resguardo de solicitud de nacionalidad' },
-              { v: 'resguardo_extranjeria', l: 'Resguardo de un trámite de extranjería' },
-              { v: 'autorizacion_regreso', l: 'Autorización de regreso' },
-              { v: 'antecedentes', l: 'Certificado de antecedentes penales' },
-              { v: 'libro_familia', l: 'Libro de familia' },
-              { v: 'demandante_empleo', l: 'Inscripción como demandante de empleo' },
-              { v: 'discapacidad', l: 'Certificado de discapacidad' },
-              { v: 'otro', l: 'Otro documento o trámite' }
+              { v: 'autorizacion_regreso', l: 'Autorización de regreso', h: 'Documento ya emitido' },
+              { v: 'antecedentes', l: 'Certificado de antecedentes penales', h: 'Certificado ya emitido' },
+              { v: 'libro_familia', l: 'Libro de familia', h: 'Documento ya emitido' },
+              { v: 'demandante_empleo', l: 'Inscripción como demandante de empleo', h: 'Inscripción ya hecha' },
+              { v: 'discapacidad', l: 'Certificado de discapacidad', h: 'Certificado ya emitido' },
+              { v: 'otro', l: 'Otro trámite terminado' }
+            ]
+          },
+          {
+            id: 'docsEnCurso', type: 'checkboxes', label: 'Trámites en curso o esperando resolución',
+            help: 'Marca lo que ya presentaste y está pendiente. No marques lo que solo estás pensando hacer. Esto sirve para saber qué te falta y qué no debes duplicar.',
+            options: [
+              { v: 'cita_asilo', l: 'Cita en policía para solicitar asilo', h: 'Cita pendiente, aún no presentada' },
+              { v: 'hoja_blanca', l: 'Hoja blanca (solicitud de asilo presentada)', h: 'En trámite' },
+              { v: 'tarjeta_roja', l: 'Tarjeta roja (asilo admitido a trámite)', h: 'En trámite' },
+              { v: 'resguardo_nacionalidad', l: 'Resguardo de solicitud de nacionalidad', h: 'Pendiente de resolución' },
+              { v: 'resguardo_extranjeria', l: 'Resguardo de un trámite de extranjería', h: 'Pendiente de resolución' },
+              { v: 'otro', l: 'Otro trámite en curso' }
             ]
           },
           {

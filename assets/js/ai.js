@@ -74,7 +74,9 @@
     }
     if (opts.includeDocs) {
       var docs = (d.docsBase || []).concat(d.docsTramites || []);
-      if (docs.length) l.push('- Documentos que ya tiene: ' + list(docs, DOCS));
+      if (docs.length) l.push('- Documentos y trámites terminados: ' + list(docs, DOCS));
+      var currentDocs = d.docsEnCurso || [];
+      if (currentDocs.length) l.push('- Trámites en curso o pendientes de resolución: ' + list(currentDocs, DOCS));
       if (d.asylumStage && d.asylumStage !== 'no') {
         var st = { cita: 'cita de asilo', solicitado: 'solicitud presentada', admitido: 'tarjeta roja', concedido: 'protección concedida', denegado: 'asilo denegado' };
         l.push('- Asilo: ' + (st[d.asylumStage] || d.asylumStage));
