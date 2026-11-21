@@ -67,7 +67,7 @@ Muestra una URL de tu red local (`http://192.168.x.x:8765`). Ábrela en el móvi
 
 ## Qué hace
 
-1. **Diagnóstico guiado** (6 pasos si estás fuera y 7 si estás en España, ~40 preguntas, muchas condicionales): nacionalidad, edad, ubicación, entrada, padrón, permiso, **documentos y trámites que ya tienes**, ascendencia, familia, trabajo, estudios, medios, antecedentes y objetivo.
+1. **Diagnóstico guiado** (6 pasos si estás fuera y hasta 8 si estás en España, ~40 preguntas, muchas condicionales): nacionalidad, edad, ubicación, entrada, padrón, permiso, **documentos y trámites que ya tienes**, **ficha de pareja y de cada hijo**, ascendencia, familia, trabajo, estudios, medios, antecedentes y objetivo.
 2. **Motor de reglas + capa de decisión** que evalúa el perfil contra **33 vías** y devuelve:
    - vías recomendadas, ordenadas por encaje y urgencia;
    - requisitos cumplidos, pendientes y por confirmar;
@@ -343,7 +343,7 @@ ruta-legal/
 │   ├── pdf.test.js             # 10 pruebas del PDF
 │   ├── speech.test.js          # 5 pruebas del lector de voz
 │   ├── speech.mock.test.js     # 3 pruebas con Web Speech API simulada
-│   └── ui.smoke.js             # 20 pruebas de interfaz con DOM mínimo
+│   └── ui.smoke.js             # 21 pruebas de interfaz con DOM mínimo
 ├── docs/
 │   ├── FUENTES.md              # normativa, enlaces y fecha de consulta
 │   ├── MANTENIMIENTO.md        # qué revisar, cuándo y dónde tocarlo

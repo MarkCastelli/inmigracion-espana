@@ -53,6 +53,26 @@
     d.hasKids = d.childrenCount > 0;
     d.hasCommonChild = childrenCommon > 0;
     d.childrenOwnOrCommon = childrenCommon + childrenOwn;
+    d.partnerName = p.partnerName || '';
+    d.partnerAge = p.partnerAge != null ? Number(p.partnerAge) : null;
+    d.partnerNationality = p.partnerNationality || '';
+    d.partnerIncome = p.partnerIncome != null ? Number(p.partnerIncome) : null;
+    d.familyChildren = [];
+    var childAges = [];
+    for (var ci = 1; ci <= d.childrenCount; ci++) {
+      var child = {
+        index: ci,
+        name: p['child' + ci + 'Name'] || '',
+        age: p['child' + ci + 'Age'] != null ? Number(p['child' + ci + 'Age']) : null,
+        nationality: p['child' + ci + 'Nationality'] || '',
+        relation: p['child' + ci + 'Relation'] || '',
+        disability: p['child' + ci + 'Disability'] || '',
+        lives: p['child' + ci + 'Lives'] || ''
+      };
+      d.familyChildren.push(child);
+      if (child.age != null) childAges.push(String(child.age));
+    }
+    d.childrenAges = childAges.length ? childAges.join(', ') : (p.childrenAges || '');
     d.spanishChildType = p.spanishChildType || (p.childrenSpanish === 'yes' || p.childrenSpanish === 'some' ? 'own' : '');
     d.hasSpanishChildInHousehold = p.childrenSpanish === 'yes' || p.childrenSpanish === 'some';
     d.hasSpanishChild = d.hasSpanishChildInHousehold && d.spanishChildType !== 'partner';
@@ -87,8 +107,9 @@
     d.dependency = p.dependency === 'yes';
     d.dependencyInProgress = p.dependency === 'in_progress';
     d.familyNumerosa = p.familyNumerosa === 'yes';
-    d.hasDisabledChild = p.childrenDisability === 'yes';
-    d.disabledChildInProgress = p.childrenDisability === 'in_progress';
+    d.hasDisabledChild = p.childrenDisability === 'yes' || d.familyChildren.some(function (c) { return c.disability === 'yes'; });
+    d.familyNumerosaConsistent = !d.familyNumerosa || d.childrenCount >= 3 || (d.childrenCount === 2 && d.hasDisabledChild);
+    d.disabledChildInProgress = p.childrenDisability === 'in_progress' || d.familyChildren.some(function (c) { return c.disability === 'in_progress'; });
     d.foreignStudies = p.foreignStudies === 'yes';
     d.studiesLevel = p.studiesLevel || null;
     d.studiesHomologated = p.studiesHomologated || null;
@@ -100,7 +121,7 @@
     d.childRecognized = p.childRecognized === 'yes' ? true : (p.childRecognized === 'no' ? false : null);
     d.childLivesWith = p.childLivesWithYou || null;
     d.childSupport = p.childSupport === 'yes' ? true : (p.childSupport === 'no' ? false : null);
-    var ages = String(p.childrenAges || '').match(/\d+/g);
+    var ages = String(d.childrenAges || p.childrenAges || '').match(/\d+/g);
     d.hasMinorSpanishChild = d.hasSpanishChild ? (ages ? ages.some(function (n) { return Number(n) < 18; }) : null) : false;
     d.disabledChildAdult = d.hasDisabledChild ? (ages ? ages.some(function (n) { return Number(n) >= 18; }) : null) : false;
     d.disabledChildMinor = d.hasDisabledChild ? (ages ? ages.some(function (n) { return Number(n) < 18; }) : null) : false;
@@ -599,6 +620,10 @@
         'Revisa el plazo de recurso con un abogado o una entidad especializada. También puedes valorar arraigo o circunstancias excepcionales.', 'riesgo');
     }
 
+    if (d.familyNumerosa && !d.familyNumerosaConsistent) {
+      add('warn', 'Familia numerosa: revisa los hijos cargados',
+        'Has marcado familia numerosa, pero no constan al menos 3 hijos (o 2 si uno tiene discapacidad). Revisa que estén todos cargados; no volveremos a preguntarte si sois familia numerosa.', 'documentos');
+    }
     if (d.pendingExtranjeria) {
       add('info', 'Tienes un expediente de extranjería abierto',
         'Mientras esté abierto no puedes solicitar arraigo (art. 126.h). Sigue el expediente y guarda todos los resguardos.', 'trámite');
@@ -898,6 +923,11 @@
       partner: 'Hijo solo de la pareja (no del solicitante)',
       mixed: 'Varios casos',
       dontknow: 'Vínculo no confirmado'
+    },
+    relations: {
+      common: 'Hijo común',
+      own: 'Hijo solo del solicitante',
+      partner: 'Hijo solo de la pareja'
     },
     childrenText: function (d) {
       return 'Comunes: ' + (d.childrenCommon || 0) +

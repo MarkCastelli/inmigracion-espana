@@ -188,7 +188,7 @@ node tests/education.test.js  # 3 pruebas de Bachillerato y cursos SEPE
 node tests/pdf.test.js        # 10 pruebas del PDF
 node tests/speech.test.js     # 5 pruebas del lector de voz
 node tests/speech.mock.test.js # 3 pruebas con API simulada
-node tests/ui.smoke.js        # 20 pruebas de interfaz
+node tests/ui.smoke.js        # 21 pruebas de interfaz
 python build.py               # regenera dist/ruta-legal.html
 ```
 

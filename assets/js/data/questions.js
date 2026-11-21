@@ -100,10 +100,6 @@
             help: 'Hijos de tu pareja con otra persona. Conviven o no, pero no son hijos tuyos. No los mezcles con los comunes.'
           },
           {
-            id: 'childrenAges', type: 'text', label: 'Edades de todos los hijos', showIf: hasKids, placeholder: 'Ej. 3, 11 y 16',
-            help: 'Incluye comunes, solo tuyos y solo de tu pareja. Sirve para avisarte de plazos escolares y de las vías para menores.'
-          },
-          {
             id: 'childrenSpanish', type: 'radio', label: '¿Alguno de los hijos es español o hijo/a de un progenitor español?', showIf: hasKids,
             options: [
               { v: 'no', l: 'No' },
@@ -204,6 +200,17 @@
       },
 
       /* ───────────────────────── 2 ───────────────────────── */
+      {
+        id: 'familia',
+        title: 'Tu pareja y tus hijos',
+        intro: 'Estos datos son de tu pareja y de cada hijo, no tuyos. Los usamos para el vínculo, la reagrupación, la nacionalidad y las ayudas. Si no convives con alguno, indícalo.',
+        showIf: function (p) { return p.location === 'spain' && (couple(p) || hasKids(p)); },
+        fields: [
+          { id: 'familyMembers', type: 'family', label: 'Personas de tu familia' }
+        ]
+      },
+
+      /* ───────────────────────── 3 ───────────────────────── */
       {
         id: 'situacion',
         title: 'Dónde estás y cómo llegaste',
@@ -826,7 +833,7 @@
           {
             id: 'familyNumerosa', type: 'radio', label: '¿Tenéis título de familia numerosa?',
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'in_progress', l: 'En trámite' }, { v: 'dontknow', l: 'No lo sé' }],
-            help: 'Se solicita en la comunidad autónoma. Da ventajas en educación, transporte, vivienda y tasas.'
+            help: 'Se solicita en la comunidad autónoma. Da ventajas en educación, transporte, vivienda y tasas. Si lo marcas, no volveremos a preguntar si sois familia numerosa: revisa que estén cargados todos los hijos. Mínimo 3 hijos, o 2 si uno tiene discapacidad.'
           },
           {
             id: 'foreignStudies', type: 'radio', label: '¿Tienes estudios terminados fuera de España que quieras reconocer?', showIf: function (p) { return !owns(p, 'titulo_homologado') && !ownsCurrent(p, 'homologacion_titulo'); },

@@ -224,6 +224,72 @@
     if (g) g.querySelector('span').style.width = pct + '%';
   }
 
+  function familyEditorHTML(p) {
+    var d = RL.derive(p);
+    var common = d.childrenCommon || 0;
+    var own = d.childrenOwn || 0;
+    var partnerOnly = d.childrenPartner || 0;
+    var total = d.childrenCount || 0;
+    var relations = [];
+    for (var c = 0; c < common; c++) relations.push('common');
+    for (var o = 0; o < own; o++) relations.push('own');
+    for (var q = 0; q < partnerOnly; q++) relations.push('partner');
+    var relLabels = { common: 'Hijo común', own: 'Hijo solo tuyo', partner: 'Hijo solo de tu pareja' };
+
+    var html = '<div class="family-editor">';
+    html += '<div class="callout callout--info">' + icons.family(18) + '<div><strong>Estos datos son de tu familia</strong><p>No son sobre ti. Rellena la pareja y cada hijo; si un dato no lo sabes, déjalo en blanco.</p></div></div>';
+
+    if (d.couple) {
+      html += '<div class="block" style="margin-bottom:14px"><div class="block__head">' + icons.family(18) + '<h3>Tu pareja</h3></div><div class="block__body">' +
+        '<div class="form-grid">' +
+        familyInput('partnerName', 'Nombre y apellidos', p.partnerName) +
+        familyInput('partnerAge', 'Edad', p.partnerAge, 'number') +
+        familyInput('partnerNationality', 'Nacionalidad', p.partnerNationality) +
+        familyInput('partnerIncome', 'Ingresos mensuales aproximados (€)', p.partnerIncome, 'number') +
+        '</div></div></div>';
+    }
+
+    if (total > 0) {
+      html += '<div class="block"><div class="block__head">' + icons.family(18) + '<h3>Hijos (' + total + ')</h3></div><div class="block__body">';
+      if (p.familyNumerosa === 'yes') {
+        html += '<div class="callout callout--warn" style="margin:0 0 12px">' + icons.alert(16) + '<div><strong>Familia numerosa</strong><p>Ya nos has dicho que tenéis título de familia numerosa. Revisa que estén cargados todos los hijos: no volveremos a preguntarte si lo sois.</p></div></div>';
+      }
+      for (var i = 1; i <= total; i++) {
+        var rel = p['child' + i + 'Relation'] || relations[i - 1] || 'own';
+        html += '<div class="family-child"><p class="eyebrow">Hijo/a ' + i + '</p><div class="form-grid">' +
+          familyInput('child' + i + 'Name', 'Nombre y apellidos', p['child' + i + 'Name']) +
+          familyInput('child' + i + 'Age', 'Edad', p['child' + i + 'Age'], 'number') +
+          familyInput('child' + i + 'Nationality', 'Nacionalidad', p['child' + i + 'Nationality']) +
+          familySelect('child' + i + 'Relation', 'Vínculo contigo', rel, [
+            ['common', 'Hijo común'], ['own', 'Hijo solo tuyo'], ['partner', 'Hijo solo de tu pareja']
+          ]) +
+          familySelect('child' + i + 'Disability', 'Discapacidad', p['child' + i + 'Disability'] || '', [
+            ['', 'No indicado'], ['no', 'No'], ['yes', 'Sí'], ['in_progress', 'En trámite'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('child' + i + 'Lives', '¿Vive contigo?', p['child' + i + 'Lives'] || '', [
+            ['', 'No indicado'], ['yes', 'Sí'], ['no', 'No'], ['compartida', 'Custodia compartida'], ['dontknow', 'No lo sé']
+          ]) +
+          '</div></div>';
+      }
+      html += '</div></div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function familyInput(name, label, value, type) {
+    return '<div class="field"><label class="field__label" for="ff-' + name + '">' + esc(label) + '</label>' +
+      '<input class="input" type="' + (type || 'text') + '" id="ff-' + name + '" name="' + name + '" value="' + esc(value == null ? '' : value) + '"></div>';
+  }
+
+  function familySelect(name, label, value, options) {
+    return '<div class="field"><label class="field__label" for="ff-' + name + '">' + esc(label) + '</label>' +
+      '<select class="select" id="ff-' + name + '" name="' + name + '">' +
+      options.map(function (o) {
+        return '<option value="' + esc(o[0]) + '"' + (String(value) === String(o[0]) ? ' selected' : '') + '>' + esc(o[1]) + '</option>';
+      }).join('') + '</select></div>';
+  }
+
   function fieldHTML(f, p, error) {
     var id = 'f-' + f.id;
     var val = p[f.id];
@@ -232,6 +298,8 @@
     var described = f.help ? ' aria-describedby="h-' + f.id + '"' : '';
     var err = error ? '<p class="field__error" id="e-' + f.id + '">' + esc(error) + '</p>' : '';
     var cls = 'field' + (error ? ' field--error' : '');
+
+    if (f.type === 'family') return familyEditorHTML(p);
 
     if (f.type === 'radio') {
       var opts = (f.options || []).map(function (o) {

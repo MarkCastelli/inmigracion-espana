@@ -41,10 +41,11 @@ test('matrimonio sin convivencia: la vía familiar no se recomienda', () => {
 test('el cuestionario pregunta el desglose real de hijos y pareja', () => {
   const ids = [];
   RL.questions.steps.forEach(s => (s.fields || []).forEach(f => ids.push(f.id)));
-  for (const id of ['maritalStatus', 'marriageType', 'childrenCommon', 'childrenOwn', 'childrenPartner', 'childrenAges', 'childrenSpanish', 'spanishChildType']) {
+  for (const id of ['maritalStatus', 'marriageType', 'childrenCommon', 'childrenOwn', 'childrenPartner', 'childrenSpanish', 'spanishChildType', 'familyMembers']) {
     assert.ok(ids.includes(id), 'falta ' + id);
   }
   assert.ok(!ids.includes('childrenCount'), 'no debe volver el campo ambiguo childrenCount');
+  assert.ok(!ids.includes('childrenAges'), 'la edad global se sustituye por una ficha por hijo');
 });
 
 test('la discapacidad del titular no se confunde con la de pareja o hijos', () => {

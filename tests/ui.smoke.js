@@ -406,4 +406,22 @@ t('la página de formularios muestra EX-03, EX-17 y 790-012', () => {
   nav(app, 'inicio');
 });
 
+t('el paso de familia carga pareja y una ficha por hijo', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = {
+    nationality: 'AR', age: 36, location: 'spain', maritalStatus: 'pareja_estable',
+    childrenCommon: 1, childrenPartner: 2, childrenOwn: 0, childrenSpanish: 'no',
+    docsBase: [], docsTramites: [], goals: ['regularizar']
+  };
+  nav(app, 'diagnostico');
+  RL.ui.state.step = 1;
+  RL.ui.render();
+  const html = app.document.querySelector('#wizardFields').innerHTML;
+  assert.ok(html.includes('Tu pareja'), 'falta la ficha de pareja');
+  assert.ok(html.includes('Hijo/a 1') && html.includes('Hijo/a 2') && html.includes('Hijo/a 3'), 'faltan fichas de hijos');
+  assert.ok(html.includes('name="child1Name"') && html.includes('name="child3Name"'), 'faltan campos por hijo');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

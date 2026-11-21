@@ -212,6 +212,16 @@
     if (d.hasDisabledChild) doc.kv('Hijo/a con discapacidad', 'Sí');
     if (d.householdOthers > 0) doc.kv('Otras personas en casa', String(d.householdOthers));
     if (p.householdDetails) doc.kv('Detalle de convivientes', p.householdDetails);
+    if (d.partnerName) doc.kv('Pareja', d.partnerName + (d.partnerAge != null ? ' · ' + d.partnerAge + ' años' : '') + (d.partnerNationality ? ' · ' + d.partnerNationality : ''));
+    if (d.familyChildren && d.familyChildren.length) {
+      doc.p('Hijos:', true);
+      d.familyChildren.forEach(function (c) {
+        doc.bullet('Hijo/a ' + c.index + (c.name ? ' · ' + c.name : '') + (c.age != null ? ' · ' + c.age + ' años' : '') +
+          (c.relation ? ' · ' + (RL.family.relations[c.relation] || c.relation) : '') +
+          (c.disability === 'yes' ? ' · discapacidad reconocida' : '') +
+          (c.lives ? ' · convivencia: ' + c.lives : ''));
+      });
+    }
     if (p.maritalStatus) {
       doc.kv('Situación de pareja', RL.family.status[p.maritalStatus] || p.maritalStatus);
       if (p.marriageType) doc.kv('Matrimonio', RL.family.marriage[p.marriageType] || p.marriageType);

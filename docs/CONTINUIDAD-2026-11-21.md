@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **143 pruebas pasando**.
+- **144 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -38,6 +38,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 8. **Familia y convivencia**: pareja, hijos y otras personas que conviven se cargan en el paso 1; la discapacidad/dependencia del titular se pregunta aparte y no se confunde con la de pareja o hijos.
 9. **Asilo**: añadida la opción «Renuncié a la protección internacional» y campos separados día/mes/año (`asylumRenouncedDay`, `asylumRenouncedMonth`, `asylumRenouncedYear`), todos opcionales. No se trata como asilo en trámite; el arraigo se referencia desde la renuncia cuando hay mes/año.
 10. **Formación**: añadido Bachillerato al nivel de estudios y campos de cursos SEPE terminados/en curso, con especialidad y duración.
+11. **Ficha familiar**: nuevo paso «Tu pareja y tus hijos» con ficha de pareja y una ficha por cada hijo (nombre, edad, nacionalidad, vínculo, discapacidad y convivencia). Si hay familia numerosa, se avisa de que deben estar todos los hijos cargados.
 
 ## Comandos
 
