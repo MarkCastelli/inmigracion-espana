@@ -124,8 +124,8 @@
     },
     {
       id: 'reagrupacion', scope: 'national', cat: 'familia', icon: 'family',
-      title: 'Reagrupación familiar',
-      when: 'Si ya resides legalmente en España y quieres traer a tu cónyuge, hijos o ascendientes.',
+      title: 'Reagrupación familiar (familiar en el extranjero)',
+      when: 'Solo si ya resides legalmente en España y el cónyuge, hijos o ascendientes están FUERA de España. Si ya están aquí, aunque sea de turismo, irregulares o indocumentados, no se reagrupan por esta vía.',
       where: 'Oficina de Extranjería (reagrupante) y consulado (familiar)',
       appointment: SEDE,
       appointmentLabel: 'Abrir sede de Extranjería',
@@ -138,13 +138,14 @@
         'Tasa 10,94 €'
       ],
       steps: [
+        'Confirma primero que el familiar está fuera de España. Si ya está aquí, para: esta vía no sirve.',
         'El reagrupante solicita la autorización en Extranjería con el EX-02.',
         'Con la autorización concedida, el familiar pide el visado en el consulado de su país.',
         'El familiar entra en España con el visado y solicita la TIE en 1 mes.',
         'La autorización no sirve sin el visado: son dos fases distintas.'
       ],
       fee: '10,94 € + visado + TIE',
-      note: 'No puedes reagrupar si no tienes residencia legal y medios. La vivienda debe cumplir el informe de habitabilidad.',
+      note: 'No puedes reagrupar a alguien que ya está en España, aunque esté de turismo o en situación irregular. La reagrupación exige que el familiar esté fuera y obtenga visado. Si ya está aquí, valora familiar de español/UE, arraigo u otra vía.',
       routeIds: ['reagrupacion']
     },
     {

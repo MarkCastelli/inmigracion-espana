@@ -331,6 +331,16 @@
             help: 'Mira la resolución o el reverso de la TIE. Es clave para saber cómo renovar si no tienes empleo.'
           },
           {
+            id: 'familyAbroad', type: 'select', label: 'Si quieres reagrupar a un familiar, ¿dónde está ahora?', showIf: inSpain,
+            options: [
+              { v: 'no_aplica', l: 'No voy a reagrupar a nadie' },
+              { v: 'fuera_espana', l: 'Está fuera de España' },
+              { v: 'en_espana', l: 'Ya está en España' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'La reagrupación familiar solo sirve si el familiar está fuera de España. Si ya está aquí, aunque sea de turista o en situación irregular, no se puede reagrupar: hay que valorar otra vía.'
+          },
+          {
             id: 'studyWorkHours', type: 'select', label: 'Si estudias y trabajas, ¿cuántas horas semanales?', showIf: function (p) { return inSpain(p) && (p.permitStatus === 'studies' || p.entryMode === 'studies' || p.permitKind === 'estudios'); },
             options: [
               { v: 'none', l: 'No trabajo' },

@@ -1830,6 +1830,16 @@ body.has-speech-bar { padding-bottom: 86px; }
             help: 'Mira la resolución o el reverso de la TIE. Es clave para saber cómo renovar si no tienes empleo.'
           },
           {
+            id: 'familyAbroad', type: 'select', label: 'Si quieres reagrupar a un familiar, ¿dónde está ahora?', showIf: inSpain,
+            options: [
+              { v: 'no_aplica', l: 'No voy a reagrupar a nadie' },
+              { v: 'fuera_espana', l: 'Está fuera de España' },
+              { v: 'en_espana', l: 'Ya está en España' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'La reagrupación familiar solo sirve si el familiar está fuera de España. Si ya está aquí, aunque sea de turista o en situación irregular, no se puede reagrupar: hay que valorar otra vía.'
+          },
+          {
             id: 'studyWorkHours', type: 'select', label: 'Si estudias y trabajas, ¿cuántas horas semanales?', showIf: function (p) { return inSpain(p) && (p.permitStatus === 'studies' || p.entryMode === 'studies' || p.permitKind === 'estudios'); },
             options: [
               { v: 'none', l: 'No trabajo' },
@@ -3386,14 +3396,14 @@ body.has-speech-bar { padding-bottom: 86px; }
     id: 'reagrupacion',
     group: 'residencia',
     title: 'Reagrupación familiar',
-    short: 'Traer a tu cónyuge, hijos o padres si ya resides en España.',
+    short: 'Traer a tu cónyuge, hijos o padres que están fuera de España.',
     icon: 'family',
     weight: 20,
     goals: ['familia', 'residencia_estable'],
     where: 'spain',
     availability: 'open',
     legal: 'Arts. 65-70 RD 1155/2024',
-    summary: 'Si tienes residencia en España, puedes reagrupar a tu cónyuge o pareja, hijos menores de 18 (o con discapacidad) y ascendientes mayores de 65 o dependientes. Necesitas 1 año de residencia, medios económicos e informe de vivienda.',
+    summary: 'Solo para familiares que están fuera de España: cónyuge o pareja, hijos menores de 18 (o con discapacidad) y ascendientes mayores de 65 o dependientes. Si ya están en España, aunque sea de turismo o en situación irregular, no se reagrupan por esta vía.',
     forWho: 'Titulares de una autorización de residencia que quieren traer a su familia desde el extranjero.',
     requirements: [
       { label: 'Tienes residencia en España', test: function (p, d) { return d.hasPermit; }, fix: 'Necesitas una autorización de residencia, no una estancia por estudios.' },
@@ -3404,6 +3414,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     ],
     blockers: [
       { label: 'Necesitas una autorización de residencia previa para reagrupar.', test: function (p, d) { return !d.hasPermit; } },
+      { label: 'La reagrupación solo vale si el familiar está fuera de España. Si ya está aquí, no se puede reagrupar.', test: function (p) { return p.familyAbroad === 'en_espana'; } },
       { label: 'Es una vía para mayores de edad.', test: function (p, d) { return d.minor; } }
     ],
     docs: [D.pasaporte, D.matrimonio, D.nacimiento, D.medios, D.vivienda, D.ant_es, D.tasa_reag, D.ex02],
@@ -3418,10 +3429,14 @@ body.has-speech-bar { padding-bottom: 86px; }
     risks: [
       'El informe de vivienda caduca a los 6 meses.',
       'Los ascendientes solo si tienen 65 años o dependencia acreditada.',
-      'No puedes reagrupar si tú mismo estás en situación irregular.'
+      'No puedes reagrupar si tú mismo estás en situación irregular.',
+      'Si el familiar ya está en España, no es reagrupación: hay que buscar otra vía (familiar de español/UE, arraigo u otra).'
     ],
     links: [L.boe1155, L.min],
-    fit: function (p, d) { return d.hasPermit ? 'Puedes reagrupar si cumples antigüedad y medios. Revisa el informe de vivienda.' : 'Primero necesitas tu propia residencia.'; }
+    fit: function (p, d) {
+      if (p.familyAbroad === 'en_espana') return 'No puedes reagrupar a alguien que ya está en España, aunque esté de turismo o irregular. Esta vía exige que el familiar esté fuera y pida visado.';
+      return d.hasPermit ? 'Puedes reagrupar si cumples antigüedad y medios. Revisa el informe de vivienda.' : 'Primero necesitas tu propia residencia.';
+    }
   });
 
   /* ══════════════════════════════════════════════════════════
@@ -4870,8 +4885,8 @@ body.has-speech-bar { padding-bottom: 86px; }
     },
     {
       id: 'reagrupacion', scope: 'national', cat: 'familia', icon: 'family',
-      title: 'Reagrupación familiar',
-      when: 'Si ya resides legalmente en España y quieres traer a tu cónyuge, hijos o ascendientes.',
+      title: 'Reagrupación familiar (familiar en el extranjero)',
+      when: 'Solo si ya resides legalmente en España y el cónyuge, hijos o ascendientes están FUERA de España. Si ya están aquí, aunque sea de turismo, irregulares o indocumentados, no se reagrupan por esta vía.',
       where: 'Oficina de Extranjería (reagrupante) y consulado (familiar)',
       appointment: SEDE,
       appointmentLabel: 'Abrir sede de Extranjería',
@@ -4884,13 +4899,14 @@ body.has-speech-bar { padding-bottom: 86px; }
         'Tasa 10,94 €'
       ],
       steps: [
+        'Confirma primero que el familiar está fuera de España. Si ya está aquí, para: esta vía no sirve.',
         'El reagrupante solicita la autorización en Extranjería con el EX-02.',
         'Con la autorización concedida, el familiar pide el visado en el consulado de su país.',
         'El familiar entra en España con el visado y solicita la TIE en 1 mes.',
         'La autorización no sirve sin el visado: son dos fases distintas.'
       ],
       fee: '10,94 € + visado + TIE',
-      note: 'No puedes reagrupar si no tienes residencia legal y medios. La vivienda debe cumplir el informe de habitabilidad.',
+      note: 'No puedes reagrupar a alguien que ya está en España, aunque esté de turismo o en situación irregular. La reagrupación exige que el familiar esté fuera y obtenga visado. Si ya está aquí, valora familiar de español/UE, arraigo u otra vía.',
       routeIds: ['reagrupacion']
     },
     {
@@ -6497,6 +6513,22 @@ body.has-speech-bar { padding-bottom: 86px; }
         ['Cita previa Policía · ICPP', 'https://icp.administracionelectronica.gob.es/icpplus'],
         ['Sede de Extranjería', 'https://sede.administracion.gob.es/']
       ]
+    },
+    {
+      id: 'reagrupacion_fuera', cat: 'familia',
+      q: '¿Puedo reagrupar a mi familia si ya está en España?',
+      short: 'No. La reagrupación familiar exige que el cónyuge, los hijos o los ascendientes estén fuera de España y obtengan visado. Si ya están aquí, aunque sea de turismo o en situación irregular, no se reagrupan por esta vía.',
+      detail: [
+        'La reagrupación tiene dos fases: autorización del reagrupante en España y visado del familiar en el consulado de su país.',
+        'Si el familiar ya está en España como turista, irregular o indocumentado, no puede pedir visado desde aquí ni se le puede reagrupar.',
+        'Si ya están aquí, hay que valorar otra vía: familiar de español o de la UE, arraigo, circunstancias excepcionales u otra autorización que corresponda.',
+        'No es lo mismo reagrupar que regularizar: la reagrupación no sirve para legalizar a alguien que ya está dentro.',
+        'No pagues a gestores que prometan reagrupar a una persona que ya está en España.'
+      ],
+      links: [
+        ['Ministerio de Inclusión', 'https://www.inclusion.gob.es/'],
+        ['Código Civil y normativa', 'https://www.boe.es/']
+      ]
     }
   ];
 
@@ -6849,6 +6881,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.pregnantBySpanish = d.pregnant && p.pregnantBySpanish === 'yes';
     d.permitKind = p.permitKind || '';
     d.studyWorkHours = p.studyWorkHours || null;
+    d.familyAbroad = p.familyAbroad || '';
     d.hasDisability = p.hasDisability === 'yes';
     d.disabilityInProgress = p.hasDisability === 'in_progress';
     d.disabilityDegree = p.disabilityDegree || null;

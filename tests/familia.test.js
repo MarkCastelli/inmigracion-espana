@@ -48,6 +48,17 @@ test('el cuestionario pregunta el desglose real de hijos y pareja', () => {
   assert.ok(!ids.includes('childrenAges'), 'la edad global se sustituye por una ficha por hijo');
 });
 
+test('la reagrupación no vale si el familiar ya está en España', () => {
+  const plan = RL.buildPlan(base({
+    permitStatus: 'work', permitSince: '2024-01-01',
+    familyAbroad: 'en_espana', goals: ['familia']
+  }));
+  const r = plan.results.find(x => x.route.id === 'reagrupacion');
+  assert.ok(r, 'falta la vía de reagrupación');
+  assert.ok(r.blockers.some(b => /fuera de España/i.test(b)), 'debe bloquear si el familiar ya está aquí');
+  assert.match(r.fit || '', /No puedes reagrupar/i);
+});
+
 test('la composición familiar crea fichas para las personas que conviven', () => {
   const d = RL.derive(base({ householdSize: 4 }));
   assert.strictEqual(d.extraPeople.length, 3);

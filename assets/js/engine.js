@@ -96,6 +96,7 @@
     d.pregnantBySpanish = d.pregnant && p.pregnantBySpanish === 'yes';
     d.permitKind = p.permitKind || '';
     d.studyWorkHours = p.studyWorkHours || null;
+    d.familyAbroad = p.familyAbroad || '';
     d.hasDisability = p.hasDisability === 'yes';
     d.disabilityInProgress = p.hasDisability === 'in_progress';
     d.disabilityDegree = p.disabilityDegree || null;

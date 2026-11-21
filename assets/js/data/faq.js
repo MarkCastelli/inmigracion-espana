@@ -533,6 +533,22 @@
         ['Cita previa Policía · ICPP', 'https://icp.administracionelectronica.gob.es/icpplus'],
         ['Sede de Extranjería', 'https://sede.administracion.gob.es/']
       ]
+    },
+    {
+      id: 'reagrupacion_fuera', cat: 'familia',
+      q: '¿Puedo reagrupar a mi familia si ya está en España?',
+      short: 'No. La reagrupación familiar exige que el cónyuge, los hijos o los ascendientes estén fuera de España y obtengan visado. Si ya están aquí, aunque sea de turismo o en situación irregular, no se reagrupan por esta vía.',
+      detail: [
+        'La reagrupación tiene dos fases: autorización del reagrupante en España y visado del familiar en el consulado de su país.',
+        'Si el familiar ya está en España como turista, irregular o indocumentado, no puede pedir visado desde aquí ni se le puede reagrupar.',
+        'Si ya están aquí, hay que valorar otra vía: familiar de español o de la UE, arraigo, circunstancias excepcionales u otra autorización que corresponda.',
+        'No es lo mismo reagrupar que regularizar: la reagrupación no sirve para legalizar a alguien que ya está dentro.',
+        'No pagues a gestores que prometan reagrupar a una persona que ya está en España.'
+      ],
+      links: [
+        ['Ministerio de Inclusión', 'https://www.inclusion.gob.es/'],
+        ['Código Civil y normativa', 'https://www.boe.es/']
+      ]
     }
   ];
 

@@ -393,3 +393,5 @@ Las preguntas se inspiraron en dudas recurrentes de foros y consultas, pero **no
 **Foros consultados como orientación:** migrar.org, foroinmigracion y consultas de entidades; no se usan como autoridad legal. Las respuestas finales se apoyan en BOE, ministerios y sede.
 
 **TIE y huellas:** la foto la aporta el solicitante (reciente, color, 32 × 26 mm, fondo blanco); en la comisaría se toman huellas, no fotografía. La TIE no se entrega el mismo día: se pide una segunda cita para recogerla, normalmente 30-45 días después (puede llegar a 60), en la misma oficina. [V/PV]
+
+**Reagrupación familiar:** arts. 65-70 RD 1155/2024. Solo para familiares que están fuera de España: el reagrupante solicita autorización y el familiar pide visado en el consulado. Si el familiar ya está en España, aunque sea de turismo o en situación irregular, no se reagrupa; hay que valorar familiar de español/UE, arraigo u otra vía. [V]
