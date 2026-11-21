@@ -252,6 +252,20 @@
         familyInput('partnerAge', 'Edad', p.partnerAge, 'number') +
         familyInput('partnerNationality', 'Nacionalidad', p.partnerNationality) +
         familyInput('partnerIncome', 'Ingresos mensuales aproximados (€)', p.partnerIncome, 'number') +
+        familySelect('partnerLegalStatus', 'Situación legal de tu pareja', p.partnerLegalStatus || '', [
+          ['', 'No indicado'], ['spanish', 'Española'], ['eu', 'UE/EEE'], ['residence', 'Residencia española en vigor'],
+          ['expired', 'Residencia caducada'], ['asylum', 'Asilo en trámite'], ['irregular', 'Irregular'],
+          ['tourist', 'Turista / estancia'], ['outside', 'Fuera de España'], ['dontknow', 'No lo sé']
+        ]) +
+        familySelect('partnerTimeInSpain', 'Tiempo de tu pareja en España', p.partnerTimeInSpain || '', [
+          ['', 'No indicado'], ['lt1', 'Menos de 1 año'], ['1to2', '1-2 años'], ['2to3', '2-3 años'],
+          ['3plus', 'Más de 3 años'], ['not_spain', 'No está en España'], ['dontknow', 'No lo sé']
+        ]) +
+        familySelect('partnerNeed', '¿Qué necesita tu pareja?', p.partnerNeed || '', [
+          ['', 'No indicado'], ['regularizar', 'Regularizarse'], ['trabajar', 'Trabajar'],
+          ['estudiar', 'Estudiar'], ['renovar', 'Renovar su permiso'], ['nacionalidad', 'Nacionalidad'],
+          ['reagrupar', 'Venir a España'], ['nothing', 'Nada'], ['dontknow', 'No lo sé']
+        ]) +
         '</div></div></div>';
     }
 
@@ -288,6 +302,20 @@
             ['fp_medio', 'FP de Grado Medio'], ['fp_superior', 'FP de Grado Superior (2 años)'],
             ['universidad', 'Universidad'], ['otro', 'Otro'], ['dontknow', 'No lo sé']
           ]) +
+          familySelect('child' + i + 'LegalStatus', 'Situación legal del hijo/a', p['child' + i + 'LegalStatus'] || '', [
+            ['', 'No indicado'], ['spanish', 'Español/a'], ['eu', 'UE/EEE'], ['residence', 'Residencia española'],
+            ['expired', 'Residencia caducada'], ['asylum', 'Asilo en trámite'], ['irregular', 'Irregular'],
+            ['tourist', 'Turista / estancia'], ['outside', 'Fuera de España'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('child' + i + 'TimeInSpain', 'Tiempo del hijo/a en España', p['child' + i + 'TimeInSpain'] || '', [
+            ['', 'No indicado'], ['lt1', 'Menos de 1 año'], ['1to2', '1-2 años'], ['2to3', '2-3 años'],
+            ['3plus', 'Más de 3 años'], ['not_spain', 'No está en España'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('child' + i + 'Need', '¿Qué necesita el hijo/a?', p['child' + i + 'Need'] || '', [
+            ['', 'No indicado'], ['regularizar', 'Regularizarse'], ['trabajar', 'Trabajar'],
+            ['estudiar', 'Estudiar'], ['renovar', 'Renovar permiso'], ['nacionalidad', 'Nacionalidad'],
+            ['reagrupar', 'Venir a España'], ['nothing', 'Nada'], ['dontknow', 'No lo sé']
+          ]) +
           '</div></div>';
       }
       html += '</div></div>';
@@ -304,6 +332,20 @@
           familyInput('extra' + e + 'Age', 'Edad', p['extra' + e + 'Age'], 'number') +
           familySelect('extra' + e + 'Relation', 'Relación con vosotros', p['extra' + e + 'Relation'] || '', [
             ['', 'No indicado'], ['familiar', 'Familiar'], ['amigo', 'Amigo/a'], ['otro', 'Otro']
+          ]) +
+          familySelect('extra' + e + 'LegalStatus', 'Situación legal', p['extra' + e + 'LegalStatus'] || '', [
+            ['', 'No indicado'], ['spanish', 'Española'], ['eu', 'UE/EEE'], ['residence', 'Residencia española'],
+            ['expired', 'Residencia caducada'], ['asylum', 'Asilo en trámite'], ['irregular', 'Irregular'],
+            ['tourist', 'Turista / estancia'], ['outside', 'Fuera de España'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('extra' + e + 'TimeInSpain', 'Tiempo en España', p['extra' + e + 'TimeInSpain'] || '', [
+            ['', 'No indicado'], ['lt1', 'Menos de 1 año'], ['1to2', '1-2 años'], ['2to3', '2-3 años'],
+            ['3plus', 'Más de 3 años'], ['not_spain', 'No está en España'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('extra' + e + 'Need', '¿Qué necesita?', p['extra' + e + 'Need'] || '', [
+            ['', 'No indicado'], ['regularizar', 'Regularizarse'], ['trabajar', 'Trabajar'],
+            ['estudiar', 'Estudiar'], ['renovar', 'Renovar permiso'], ['nacionalidad', 'Nacionalidad'],
+            ['reagrupar', 'Venir a España'], ['nothing', 'Nada'], ['dontknow', 'No lo sé']
           ]) +
           '</div></div>';
       }
@@ -565,6 +607,7 @@
     html += decisionHTML(plan);
     html += realityHTML(plan);
     html += familyRealityHTML(plan);
+    html += familyMembersHTML(plan);
     html += windowsHTML(plan);
     html += nextStepsHTML(plan, top);
 
@@ -689,6 +732,22 @@
       '<ul style="padding-left:18px;font-size:.86rem;color:var(--ink-2)">' +
       r.bullets.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') +
       '</ul></div></div>';
+  }
+
+  function familyMembersHTML(plan) {
+    var list = (plan.d && plan.d.familyAdvice) || [];
+    if (!list.length) return '';
+    var roleLabel = { pareja: 'Pareja', hijo: 'Hijo/a', otro: 'Otra persona' };
+    return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.family(18) + '<h2>Tu familia: situación y opciones</h2></div><div class="block__body">' +
+      list.map(function (x) {
+        return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.user(15) + '</span><div>' +
+          '<strong>' + esc(roleLabel[x.role] || x.role) + ' · ' + esc(x.name) + '</strong>' +
+          '<p style="font-size:.86rem;color:var(--ink-2);margin:3px 0 0">' + esc(x.text) + '</p>' +
+          '<p class="muted" style="font-size:.78rem;margin:4px 0 0">Situación: ' + esc(x.status) + (x.time ? ' · Tiempo: ' + esc(x.time) : '') + (x.need ? ' · Necesita: ' + esc(x.need) : '') + '</p>' +
+          '</div></div>';
+      }).join('') +
+      '<p class="muted" style="font-size:.8rem;margin-top:10px">Cada persona tiene su propia situación. Estas opciones son orientativas y dependen de pruebas y del criterio de la oficina; no son una concesión automática.</p>' +
+      '</div></div>';
   }
 
   function familyRealityHTML(plan) {

@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **162 pruebas pasando**.
+- **163 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -48,6 +48,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 18. **Historial de asilo**: se pregunta si el asilo se pidió antes de los 90 días, si se desistió/archivó, y qué pasó después (arraigo por formación, cuenta ajena, residencia aprobada). Si hay residencia posterior, no se muestra sobreestancia ni se trata el asilo como pendiente.
 19. **Nacionalidad**: el plazo de 2 años se calcula desde la residencia legal, no desde turismo ni asilo solicitado; CCSE obligatorio y DELE solo para no hispanohablantes.
 20. **Asilo histórico**: una hoja blanca o tarjeta roja en «terminados» no mantiene la vía de seguimiento activa; solo cuentan los documentos en curso o un `asylumStage` activo.
+21. **Familia individual**: cada miembro tiene situación legal, tiempo en España y necesidad; el plan muestra opciones separadas para pareja, cada hijo y otras personas.
 
 ## Comandos
 

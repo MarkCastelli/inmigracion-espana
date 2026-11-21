@@ -89,6 +89,9 @@
       (d.extraPeople || []).forEach(function (x) {
         l.push('- Otra persona en casa: ' + (x.name || 'sin nombre') + (x.age != null ? ', ' + x.age + ' años' : '') + (x.relation ? ', ' + x.relation : ''));
       });
+      (d.familyAdvice || []).forEach(function (x) {
+        l.push('- ' + x.role + ' ' + x.name + ': ' + x.text);
+      });
     }
     if (opts.includeDocs) {
       var docs = (d.docsBase || []).concat(d.docsTramites || []);

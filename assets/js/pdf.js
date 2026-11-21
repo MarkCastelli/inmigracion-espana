@@ -231,6 +231,12 @@
         doc.bullet('Persona ' + x.index + (x.name ? ' · ' + x.name : '') + (x.age != null ? ' · ' + x.age + ' años' : '') + (x.relation ? ' · ' + x.relation : ''));
       });
     }
+    if (d.familyAdvice && d.familyAdvice.length) {
+      doc.p('Situación y opciones de cada familiar:', true);
+      d.familyAdvice.forEach(function (x) {
+        doc.bullet(x.role + ' · ' + x.name + ' · ' + x.status + (x.time ? ' · ' + x.time : '') + '. ' + x.text);
+      });
+    }
     if (p.maritalStatus) {
       doc.kv('Situación de pareja', RL.family.status[p.maritalStatus] || p.maritalStatus);
       if (p.marriageType) doc.kv('Matrimonio', RL.family.marriage[p.marriageType] || p.marriageType);

@@ -70,6 +70,9 @@
         disabilityRecognized: p['child' + ci + 'DisabilityRecognized'] || '',
         disabilityDegree: p['child' + ci + 'DisabilityDegree'] || '',
         disabilityExpiry: p['child' + ci + 'DisabilityExpiry'] || '',
+        legalStatus: p['child' + ci + 'LegalStatus'] || '',
+        timeInSpain: p['child' + ci + 'TimeInSpain'] || '',
+        need: p['child' + ci + 'Need'] || '',
         lives: p['child' + ci + 'Lives'] || '',
         education: p['child' + ci + 'Education'] || ''
       };
@@ -113,6 +116,9 @@
     d.partnerHasDisability = p.partnerDisability === 'yes' && d.partnerDisabilityRecognized !== 'no';
     d.partnerDisabilityDegree = p.partnerDisabilityDegree || null;
     d.partnerDisabilityExpiry = p.partnerDisabilityExpiry || '';
+    d.partnerLegalStatus = p.partnerLegalStatus || '';
+    d.partnerTimeInSpain = p.partnerTimeInSpain || '';
+    d.partnerNeed = p.partnerNeed || '';
     d.partnerDependency = p.partnerDependency === 'yes';
     d.householdOthers = Number(p.householdOthers) || 0;
     d.householdDetails = p.householdDetails || '';
@@ -125,7 +131,10 @@
         index: ei,
         name: p['extra' + ei + 'Name'] || '',
         age: p['extra' + ei + 'Age'] != null ? Number(p['extra' + ei + 'Age']) : null,
-        relation: p['extra' + ei + 'Relation'] || ''
+        relation: p['extra' + ei + 'Relation'] || '',
+        legalStatus: p['extra' + ei + 'LegalStatus'] || '',
+        timeInSpain: p['extra' + ei + 'TimeInSpain'] || '',
+        need: p['extra' + ei + 'Need'] || ''
       });
     }
     if (extraHousehold > d.householdOthers) d.householdOthers = extraHousehold;
@@ -445,6 +454,38 @@
     d.nonLucrativeNeedMonth = d.iprem.month * 4;        // 2.400 €/mes
 
     d.hasAnyRouteData = !!(p.nationality && (d.inSpain ? p.entryMode : p.outsideGoal));
+    d.familyAdvice = [];
+    function addFamilyAdvice(role, name, status, time, need, extra) {
+      var label = status || 'sin indicar';
+      var text = '';
+      if (status === 'spanish') text = 'No necesita autorización de extranjería: DNI o pasaporte. Su nacionalidad puede abrir la vía de familiar de español a quien cumpla el vínculo.';
+      else if (status === 'eu') text = 'No necesita autorización de residencia: certificado de registro y empadronamiento.';
+      else if (status === 'residence') text = 'Tiene residencia española: revisa vigencia y renovación. No se reagrupa desde dentro; si quiere cambiar de estatus, hay que modificar.';
+      else if (status === 'expired') text = 'Residencia caducada: revisa renovación o recuperación según el caso. No es una reagrupación.';
+      else if (status === 'asylum') text = 'Asilo en trámite: seguimiento de la solicitud. Mientras esté abierto no se plantea arraigo.';
+      else if (status === 'irregular') text = 'En España sin autorización: valorar arraigo (2 años de permanencia), familiar de español/UE si cumple vínculo, o circunstancias excepcionales. No se puede reagrupar desde dentro.';
+      else if (status === 'tourist') text = 'Como turista no puede trabajar ni quedarse indefinidamente. La reagrupación exige estar fuera y obtener visado.';
+      else if (status === 'outside') text = 'Está fuera de España: solo se puede reagrupar si el titular es residente y cumple los requisitos; también puede pedir visado propio de estudio o trabajo.';
+      else if (status === 'dontknow') text = 'Falta saber su situación legal. Sin ese dato no se pueden valorar sus opciones.';
+      else text = 'Falta indicar su situación legal. Sin ese dato no se pueden valorar sus opciones.';
+      if (need === 'regularizar') text += ' Quiere regularizarse.';
+      else if (need === 'trabajar') text += ' Quiere trabajar: revisa si su autorización lo permite o si necesita modificación.';
+      else if (need === 'estudiar') text += ' Quiere estudiar: revisa estancia por estudios o compatibilidad con su permiso.';
+      else if (need === 'renovar') text += ' Quiere renovar: prepara la renovación antes del vencimiento.';
+      else if (need === 'nacionalidad') text += ' Quiere nacionalidad: revisa el tiempo de residencia legal y los exámenes.';
+      else if (need === 'reagrupar') text += ' Quiere venir a España: la reagrupación solo procede desde fuera.';
+      if (extra) text += ' ' + extra;
+      d.familyAdvice.push({ role: role, name: name || 'Sin nombre', status: label, time: time || '', need: need || '', text: text });
+    }
+    if (d.couple) addFamilyAdvice('pareja', d.partnerName, d.partnerLegalStatus, d.partnerTimeInSpain, d.partnerNeed);
+    (d.familyChildren || []).forEach(function (c) {
+      addFamilyAdvice('hijo', c.name, c.legalStatus, c.timeInSpain, c.need,
+        c.education ? 'Estudios: ' + (RL.education.child[c.education] || c.education) + '.' : '');
+    });
+    (d.extraPeople || []).forEach(function (x) {
+      addFamilyAdvice('otro', x.name, x.legalStatus, x.timeInSpain, x.need, x.relation ? 'Relación: ' + x.relation + '.' : '');
+    });
+
     return d;
   };
 

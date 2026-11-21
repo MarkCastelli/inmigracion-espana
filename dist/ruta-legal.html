@@ -7008,6 +7008,9 @@ body.has-speech-bar { padding-bottom: 86px; }
         disabilityRecognized: p['child' + ci + 'DisabilityRecognized'] || '',
         disabilityDegree: p['child' + ci + 'DisabilityDegree'] || '',
         disabilityExpiry: p['child' + ci + 'DisabilityExpiry'] || '',
+        legalStatus: p['child' + ci + 'LegalStatus'] || '',
+        timeInSpain: p['child' + ci + 'TimeInSpain'] || '',
+        need: p['child' + ci + 'Need'] || '',
         lives: p['child' + ci + 'Lives'] || '',
         education: p['child' + ci + 'Education'] || ''
       };
@@ -7051,6 +7054,9 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.partnerHasDisability = p.partnerDisability === 'yes' && d.partnerDisabilityRecognized !== 'no';
     d.partnerDisabilityDegree = p.partnerDisabilityDegree || null;
     d.partnerDisabilityExpiry = p.partnerDisabilityExpiry || '';
+    d.partnerLegalStatus = p.partnerLegalStatus || '';
+    d.partnerTimeInSpain = p.partnerTimeInSpain || '';
+    d.partnerNeed = p.partnerNeed || '';
     d.partnerDependency = p.partnerDependency === 'yes';
     d.householdOthers = Number(p.householdOthers) || 0;
     d.householdDetails = p.householdDetails || '';
@@ -7063,7 +7069,10 @@ body.has-speech-bar { padding-bottom: 86px; }
         index: ei,
         name: p['extra' + ei + 'Name'] || '',
         age: p['extra' + ei + 'Age'] != null ? Number(p['extra' + ei + 'Age']) : null,
-        relation: p['extra' + ei + 'Relation'] || ''
+        relation: p['extra' + ei + 'Relation'] || '',
+        legalStatus: p['extra' + ei + 'LegalStatus'] || '',
+        timeInSpain: p['extra' + ei + 'TimeInSpain'] || '',
+        need: p['extra' + ei + 'Need'] || ''
       });
     }
     if (extraHousehold > d.householdOthers) d.householdOthers = extraHousehold;
@@ -7383,6 +7392,38 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.nonLucrativeNeedMonth = d.iprem.month * 4;        // 2.400 €/mes
 
     d.hasAnyRouteData = !!(p.nationality && (d.inSpain ? p.entryMode : p.outsideGoal));
+    d.familyAdvice = [];
+    function addFamilyAdvice(role, name, status, time, need, extra) {
+      var label = status || 'sin indicar';
+      var text = '';
+      if (status === 'spanish') text = 'No necesita autorización de extranjería: DNI o pasaporte. Su nacionalidad puede abrir la vía de familiar de español a quien cumpla el vínculo.';
+      else if (status === 'eu') text = 'No necesita autorización de residencia: certificado de registro y empadronamiento.';
+      else if (status === 'residence') text = 'Tiene residencia española: revisa vigencia y renovación. No se reagrupa desde dentro; si quiere cambiar de estatus, hay que modificar.';
+      else if (status === 'expired') text = 'Residencia caducada: revisa renovación o recuperación según el caso. No es una reagrupación.';
+      else if (status === 'asylum') text = 'Asilo en trámite: seguimiento de la solicitud. Mientras esté abierto no se plantea arraigo.';
+      else if (status === 'irregular') text = 'En España sin autorización: valorar arraigo (2 años de permanencia), familiar de español/UE si cumple vínculo, o circunstancias excepcionales. No se puede reagrupar desde dentro.';
+      else if (status === 'tourist') text = 'Como turista no puede trabajar ni quedarse indefinidamente. La reagrupación exige estar fuera y obtener visado.';
+      else if (status === 'outside') text = 'Está fuera de España: solo se puede reagrupar si el titular es residente y cumple los requisitos; también puede pedir visado propio de estudio o trabajo.';
+      else if (status === 'dontknow') text = 'Falta saber su situación legal. Sin ese dato no se pueden valorar sus opciones.';
+      else text = 'Falta indicar su situación legal. Sin ese dato no se pueden valorar sus opciones.';
+      if (need === 'regularizar') text += ' Quiere regularizarse.';
+      else if (need === 'trabajar') text += ' Quiere trabajar: revisa si su autorización lo permite o si necesita modificación.';
+      else if (need === 'estudiar') text += ' Quiere estudiar: revisa estancia por estudios o compatibilidad con su permiso.';
+      else if (need === 'renovar') text += ' Quiere renovar: prepara la renovación antes del vencimiento.';
+      else if (need === 'nacionalidad') text += ' Quiere nacionalidad: revisa el tiempo de residencia legal y los exámenes.';
+      else if (need === 'reagrupar') text += ' Quiere venir a España: la reagrupación solo procede desde fuera.';
+      if (extra) text += ' ' + extra;
+      d.familyAdvice.push({ role: role, name: name || 'Sin nombre', status: label, time: time || '', need: need || '', text: text });
+    }
+    if (d.couple) addFamilyAdvice('pareja', d.partnerName, d.partnerLegalStatus, d.partnerTimeInSpain, d.partnerNeed);
+    (d.familyChildren || []).forEach(function (c) {
+      addFamilyAdvice('hijo', c.name, c.legalStatus, c.timeInSpain, c.need,
+        c.education ? 'Estudios: ' + (RL.education.child[c.education] || c.education) + '.' : '');
+    });
+    (d.extraPeople || []).forEach(function (x) {
+      addFamilyAdvice('otro', x.name, x.legalStatus, x.timeInSpain, x.need, x.relation ? 'Relación: ' + x.relation + '.' : '');
+    });
+
     return d;
   };
 
@@ -8643,6 +8684,9 @@ body.has-speech-bar { padding-bottom: 86px; }
       (d.extraPeople || []).forEach(function (x) {
         l.push('- Otra persona en casa: ' + (x.name || 'sin nombre') + (x.age != null ? ', ' + x.age + ' años' : '') + (x.relation ? ', ' + x.relation : ''));
       });
+      (d.familyAdvice || []).forEach(function (x) {
+        l.push('- ' + x.role + ' ' + x.name + ': ' + x.text);
+      });
     }
     if (opts.includeDocs) {
       var docs = (d.docsBase || []).concat(d.docsTramites || []);
@@ -9074,6 +9118,12 @@ body.has-speech-bar { padding-bottom: 86px; }
       doc.p('Otras personas que conviven:', true);
       d.extraPeople.forEach(function (x) {
         doc.bullet('Persona ' + x.index + (x.name ? ' · ' + x.name : '') + (x.age != null ? ' · ' + x.age + ' años' : '') + (x.relation ? ' · ' + x.relation : ''));
+      });
+    }
+    if (d.familyAdvice && d.familyAdvice.length) {
+      doc.p('Situación y opciones de cada familiar:', true);
+      d.familyAdvice.forEach(function (x) {
+        doc.bullet(x.role + ' · ' + x.name + ' · ' + x.status + (x.time ? ' · ' + x.time : '') + '. ' + x.text);
       });
     }
     if (p.maritalStatus) {
@@ -10031,6 +10081,20 @@ body.has-speech-bar { padding-bottom: 86px; }
         familyInput('partnerAge', 'Edad', p.partnerAge, 'number') +
         familyInput('partnerNationality', 'Nacionalidad', p.partnerNationality) +
         familyInput('partnerIncome', 'Ingresos mensuales aproximados (€)', p.partnerIncome, 'number') +
+        familySelect('partnerLegalStatus', 'Situación legal de tu pareja', p.partnerLegalStatus || '', [
+          ['', 'No indicado'], ['spanish', 'Española'], ['eu', 'UE/EEE'], ['residence', 'Residencia española en vigor'],
+          ['expired', 'Residencia caducada'], ['asylum', 'Asilo en trámite'], ['irregular', 'Irregular'],
+          ['tourist', 'Turista / estancia'], ['outside', 'Fuera de España'], ['dontknow', 'No lo sé']
+        ]) +
+        familySelect('partnerTimeInSpain', 'Tiempo de tu pareja en España', p.partnerTimeInSpain || '', [
+          ['', 'No indicado'], ['lt1', 'Menos de 1 año'], ['1to2', '1-2 años'], ['2to3', '2-3 años'],
+          ['3plus', 'Más de 3 años'], ['not_spain', 'No está en España'], ['dontknow', 'No lo sé']
+        ]) +
+        familySelect('partnerNeed', '¿Qué necesita tu pareja?', p.partnerNeed || '', [
+          ['', 'No indicado'], ['regularizar', 'Regularizarse'], ['trabajar', 'Trabajar'],
+          ['estudiar', 'Estudiar'], ['renovar', 'Renovar su permiso'], ['nacionalidad', 'Nacionalidad'],
+          ['reagrupar', 'Venir a España'], ['nothing', 'Nada'], ['dontknow', 'No lo sé']
+        ]) +
         '</div></div></div>';
     }
 
@@ -10067,6 +10131,20 @@ body.has-speech-bar { padding-bottom: 86px; }
             ['fp_medio', 'FP de Grado Medio'], ['fp_superior', 'FP de Grado Superior (2 años)'],
             ['universidad', 'Universidad'], ['otro', 'Otro'], ['dontknow', 'No lo sé']
           ]) +
+          familySelect('child' + i + 'LegalStatus', 'Situación legal del hijo/a', p['child' + i + 'LegalStatus'] || '', [
+            ['', 'No indicado'], ['spanish', 'Español/a'], ['eu', 'UE/EEE'], ['residence', 'Residencia española'],
+            ['expired', 'Residencia caducada'], ['asylum', 'Asilo en trámite'], ['irregular', 'Irregular'],
+            ['tourist', 'Turista / estancia'], ['outside', 'Fuera de España'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('child' + i + 'TimeInSpain', 'Tiempo del hijo/a en España', p['child' + i + 'TimeInSpain'] || '', [
+            ['', 'No indicado'], ['lt1', 'Menos de 1 año'], ['1to2', '1-2 años'], ['2to3', '2-3 años'],
+            ['3plus', 'Más de 3 años'], ['not_spain', 'No está en España'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('child' + i + 'Need', '¿Qué necesita el hijo/a?', p['child' + i + 'Need'] || '', [
+            ['', 'No indicado'], ['regularizar', 'Regularizarse'], ['trabajar', 'Trabajar'],
+            ['estudiar', 'Estudiar'], ['renovar', 'Renovar permiso'], ['nacionalidad', 'Nacionalidad'],
+            ['reagrupar', 'Venir a España'], ['nothing', 'Nada'], ['dontknow', 'No lo sé']
+          ]) +
           '</div></div>';
       }
       html += '</div></div>';
@@ -10083,6 +10161,20 @@ body.has-speech-bar { padding-bottom: 86px; }
           familyInput('extra' + e + 'Age', 'Edad', p['extra' + e + 'Age'], 'number') +
           familySelect('extra' + e + 'Relation', 'Relación con vosotros', p['extra' + e + 'Relation'] || '', [
             ['', 'No indicado'], ['familiar', 'Familiar'], ['amigo', 'Amigo/a'], ['otro', 'Otro']
+          ]) +
+          familySelect('extra' + e + 'LegalStatus', 'Situación legal', p['extra' + e + 'LegalStatus'] || '', [
+            ['', 'No indicado'], ['spanish', 'Española'], ['eu', 'UE/EEE'], ['residence', 'Residencia española'],
+            ['expired', 'Residencia caducada'], ['asylum', 'Asilo en trámite'], ['irregular', 'Irregular'],
+            ['tourist', 'Turista / estancia'], ['outside', 'Fuera de España'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('extra' + e + 'TimeInSpain', 'Tiempo en España', p['extra' + e + 'TimeInSpain'] || '', [
+            ['', 'No indicado'], ['lt1', 'Menos de 1 año'], ['1to2', '1-2 años'], ['2to3', '2-3 años'],
+            ['3plus', 'Más de 3 años'], ['not_spain', 'No está en España'], ['dontknow', 'No lo sé']
+          ]) +
+          familySelect('extra' + e + 'Need', '¿Qué necesita?', p['extra' + e + 'Need'] || '', [
+            ['', 'No indicado'], ['regularizar', 'Regularizarse'], ['trabajar', 'Trabajar'],
+            ['estudiar', 'Estudiar'], ['renovar', 'Renovar permiso'], ['nacionalidad', 'Nacionalidad'],
+            ['reagrupar', 'Venir a España'], ['nothing', 'Nada'], ['dontknow', 'No lo sé']
           ]) +
           '</div></div>';
       }
@@ -10344,6 +10436,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     html += decisionHTML(plan);
     html += realityHTML(plan);
     html += familyRealityHTML(plan);
+    html += familyMembersHTML(plan);
     html += windowsHTML(plan);
     html += nextStepsHTML(plan, top);
 
@@ -10468,6 +10561,22 @@ body.has-speech-bar { padding-bottom: 86px; }
       '<ul style="padding-left:18px;font-size:.86rem;color:var(--ink-2)">' +
       r.bullets.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') +
       '</ul></div></div>';
+  }
+
+  function familyMembersHTML(plan) {
+    var list = (plan.d && plan.d.familyAdvice) || [];
+    if (!list.length) return '';
+    var roleLabel = { pareja: 'Pareja', hijo: 'Hijo/a', otro: 'Otra persona' };
+    return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.family(18) + '<h2>Tu familia: situación y opciones</h2></div><div class="block__body">' +
+      list.map(function (x) {
+        return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.user(15) + '</span><div>' +
+          '<strong>' + esc(roleLabel[x.role] || x.role) + ' · ' + esc(x.name) + '</strong>' +
+          '<p style="font-size:.86rem;color:var(--ink-2);margin:3px 0 0">' + esc(x.text) + '</p>' +
+          '<p class="muted" style="font-size:.78rem;margin:4px 0 0">Situación: ' + esc(x.status) + (x.time ? ' · Tiempo: ' + esc(x.time) : '') + (x.need ? ' · Necesita: ' + esc(x.need) : '') + '</p>' +
+          '</div></div>';
+      }).join('') +
+      '<p class="muted" style="font-size:.8rem;margin-top:10px">Cada persona tiene su propia situación. Estas opciones son orientativas y dependen de pruebas y del criterio de la oficina; no son una concesión automática.</p>' +
+      '</div></div>';
   }
 
   function familyRealityHTML(plan) {

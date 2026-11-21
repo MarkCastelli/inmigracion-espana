@@ -78,6 +78,18 @@ test('si hay discapacidad se pregunta reconocimiento, grado y vencimiento', () =
   assert.strictEqual(d.disabilityExpiry, '2027-05-01');
 });
 
+test('cada familiar tiene situación y opciones propias', () => {
+  const d = RL.derive(base({
+    maritalStatus: 'pareja_estable',
+    partnerLegalStatus: 'irregular', partnerTimeInSpain: '2to3', partnerNeed: 'regularizar',
+    childrenCommon: 1, child1Name: 'Lucía', child1LegalStatus: 'spanish', child1Need: 'nacionalidad'
+  }));
+  assert.strictEqual(d.familyAdvice.length, 2);
+  assert.match(d.familyAdvice[0].text, /arraigo/i);
+  assert.match(d.familyAdvice[1].text, /No necesita autorización/i);
+  assert.match(d.familyAdvice[1].text, /nacionalidad/i);
+});
+
 test('la composición familiar crea fichas para las personas que conviven', () => {
   const d = RL.derive(base({ householdSize: 3 }));
   assert.strictEqual(d.extraPeople.length, 3);
