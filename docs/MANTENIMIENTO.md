@@ -189,7 +189,7 @@ node tests/persistence.test.js # 2 pruebas de copia JSON y reanudación
 node tests/pdf.test.js        # 10 pruebas del PDF
 node tests/speech.test.js     # 5 pruebas del lector de voz
 node tests/speech.mock.test.js # 3 pruebas con API simulada
-node tests/ui.smoke.js        # 22 pruebas de interfaz
+node tests/ui.smoke.js        # 23 pruebas de interfaz
 python build.py               # regenera dist/ruta-legal.html
 ```
 

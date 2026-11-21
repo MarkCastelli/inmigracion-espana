@@ -10264,6 +10264,18 @@ body.has-speech-bar { padding-bottom: 86px; }
       }
       for (var i = 1; i <= total; i++) {
         var rel = p['child' + i + 'Relation'] || relations[i - 1] || 'own';
+        var childDisability = p['child' + i + 'Disability'] || '';
+        var childDisabilityDetails = '';
+        if (childDisability === 'yes' || childDisability === 'in_progress') {
+          childDisabilityDetails =
+            familySelect('child' + i + 'DisabilityRecognized', '¿Discapacidad reconocida?', p['child' + i + 'DisabilityRecognized'] || '', [
+              ['', 'No indicado'], ['yes', 'Sí'], ['in_progress', 'En trámite'], ['no', 'No'], ['dontknow', 'No lo sé']
+            ]) +
+            familySelect('child' + i + 'DisabilityDegree', 'Grado de discapacidad', p['child' + i + 'DisabilityDegree'] || '', [
+              ['', 'No indicado'], ['33_44', '33-44 %'], ['45_64', '45-64 %'], ['65_mas', '65 % o más'], ['dontknow', 'No lo sé']
+            ]) +
+            familyInput('child' + i + 'DisabilityExpiry', 'Vencimiento del certificado (opcional)', p['child' + i + 'DisabilityExpiry'], 'date');
+        }
         html += '<div class="family-child"><p class="eyebrow">Hijo/a ' + i + '</p><div class="form-grid">' +
           familyInput('child' + i + 'Name', 'Nombre y apellidos', p['child' + i + 'Name']) +
           familyInput('child' + i + 'Age', 'Edad', p['child' + i + 'Age'], 'number') +
@@ -10271,16 +10283,10 @@ body.has-speech-bar { padding-bottom: 86px; }
           familySelect('child' + i + 'Relation', 'Vínculo contigo', rel, [
             ['common', 'Hijo común'], ['own', 'Hijo solo tuyo'], ['partner', 'Hijo solo de tu pareja']
           ]) +
-          familySelect('child' + i + 'Disability', 'Discapacidad', p['child' + i + 'Disability'] || '', [
+          familySelect('child' + i + 'Disability', 'Discapacidad', childDisability, [
             ['', 'No indicado'], ['no', 'No'], ['yes', 'Sí'], ['in_progress', 'En trámite'], ['dontknow', 'No lo sé']
           ]) +
-          familySelect('child' + i + 'DisabilityRecognized', '¿Discapacidad reconocida?', p['child' + i + 'DisabilityRecognized'] || '', [
-            ['', 'No indicado'], ['yes', 'Sí'], ['in_progress', 'En trámite'], ['no', 'No'], ['dontknow', 'No lo sé']
-          ]) +
-          familySelect('child' + i + 'DisabilityDegree', 'Grado de discapacidad', p['child' + i + 'DisabilityDegree'] || '', [
-            ['', 'No indicado'], ['33_44', '33-44 %'], ['45_64', '45-64 %'], ['65_mas', '65 % o más'], ['dontknow', 'No lo sé']
-          ]) +
-          familyInput('child' + i + 'DisabilityExpiry', 'Vencimiento del certificado (opcional)', p['child' + i + 'DisabilityExpiry'], 'date') +
+          childDisabilityDetails +
           familySelect('child' + i + 'Lives', '¿Vive contigo?', p['child' + i + 'Lives'] || '', [
             ['', 'No indicado'], ['yes', 'Sí'], ['no', 'No'], ['compartida', 'Custodia compartida'], ['dontknow', 'No lo sé']
           ]) +
@@ -10463,6 +10469,10 @@ body.has-speech-bar { padding-bottom: 86px; }
       if (!step) return;
       var before = currentVisibleIds(step).join('|');
       setValue(el, ui.step);
+      if (/^child\d+Disability$/.test(el.name)) {
+        renderWizard();
+        return;
+      }
       var after = currentVisibleIds(step).join('|');
       if (el.type === 'radio' || el.type === 'checkbox' || el.tagName === 'SELECT') {
         if (before !== after) renderWizard();

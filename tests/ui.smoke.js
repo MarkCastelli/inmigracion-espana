@@ -452,4 +452,23 @@ t('se puede retroceder paso a paso hasta el inicio', () => {
   nav(app, 'inicio');
 });
 
+t('las preguntas de discapacidad de un hijo solo salen si tiene discapacidad', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = {
+    nationality: 'AR', age: 36, location: 'spain', maritalStatus: 'pareja_estable',
+    childrenCommon: 1, child1Disability: 'yes', docsBase: [], docsTramites: [], goals: ['regularizar']
+  };
+  nav(app, 'diagnostico');
+  RL.ui.state.step = RL.questions.visibleSteps(RL.state.profile).findIndex(s => s.id === 'familia');
+  RL.ui.render();
+  let html = app.document.querySelector('#wizardFields').innerHTML;
+  assert.ok(html.includes('name="child1DisabilityDegree"'), 'faltan grado/vencimiento con discapacidad');
+  RL.state.profile.child1Disability = 'no';
+  RL.ui.render();
+  html = app.document.querySelector('#wizardFields').innerHTML;
+  assert.ok(!html.includes('name="child1DisabilityDegree"'), 'no debe preguntar grado si no tiene discapacidad');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
