@@ -106,3 +106,14 @@ test('un certificado en curso no se cuenta como certificado ya emitido', () => {
   assert.strictEqual(d.hasAntecedentesCert, false);
   assert.strictEqual(d.hasDisability, false);
 });
+
+test('documentos históricos de asilo no mantienen la vía activa', () => {
+  const p = base({ docsTramites: ['hoja_blanca', 'tarjeta_roja'], permitStatus: 'asylum', asylumStage: 'no' });
+  const d = RL.derive(p);
+  assert.strictEqual(d.asylumInProcess, false);
+  assert.strictEqual(d.hasWhitePaper, false);
+  assert.strictEqual(d.hasRedCard, false);
+  const plan = RL.buildPlan(p);
+  const r = plan.results.find(x => x.route.id === 'asilo_seguimiento');
+  assert.ok(r.blockers.length > 0, 'la ficha debe estar bloqueada');
+});

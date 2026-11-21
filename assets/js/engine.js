@@ -247,9 +247,9 @@
     /* protección internacional */
     var stage = p.asylumStage;
     if (!stage) {
-      if (d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca')) stage = 'solicitado';
-      else if (d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja')) stage = 'admitido';
-      else if (d.owns('cita_asilo') || d.ownsCurrent('cita_asilo')) stage = 'cita';
+      if (d.ownsCurrent('hoja_blanca')) stage = 'solicitado';
+      else if (d.ownsCurrent('tarjeta_roja')) stage = 'admitido';
+      else if (d.ownsCurrent('cita_asilo')) stage = 'cita';
       else if (p.asylumRequested === 'yes') stage = 'solicitado';
       else if (p.asylumRequested === 'soon') stage = 'cita';
       else if (p.permitStatus === 'asylum') stage = 'solicitado';
@@ -290,12 +290,12 @@
     if (renMonth) renParts.push(renMonth);
     if (renYear) renParts.push(String(renYear));
     d.asylumRenouncedDateText = renParts.length ? renParts.join('/') : 'fecha no indicada';
-    d.hasRedCard = !d.asylumExited && (stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja') || d.redCardRenewalPending);
-    d.hasWhitePaper = !d.asylumExited && (stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca'));
-    d.hasAsylumAppointment = !d.asylumExited && (stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'));
+    d.hasRedCard = !d.asylumExited && (stage === 'admitido' || d.ownsCurrent('tarjeta_roja') || d.redCardRenewalPending);
+    d.hasWhitePaper = !d.asylumExited && (stage === 'solicitado' || d.ownsCurrent('hoja_blanca'));
+    d.hasAsylumAppointment = !d.asylumExited && (stage === 'cita' || d.ownsCurrent('cita_asilo'));
     d.asylumInProcess = !d.asylumGranted && !d.asylumDenied && !d.asylumExited &&
-      (d.asylum || d.hasRedCard || d.hasWhitePaper || p.permitStatus === 'asylum');
-    if (!d.asylumInProcess && !d.asylumDenied && !d.asylumExited && (d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'))) d.asylumSoon = true;
+      (d.asylum || d.hasRedCard || d.hasWhitePaper || (p.permitStatus === 'asylum' && stage !== 'no'));
+    if (!d.asylumInProcess && !d.asylumDenied && !d.asylumExited && d.ownsCurrent('cita_asilo')) d.asylumSoon = true;
     d.asylumProtected = d.asylumInProcess;
     d.asylumGrantedDate = p.asylumGrantedDate || '';
     d.tarjetaRojaExpiry = p.tarjetaRojaExpiry || (stage === 'admitido' ? (p.permitExpiry || '') : '');

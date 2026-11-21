@@ -183,7 +183,7 @@ node tests/links.test.js      # 4 pruebas de enlaces y rutas muertas
 node tests/ai.test.js         # 4 pruebas de prompt y consultas
 node tests/familia.test.js    # 18 pruebas de matrimonio, pareja, hijos y reagrupación
 node tests/housing.test.js    # 3 pruebas de vivienda y prueba de domicilio
-node tests/docs.test.js       # 7 pruebas de trámites terminados vs. en curso
+node tests/docs.test.js       # 8 pruebas de trámites terminados vs. en curso
 node tests/education.test.js  # 4 pruebas de Bachillerato, SEPE y estudios por hijo
 node tests/persistence.test.js # 2 pruebas de copia JSON y reanudación
 node tests/pdf.test.js        # 10 pruebas del PDF

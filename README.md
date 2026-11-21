@@ -338,7 +338,7 @@ ruta-legal/
 │   ├── links.test.js           # 4 pruebas de enlaces y rutas muertas
 │   ├── familia.test.js         # 18 pruebas de pareja, matrimonio, hijos y reagrupación
 │   ├── housing.test.js         # 3 pruebas de vivienda y prueba de domicilio
-│   ├── docs.test.js            # 7 pruebas de trámites terminados/en curso
+│   ├── docs.test.js            # 8 pruebas de trámites terminados/en curso
 │   ├── education.test.js       # 4 pruebas de Bachillerato, SEPE y estudios por hijo
 │   ├── persistence.test.js     # 2 pruebas de copia JSON y reanudación
 │   ├── pdf.test.js             # 10 pruebas del PDF
