@@ -82,12 +82,14 @@ test('cada familiar tiene situación y opciones propias', () => {
   const d = RL.derive(base({
     maritalStatus: 'pareja_estable',
     partnerLegalStatus: 'irregular', partnerTimeInSpain: '2to3', partnerNeed: 'regularizar',
-    childrenCommon: 1, child1Name: 'Lucía', child1LegalStatus: 'spanish', child1Need: 'nacionalidad'
+    childrenCommon: 1, child1Name: 'Lucía', child1LegalStatus: 'spanish', child1Need: 'nacionalidad',
+    child1Disability: 'yes'
   }));
   assert.strictEqual(d.familyAdvice.length, 2);
   assert.match(d.familyAdvice[0].text, /arraigo/i);
   assert.match(d.familyAdvice[1].text, /No necesita autorización/i);
   assert.match(d.familyAdvice[1].text, /nacionalidad/i);
+  assert.match(d.familyAdvice[1].second, /discapacidad/i);
 });
 
 test('la composición familiar crea fichas para las personas que conviven', () => {
@@ -96,6 +98,10 @@ test('la composición familiar crea fichas para las personas que conviven', () =
   assert.strictEqual(d.householdOthers, 3);
   const steps = RL.questions.visibleSteps(base({ householdSize: 3 })).map(s => s.id);
   assert.ok(steps.includes('familia'));
+  const order = RL.questions.visibleSteps(base({ householdSize: 1, maritalStatus: 'pareja_estable' })).map(s => s.id);
+  assert.ok(order.indexOf('yo') < order.indexOf('general'));
+  assert.ok(order.indexOf('general') < order.indexOf('familia'));
+  assert.ok(order.indexOf('familia') < order.indexOf('objetivo'));
 });
 
 test('la discapacidad del titular no se confunde con la de pareja o hijos', () => {
@@ -116,9 +122,9 @@ test('la discapacidad del titular no se confunde con la de pareja o hijos', () =
 });
 
 test('las preguntas de discapacidad y convivencia están en la familia', () => {
-  const yo = RL.questions.steps.find(s => s.id === 'yo');
+  const general = RL.questions.steps.find(s => s.id === 'general');
   const recursos = RL.questions.steps.find(s => s.id === 'recursos');
-  const familyIds = RL.questions.visibleFields(yo, base({ childrenPartner: 1, maritalStatus: 'pareja_estable', householdOthers: 1 })).map(f => f.id);
+  const familyIds = RL.questions.visibleFields(general, base({ childrenPartner: 1, maritalStatus: 'pareja_estable', householdOthers: 1 })).map(f => f.id);
   for (const id of ['partnerDisability', 'partnerDependency', 'childrenDisability', 'householdOthers', 'householdDetails']) {
     assert.ok(familyIds.includes(id), 'falta ' + id);
   }

@@ -1134,6 +1134,42 @@
     });
   };
 
+  /* Orden: titular → datos generales → pareja/hijos → objetivo → resto. */
+  (function () {
+    var generalIds = [
+      'householdSize', 'maritalStatus', 'marriageType', 'childrenCommon', 'childrenOwn',
+      'childrenPartner', 'childrenSpanish', 'spanishChildType', 'spouseSpanish',
+      'spouseInSpain', 'spouseStatus', 'cohabitation', 'partnerDisability',
+      'partnerDisabilityRecognized', 'partnerDisabilityDegree', 'partnerDisabilityExpiry',
+      'partnerDependency', 'pregnant', 'pregnantBySpanish', 'childRecognized',
+      'childLivesWithYou', 'childSupport', 'childrenDisability', 'childrenDisabilityRecognized',
+      'childrenDisabilityDegree', 'childrenDisabilityExpiry', 'householdOthers', 'householdDetails'
+    ];
+    var generalFields = [];
+    var yo = RL.questions.steps.find(function (s) { return s.id === 'yo'; });
+    if (yo) {
+      yo.intro = 'Primero, tus datos como titular. Después veremos la composición familiar y las preguntas de cada persona.';
+      yo.fields = yo.fields.filter(function (f) {
+        if (generalIds.indexOf(f.id) !== -1) { generalFields.push(f); return false; }
+        return true;
+      });
+    }
+    var yoIndex = RL.questions.steps.findIndex(function (s) { return s.id === 'yo'; });
+    RL.questions.steps.splice(yoIndex + 1, 0, {
+      id: 'general',
+      title: 'Datos generales de la familia',
+      intro: 'Estas preguntas afectan a todos: con quién vives, cuántos hijos hay, si alguno es español o tiene discapacidad. No son todavía la ficha individual de cada uno.',
+      showIf: function (p) { return p.location === 'spain'; },
+      fields: generalFields
+    });
+    var objetivoIndex = RL.questions.steps.findIndex(function (s) { return s.id === 'objetivo'; });
+    var objetivo = objetivoIndex >= 0 ? RL.questions.steps.splice(objetivoIndex, 1)[0] : null;
+    if (objetivo) {
+      var familyIndex = RL.questions.steps.findIndex(function (s) { return s.id === 'familia'; });
+      RL.questions.steps.splice(familyIndex + 1, 0, objetivo);
+    }
+  })();
+
   /* Toda la investigación del asilo en una sola página, después de «situación». */
   (function () {
     var ids = [

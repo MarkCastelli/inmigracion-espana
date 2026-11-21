@@ -384,7 +384,7 @@ test('el paso de documentos solo aparece si estás en España', () => {
   const outside = RL.questions.visibleSteps({ location: 'origin' }).map(s => s.id);
   assert.ok(inside.includes('documentos'));
   assert.ok(!outside.includes('documentos'));
-  assert.strictEqual(inside.length, outside.length + 1);
+  assert.strictEqual(inside.length, outside.length + 2);
 });
 
 /* ───────────── HTML ───────────── */

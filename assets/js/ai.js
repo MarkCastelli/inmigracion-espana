@@ -90,7 +90,7 @@
         l.push('- Otra persona en casa: ' + (x.name || 'sin nombre') + (x.age != null ? ', ' + x.age + ' años' : '') + (x.relation ? ', ' + x.relation : ''));
       });
       (d.familyAdvice || []).forEach(function (x) {
-        l.push('- ' + x.role + ' ' + x.name + ': ' + x.text);
+        l.push('- ' + x.role + ' ' + x.name + ': ' + x.text + (x.second ? ' ' + x.second : ''));
       });
     }
     if (opts.includeDocs) {

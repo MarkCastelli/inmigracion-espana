@@ -222,7 +222,7 @@ t('el asistente adapta el número de pasos según dónde estés', () => {
   const saved = RL.state.profile;
   RL.state.profile = { nationality: 'CU', location: 'spain' };
   nav(app, 'diagnostico');
-  assert.strictEqual(app.document.querySelector('#wizardStepLabel').textContent, 'Paso 1 de 7');
+  assert.strictEqual(app.document.querySelector('#wizardStepLabel').textContent, 'Paso 1 de 8');
   RL.state.profile.location = 'origin';
   nav(app, 'diagnostico');
   assert.strictEqual(app.document.querySelector('#wizardStepLabel').textContent, 'Paso 1 de 6');
@@ -423,7 +423,7 @@ t('el paso de familia carga pareja y una ficha por hijo', () => {
     docsBase: [], docsTramites: [], goals: ['regularizar']
   };
   nav(app, 'diagnostico');
-  RL.ui.state.step = 1;
+  RL.ui.state.step = RL.questions.visibleSteps(RL.state.profile).findIndex(s => s.id === 'familia');
   RL.ui.render();
   const html = app.document.querySelector('#wizardFields').innerHTML;
   assert.ok(html.includes('Tu pareja'), 'falta la ficha de pareja');

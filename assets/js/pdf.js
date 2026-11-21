@@ -235,6 +235,7 @@
       doc.p('Situación y opciones de cada familiar:', true);
       d.familyAdvice.forEach(function (x) {
         doc.bullet(x.role + ' · ' + x.name + ' · ' + x.status + (x.time ? ' · ' + x.time : '') + '. ' + x.text);
+        if (x.second) doc.bullet('Segunda opción: ' + x.second);
       });
     }
     if (p.maritalStatus) {

@@ -753,6 +753,7 @@
         return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.user(15) + '</span><div>' +
           '<strong>' + esc(roleLabel[x.role] || x.role) + ' · ' + esc(x.name) + '</strong>' +
           '<p style="font-size:.86rem;color:var(--ink-2);margin:3px 0 0">' + esc(x.text) + '</p>' +
+          (x.second ? '<p style="font-size:.82rem;color:var(--ink-2);margin:4px 0 0"><strong>Segunda opción:</strong> ' + esc(x.second.replace(/^Segunda opción a valorar:\s*/, '')) + '</p>' : '') +
           '<p class="muted" style="font-size:.78rem;margin:4px 0 0">Situación: ' + esc(x.status) + (x.time ? ' · Tiempo: ' + esc(x.time) : '') + (x.need ? ' · Necesita: ' + esc(x.need) : '') + '</p>' +
           '</div></div>';
       }).join('') +

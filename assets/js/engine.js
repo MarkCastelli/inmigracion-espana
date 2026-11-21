@@ -455,9 +455,10 @@
 
     d.hasAnyRouteData = !!(p.nationality && (d.inSpain ? p.entryMode : p.outsideGoal));
     d.familyAdvice = [];
-    function addFamilyAdvice(role, name, status, time, need, extra) {
+    function addFamilyAdvice(role, name, status, time, need, extra, disabled) {
       var label = status || 'sin indicar';
       var text = '';
+      var second = '';
       if (status === 'spanish') text = 'No necesita autorización de extranjería: DNI o pasaporte. Su nacionalidad puede abrir la vía de familiar de español a quien cumpla el vínculo.';
       else if (status === 'eu') text = 'No necesita autorización de residencia: certificado de registro y empadronamiento.';
       else if (status === 'residence') text = 'Tiene residencia española: revisa vigencia y renovación. No se reagrupa desde dentro; si quiere cambiar de estatus, hay que modificar.';
@@ -475,12 +476,14 @@
       else if (need === 'nacionalidad') text += ' Quiere nacionalidad: revisa el tiempo de residencia legal y los exámenes.';
       else if (need === 'reagrupar') text += ' Quiere venir a España: la reagrupación solo procede desde fuera.';
       if (extra) text += ' ' + extra;
-      d.familyAdvice.push({ role: role, name: name || 'Sin nombre', status: label, time: time || '', need: need || '', text: text });
+      if (disabled) second = 'Segunda opción a valorar: la discapacidad por sí sola no regulariza, pero puede influir en la valoración de vulnerabilidad, dependencia o ayudas. Revísalo con un abogado o servicios sociales antes de presentar nada.';
+      d.familyAdvice.push({ role: role, name: name || 'Sin nombre', status: label, time: time || '', need: need || '', text: text, second: second });
     }
-    if (d.couple) addFamilyAdvice('pareja', d.partnerName, d.partnerLegalStatus, d.partnerTimeInSpain, d.partnerNeed);
+    if (d.couple) addFamilyAdvice('pareja', d.partnerName, d.partnerLegalStatus, d.partnerTimeInSpain, d.partnerNeed, '', d.partnerHasDisability);
     (d.familyChildren || []).forEach(function (c) {
       addFamilyAdvice('hijo', c.name, c.legalStatus, c.timeInSpain, c.need,
-        c.education ? 'Estudios: ' + (RL.education.child[c.education] || c.education) + '.' : '');
+        c.education ? 'Estudios: ' + (RL.education.child[c.education] || c.education) + '.' : '',
+        c.disability === 'yes');
     });
     (d.extraPeople || []).forEach(function (x) {
       addFamilyAdvice('otro', x.name, x.legalStatus, x.timeInSpain, x.need, x.relation ? 'Relación: ' + x.relation + '.' : '');
