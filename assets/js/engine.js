@@ -136,6 +136,9 @@
     d.padronDate = p.empadronamientoSince || '';
     d.monthsEmpadronado = d.padronDate ? (RL.dates.diff(d.padronDate, now) || 0) / 30.44 : null;
     d.gaps = p.empadronamientoGaps || null;
+    d.housing = p.housing || '';
+    d.housingProof = p.housingProof || '';
+    d.hasHousingProof = ['contract', 'room_contract', 'owner_auth', 'receipt', 'deed'].indexOf(d.housingProof) !== -1;
     d.continuousStay = d.gaps === 'no' || d.gaps === 'small' || d.gaps == null;
 
     d.monthsInSpain = d.monthsEmpadronado != null && claimMonths != null
@@ -633,8 +636,13 @@
         'Con el empadronamiento puedes solicitar asistencia sanitaria en tu centro de salud. Es clave para ti y para tus hijos.', 'Este mes', 'base');
       if (d.hasDisability) add('discapacidad', 'Ten a mano tu certificado de discapacidad',
         'Puede abrir vías por circunstancias excepcionales y mejorar la valoración de vulnerabilidad. Lleva una copia a tu cita.', 'Cuando lo necesites', 'documentos');
-      if (!d.hasRentContract) add('alquiler', 'Consigue una prueba de domicilio',
-        'Contrato de alquiler, autorización del propietario o certificado de convivencia. Te sirve para el padrón y para acreditar arraigo.', 'Este mes', 'documentos');
+      if (!d.hasRentContract && !d.hasHousingProof) {
+        var housingMsg = 'Contrato de alquiler, autorización del propietario, recibos o certificado de convivencia. Te sirve para el padrón y para acreditar arraigo.';
+        if (d.housing === 'alquiler_habitacion') housingMsg = 'Pide el contrato de la habitación y guarda los recibos o transferencias. Para el padrón puede hacer falta también una autorización del titular.';
+        else if (d.housing === 'familiar_amigo') housingMsg = 'Pide al familiar o amigo una autorización firmada, el certificado de convivencia y algún recibo. Sin prueba de domicilio, el padrón y el arraigo se complican.';
+        else if (d.housing === 'propietario_hipoteca' || d.housing === 'propietario') housingMsg = 'Guarda la escritura, la hipoteca o el recibo del IBI. Si no vives solo, añade la autorización o el certificado de convivencia.';
+        add('vivienda', 'Consigue una prueba de domicilio', housingMsg, 'Este mes', 'documentos');
+      }
       if (d.workedMonths > 0 && !d.hasPayslips) add('nominas', 'Guarda nóminas y contrato',
         'Las nóminas, el contrato y los justificantes de pago son la prueba de medios y de trabajo que más se usa en extranjería.', 'Continuo', 'documentos');
     }
@@ -823,6 +831,27 @@
         ' · Solo solicitante: ' + (d.childrenOwn || 0) +
         ' · Solo pareja: ' + (d.childrenPartner || 0) +
         ' · Total: ' + (d.childrenCount || 0);
+    }
+  };
+
+  RL.housing = {
+    labels: {
+      alquiler_piso: 'Alquilo un piso entero',
+      alquiler_habitacion: 'Alquilo una habitación',
+      familiar_amigo: 'Vivo con familiar o amigo, sin pagar alquiler',
+      propietario_hipoteca: 'Propietario/a con hipoteca',
+      propietario: 'Propietario/a sin hipoteca',
+      pension_albergue: 'Pensión, albergue, realojo u otra situación',
+      dontknow: 'No lo sé / prefiere no decirlo'
+    },
+    proof: {
+      contract: 'Contrato de alquiler del piso',
+      room_contract: 'Contrato de alquiler de habitación',
+      owner_auth: 'Autorización del propietario o familiar/amigo',
+      receipt: 'Recibos de alquiler, suministros o transferencias',
+      deed: 'Escritura o hipoteca',
+      none: 'Sin prueba de vivienda',
+      dontknow: 'No lo sé'
     }
   };
 })();

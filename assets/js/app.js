@@ -46,6 +46,7 @@
     asylumRequested: 'no', leftSpain: 'no', exitOrder: 'no',
     maritalStatus: 'casada', marriageType: 'civil', spouseInSpain: 'yes', spouseStatus: 'irregular',
     childrenCommon: 1, childrenOwn: 0, childrenPartner: 0, childrenAges: '7', childrenSpanish: 'no',
+    housing: 'alquiler_piso', housingProof: 'contract',
     ancestry: 'none', bornInSpain: 'no',
     employment: 'informal', monthsWorked: 20, cotizaciones: 'no',
     monthlyIncome: 950, savings: 1200, jobOffer: 'no', sector: 'cuidados',
@@ -531,6 +532,7 @@
       else if (d.hasPermit) chips.push('<span class="chip chip--ok">' + icons.check(14) + ' Con autorización</span>');
     }
     if (d.ibero) chips.push(chip(icons.globe(14), 'Nacionalidad con plazo de 2 años'));
+    if (d.housing) chips.push(chip(icons.home(14), RL.housing.labels[d.housing] || d.housing));
     if (p.maritalStatus) chips.push(chip(icons.family(14), RL.family.status[p.maritalStatus] || p.maritalStatus));
     if (d.hasKids) chips.push(chip(icons.family(14), 'Hijos: ' + d.childrenCount + ' (' + RL.family.childrenText(d) + ')'));
     if (d.hasAncestry) chips.push(chip(icons.family(14), 'Ascendencia española'));
@@ -654,7 +656,7 @@
       pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
       certificado_digital: 'Certificado digital', cuenta_bancaria: 'Cuenta bancaria',
       seguridad_social: 'Nº Seguridad Social', vida_laboral: 'Vida laboral',
-      tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',
+      tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler, autorización, recibo o escritura de vivienda',
       nominas: 'Nóminas / contrato', cita_asilo: 'Cita de asilo', hoja_blanca: 'Hoja blanca',
       tarjeta_roja: 'Tarjeta roja', resguardo_nacionalidad: 'Resguardo nacionalidad',
       resguardo_extranjeria: 'Resguardo extranjería', autorizacion_regreso: 'Autorización de regreso',
@@ -830,6 +832,8 @@
     if (d.inSpain && d.monthsInSpain != null) rows.push(['Tiempo en España', fmt.duration(d.monthsInSpain)]);
     if (d.inSpain) rows.push(['Permiso', permitLabel(p.permitStatus)]);
     if (p.empadronado) rows.push(['Padrón', p.empadronado === 'yes' ? 'Sí' : 'No']);
+    if (d.housing) rows.push(['Vivienda', RL.housing.labels[d.housing] || d.housing]);
+    if (d.housingProof) rows.push(['Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof]);
     rows.push(['Objetivo', goalLabel(p.goals)]);
     return '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Tu perfil</h2></div><div class="block__body">' +
       '<dl class="kv">' + rows.map(function (r) {
@@ -1869,6 +1873,8 @@
       fechaEntrada: p.entryDate || '',
       estadoCivil: p.maritalStatus ? (RL.family.status[p.maritalStatus] || p.maritalStatus) : '',
       matrimonio: p.marriageType ? (RL.family.marriage[p.marriageType] || p.marriageType) : '',
+      vivienda: d.housing ? (RL.housing.labels[d.housing] || d.housing) : '',
+      pruebaVivienda: d.housingProof ? (RL.housing.proof[d.housingProof] || d.housingProof) : '',
       hijos: d.hasKids ? RL.family.childrenText(d) : 'Sin hijos',
       edadesHijos: p.childrenAges || '',
       hijoEspanol: d.hasSpanishChildInHousehold ? (RL.family.spanishChild[d.spanishChildType] || '') : ''
@@ -1902,6 +1908,8 @@
       fdField('hijos', 'Hijos (comunes / solo tuyos / solo pareja / total)', data.hijos, 'text', true) +
       fdField('edadesHijos', 'Edades de los hijos', data.edadesHijos) +
       fdField('hijoEspanol', 'Hijo/a español y vínculo', data.hijoEspanol) +
+      fdField('vivienda', 'Situación de vivienda', data.vivienda) +
+      fdField('pruebaVivienda', 'Prueba de vivienda', data.pruebaVivienda) +
       fdField('nie', 'NIE', data.nie) +
       fdField('pasaporte', 'Pasaporte de tu país (no español)', data.pasaporte) +
       fdField('expediente', 'Número de expediente (si lo tienes)', data.expediente) +

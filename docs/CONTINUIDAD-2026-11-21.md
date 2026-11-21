@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **126 pruebas pasando**.
+- **129 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -33,6 +33,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
    - Si la policía cita antes, no puede tomar huellas ni renovar la tarjeta.
    - Cambiados `engine.js` (ventanas/avisos), `procedures.js`, `faq.js` y `forms.js`.
 5. **Contenido**: nacionalidad (CCSE/DELE, plazos por país), renta, servicios sociales, ONG, ayudas, discapacidad/dependencia/incapacidad, transporte, fraude laboral.
+6. **Vivienda**: pregunta si alquila piso, habitación, vive con familiar/amigo sin pagar, es propietario con/sin hipoteca u otra situación, y qué prueba de domicilio tiene. Se muestra en plan, PDF y hoja de datos.
 
 ## Comandos
 

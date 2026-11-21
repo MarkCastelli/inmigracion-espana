@@ -18,6 +18,7 @@ const demo = {
   monthlyIncome: 950, savings: 1200, jobOffer: 'no', sector: 'cuidados',
   degree: 'fp_medio', spanishLevel: 'nativo', exams: 'not_needed',
   maritalStatus: 'casada', spouseInSpain: 'yes', spouseStatus: 'irregular',
+  housing: 'alquiler_piso', housingProof: 'contract',
   childrenCount: 1, childrenAges: '7', childrenSpanish: 'no',
   ancestry: 'none', bornInSpain: 'no',
   goals: ['regularizar', 'trabajar'], horizon: 'urgent', canLeaveSpain: 'no',
@@ -79,6 +80,7 @@ test('el PDF incluye el plan, los requisitos y los documentos', () => {
   assert.ok(!str.includes('[object Object]'));
   const doc = extractText(Buffer.from(str, 'latin1'));
   assert.ok(doc.text.includes('Expectativa realista'), 'falta la expectativa realista');
+  assert.ok(doc.text.toLowerCase().includes('vivienda'), 'falta la situación de vivienda');
 });
 
 test('el PDF incluye el aviso de que no es asesoramiento jurídico', () => {

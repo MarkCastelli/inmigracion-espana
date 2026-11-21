@@ -70,6 +70,7 @@
       l.push('- Situación: ' + (d.irregular ? 'irregular' : (d.hasPermit ? 'con autorización' : 'sin datos suficientes')));
       if (p.permitStatus) l.push('- Permiso: ' + (PERMIT[p.permitStatus] || p.permitStatus));
       if (p.empadronado) l.push('- Padrón: ' + (p.empadronado === 'yes' ? 'sí' : 'no'));
+      if (d.housing) l.push('- Vivienda: ' + (RL.housing.labels[d.housing] || d.housing) + (d.housingProof ? ' · prueba: ' + (RL.housing.proof[d.housingProof] || d.housingProof) : ''));
     }
     if (opts.includeDocs) {
       var docs = (d.docsBase || []).concat(d.docsTramites || []);

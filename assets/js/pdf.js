@@ -201,6 +201,8 @@
     if (d.inSpain && d.monthsInSpain != null) doc.kv('Tiempo en España', RL.fmt.duration(d.monthsInSpain));
     if (d.inSpain) doc.kv('Situación', d.irregular ? 'Sin autorización (irregular)' : (d.hasPermit ? 'Con autorización' : 'No indicada'));
     if (p.empadronado) doc.kv('Padrón', p.empadronado === 'yes' ? 'Sí' : 'No');
+    if (d.housing) doc.kv('Vivienda', RL.housing.labels[d.housing] || d.housing);
+    if (d.housingProof) doc.kv('Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof);
     if (p.maritalStatus) {
       doc.kv('Situación de pareja', RL.family.status[p.maritalStatus] || p.maritalStatus);
       if (p.marriageType) doc.kv('Matrimonio', RL.family.marriage[p.marriageType] || p.marriageType);
@@ -223,7 +225,7 @@
       pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE o tarjeta de residencia', tarjeta_ue: 'Tarjeta de familiar de la UE',
       certificado_digital: 'Certificado digital o Cl@ve', cuenta_bancaria: 'Cuenta bancaria',
       seguridad_social: 'Número de la Seguridad Social', vida_laboral: 'Informe de vida laboral',
-      tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',
+      tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler, autorización, recibo o escritura de vivienda',
       nominas: 'Nóminas o contrato de trabajo', cita_asilo: 'Cita de asilo', hoja_blanca: 'Hoja blanca',
       tarjeta_roja: 'Tarjeta roja', resguardo_nacionalidad: 'Resguardo de nacionalidad',
       resguardo_extranjeria: 'Resguardo de extranjería', autorizacion_regreso: 'Autorización de regreso',

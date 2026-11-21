@@ -238,6 +238,32 @@
             ]
           },
           {
+            id: 'housing', type: 'select', label: '¿Cuál es tu situación de vivienda?', showIf: inSpain,
+            options: [
+              { v: 'alquiler_piso', l: 'Alquilo un piso entero' },
+              { v: 'alquiler_habitacion', l: 'Alquilo una habitación' },
+              { v: 'familiar_amigo', l: 'Vivo con un familiar o amigo, sin pagar alquiler' },
+              { v: 'propietario_hipoteca', l: 'Soy propietario/a y pago hipoteca' },
+              { v: 'propietario', l: 'Soy propietario/a, sin hipoteca' },
+              { v: 'pension_albergue', l: 'Pensión, albergue, realojo u otra situación' },
+              { v: 'dontknow', l: 'No lo sé / prefiero no decirlo' }
+            ],
+            help: 'No es lo mismo un contrato de piso que una habitación, vivir con un familiar sin pagar o ser propietario. Cambia el padrón, las pruebas de domicilio y las ayudas.'
+          },
+          {
+            id: 'housingProof', type: 'select', label: '¿Puedes demostrar dónde vives?', showIf: inSpain,
+            options: [
+              { v: 'contract', l: 'Contrato de alquiler del piso' },
+              { v: 'room_contract', l: 'Contrato de alquiler de habitación' },
+              { v: 'owner_auth', l: 'Autorización del propietario o del familiar/amigo' },
+              { v: 'receipt', l: 'Recibos de alquiler, suministros o transferencias' },
+              { v: 'deed', l: 'Escritura o hipoteca' },
+              { v: 'none', l: 'No tengo forma de demostrarlo' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'Para el padrón y el arraigo no basta con decir que vives ahí: necesitas contrato, autorización, recibo o escritura. Si no lo tienes, pide al titular un documento firmado.'
+          },
+          {
             id: 'permitStatus', type: 'select', label: '¿Qué documento de residencia tienes ahora?', showIf: inSpain,
             options: [
               { v: 'none', l: 'Ninguno' },
@@ -364,7 +390,7 @@
               { v: 'seguridad_social', l: 'Número de la Seguridad Social' },
               { v: 'vida_laboral', l: 'Informe de vida laboral', h: 'Prueba tus cotizaciones' },
               { v: 'tarjeta_sanitaria', l: 'Tarjeta sanitaria' },
-              { v: 'contrato_alquiler', l: 'Contrato de alquiler o de vivienda' },
+              { v: 'contrato_alquiler', l: 'Contrato de alquiler, autorización, recibo o escritura de vivienda' },
               { v: 'nominas', l: 'Nóminas o contrato de trabajo' }
             ]
           },

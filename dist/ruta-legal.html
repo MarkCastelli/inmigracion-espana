@@ -1728,6 +1728,32 @@ body.has-speech-bar { padding-bottom: 86px; }
             ]
           },
           {
+            id: 'housing', type: 'select', label: '¿Cuál es tu situación de vivienda?', showIf: inSpain,
+            options: [
+              { v: 'alquiler_piso', l: 'Alquilo un piso entero' },
+              { v: 'alquiler_habitacion', l: 'Alquilo una habitación' },
+              { v: 'familiar_amigo', l: 'Vivo con un familiar o amigo, sin pagar alquiler' },
+              { v: 'propietario_hipoteca', l: 'Soy propietario/a y pago hipoteca' },
+              { v: 'propietario', l: 'Soy propietario/a, sin hipoteca' },
+              { v: 'pension_albergue', l: 'Pensión, albergue, realojo u otra situación' },
+              { v: 'dontknow', l: 'No lo sé / prefiero no decirlo' }
+            ],
+            help: 'No es lo mismo un contrato de piso que una habitación, vivir con un familiar sin pagar o ser propietario. Cambia el padrón, las pruebas de domicilio y las ayudas.'
+          },
+          {
+            id: 'housingProof', type: 'select', label: '¿Puedes demostrar dónde vives?', showIf: inSpain,
+            options: [
+              { v: 'contract', l: 'Contrato de alquiler del piso' },
+              { v: 'room_contract', l: 'Contrato de alquiler de habitación' },
+              { v: 'owner_auth', l: 'Autorización del propietario o del familiar/amigo' },
+              { v: 'receipt', l: 'Recibos de alquiler, suministros o transferencias' },
+              { v: 'deed', l: 'Escritura o hipoteca' },
+              { v: 'none', l: 'No tengo forma de demostrarlo' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'Para el padrón y el arraigo no basta con decir que vives ahí: necesitas contrato, autorización, recibo o escritura. Si no lo tienes, pide al titular un documento firmado.'
+          },
+          {
             id: 'permitStatus', type: 'select', label: '¿Qué documento de residencia tienes ahora?', showIf: inSpain,
             options: [
               { v: 'none', l: 'Ninguno' },
@@ -1854,7 +1880,7 @@ body.has-speech-bar { padding-bottom: 86px; }
               { v: 'seguridad_social', l: 'Número de la Seguridad Social' },
               { v: 'vida_laboral', l: 'Informe de vida laboral', h: 'Prueba tus cotizaciones' },
               { v: 'tarjeta_sanitaria', l: 'Tarjeta sanitaria' },
-              { v: 'contrato_alquiler', l: 'Contrato de alquiler o de vivienda' },
+              { v: 'contrato_alquiler', l: 'Contrato de alquiler, autorización, recibo o escritura de vivienda' },
               { v: 'nominas', l: 'Nóminas o contrato de trabajo' }
             ]
           },
@@ -6701,6 +6727,9 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.padronDate = p.empadronamientoSince || '';
     d.monthsEmpadronado = d.padronDate ? (RL.dates.diff(d.padronDate, now) || 0) / 30.44 : null;
     d.gaps = p.empadronamientoGaps || null;
+    d.housing = p.housing || '';
+    d.housingProof = p.housingProof || '';
+    d.hasHousingProof = ['contract', 'room_contract', 'owner_auth', 'receipt', 'deed'].indexOf(d.housingProof) !== -1;
     d.continuousStay = d.gaps === 'no' || d.gaps === 'small' || d.gaps == null;
 
     d.monthsInSpain = d.monthsEmpadronado != null && claimMonths != null
@@ -7198,8 +7227,13 @@ body.has-speech-bar { padding-bottom: 86px; }
         'Con el empadronamiento puedes solicitar asistencia sanitaria en tu centro de salud. Es clave para ti y para tus hijos.', 'Este mes', 'base');
       if (d.hasDisability) add('discapacidad', 'Ten a mano tu certificado de discapacidad',
         'Puede abrir vías por circunstancias excepcionales y mejorar la valoración de vulnerabilidad. Lleva una copia a tu cita.', 'Cuando lo necesites', 'documentos');
-      if (!d.hasRentContract) add('alquiler', 'Consigue una prueba de domicilio',
-        'Contrato de alquiler, autorización del propietario o certificado de convivencia. Te sirve para el padrón y para acreditar arraigo.', 'Este mes', 'documentos');
+      if (!d.hasRentContract && !d.hasHousingProof) {
+        var housingMsg = 'Contrato de alquiler, autorización del propietario, recibos o certificado de convivencia. Te sirve para el padrón y para acreditar arraigo.';
+        if (d.housing === 'alquiler_habitacion') housingMsg = 'Pide el contrato de la habitación y guarda los recibos o transferencias. Para el padrón puede hacer falta también una autorización del titular.';
+        else if (d.housing === 'familiar_amigo') housingMsg = 'Pide al familiar o amigo una autorización firmada, el certificado de convivencia y algún recibo. Sin prueba de domicilio, el padrón y el arraigo se complican.';
+        else if (d.housing === 'propietario_hipoteca' || d.housing === 'propietario') housingMsg = 'Guarda la escritura, la hipoteca o el recibo del IBI. Si no vives solo, añade la autorización o el certificado de convivencia.';
+        add('vivienda', 'Consigue una prueba de domicilio', housingMsg, 'Este mes', 'documentos');
+      }
       if (d.workedMonths > 0 && !d.hasPayslips) add('nominas', 'Guarda nóminas y contrato',
         'Las nóminas, el contrato y los justificantes de pago son la prueba de medios y de trabajo que más se usa en extranjería.', 'Continuo', 'documentos');
     }
@@ -7388,6 +7422,27 @@ body.has-speech-bar { padding-bottom: 86px; }
         ' · Solo solicitante: ' + (d.childrenOwn || 0) +
         ' · Solo pareja: ' + (d.childrenPartner || 0) +
         ' · Total: ' + (d.childrenCount || 0);
+    }
+  };
+
+  RL.housing = {
+    labels: {
+      alquiler_piso: 'Alquilo un piso entero',
+      alquiler_habitacion: 'Alquilo una habitación',
+      familiar_amigo: 'Vivo con familiar o amigo, sin pagar alquiler',
+      propietario_hipoteca: 'Propietario/a con hipoteca',
+      propietario: 'Propietario/a sin hipoteca',
+      pension_albergue: 'Pensión, albergue, realojo u otra situación',
+      dontknow: 'No lo sé / prefiere no decirlo'
+    },
+    proof: {
+      contract: 'Contrato de alquiler del piso',
+      room_contract: 'Contrato de alquiler de habitación',
+      owner_auth: 'Autorización del propietario o familiar/amigo',
+      receipt: 'Recibos de alquiler, suministros o transferencias',
+      deed: 'Escritura o hipoteca',
+      none: 'Sin prueba de vivienda',
+      dontknow: 'No lo sé'
     }
   };
 })();
@@ -7980,6 +8035,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       l.push('- Situación: ' + (d.irregular ? 'irregular' : (d.hasPermit ? 'con autorización' : 'sin datos suficientes')));
       if (p.permitStatus) l.push('- Permiso: ' + (PERMIT[p.permitStatus] || p.permitStatus));
       if (p.empadronado) l.push('- Padrón: ' + (p.empadronado === 'yes' ? 'sí' : 'no'));
+      if (d.housing) l.push('- Vivienda: ' + (RL.housing.labels[d.housing] || d.housing) + (d.housingProof ? ' · prueba: ' + (RL.housing.proof[d.housingProof] || d.housingProof) : ''));
     }
     if (opts.includeDocs) {
       var docs = (d.docsBase || []).concat(d.docsTramites || []);
@@ -8375,6 +8431,8 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (d.inSpain && d.monthsInSpain != null) doc.kv('Tiempo en España', RL.fmt.duration(d.monthsInSpain));
     if (d.inSpain) doc.kv('Situación', d.irregular ? 'Sin autorización (irregular)' : (d.hasPermit ? 'Con autorización' : 'No indicada'));
     if (p.empadronado) doc.kv('Padrón', p.empadronado === 'yes' ? 'Sí' : 'No');
+    if (d.housing) doc.kv('Vivienda', RL.housing.labels[d.housing] || d.housing);
+    if (d.housingProof) doc.kv('Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof);
     if (p.maritalStatus) {
       doc.kv('Situación de pareja', RL.family.status[p.maritalStatus] || p.maritalStatus);
       if (p.marriageType) doc.kv('Matrimonio', RL.family.marriage[p.marriageType] || p.marriageType);
@@ -8397,7 +8455,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE o tarjeta de residencia', tarjeta_ue: 'Tarjeta de familiar de la UE',
       certificado_digital: 'Certificado digital o Cl@ve', cuenta_bancaria: 'Cuenta bancaria',
       seguridad_social: 'Número de la Seguridad Social', vida_laboral: 'Informe de vida laboral',
-      tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',
+      tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler, autorización, recibo o escritura de vivienda',
       nominas: 'Nóminas o contrato de trabajo', cita_asilo: 'Cita de asilo', hoja_blanca: 'Hoja blanca',
       tarjeta_roja: 'Tarjeta roja', resguardo_nacionalidad: 'Resguardo de nacionalidad',
       resguardo_extranjeria: 'Resguardo de extranjería', autorizacion_regreso: 'Autorización de regreso',
@@ -9103,6 +9161,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     asylumRequested: 'no', leftSpain: 'no', exitOrder: 'no',
     maritalStatus: 'casada', marriageType: 'civil', spouseInSpain: 'yes', spouseStatus: 'irregular',
     childrenCommon: 1, childrenOwn: 0, childrenPartner: 0, childrenAges: '7', childrenSpanish: 'no',
+    housing: 'alquiler_piso', housingProof: 'contract',
     ancestry: 'none', bornInSpain: 'no',
     employment: 'informal', monthsWorked: 20, cotizaciones: 'no',
     monthlyIncome: 950, savings: 1200, jobOffer: 'no', sector: 'cuidados',
@@ -9588,6 +9647,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       else if (d.hasPermit) chips.push('<span class="chip chip--ok">' + icons.check(14) + ' Con autorización</span>');
     }
     if (d.ibero) chips.push(chip(icons.globe(14), 'Nacionalidad con plazo de 2 años'));
+    if (d.housing) chips.push(chip(icons.home(14), RL.housing.labels[d.housing] || d.housing));
     if (p.maritalStatus) chips.push(chip(icons.family(14), RL.family.status[p.maritalStatus] || p.maritalStatus));
     if (d.hasKids) chips.push(chip(icons.family(14), 'Hijos: ' + d.childrenCount + ' (' + RL.family.childrenText(d) + ')'));
     if (d.hasAncestry) chips.push(chip(icons.family(14), 'Ascendencia española'));
@@ -9711,7 +9771,7 @@ body.has-speech-bar { padding-bottom: 86px; }
       pasaporte: 'Pasaporte de tu país (no español)', nie: 'NIE', tie: 'TIE', tarjeta_ue: 'Tarjeta UE',
       certificado_digital: 'Certificado digital', cuenta_bancaria: 'Cuenta bancaria',
       seguridad_social: 'Nº Seguridad Social', vida_laboral: 'Vida laboral',
-      tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler',
+      tarjeta_sanitaria: 'Tarjeta sanitaria', contrato_alquiler: 'Contrato de alquiler, autorización, recibo o escritura de vivienda',
       nominas: 'Nóminas / contrato', cita_asilo: 'Cita de asilo', hoja_blanca: 'Hoja blanca',
       tarjeta_roja: 'Tarjeta roja', resguardo_nacionalidad: 'Resguardo nacionalidad',
       resguardo_extranjeria: 'Resguardo extranjería', autorizacion_regreso: 'Autorización de regreso',
@@ -9887,6 +9947,8 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (d.inSpain && d.monthsInSpain != null) rows.push(['Tiempo en España', fmt.duration(d.monthsInSpain)]);
     if (d.inSpain) rows.push(['Permiso', permitLabel(p.permitStatus)]);
     if (p.empadronado) rows.push(['Padrón', p.empadronado === 'yes' ? 'Sí' : 'No']);
+    if (d.housing) rows.push(['Vivienda', RL.housing.labels[d.housing] || d.housing]);
+    if (d.housingProof) rows.push(['Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof]);
     rows.push(['Objetivo', goalLabel(p.goals)]);
     return '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Tu perfil</h2></div><div class="block__body">' +
       '<dl class="kv">' + rows.map(function (r) {
@@ -10926,6 +10988,8 @@ body.has-speech-bar { padding-bottom: 86px; }
       fechaEntrada: p.entryDate || '',
       estadoCivil: p.maritalStatus ? (RL.family.status[p.maritalStatus] || p.maritalStatus) : '',
       matrimonio: p.marriageType ? (RL.family.marriage[p.marriageType] || p.marriageType) : '',
+      vivienda: d.housing ? (RL.housing.labels[d.housing] || d.housing) : '',
+      pruebaVivienda: d.housingProof ? (RL.housing.proof[d.housingProof] || d.housingProof) : '',
       hijos: d.hasKids ? RL.family.childrenText(d) : 'Sin hijos',
       edadesHijos: p.childrenAges || '',
       hijoEspanol: d.hasSpanishChildInHousehold ? (RL.family.spanishChild[d.spanishChildType] || '') : ''
@@ -10959,6 +11023,8 @@ body.has-speech-bar { padding-bottom: 86px; }
       fdField('hijos', 'Hijos (comunes / solo tuyos / solo pareja / total)', data.hijos, 'text', true) +
       fdField('edadesHijos', 'Edades de los hijos', data.edadesHijos) +
       fdField('hijoEspanol', 'Hijo/a español y vínculo', data.hijoEspanol) +
+      fdField('vivienda', 'Situación de vivienda', data.vivienda) +
+      fdField('pruebaVivienda', 'Prueba de vivienda', data.pruebaVivienda) +
       fdField('nie', 'NIE', data.nie) +
       fdField('pasaporte', 'Pasaporte de tu país (no español)', data.pasaporte) +
       fdField('expediente', 'Número de expediente (si lo tienes)', data.expediente) +
