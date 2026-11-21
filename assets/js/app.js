@@ -300,7 +300,7 @@
         '<textarea class="textarea" id="' + id + '" name="' + f.id + '" placeholder="' + esc(f.placeholder || '') + '"' + described + '>' + esc(val || '') + '</textarea>' + err + '</div>';
     }
 
-    var type = f.type === 'number' ? 'number' : (f.type === 'date' ? 'date' : 'text');
+    var type = f.type === 'number' ? 'number' : (f.type === 'date' ? 'date' : (f.type === 'month' ? 'month' : 'text'));
     var attrs = '';
     if (f.min != null) attrs += ' min="' + f.min + '"';
     if (f.max != null) attrs += ' max="' + f.max + '"';

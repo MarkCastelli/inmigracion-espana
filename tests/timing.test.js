@@ -34,6 +34,20 @@ test('la renovación administrativa y la TIE física tienen fechas distintas', (
   assert.ok(alert && /nunca antes/i.test(alert.body));
 });
 
+test('una renuncia a la protección internacional no cuenta como asilo en trámite', () => {
+  const renounced = RL.dates.addMonths(RL.dates.today(), -6).slice(0, 7);
+  const plan = RL.buildPlan(base({
+    entryMode: 'asylum', permitStatus: 'asylum', asylumStage: 'renunciado',
+    asylumRenouncedDate: renounced, timeInSpain: '2to3y'
+  }));
+  assert.strictEqual(plan.d.asylumRenounced, true);
+  assert.strictEqual(plan.d.asylumInProcess, false);
+  assert.ok(plan.d.arraigoMonths != null && plan.d.arraigoMonths < 12);
+  assert.ok(plan.alerts.some(a => /Renunciaste a la protección internacional/i.test(a.title)));
+  const field = RL.questions.steps.flatMap(s => s.fields || []).find(f => f.id === 'asylumRenouncedDate');
+  assert.ok(field && field.type === 'month', 'la fecha de renuncia debe ser mes/año');
+});
+
 test('un permiso caducado hace poco avisa de los 3 meses', () => {
   const plan = RL.buildPlan(base({
     permitStatus: 'work', permitExpiry: RL.dates.addDays(RL.dates.today(), -20)

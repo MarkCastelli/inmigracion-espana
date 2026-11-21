@@ -206,12 +206,17 @@
     d.asylumSoon = stage === 'cita';
     d.asylumGranted = stage === 'concedido';
     d.asylumDenied = stage === 'denegado';
-    d.hasRedCard = stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja') || d.redCardRenewalPending;
-    d.hasWhitePaper = stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca');
-    d.hasAsylumAppointment = stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo');
-    d.asylumInProcess = !d.asylumGranted && !d.asylumDenied &&
+    d.asylumRenounced = stage === 'renunciado';
+    d.asylumRenouncedDate = p.asylumRenouncedDate || '';
+    d.asylumRenouncedDateISO = d.asylumRenouncedDate && String(d.asylumRenouncedDate).length === 7
+      ? d.asylumRenouncedDate + '-01'
+      : d.asylumRenouncedDate;
+    d.hasRedCard = !d.asylumRenounced && (stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja') || d.redCardRenewalPending);
+    d.hasWhitePaper = !d.asylumRenounced && (stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca'));
+    d.hasAsylumAppointment = !d.asylumRenounced && (stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'));
+    d.asylumInProcess = !d.asylumGranted && !d.asylumDenied && !d.asylumRenounced &&
       (d.asylum || d.hasRedCard || d.hasWhitePaper || p.permitStatus === 'asylum');
-    if (!d.asylumInProcess && !d.asylumDenied && (d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'))) d.asylumSoon = true;
+    if (!d.asylumInProcess && !d.asylumDenied && !d.asylumRenounced && (d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'))) d.asylumSoon = true;
     d.asylumProtected = d.asylumInProcess;
     d.asylumGrantedDate = p.asylumGrantedDate || '';
     d.tarjetaRojaExpiry = p.tarjetaRojaExpiry || (stage === 'admitido' ? (p.permitExpiry || '') : '');
@@ -228,6 +233,10 @@
     } else if (d.asylumDenied) {
       if (d.asylumAppeal === 'yes' || !d.asylumDeniedDate) d.arraigoMonths = null;
       else d.arraigoMonths = Math.max(0, (RL.dates.diff(d.asylumDeniedDate, now) || 0) / 30.44);
+    } else if (d.asylumRenounced) {
+      d.arraigoMonths = d.asylumRenouncedDateISO
+        ? Math.max(0, (RL.dates.diff(d.asylumRenouncedDateISO, now) || 0) / 30.44)
+        : null;
     }
 
     /* permisos de residencia */
@@ -554,6 +563,11 @@
     } else if (d.asylumSoon) {
       add('warn', 'Tienes cita para solicitar asilo',
         'No faltes. Lleva pasaporte, documentación y pruebas. Si no acudes, puedes perder el turno.', 'prioridad');
+    } else if (d.asylumRenounced) {
+      add('warn', 'Renunciaste a la protección internacional',
+        'No estás en trámite de asilo. El tiempo como solicitante no cuenta para el arraigo; la referencia es la fecha de renuncia' +
+        (d.asylumRenouncedDateISO ? ': ' + RL.fmt.monthYear(d.asylumRenouncedDateISO) : ' (no indicada)') +
+        '. Guarda el documento de renuncia y consulta con un abogado.', 'plazo');
     } else if (d.asylumDenied) {
       add('bad', 'Tu solicitud de asilo fue denegada',
         'Revisa el plazo de recurso con un abogado o una entidad especializada. También puedes valorar arraigo o circunstancias excepcionales.', 'riesgo');
@@ -751,7 +765,8 @@
     if (d.inSpain && d.entryDate) {
       if (d.tourist) add(RL.dates.addDays(d.entryDate, 90), 'Fin de los 90 días de turista', 'Si sigues aquí después de esta fecha, tu estancia pasa a ser irregular. No implica expulsión automática, pero sí impide trabajar.', 'soon');
       if (d.arraigoMonths != null && d.arraigoMonths < 24) {
-        var arraigoBase = d.asylumDenied && d.asylumDeniedDate ? d.asylumDeniedDate : d.entryDate;
+        var arraigoBase = d.asylumDenied && d.asylumDeniedDate ? d.asylumDeniedDate
+          : (d.asylumRenounced && d.asylumRenouncedDateISO ? d.asylumRenouncedDateISO : d.entryDate);
         add(RL.dates.addDays(arraigoBase, 730), 'Cumples 2 años computables para el arraigo', 'Fecha de referencia para el arraigo social (si mantienes permanencia continuada y padrón). El tiempo como solicitante de asilo no cuenta.', 'later');
       }
       if (d.monthsInSpain != null && d.monthsInSpain < 60) add(RL.dates.addDays(d.entryDate, 1826), 'Cumples 5 años en España', 'Umbral para la residencia de larga duración.', 'later');

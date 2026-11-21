@@ -463,9 +463,15 @@
               { v: 'admitido', l: 'Admitida a trámite (tarjeta roja)' },
               { v: 'concedido', l: 'Me han concedido protección internacional' },
               { v: 'denegado', l: 'Denegada' },
+              { v: 'renunciado', l: 'Renuncié a la protección internacional' },
               { v: 'dontknow', l: 'No lo sé' }
             ],
-            help: 'Si no es tu caso, elige la primera opción. Si ya tienes hoja blanca o tarjeta roja, tu situación cambia por completo.'
+            help: 'Si no es tu caso, elige la primera opción. Si ya tienes hoja blanca o tarjeta roja, tu situación cambia por completo. Si renunciaste, no estás en trámite.'
+          },
+          {
+            id: 'asylumRenouncedDate', type: 'month', label: '¿Cuándo renunciaste? Mes y año',
+            showIf: function (p) { return p.asylumStage === 'renunciado'; },
+            help: 'No hace falta el día exacto. Si no recuerdas el mes, pon el más aproximado. Es clave para calcular desde cuándo puede contar el arraigo.'
           },
           {
             id: 'asylumCitaDate', type: 'date', label: '¿Para cuándo tienes la cita?',
