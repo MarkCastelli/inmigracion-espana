@@ -274,17 +274,20 @@
       doc.p('Trámites en curso o pendientes de resolución:', true);
       currentDocs.forEach(function (x) { doc.bullet(x); });
     }
-    var stageText = { cita: 'Cita de asilo', solicitado: 'Solicitud presentada (hoja blanca)', admitido: 'Admitida a trámite (tarjeta roja)', concedido: 'Protección internacional concedida', denegado: 'Denegada', renunciado: 'Renuncia a la protección internacional' };
+    var stageText = { cita: 'Cita de asilo', solicitado: 'Solicitud presentada (hoja blanca)', admitido: 'Admitida a trámite (tarjeta roja)', concedido: 'Protección internacional concedida', denegado: 'Denegada', desistido: 'Desistimiento o archivo', renunciado: 'Renuncia a la protección internacional' };
     if (d.asylumStage && stageText[d.asylumStage]) doc.kv('Protección internacional', stageText[d.asylumStage] + (d.asylumRenouncedDateText ? ' · ' + d.asylumRenouncedDateText : ''));
     if (d.postRenunciation) {
       var postText = {
-        irregular: 'Siguió irregular', arraigo_pending: 'Arraigo pendiente', arraigo_granted: 'Arraigo concedido',
-        arraigo_denied: 'Arraigo denegado', reg2026_pending: 'Regularización 2026 pendiente',
-        reg2026_granted: 'Regularización 2026 concedida', reg2026_denied: 'Regularización 2026 denegada',
+        irregular: 'Siguió irregular', arraigo_formacion_granted: 'Arraigo por formación concedido',
+        arraigo_cuenta_ajena_granted: 'Arraigo por cuenta ajena concedido', arraigo_pending: 'Arraigo pendiente',
+        arraigo_granted: 'Otro arraigo concedido', arraigo_denied: 'Arraigo denegado',
+        reg2026_pending: 'Regularización 2026 pendiente', reg2026_granted: 'Regularización 2026 concedida',
+        reg2026_denied: 'Regularización 2026 denegada', residencia_aprobada: 'Residencia aprobada',
         other_permit: 'Otro permiso obtenido', left_spain: 'Salió de España', dontknow: 'No lo sabe'
       };
-      doc.kv('Después de la renuncia', (postText[d.postRenunciation] || d.postRenunciation) + (d.postRenunciationDateISO ? ' · ' + RL.fmt.monthYear(d.postRenunciationDateISO) : ''));
+      doc.kv('Después de la salida del asilo', (postText[d.postRenunciation] || d.postRenunciation) + (d.postRenunciationDateISO ? ' · ' + RL.fmt.monthYear(d.postRenunciationDateISO) : ''));
     }
+    if (d.residenceApproved === 'yes') doc.kv('Residencia aprobada', (d.residenceApprovedYears ? d.residenceApprovedYears + ' años' : 'Sí') + (d.residenceApprovedDate ? ' · ' + RL.fmt.date(d.residenceApprovedDate) : '') + (d.tieWaitingExpiry === 'yes' ? ' · esperando vencimiento de TIE' : ''));
     if (d.pendingExtranjeria) doc.kv('Expediente abierto', 'Sí');
     if (d.pendingNationality) doc.kv('Nacionalidad en trámite', 'Sí');
 

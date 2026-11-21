@@ -74,7 +74,7 @@ test('después de renunciar se distingue arraigo concedido de seguir irregular',
   assert.strictEqual(granted.d.hasPermit, true);
   assert.strictEqual(granted.d.irregular, false);
   assert.strictEqual(granted.d.arraigoMonths, null);
-  assert.ok(granted.alerts.some(a => /Después de renunciar obtuviste/i.test(a.title)));
+  assert.ok(granted.alerts.some(a => /Después del asilo obtuviste/i.test(a.title)));
 
   const irregular = RL.buildPlan(base({
     entryMode: 'asylum', permitStatus: 'asylum', asylumStage: 'renunciado',
@@ -83,6 +83,29 @@ test('después de renunciar se distingue arraigo concedido de seguir irregular',
   }));
   assert.strictEqual(irregular.d.irregular, true);
   assert.ok(irregular.d.arraigoMonths != null);
+});
+
+test('el asilo antes de 90 días y la residencia posterior no se tratan como sobreestancia', () => {
+  const plan = RL.buildPlan(base({
+    entryMode: 'tourist_free', timeInSpain: '3plus', permitStatus: 'none',
+    asylumStage: 'denegado', asylumBefore90: 'yes',
+    postRenunciationOutcome: 'arraigo_formacion_granted', residenceApproved: 'yes',
+    residenceApprovedYears: 4, tieWaitingExpiry: 'yes', docsBase: ['tie']
+  }));
+  assert.strictEqual(plan.d.overstay, false);
+  assert.strictEqual(plan.d.hasPermit, true);
+  assert.strictEqual(plan.d.irregular, false);
+  assert.strictEqual(plan.d.residenceApprovedYears, 4);
+  assert.ok(!plan.alerts.some(a => /Has superado los 90/i.test(a.title)), 'no debe avisar de sobreestancia');
+  assert.ok(!plan.alerts.some(a => /Tu solicitud de asilo fue denegada/i.test(a.title)), 'no debe quedarse en la denegación');
+  assert.ok(plan.alerts.some(a => /Después del asilo/i.test(a.title)));
+});
+
+test('desistir del asilo no se registra como denegación', () => {
+  const d = RL.derive(base({ asylumStage: 'desistido', asylumBefore90: 'yes' }));
+  assert.strictEqual(d.asylumWithdrawn, true);
+  assert.strictEqual(d.asylumDenied, false);
+  assert.strictEqual(d.asylumExited, true);
 });
 
 test('un permiso caducado hace poco avisa de los 3 meses', () => {

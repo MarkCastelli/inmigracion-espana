@@ -950,6 +950,7 @@
     rows.push(['Ubicación', p.location === 'spain' ? 'España' : (p.location === 'origin' ? 'País de origen' : 'Otro país')]);
     if (d.inSpain && d.monthsInSpain != null) rows.push(['Tiempo en España', fmt.duration(d.monthsInSpain)]);
     if (d.inSpain) rows.push(['Permiso', permitLabel(p.permitStatus)]);
+    if (d.residenceApproved === 'yes') rows.push(['Residencia aprobada', (d.residenceApprovedYears ? d.residenceApprovedYears + ' años' : 'Sí') + (d.tieWaitingExpiry === 'yes' ? ' · esperando vencimiento de TIE' : '')]);
     if (p.empadronado) rows.push(['Padrón', p.empadronado === 'yes' ? 'Sí' : 'No']);
     if (d.housing) rows.push(['Vivienda', RL.housing.labels[d.housing] || d.housing]);
     if (d.housingProof) rows.push(['Prueba de vivienda', RL.housing.proof[d.housingProof] || d.housingProof]);

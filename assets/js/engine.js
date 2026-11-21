@@ -261,6 +261,10 @@
     d.asylumGranted = stage === 'concedido';
     d.asylumDenied = stage === 'denegado';
     d.asylumRenounced = stage === 'renunciado';
+    d.asylumWithdrawn = stage === 'desistido';
+    d.asylumExited = d.asylumRenounced || d.asylumWithdrawn;
+    d.asylumHistory = ['solicitado', 'admitido', 'concedido', 'denegado', 'renunciado', 'desistido'].indexOf(stage) !== -1;
+    d.asylumBefore90 = p.asylumBefore90 || '';
     var renDay = p.asylumRenouncedDay != null ? Number(p.asylumRenouncedDay) : null;
     var renMonth = p.asylumRenouncedMonth && p.asylumRenouncedMonth !== 'unknown' ? p.asylumRenouncedMonth : '';
     var renYear = p.asylumRenouncedYear != null ? Number(p.asylumRenouncedYear) : null;
@@ -286,12 +290,12 @@
     if (renMonth) renParts.push(renMonth);
     if (renYear) renParts.push(String(renYear));
     d.asylumRenouncedDateText = renParts.length ? renParts.join('/') : 'fecha no indicada';
-    d.hasRedCard = !d.asylumRenounced && (stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja') || d.redCardRenewalPending);
-    d.hasWhitePaper = !d.asylumRenounced && (stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca'));
-    d.hasAsylumAppointment = !d.asylumRenounced && (stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'));
-    d.asylumInProcess = !d.asylumGranted && !d.asylumDenied && !d.asylumRenounced &&
+    d.hasRedCard = !d.asylumExited && (stage === 'admitido' || d.owns('tarjeta_roja') || d.ownsCurrent('tarjeta_roja') || d.redCardRenewalPending);
+    d.hasWhitePaper = !d.asylumExited && (stage === 'solicitado' || d.owns('hoja_blanca') || d.ownsCurrent('hoja_blanca'));
+    d.hasAsylumAppointment = !d.asylumExited && (stage === 'cita' || d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'));
+    d.asylumInProcess = !d.asylumGranted && !d.asylumDenied && !d.asylumExited &&
       (d.asylum || d.hasRedCard || d.hasWhitePaper || p.permitStatus === 'asylum');
-    if (!d.asylumInProcess && !d.asylumDenied && !d.asylumRenounced && (d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'))) d.asylumSoon = true;
+    if (!d.asylumInProcess && !d.asylumDenied && !d.asylumExited && (d.owns('cita_asilo') || d.ownsCurrent('cita_asilo'))) d.asylumSoon = true;
     d.asylumProtected = d.asylumInProcess;
     d.asylumGrantedDate = p.asylumGrantedDate || '';
     d.tarjetaRojaExpiry = p.tarjetaRojaExpiry || (stage === 'admitido' ? (p.permitExpiry || '') : '');
@@ -308,7 +312,7 @@
     } else if (d.asylumDenied) {
       if (d.asylumAppeal === 'yes' || !d.asylumDeniedDate) d.arraigoMonths = null;
       else d.arraigoMonths = Math.max(0, (RL.dates.diff(d.asylumDeniedDate, now) || 0) / 30.44);
-    } else if (d.asylumRenounced) {
+    } else if (d.asylumExited) {
       if (d.postRenunciationGranted) {
         d.arraigoMonths = null;
       } else {
@@ -329,6 +333,14 @@
     d.permitExpiry = p.permitExpiry || '';
     d.permitSince = p.permitSince || (d.asylumGranted ? d.asylumGrantedDate : '');
     d.monthsResident = d.permitSince ? (RL.dates.diff(d.permitSince, now) || 0) / 30.44 : null;
+    d.residenceApproved = p.residenceApproved || '';
+    d.residenceApprovedYears = p.residenceApprovedYears != null ? Number(p.residenceApprovedYears) : null;
+    d.residenceApprovedDate = p.residenceApprovedDate || '';
+    d.tieWaitingExpiry = p.tieWaitingExpiry || '';
+    if (d.residenceApproved === 'yes') {
+      d.hasPermit = true;
+      d.irregular = false;
+    }
 
     var touristLegal = (p.entryMode === 'tourist_free' || p.entryMode === 'tourist_visa') &&
       d.monthsInSpain != null && d.monthsInSpain <= 3;
@@ -348,7 +360,7 @@
     d.postRenunciationDateISO = d.postRenunciationDate && String(d.postRenunciationDate).length === 7
       ? d.postRenunciationDate + '-01'
       : d.postRenunciationDate;
-    d.postRenunciationGranted = ['arraigo_granted', 'reg2026_granted', 'other_permit'].indexOf(d.postRenunciation) !== -1;
+    d.postRenunciationGranted = ['arraigo_granted', 'arraigo_formacion_granted', 'arraigo_cuenta_ajena_granted', 'reg2026_granted', 'residencia_aprobada', 'other_permit'].indexOf(d.postRenunciation) !== -1;
     d.postRenunciationPending = ['arraigo_pending', 'reg2026_pending'].indexOf(d.postRenunciation) !== -1;
     d.postRenunciationDenied = ['arraigo_denied', 'reg2026_denied'].indexOf(d.postRenunciation) !== -1;
     d.regularization = p.regularizationApplied || 'none';
@@ -373,7 +385,11 @@
       d.irregular = false;
       d.pendingExtranjeria = true;
     }
-    if (d.asylumRenounced && d.postRenunciationGranted) d.arraigoMonths = null;
+    if (d.postRenunciationGranted) d.arraigoMonths = null;
+    if (d.hasPermit || d.postRenunciationGranted || d.residenceApproved === 'yes' || d.asylumBefore90 === 'yes') {
+      d.overstay = false;
+      d.overstayDays = null;
+    }
 
     d.workedMonths = Number(p.monthsWorked) || 0;
     d.hasCotizaciones = p.cotizaciones === 'yes' || p.cotizaciones === 'some';
@@ -671,25 +687,25 @@
     } else if (d.asylumSoon) {
       add('warn', 'Tienes cita para solicitar asilo',
         'No faltes. Lleva pasaporte, documentación y pruebas. Si no acudes, puedes perder el turno.', 'prioridad');
-    } else if (d.asylumRenounced) {
-      add('warn', 'Renunciaste a la protección internacional',
-        'No estás en trámite de asilo. El tiempo como solicitante no cuenta para el arraigo; la referencia es la fecha de renuncia' +
+    } else if (d.asylumRenounced || d.asylumWithdrawn) {
+      add('warn', d.asylumWithdrawn ? 'Desististe del asilo' : 'Renunciaste a la protección internacional',
+        'No estás en trámite de asilo. El tiempo como solicitante no cuenta para el arraigo; la referencia es la fecha de salida' +
         (d.asylumRenouncedDateISO ? ': ' + d.asylumRenouncedDateText + ' (aproximada)' : ': ' + d.asylumRenouncedDateText) +
-        '. Guarda el documento de renuncia y consulta con un abogado.', 'plazo');
-    } else if (d.asylumDenied) {
+        '. Guarda el documento y revisa qué autorización posterior tienes.', 'plazo');
+    } else if (d.asylumDenied && !d.postRenunciationGranted && !d.hasPermit) {
       add('bad', 'Tu solicitud de asilo fue denegada',
         'Revisa el plazo de recurso con un abogado o una entidad especializada. También puedes valorar arraigo o circunstancias excepcionales.', 'riesgo');
     }
-    if (d.asylumRenounced && d.postRenunciationGranted) {
-      add('ok', 'Después de renunciar obtuviste una autorización',
-        'Ya no estás en trámite de asilo ni en situación irregular. Revisa la vigencia y el tipo de permiso; el tiempo como solicitante no cuenta para el arraigo.', 'info');
-    } else if (d.asylumRenounced && d.postRenunciationPending) {
+    if (d.postRenunciationGranted) {
+      add('ok', 'Después del asilo obtuviste una autorización',
+        'Ya no estás en trámite de asilo ni en situación irregular. Revisa el tipo, los años aprobados y la vigencia de tu TIE; el tiempo como solicitante no cuenta para el arraigo.', 'info');
+    } else if (d.postRenunciationPending) {
       add('info', 'Tienes una solicitud posterior en trámite',
-        'Después de renunciar al asilo presentaste arraigo o regularización. No puedes pedir otro arraigo mientras el expediente esté abierto; controla requerimientos y resolución.', 'trámite');
-    } else if (d.asylumRenounced && d.postRenunciation === 'irregular') {
-      add('warn', 'Sigues irregular después de renunciar al asilo',
-        'El tiempo como solicitante no cuenta para el arraigo. La referencia es la fecha de renuncia o, si la tienes, la de la resolución posterior. Valora arraigo, regularización cerrada o vía familiar.', 'riesgo');
-    } else if (d.asylumRenounced && d.postRenunciationDenied) {
+        'Después del asilo presentaste arraigo o regularización. No puedes pedir otro arraigo mientras el expediente esté abierto; controla requerimientos y resolución.', 'trámite');
+    } else if (d.postRenunciation === 'irregular') {
+      add('warn', 'Sigues irregular después de salir del asilo',
+        'El tiempo como solicitante no cuenta para el arraigo. La referencia es la fecha de salida o, si la tienes, la de la resolución posterior. Valora arraigo, regularización cerrada o vía familiar.', 'riesgo');
+    } else if (d.postRenunciationDenied) {
       add('warn', 'Tu solicitud posterior fue denegada',
         'Revisa el plazo de recurso y las alternativas. No presentes otra solicitud sin comprobar antes si hay un expediente abierto o una prohibición.', 'riesgo');
     }
@@ -823,7 +839,7 @@
       'Si han pasado 6 meses desde la solicitud y no hay denegación, puedes pedir autorización de trabajo. Revisa la fecha de tu hoja blanca.', 'A los 6 meses', 'plazo');
     if (d.hasRedCard && d.tarjetaRojaExpiry) add('renueva-roja', 'Renueva la tarjeta roja',
       'Pide cita antes de que caduque. Sin tarjeta en vigor se bloquean trámites y el trabajo.', '60 días antes', 'plazo');
-    if (d.asylumDenied) add('recurso-asilo', 'Revisa el recurso de asilo',
+    if (d.asylumDenied && !d.postRenunciationGranted && !d.hasPermit) add('recurso-asilo', 'Revisa el recurso de asilo',
       'El plazo es corto. Consulta con un abogado o una entidad especializada y valora alternativas como el arraigo o las circunstancias excepcionales.', 'Cuanto antes', 'riesgo');
     if (d.pendingExtranjeria) add('expediente-abierto', 'Sigue tu expediente de extranjería',
       'No puedes pedir arraigo mientras esté abierto (art. 126.h). Guarda el resguardo, controla los requerimientos y consulta el estado.', 'Cada 4-6 semanas', 'trámite');
@@ -891,7 +907,7 @@
       if (d.tourist) add(RL.dates.addDays(d.entryDate, 90), 'Fin de los 90 días de turista', 'Si sigues aquí después de esta fecha, tu estancia pasa a ser irregular. No implica expulsión automática, pero sí impide trabajar.', 'soon');
       if (d.arraigoMonths != null && d.arraigoMonths < 24) {
         var arraigoBase = d.asylumDenied && d.asylumDeniedDate ? d.asylumDeniedDate
-          : (d.asylumRenounced ? (d.asylumRenouncedDateISO || '') : d.entryDate);
+          : (d.asylumExited ? (d.asylumRenouncedDateISO || '') : d.entryDate);
         if (arraigoBase) add(RL.dates.addDays(arraigoBase, 730), 'Cumples 2 años computables para el arraigo', 'Fecha de referencia para el arraigo social (si mantienes permanencia continuada y padrón). El tiempo como solicitante de asilo no cuenta.', 'later');
       }
       if (d.monthsInSpain != null && d.monthsInSpain < 60) add(RL.dates.addDays(d.entryDate, 1826), 'Cumples 5 años en España', 'Umbral para la residencia de larga duración.', 'later');

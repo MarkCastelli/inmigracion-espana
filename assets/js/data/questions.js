@@ -26,6 +26,8 @@
     return Array.isArray(p.docsEnCurso) && p.docsEnCurso.indexOf(k) !== -1;
   };
   var hasAsylumDoc = function (p) { return owns(p, 'cita_asilo') || owns(p, 'hoja_blanca') || owns(p, 'tarjeta_roja') || ownsCurrent(p, 'cita_asilo') || ownsCurrent(p, 'hoja_blanca') || ownsCurrent(p, 'tarjeta_roja'); };
+  var asylumHistory = function (p) { return ['solicitado', 'admitido', 'concedido', 'denegado', 'renunciado', 'desistido'].indexOf(p.asylumStage) !== -1; };
+  var postAsylumPath = function (p) { return ['renunciado', 'desistido', 'denegado'].indexOf(p.asylumStage) !== -1; };
 
   RL.questions = {
     steps: [
@@ -352,8 +354,7 @@
             help: 'Para el padrón y el arraigo no basta con decir que vives ahí: necesitas contrato, autorización, recibo o escritura. Si no lo tienes, pide al titular un documento firmado.'
           },
           {
-            id: 'permitStatus', type: 'select', label: '¿Cuál es tu situación de residencia ahora?', showIf: function (p) { return inSpain(p) && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },
-            options: [
+            id: 'permitStatus', type: 'select', label: '¿Cuál es tu situación de residencia ahora?', showIf: function (p) { return inSpain(p) && !owns(p, 'tie') && !owns(p, 'tarjeta_ue'); },            options: [
               { v: 'none', l: 'Ninguna / estoy irregular' },
               { v: 'studies', l: 'Estancia por estudios' },
               { v: 'residencia_temporal', l: 'Residencia temporal (trabajo, familiar, no lucrativa…)' },
@@ -391,6 +392,30 @@
               { v: 'dontknow', l: 'No lo sé' }
             ],
             help: 'La reagrupación familiar solo sirve si el familiar está fuera de España. Si ya está aquí, aunque sea de turista o en situación irregular, no se puede reagrupar: hay que valorar otra vía.'
+          },
+          {
+            id: 'residenceApproved', type: 'select', label: '¿Tienes una residencia ya aprobada?', showIf: inSpain,
+            options: [
+              { v: 'yes', l: 'Sí, aprobada' },
+              { v: 'in_progress', l: 'En trámite' },
+              { v: 'no', l: 'No' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'Aprobada no es lo mismo que TIE entregada. Puedes tener la resolución favorable y estar esperando la tarjeta.'
+          },
+          {
+            id: 'residenceApprovedYears', type: 'number', label: '¿Por cuántos años te la aprobaron?', min: 1, max: 10, placeholder: 'Ej. 4',
+            showIf: function (p) { return inSpain(p) && p.residenceApproved === 'yes'; }
+          },
+          {
+            id: 'residenceApprovedDate', type: 'date', label: '¿Cuándo te la aprobaron? (opcional)',
+            showIf: function (p) { return inSpain(p) && p.residenceApproved === 'yes'; }
+          },
+          {
+            id: 'tieWaitingExpiry', type: 'radio', label: '¿Estás esperando a que venza tu TIE para pedir la nueva?',
+            showIf: function (p) { return inSpain(p) && p.residenceApproved === 'yes'; },
+            options: [{ v: 'yes', l: 'Sí' }, { v: 'no', l: 'No' }, { v: 'dontknow', l: 'No lo sé' }],
+            help: 'Si la residencia ya está aprobada pero la TIE sigue vigente, no tienes que pedir cita de huellas antes del vencimiento.'
           },
           {
             id: 'studyWorkHours', type: 'select', label: 'Si estudias y trabajas, ¿cuántas horas semanales?', showIf: function (p) { return inSpain(p) && (p.permitStatus === 'studies' || p.entryMode === 'studies' || p.permitKind === 'estudios'); },
@@ -536,19 +561,26 @@
               { v: 'admitido', l: 'Admitida a trámite (tarjeta roja)' },
               { v: 'concedido', l: 'Me han concedido protección internacional' },
               { v: 'denegado', l: 'Denegada' },
+              { v: 'desistido', l: 'Desistí del asilo o se archivó' },
               { v: 'renunciado', l: 'Renuncié a la protección internacional' },
               { v: 'dontknow', l: 'No lo sé' }
             ],
-            help: 'Si no es tu caso, elige la primera opción. Si ya tienes hoja blanca o tarjeta roja, tu situación cambia por completo. Si renunciaste, no estás en trámite.'
+            help: 'Si no es tu caso, elige la primera opción. Si ya tienes hoja blanca o tarjeta roja, tu situación cambia por completo. Si desististe o renunciaste, no estás en trámite.'
           },
           {
-            id: 'asylumRenouncedDay', type: 'number', label: 'Día de la renuncia (si lo recuerdas)', min: 1, max: 31, placeholder: 'Ej. 12',
-            showIf: function (p) { return p.asylumStage === 'renunciado'; },
+            id: 'asylumBefore90', type: 'radio', label: '¿Solicitaste asilo antes de que se cumplieran los 90 días?',
+            showIf: function (p) { return inSpain(p) && asylumHistory(p); },
+            options: [{ v: 'yes', l: 'Sí, antes de los 90 días' }, { v: 'no', l: 'No, después' }, { v: 'dontknow', l: 'No lo sé' }],
+            help: 'Si pediste asilo dentro de los 90 días, la app no debe tratar tu entrada como una simple sobreestancia turística.'
+          },
+          {
+            id: 'asylumRenouncedDay', type: 'number', label: 'Día en que saliste del asilo (si lo recuerdas)', min: 1, max: 31, placeholder: 'Ej. 12',
+            showIf: postAsylumPath,
             help: 'Opcional. Rellena solo lo que recuerdes. Si no sabes el día, déjalo vacío.'
           },
           {
-            id: 'asylumRenouncedMonth', type: 'select', label: 'Mes de la renuncia (si lo recuerdas)',
-            showIf: function (p) { return p.asylumStage === 'renunciado'; },
+            id: 'asylumRenouncedMonth', type: 'select', label: 'Mes en que saliste del asilo (si lo recuerdas)',
+            showIf: postAsylumPath,
             options: [
               { v: 'unknown', l: 'No lo recuerdo' },
               { v: '01', l: 'Enero' }, { v: '02', l: 'Febrero' }, { v: '03', l: 'Marzo' },
@@ -559,30 +591,33 @@
             help: 'Opcional. Si no sabes el mes, elige «No lo recuerdo».'
           },
           {
-            id: 'asylumRenouncedYear', type: 'number', label: 'Año de la renuncia (si lo recuerdas)', min: 1900, max: 2100, placeholder: 'Ej. 2024',
-            showIf: function (p) { return p.asylumStage === 'renunciado'; },
+            id: 'asylumRenouncedYear', type: 'number', label: 'Año en que saliste del asilo (si lo recuerdas)', min: 1900, max: 2100, placeholder: 'Ej. 2024',
+            showIf: postAsylumPath,
             help: 'Opcional. Rellena solo lo que recuerdes; no hace falta completar día, mes y año.'
           },
           {
-            id: 'postRenunciationOutcome', type: 'select', label: 'Después de renunciar, ¿qué pasó?',
-            showIf: function (p) { return p.asylumStage === 'renunciado'; },
+            id: 'postRenunciationOutcome', type: 'select', label: 'Después de salir del asilo, ¿qué pasó?',
+            showIf: postAsylumPath,
             options: [
               { v: 'irregular', l: 'Seguí en situación irregular' },
+              { v: 'arraigo_formacion_granted', l: 'Arraigo por formación concedido' },
+              { v: 'arraigo_cuenta_ajena_granted', l: 'Arraigo por cuenta ajena concedido' },
               { v: 'arraigo_pending', l: 'Solicité arraigo, pendiente de resolución' },
-              { v: 'arraigo_granted', l: 'Me concedieron el arraigo' },
+              { v: 'arraigo_granted', l: 'Me concedieron otro arraigo' },
               { v: 'arraigo_denied', l: 'El arraigo fue denegado' },
               { v: 'reg2026_pending', l: 'Solicité la regularización de 2026, pendiente' },
               { v: 'reg2026_granted', l: 'Me concedieron la regularización de 2026' },
               { v: 'reg2026_denied', l: 'La regularización de 2026 fue denegada' },
+              { v: 'residencia_aprobada', l: 'Me aprobaron una residencia' },
               { v: 'other_permit', l: 'Obtuve otro permiso o autorización' },
               { v: 'left_spain', l: 'Salí de España' },
               { v: 'dontknow', l: 'No lo sé / no quiero decirlo' }
             ],
-            help: 'No es lo mismo seguir irregular que haber obtenido arraigo, la regularización de 2026 u otro permiso. Esto cambia el diagnóstico y lo que te falta.'
+            help: 'Cuéntanos la secuencia real: asilo, salida, arraigo por formación, arraigo por cuenta ajena, residencia aprobada… No es lo mismo seguir irregular que haber obtenido una autorización.'
           },
           {
             id: 'postRenunciationDate', type: 'month', label: '¿Cuándo ocurrió? Mes y año (opcional)',
-            showIf: function (p) { return p.asylumStage === 'renunciado' && p.postRenunciationOutcome && p.postRenunciationOutcome !== 'dontknow'; },
+            showIf: function (p) { return postAsylumPath(p) && p.postRenunciationOutcome && p.postRenunciationOutcome !== 'dontknow'; },
             help: 'Si no recuerdas el mes exacto, pon el más aproximado. Sirve para ordenar los hechos, no para inventar una fecha.'
           },
           {
