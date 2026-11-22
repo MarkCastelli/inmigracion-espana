@@ -2671,9 +2671,20 @@
   function scrollToWizardTop() {
     var form = $('#wizardForm') || $('#view-diagnostico');
     if (!form) return;
-    var rect = form.getBoundingClientRect ? form.getBoundingClientRect() : { top: 0 };
-    var top = rect.top + (window.pageYOffset || 0) - 16;
-    window.scrollTo(0, Math.max(0, top));
+    var run = function () {
+      var bar = document.querySelector('.topbar');
+      var offset = (bar && bar.offsetHeight ? bar.offsetHeight : 0) + 14;
+      var rect = form.getBoundingClientRect ? form.getBoundingClientRect() : { top: 0 };
+      var top = rect.top + (window.pageYOffset || 0) - offset;
+      window.scrollTo(0, Math.max(0, top));
+    };
+    if (window.requestAnimationFrame) {
+      window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(run);
+      });
+    } else {
+      setTimeout(run, 0);
+    }
   }
 
   function exportData() {

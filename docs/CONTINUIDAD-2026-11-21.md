@@ -87,6 +87,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 57. **Registros online**: Online nombra la sede autonómica real (Xunta, Junta, Generalitat…), añade registro electrónico autonómico y Registro General del Estado; distingue registro civil, autonómico y estatal.
 58. **SEO**: metadatos por sección (título, descripción, keywords, canonical, Open Graph/Twitter), JSON-LD WebSite/WebPage, `robots.txt`, `sitemap.xml`, imagen social e idiomas `?lang=`/hreflang. Limitación: las secciones con hash no se indexan como URLs independientes.
 59. **Hijos de la pareja**: botón explícito «Añadir hijo/a de mi pareja» dentro de la ficha de pareja; crea la ficha como «Hijo solo de tu pareja» y conserva el campo general.
+60. **Scroll del asistente**: al pasar de paso se descuenta la altura de la cabecera fija y se espera al siguiente frame para que el inicio del formulario quede visible.
 
 ## Comandos
 
