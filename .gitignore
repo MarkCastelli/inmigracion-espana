@@ -1,5 +1,24 @@
+# Dependencias y entornos locales
+node_modules/
+.venv/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
 *.log
+
+# Sistema operativo
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Editores
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Copias y temporales
+*.bak
+*.tmp
+*.temp
+dist/*.tmp
