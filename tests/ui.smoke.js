@@ -400,6 +400,7 @@ t('la sección online muestra DEHú, Mercurio y DGT', () => {
   assert.ok(html.includes('DEHú'));
   assert.ok(html.includes('Mercurio'));
   assert.ok(html.includes('DGT'));
+  assert.ok(html.includes('Modelos EX para descargar'));
   assert.ok(html.includes('sede.comunidad.madrid'));
   RL.state.profile = saved;
   nav(app, 'inicio');
