@@ -9,6 +9,7 @@ const assert = require('assert');
 const ROOT = path.resolve(__dirname, '..');
 const FILES = [
   'assets/js/data/i18n.js',
+  'assets/js/data/antes.js',
   'assets/js/core.js',
   'assets/js/data/countries.js',
   'assets/js/data/regions.js',
@@ -562,6 +563,15 @@ t('la interfaz cambia de idioma y el árabe activa RTL', () => {
   assert.strictEqual(app.document.documentElement.dir, 'ltr');
   RL.i18n.setLang('es');
   assert.strictEqual(RL.i18n.t('nav.inicio'), 'Inicio');
+});
+
+t('la sección Antes de emigrar carga el testimonio corregido', () => {
+  nav(app, 'antes');
+  const html = app.document.querySelector('#view-antes').innerHTML;
+  assert.ok(html.includes('Antes de emigrar'));
+  assert.ok(html.includes('Lo que sí puede mejorar'));
+  assert.ok(html.includes('Trabajo y salario'));
+  assert.ok(html.includes('prestación por desempleo no es automática'));
 });
 
 console.log('\nSmoke test de interfaz terminado.');

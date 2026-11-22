@@ -21,7 +21,7 @@
       free: 'Gratis',
       private: 'Privado',
       nav: {
-        inicio: 'Inicio', plan: 'Mi plan', vias: 'Vías', tramites: 'Trámites',
+        inicio: 'Inicio', antes: 'Antes de emigrar', plan: 'Mi plan', vias: 'Vías', tramites: 'Trámites',
         online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos',
         directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos',
         formularios: 'Formularios', ayuda: 'Ayuda'
@@ -43,7 +43,7 @@
       free: 'مجاني',
       private: 'خاص',
       nav: {
-        inicio: 'الرئيسية', plan: 'خطتي', vias: 'المسارات', tramites: 'الإجراءات',
+        inicio: 'الرئيسية', antes: 'قبل الهجرة', plan: 'خطتي', vias: 'المسارات', tramites: 'الإجراءات',
         online: 'عبر الإنترنت', preguntas: 'الأسئلة', derechos: 'الحقوق',
         directorio: 'أين أذهب', consulta: 'استشارة الذكاء الاصطناعي', docs: 'الوثائق',
         formularios: 'النماذج', ayuda: 'المساعدة'
@@ -65,7 +65,7 @@
       free: 'Gratuit',
       private: 'Privé',
       nav: {
-        inicio: 'Accueil', plan: 'Mon plan', vias: 'Voies', tramites: 'Démarches',
+        inicio: 'Accueil', antes: "Avant d'émigrer", plan: 'Mon plan', vias: 'Voies', tramites: 'Démarches',
         online: 'En ligne', preguntas: 'Questions', derechos: 'Droits',
         directorio: 'Où aller', consulta: 'Consultation IA', docs: 'Documents',
         formularios: 'Formulaires', ayuda: 'Aide'
@@ -87,7 +87,7 @@
       free: 'Free',
       private: 'Private',
       nav: {
-        inicio: 'Home', plan: 'My plan', vias: 'Routes', tramites: 'Procedures',
+        inicio: 'Home', antes: 'Before emigrating', plan: 'My plan', vias: 'Routes', tramites: 'Procedures',
         online: 'Online', preguntas: 'Questions', derechos: 'Rights',
         directorio: 'Where to go', consulta: 'AI consultation', docs: 'Documents',
         formularios: 'Forms', ayuda: 'Help'
@@ -109,7 +109,7 @@
       free: 'Gratuit',
       private: 'Privat',
       nav: {
-        inicio: 'Acasă', plan: 'Planul meu', vias: 'Căi', tramites: 'Proceduri',
+        inicio: 'Acasă', antes: 'Înainte de a emigra', plan: 'Planul meu', vias: 'Căi', tramites: 'Proceduri',
         online: 'Online', preguntas: 'Întrebări', derechos: 'Drepturi',
         directorio: 'Unde să mergi', consulta: 'Consultație IA', docs: 'Documente',
         formularios: 'Formulare', ayuda: 'Ajutor'

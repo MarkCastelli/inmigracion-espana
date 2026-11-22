@@ -34,7 +34,7 @@
     aiLastId: null
   };
 
-  var VIEWS = ['inicio', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'consulta', 'docs', 'formularios', 'ayuda'];
+  var VIEWS = ['inicio', 'antes', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'consulta', 'docs', 'formularios', 'ayuda'];
   var REGION_LABEL = { latam: 'América Latina', ue: 'Unión Europea', eea: 'Espacio Económico Europeo', eu: 'Europa (otros)', africa: 'África', asia: 'Asia', otro: 'Otros países' };
 
   /* Perfil de ejemplo para probar la app sin escribir nada. */
@@ -160,6 +160,7 @@
     $('#globalProgress').hidden = ui.view !== 'diagnostico';
 
     if (ui.view === 'inicio') renderHome();
+    else if (ui.view === 'antes') renderAntes();
     else if (ui.view === 'diagnostico') renderWizard();
     else if (ui.view === 'plan') renderPlan();
     else if (ui.view === 'vias') renderCatalog();
@@ -176,6 +177,36 @@
     window.scrollTo(0, 0);
     var main = $('#main');
     if (main && ui.view !== 'inicio') main.focus({ preventScroll: true });
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     ANTES DE EMIGRAR
+     ══════════════════════════════════════════════════════════ */
+  function renderAntes() {
+    var host = $('#view-antes');
+    var A = RL.antes;
+    if (!A) {
+      host.innerHTML = emptyState('Contenido no disponible', 'No se ha cargado la guía previa a la emigración.', 'Volver al inicio', 'inicio');
+      return;
+    }
+    var html = '<div class="plan-head"><div><p class="eyebrow">' + esc(A.eyebrow) + '</p><h1>' + esc(A.title) + '</h1>' +
+      '<p class="plan-head__sub">' + esc(A.intro) + '</p></div></div>';
+
+    html += '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>Testimonio personal, no una verdad universal</strong><p>' + esc(A.warning) + '</p></div></div>';
+
+    html += '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.check(18) + '<h2>' + esc(A.goodTitle) + '</h2></div><div class="block__body"><ul style="padding-left:18px;font-size:.9rem;color:var(--ink-2)">' +
+      A.good.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div></div>';
+
+    A.sections.forEach(function (s) {
+      html += '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.info(18) + '<h2>' + esc(s.title) + '</h2></div><div class="block__body"><ul style="padding-left:18px;font-size:.9rem;color:var(--ink-2);line-height:1.65">' +
+        s.items.map(function (x) { return '<li style="margin-bottom:9px">' + esc(x) + '</li>'; }).join('') + '</ul></div></div>';
+    });
+
+    html += '<div class="callout callout--info" style="margin-bottom:18px">' + icons.route(18) + '<div><strong>Resumen</strong><p>' + esc(A.closing) + '</p></div></div>';
+    html += '<div class="flex" style="flex-wrap:wrap"><button class="btn btn--primary" data-nav="diagnostico">' + icons.route(15) + ' Empezar mi diagnóstico</button>' +
+      '<button class="btn btn--soft" data-nav="ayuda">' + icons.help(15) + ' Ver recursos y ayuda</button></div>';
+
+    host.innerHTML = html;
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -2545,7 +2576,7 @@
     if (action === 'generate-form') { generateForm(btn); return; }
     if (action === 'listen-view') {
       if (!RL.speech || !RL.speech.supported) { toast('Tu navegador no permite lectura en voz alta.'); return; }
-      var titles = { inicio: 'Inicio', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Formularios', ayuda: 'Ayuda' };
+      var titles = { inicio: 'Inicio', antes: 'Antes de emigrar', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Formularios', ayuda: 'Ayuda' };
       if (ui.view === 'plan' && RL.hasSavedProfile()) {
         RL.speech.speak(RL.speech.buildPlanScript(RL.buildPlan(RL.profile())), 'Tu plan');
       } else {

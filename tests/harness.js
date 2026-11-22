@@ -7,6 +7,7 @@ const vm = require('vm');
 const ROOT = path.resolve(__dirname, '..');
 const FILES = [
   'assets/js/core.js',
+  'assets/js/data/antes.js',
   'assets/js/data/countries.js',
   'assets/js/data/regions.js',
   'assets/js/data/questions.js',
