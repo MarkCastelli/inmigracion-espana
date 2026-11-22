@@ -947,4 +947,25 @@ t('pide la fecha de paso a residencia legal y su base', () => {
   nav(app, 'inicio');
 });
 
+t('el paso final genera un informe profesional con puntos clave', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.applicant.name = 'Ana Pérez';
+  f.applicant.disability = 'si';
+  f.applicant.disabilityDegree = '65_mas';
+  f.applicant.goals = ['nacionalidad'];
+  f.step = 11;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Informe para asesoría legal'));
+  assert.ok(html.includes('Puntos clave'));
+  assert.ok(html.includes('Discapacidad y dependencia'));
+  assert.ok(html.includes('Ana Pérez'));
+  assert.ok(html.includes('65_mas'));
+  assert.ok(html.includes('Nacionalidad española'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

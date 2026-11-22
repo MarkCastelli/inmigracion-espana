@@ -750,3 +750,46 @@ html[dir="rtl"] .plan-head { text-align: right; }
 @media (max-width: 980px) {
   .lang-picker select { max-width: 6.4rem; }
 }
+
+
+/* ── Informe profesional del formulario ─────────────────────── */
+.print-report {
+  background: #fff;
+  color: #172b31;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 34px 38px 30px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+.report-cover { border-bottom: 4px solid #0d4f5c; padding-bottom: 18px; margin-bottom: 20px; }
+.report-kicker { margin: 0 0 6px; color: #0d4f5c; font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.report-cover h1 { margin: 0; font-size: clamp(1.7rem, 4vw, 2.45rem); line-height: 1.1; color: #0d4f5c; }
+.report-sub { margin: 8px 0 0; color: #3d5a60; }
+.report-meta { margin: 12px 0 0; font-size: .84rem; color: #597077; }
+.report-key { background: #f1f7f8; border: 1px solid #cfe1e4; border-radius: 10px; padding: 16px 18px; margin: 18px 0 22px; break-inside: avoid; }
+.report-key h2 { margin: 0 0 10px; font-size: 1.05rem; }
+.report-key__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+.report-key__grid div { border-left: 3px solid #e8863a; padding-left: 10px; }
+.report-key__grid span { display: block; font-size: .72rem; color: #597077; text-transform: uppercase; letter-spacing: .06em; }
+.report-key__grid strong { display: block; font-size: .92rem; color: #172b31; }
+.report-section { margin: 20px 0; }
+.report-section > h2 { color: #0d4f5c; border-bottom: 1px solid #cfe1e4; padding-bottom: 5px; margin-bottom: 10px; }
+.report-person { border-left: 4px solid #e8863a; background: #fbfaf7; padding: 9px 12px; margin: 8px 0; break-inside: avoid; }
+.report-person h3 { margin: 0 0 4px; font-size: 1rem; }
+.report-person p { margin: 0; font-size: .88rem; color: #3d5a60; }
+.report-footer { border-top: 1px solid #cfe1e4; margin-top: 24px; padding-top: 12px; font-size: .76rem; color: #597077; break-inside: avoid; }
+.report-footer p { margin: 0 0 5px; }
+@media print {
+  @page { size: A4; margin: 16mm 15mm; }
+  body { background: #fff !important; color: #111 !important; }
+  .topbar, .skip-link, .lang-notice, .wizard > .plan-head, .wizard > .progress, .wizard__nav, .no-print, .btn { display: none !important; }
+  #view-formulario { padding: 0 !important; max-width: none !important; }
+  .print-report { border: 0 !important; box-shadow: none !important; border-radius: 0 !important; max-width: none !important; padding: 0 !important; }
+  .report-section { break-inside: auto; }
+  .report-key, .report-person, .report-section .block, .report-footer { break-inside: avoid; }
+  .report-section .block { border: 1px solid #d7dde0 !important; box-shadow: none !important; }
+  .report-cover h1 { font-size: 26pt; }
+  .report-section > h2 { font-size: 14pt; }
+}

@@ -500,9 +500,9 @@
     applyCommonGoals(F);
     var step = Math.max(0, Math.min(11, Number(F.step) || 0));
     var total = 12;
-    var html = '<div class="wizard"><div class="plan-head"><div><p class="eyebrow">Formulario · Paso ' + step + ' de 11</p>' +
+    var html = '<div class="wizard"><div class="plan-head no-print"><div><p class="eyebrow">Formulario · Paso ' + step + ' de 11</p>' +
       '<h1>' + fEsc(FORM_TITLES[step]) + '</h1><p class="plan-head__sub">Formulario guiado para ordenar tu caso. Se guarda solo en este dispositivo.</p></div></div>' +
-      '<div class="progress" style="margin-bottom:18px"><span style="display:block;height:100%;width:' + Math.round(step / 11 * 100) + '%"></span></div>';
+      '<div class="progress no-print" style="margin-bottom:18px"><span style="display:block;height:100%;width:' + Math.round(step / 11 * 100) + '%"></span></div>';
 
     if (step === 0) {
       html += '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.user(18) + '<h2>Sobre ti</h2></div><div class="block__body">' +
@@ -677,11 +677,11 @@
     } else if (step === 10) {
       html += formSummaryHTML(F, true);
     } else {
-      html += formSummaryHTML(F, false);
-      html += '<div class="callout callout--info">' + icons.doc(18) + '<div><strong>Documento preparado</strong><p>Revisa el resumen y pulsa imprimir. En el diálogo del navegador elige «Guardar como PDF». Puedes quitar secciones en el paso anterior.</p><button class="btn btn--primary mt-2" type="button" data-form-action="print">Imprimir / guardar PDF</button></div></div>';
+      html += printReportHTML(F);
+      html += '<div class="callout callout--info no-print">' + icons.doc(18) + '<div><strong>Documento preparado</strong><p>Revisa el informe y pulsa imprimir. En el diálogo del navegador elige «Guardar como PDF». Puedes quitar secciones en el paso anterior.</p><button class="btn btn--primary mt-2" type="button" data-form-action="print">Imprimir / guardar PDF</button></div></div>';
     }
 
-    html += '<div class="wizard__nav" style="display:flex;justify-content:space-between;gap:10px;margin-top:18px">' +
+    html += '<div class="wizard__nav no-print" style="display:flex;justify-content:space-between;gap:10px;margin-top:18px">' +
       '<button class="btn btn--ghost" type="button" data-form-action="prev"' + (step === 0 ? ' disabled' : '') + '>Atrás</button>' +
       '<button class="btn btn--primary" type="button" data-form-action="next">' + (step === 11 ? 'Volver a empezar' : 'Siguiente') + '</button></div>';
     html += '</div>';
@@ -758,6 +758,56 @@
       var found = RL.formulario.goals.filter(function (g) { return g.v === v; })[0];
       return found ? found.l : v;
     }).join(', ');
+  }
+
+  function printReportHTML(F) {
+    var people = goalPeople(F);
+    var disabled = people.filter(function (p) { return p.obj.disability === 'si'; });
+    var showDisability = !F.print || F.print.disability !== false;
+    var showGoals = !F.print || F.print.goals !== false;
+    var today = new Date();
+    var dateText = today.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
+    var html = '<div class="print-report">' +
+      '<header class="report-cover"><p class="report-kicker">Ruta Legal · Informe de caso</p>' +
+      '<h1>Informe para asesoría legal</h1>' +
+      '<p class="report-sub">Documento preparado para revisar con un abogado, ONG o servicio de extranjería.</p>' +
+      '<p class="report-meta">' + fEsc(dateText) + ' · ' + (F.mode === 'family' ? 'Grupo familiar' : 'Consulta individual') + ' · ' + fEsc(F.applicant.name || 'Titular sin nombre') + '</p></header>' +
+      '<section class="report-key"><h2>Puntos clave</h2><div class="report-key__grid">' +
+      '<div><span>Discapacidad reconocida</span><strong>' + (!showDisability ? 'Sección omitida' : (disabled.length ? disabled.map(function (p) { return fEsc(p.label); }).join(', ') : 'No consta')) + '</strong></div>' +
+      '<div><span>Objetivo principal</span><strong>' + (!showGoals ? 'Sección omitida' : fEsc(F.commonGoalsOn ? (goalText(F.commonGoals) || 'Sin indicar') : (goalText(F.applicant.goals) || 'Sin indicar'))) + '</strong></div>' +
+      '<div><span>Ingreso neto mensual</span><strong>' + (fnum(fget(F.applicant, 'netSalary')) + (F.mode === 'family' ? fnum(fget(F.spouse, 'netSalary')) : 0)).toFixed(2) + ' €</strong></div>' +
+      '<div><span>Composición</span><strong>' + (F.mode === 'family' ? (1 + (F.members || []).length) + ' personas' : '1 persona') + '</strong></div>' +
+      '</div></section>';
+    if (showDisability) {
+      html += '<section class="report-section"><h2>Discapacidad y dependencia</h2>';
+      if (!disabled.length) {
+        html += '<p>No consta discapacidad reconocida en la información aportada.</p>';
+      } else {
+        disabled.forEach(function (p) {
+          var o = p.obj;
+          html += '<div class="report-person"><h3>' + fEsc(p.label) + '</h3><p><strong>Grado:</strong> ' + fEsc(o.disabilityDegree || 'sin indicar') +
+            ' · <strong>Reconocida:</strong> ' + fEsc(o.disabilityRecognized || 'sin indicar') +
+            ' · <strong>Dependencia:</strong> ' + fEsc(o.dependency || 'sin indicar') +
+            ' · <strong>Vencimiento:</strong> ' + fEsc(o.disabilityExpiryStatus === 'no' ? 'No caduca' : (o.disabilityExpiry || 'sin indicar')) + '</p></div>';
+        });
+      }
+      html += '</section>';
+    }
+    if (showGoals) {
+      html += '<section class="report-section"><h2>Objetivos</h2>';
+      if (F.commonGoalsOn && F.mode === 'family') {
+        html += '<p><strong>Objetivos comunes:</strong> ' + fEsc(goalText(F.commonGoals) || 'Sin indicar') + '</p>';
+      }
+      people.forEach(function (p) {
+        var goals = goalText(fget(p.obj, 'goals'));
+        if (goals) html += '<p><strong>' + fEsc(p.label) + ':</strong> ' + fEsc(goals) + '</p>';
+      });
+      html += '</section>';
+    }
+    html += '<section class="report-section">' + formSummaryHTML(F, false) + '</section>' +
+      '<footer class="report-footer"><p>Este informe recoge la información aportada por la persona solicitante. No es asesoramiento jurídico ni una garantía de concesión. La valoración legal corresponde a un abogado o entidad especializada.</p><p>Ruta Legal · documento generado en el dispositivo · ' + fEsc(dateText) + '</p></footer>' +
+      '</div>';
+    return html;
   }
 
   function formSummaryHTML(F, editable) {
