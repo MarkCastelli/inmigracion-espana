@@ -19,9 +19,9 @@
       keywords: 'vivir en España, inmigrar a España, experiencia inmigrante, trabajo en España, alquiler España, coste de vida, Galicia'
     },
     diagnostico: {
-      title: 'Diagnóstico de residencia en España | Ruta Legal',
-      description: 'Responde unas preguntas y ordena tu caso: residencia, arraigo, nacionalidad, asilo, familia, trabajo y documentos. Informe gratuito para revisar con un abogado.',
-      keywords: 'diagnóstico extranjería, residencia España, arraigo, nacionalidad, asilo, reagrupación familiar'
+      title: 'Prepara tu informe para un abogado | Ruta Legal',
+      description: 'Completa el formulario y descarga un informe con tus datos, familia, residencia, trabajo y objetivos para revisar con un abogado o entidad. No evaluamos tu caso.',
+      keywords: 'informe extranjería, preparar consulta, abogado inmigración, residencia España'
     },
     formulario: {
       title: 'Formulario de caso para inmigración en España | Ruta Legal',
