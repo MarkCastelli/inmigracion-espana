@@ -1102,4 +1102,24 @@ t('al volver al formulario completado abre el documento final', () => {
   nav(app, 'inicio');
 });
 
+t('los campos del formulario se traducen sin tocar el PDF', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.i18n.setLang('fr');
+  nav(app, 'formulario');
+  let html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Nom et prénoms'));
+  assert.ok(html.includes('Un individu'));
+  assert.ok(html.includes('Groupe familial'));
+  RL.state.profile.formulario.applicant.name = 'Ana';
+  RL.state.profile.formulario.step = 11;
+  RL.ui.render();
+  html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Informe para asesoría legal'), 'el PDF debe seguir en español');
+  assert.ok(!html.includes('Rapport pour'), 'no debe traducir el informe');
+  RL.i18n.setLang('es');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

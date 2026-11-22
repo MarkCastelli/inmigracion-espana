@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **212 pruebas pasando**.
+- **213 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -128,6 +128,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 98. **Formulario completado**: se guarda `completed` al llegar al paso 11; al pulsar de nuevo «Formulario» se abre directamente el Documento final, salvo que se haya reiniciado.
 99. **Menú en una fila**: etiquetas compactas (Experiencia, Plan, FAQ, IA, Docs) y espaciado reducido; las 14 opciones caben en una sola fila en escritorio y solo envuelven en móvil.
 100. **Auditoría de vías (22/11/2026)**: cada ficha muestra una «Fuente oficial principal»; se corrigieron arraigo social (medios + informe), regularización 2026 (5 meses antes de solicitar), nómada digital (no es la única vía), umbral PAC y se retiró una afirmación no verificada sobre el voto CERA. Se contrastaron BOE, Ministerios de Inclusión, Justicia, Interior y Exteriores.
+101. **Formulario multilingüe**: etiquetas y opciones del formulario traducidas a francés, inglés, árabe y rumano; el informe/PDF sigue siempre en español. Ayuda con instrucciones de traducción del navegador en cinco idiomas y aviso de no traducir el PDF.
 
 ## Comandos
 

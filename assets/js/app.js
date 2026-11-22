@@ -62,6 +62,9 @@
      ARRANQUE
      ══════════════════════════════════════════════════════════ */
   document.addEventListener('DOMContentLoaded', init);
+  if (typeof window.addEventListener === 'function') {
+    window.addEventListener('rl:langchange', function () { render(); });
+  }
 
   function init() {
     RL.store.load();
@@ -235,32 +238,33 @@
 
   function fEsc(v) { return esc(v == null ? '' : v); }
   function fnum(v) { var n = Number(v); return isFinite(n) ? n : 0; }
+  function fT(v) { return RL.formText ? RL.formText(v) : v; }
 
   function fInput(path, label, value, type, placeholder) {
-    return '<label class="field"><span class="field__label">' + fEsc(label) + '</span>' +
-      '<input class="input" type="' + (type || 'text') + '" data-fpath="' + fEsc(path) + '" value="' + fEsc(value) + '" placeholder="' + fEsc(placeholder || '') + '"></label>';
+    return '<label class="field"><span class="field__label">' + fEsc(fT(label)) + '</span>' +
+      '<input class="input" type="' + (type || 'text') + '" data-fpath="' + fEsc(path) + '" value="' + fEsc(value) + '" placeholder="' + fEsc(fT(placeholder || '')) + '"></label>';
   }
 
   function fSelect(path, label, value, options) {
-    return '<label class="field"><span class="field__label">' + fEsc(label) + '</span>' +
+    return '<label class="field"><span class="field__label">' + fEsc(fT(label)) + '</span>' +
       '<select class="select" data-fpath="' + fEsc(path) + '">' +
-      options.map(function (o) { return '<option value="' + fEsc(o.v) + '"' + (String(value) === String(o.v) ? ' selected' : '') + '>' + fEsc(o.l) + '</option>'; }).join('') +
+      options.map(function (o) { return '<option value="' + fEsc(o.v) + '"' + (String(value) === String(o.v) ? ' selected' : '') + '>' + fEsc(fT(o.l)) + '</option>'; }).join('') +
       '</select></label>';
   }
 
   function fRadio(path, label, value, options) {
-    return '<fieldset class="field"><legend class="field__label">' + fEsc(label) + '</legend>' +
+    return '<fieldset class="field"><legend class="field__label">' + fEsc(fT(label)) + '</legend>' +
       '<div class="option-list">' + options.map(function (o) {
-        return '<label class="option"><input type="radio" name="' + fEsc(path) + '" data-fpath="' + fEsc(path) + '" value="' + fEsc(o.v) + '"' + (String(value) === String(o.v) ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">' + fEsc(o.l) + '</span></span></label>';
+        return '<label class="option"><input type="radio" name="' + fEsc(path) + '" data-fpath="' + fEsc(path) + '" value="' + fEsc(o.v) + '"' + (String(value) === String(o.v) ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">' + fEsc(fT(o.l)) + '</span></span></label>';
       }).join('') + '</div></fieldset>';
   }
 
   function fChecks(path, label, values, options) {
     var arr = Array.isArray(values) ? values : [];
-    return '<fieldset class="field"><legend class="field__label">' + fEsc(label) + '</legend>' +
+    return '<fieldset class="field"><legend class="field__label">' + fEsc(fT(label)) + '</legend>' +
       '<div class="option-list">' + options.map(function (o) {
         var on = arr.indexOf(o.v) !== -1;
-        return '<label class="option option--check"><input type="checkbox" data-fgroup="' + fEsc(path) + '" value="' + fEsc(o.v) + '"' + (on ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">' + fEsc(o.l) + '</span></span></label>';
+        return '<label class="option option--check"><input type="checkbox" data-fgroup="' + fEsc(path) + '" value="' + fEsc(o.v) + '"' + (on ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">' + fEsc(fT(o.l)) + '</span></span></label>';
       }).join('') + '</div></fieldset>';
   }
 
@@ -506,7 +510,7 @@
     var step = Math.max(0, Math.min(11, Number(F.step) || 0));
     var total = 12;
     var html = '<div class="wizard"><div class="plan-head no-print"><div><p class="eyebrow">Formulario · Paso ' + step + ' de 11</p>' +
-      '<h1>' + fEsc(FORM_TITLES[step]) + '</h1><p class="plan-head__sub">Formulario guiado para ordenar tu caso. Se guarda solo en este dispositivo.</p></div></div>' +
+      '<h1>' + fEsc(fT(FORM_TITLES[step])) + '</h1><p class="plan-head__sub">Formulario guiado para ordenar tu caso. Se guarda solo en este dispositivo.</p></div></div>' +
       '<div class="progress no-print" style="margin-bottom:18px"><span style="display:block;height:100%;width:' + Math.round(step / 11 * 100) + '%"></span></div>';
 
     if (step === 0) {
@@ -532,8 +536,8 @@
 
       html += '<div class="block"><div class="block__head">' + icons.family(18) + '<h2>Consulta para un individuo o grupo familiar</h2></div><div class="block__body">' +
         '<div class="option-list">' +
-        '<label class="option"><input type="radio" name="form-mode" data-fpath="mode" value="individual"' + (F.mode === 'individual' ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">Un individuo</span></span></label>' +
-        '<label class="option"><input type="radio" name="form-mode" data-fpath="mode" value="family"' + (F.mode === 'family' ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">Grupo familiar</span></span></label>' +
+        '<label class="option"><input type="radio" name="form-mode" data-fpath="mode" value="individual"' + (F.mode === 'individual' ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">' + fEsc(fT('Un individuo')) + '</span></span></label>' +
+        '<label class="option"><input type="radio" name="form-mode" data-fpath="mode" value="family"' + (F.mode === 'family' ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">' + fEsc(fT('Grupo familiar')) + '</span></span></label>' +
         '</div>';
       if (F.mode === 'family') {
         html += '<div style="margin-top:18px"><h3>Cantidad de integrantes</h3>' +
@@ -3470,11 +3474,22 @@
 
     html += '</div>';
 
-    html += '<div class="block mt-3"><div class="block__head">' + icons.globe(18) + '<h2>Traducir el contenido largo</h2></div><div class="block__body">' +
-      '<p>La interfaz tiene selector de idioma. Las guías y fichas legales largas siguen en español para no dar una traducción automática por buena. Puedes usar la traducción del navegador para entenderlas, pero:</p>' +
-      '<div class="callout callout--info">' + icons.info(18) + '<div><strong>La web no puede activar la traducción del navegador</strong><p>No existe un botón web estándar que diga a Chrome, Edge, Firefox o Safari «traduce esta página». Es una función del navegador y la controla el usuario. En Chrome/Edge puedes activar <strong>«Traducir siempre el español a [tu idioma]»</strong>; el navegador recordará la preferencia para este sitio. Si cambias de pantalla, puede que tengas que volver a pulsar traducir.</p></div></div>' +
-      '<ul style="padding-left:18px;font-size:.88rem;color:var(--ink-2)"><li>No la uses si el informe muestra tu nombre, NIE, familia o situación personal: el texto puede enviarse al proveedor del navegador.</li><li>Vuelve a traducir si cambias de pantalla; la app vuelve a pintar contenido en español.</li><li>Confirma fechas, tasas y nombres de trámites en la sede oficial: una traducción automática puede confundir términos legales.</li></ul>' +
-      '<p class="muted" style="font-size:.8rem">En Chrome/Edge: clic derecho → Traducir. En Firefox/Safari: botón de traducción del navegador.</p></div></div>';
+    html += '<div class="block mt-3" id="como-traducir"><div class="block__head">' + icons.globe(18) + '<h2>Cómo traducir esta página con tu navegador</h2></div><div class="block__body">' +
+      '<p><strong>Los campos del formulario se traducen al cambiar el idioma.</strong> Las fichas legales largas, las ayudas y el informe final siguen en español. <strong>El PDF se genera siempre en español</strong>, porque lo normal es que lo revise un abogado o una entidad española.</p>' +
+      '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>El PDF no se traduce</strong><p>No uses la traducción automática para leer el informe que vas a entregar: puede cambiar nombres, fechas, tasas o términos jurídicos. Si no entiendes el español, pide a un intérprete o a una entidad que te acompañe.</p></div></div>' +
+      '<p><strong>Para traducir el resto de la página:</strong></p>' +
+      '<ol style="padding-left:20px;font-size:.9rem;color:var(--ink-2)"><li><strong>Chrome o Edge:</strong> pulsa el icono de traducción de la barra de direcciones o haz clic derecho → <em>Traducir</em>. Puedes elegir <em>Traducir siempre el español</em>.</li>' +
+      '<li><strong>Firefox:</strong> icono de traducción en la barra de direcciones o clic derecho → <em>Traducir página</em>. Si no aparece, instala el idioma desde los ajustes.</li>' +
+      '<li><strong>Safari:</strong> menú <em>Visualización → Traducir</em> o el icono de traducción en la barra de direcciones.</li>' +
+      '<li><strong>Móvil:</strong> menú ⋮ o ⋯ → <em>Traducir</em>. En iPhone, comparte la página y elige traducción.</li></ol>' +
+      '<div class="callout callout--info">' + icons.info(18) + '<div><strong>La web no puede activar la traducción del navegador</strong><p>No existe un botón web estándar para ordenar a Chrome, Edge, Firefox o Safari que traduzcan la página. Es una función del navegador y la controla el usuario. Si cambias de pantalla, puede que tengas que volver a pulsar traducir.</p></div></div>' +
+      '<details class="accordion"><summary>Instructions en français, English, العربية et română</summary><div class="accordion__body">' +
+      '<p><strong>Français :</strong> les champs du formulaire sont traduits. Les fiches juridiques longues et le PDF restent en espagnol. Pour traduire le reste : clic droit → Traduire dans Chrome/Edge, ou icône de traduction dans Firefox/Safari. Ne te fie pas à la traduction automatique du PDF : demande un interprète.</p>' +
+      '<p><strong>English:</strong> the form fields are translated. Long legal guides and the PDF remain in Spanish. To translate the rest, use the browser translation icon or right-click → Translate. Do not rely on automatic translation for the PDF; ask an interpreter if needed.</p>' +
+      '<p dir="rtl"><strong>العربية:</strong> حقول النموذج مترجمة. الأدلة القانونية الطويلة وملف PDF تبقى بالإسبانية. لترجمة بقية الصفحة استخدم أيقونة الترجمة في المتصفح أو انقر بزر الفأرة الأيمن ثم «ترجمة». لا تعتمد على الترجمة الآلية لملف PDF.</p>' +
+      '<p><strong>Română:</strong> câmpurile formularului sunt traduse. Ghidurile juridice lungi și PDF-ul rămân în spaniolă. Pentru restul paginii folosește pictograma de traducere din browser sau clic dreapta → Tradu. Nu te baza pe traducerea automată a PDF-ului.</p>' +
+      '</div></details>' +
+      '<p class="muted" style="font-size:.8rem">No traduzcas el informe si contiene tu nombre, NIE, familia o datos de salud: la traducción puede enviar el texto al proveedor del navegador.</p></div></div>';
 
     html += '<div class="block mt-3"><div class="block__head">' + icons.ext(18) + '<h2>Canales de YouTube</h2></div><div class="block__body">' +
       '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>Recomendados por esta página, no asesoramiento oficial</strong>' +

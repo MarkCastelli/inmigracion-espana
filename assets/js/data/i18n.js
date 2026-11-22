@@ -36,7 +36,7 @@
       noticeTitle: 'Esto es una ayuda, no asesoramiento jurídico.',
       noticeText: 'No garantizamos que sea ni el mejor ni el único camino: hacemos lo posible por acercarnos a tu caso, pero la normativa cambia y cada expediente tiene matices. Antes de presentar nada, confirma en la fuente oficial y consulta con un abogado de extranjería o una entidad social. <a href="#/ayuda" data-nav="ayuda">Ver recursos gratuitos y aviso legal</a>.',
       langNoticeTitle: 'Interfaz en español',
-      langNoticeText: 'Las guías y fichas legales detalladas están en español. Puedes usar la traducción del navegador para el texto largo, pero no la uses si el informe muestra datos personales.'
+      langNoticeText: 'Los campos del formulario se traducen al cambiar de idioma. Las fichas legales largas y el PDF siguen en español para que los revise un abogado o entidad española. Puedes usar la traducción del navegador para el resto del texto, pero no para el informe final.'
     },
     ar: {
       tagline: 'إسبانيا، خطوة بخطوة',
@@ -80,7 +80,7 @@
       noticeTitle: "Ceci est une aide, pas un conseil juridique.",
       noticeText: "Nous ne garantissons pas que ce soit la meilleure ou la seule voie : nous faisons de notre mieux pour nous approcher de votre cas, mais la norme change et chaque dossier a ses nuances. Avant de présenter quoi que ce soit, vérifiez la source officielle et consultez un avocat en immigration ou une association. <a href=\"#/ayuda\" data-nav=\"ayuda\">Ressources gratuites et mentions légales</a>.",
       langNoticeTitle: "Interface en français",
-      langNoticeText: "Les guides et fiches juridiques détaillés sont encore en espagnol. Vous pouvez utiliser la traduction du navigateur pour les textes longs, mais pas si le rapport contient des données personnelles."
+      langNoticeText: "Les champs du formulaire sont traduits. Les fiches juridiques longues et le PDF restent en espagnol pour être relus par un professionnel espagnol. Vous pouvez utiliser la traduction du navigateur pour le reste, mais pas pour le rapport final."
     },
     en: {
       tagline: 'Spain, step by step',
@@ -102,7 +102,7 @@
       noticeTitle: 'This is help, not legal advice.',
       noticeText: 'We do not guarantee that this is the best or the only route: we do our best to get close to your case, but rules change and every file has nuances. Before submitting anything, check the official source and consult an immigration lawyer or a social organisation. <a href="#/ayuda" data-nav="ayuda">Free resources and legal notice</a>.',
       langNoticeTitle: 'Interface in English',
-      langNoticeText: 'Detailed legal guides and cards are still in Spanish. You can use browser translation for long text, but not if the report shows personal data.'
+      langNoticeText: 'Form fields are translated. Long legal guides and the PDF remain in Spanish so a Spanish lawyer or organisation can review them. You can use browser translation for the rest, but not for the final report.'
     },
     ro: {
       tagline: 'Spania, pas cu pas',
