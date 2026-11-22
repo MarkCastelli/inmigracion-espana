@@ -120,6 +120,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 90. **Transporte, varios y créditos**: el titular carga transporte, gastos varios (ropa, extras, salidas) y el total mensual de créditos/compras a plazos; se suman al gasto del hogar y aparecen en el informe.
 91. **Hipoteca o alquiler**: el resumen y las páginas del informe muestran “Hipoteca” o “Alquiler” según el tipo de vivienda declarado, no una etiqueta genérica.
 92. **Mi plan desde el formulario**: si hay datos en `formulario`, “Mi plan” muestra el informe generado con ellos (paginado, con discapacidad y objetivos) en vez del perfil antiguo del diagnóstico.
+93. **Documentos claros**: el paso 2 explica que no se suben archivos ni se consulta la Administración; solo se marca lo que ya se tiene para preparar el informe y la revisión del abogado.
 
 ## Comandos
 

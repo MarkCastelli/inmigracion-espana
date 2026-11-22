@@ -375,7 +375,8 @@
 
   function documentsBlock(obj, prefix) {
     var F = RL.formulario;
-    return fChecks(prefix + '.docs', 'Documentos y credenciales que tienes', fget(obj, 'docs'), F.docs) +
+    return fChecks(prefix + '.docs', 'Marca los documentos que ya tienes', fget(obj, 'docs'), F.docs) +
+      '<p class="field__help">No subas fotos ni números. Esta lista solo indica qué tienes para que el informe y el abogado sepan qué falta.</p>' +
       fRadio(prefix + '.aidReceived', '¿Recibes alguna ayuda?', fget(obj, 'aidReceived'), F.yesNo) +
       (fget(obj, 'aidReceived') === 'si' ? fChecks(prefix + '.aidTypes', '¿Qué ayudas recibes?', fget(obj, 'aidTypes'), F.aidTypes) : '');
   }
@@ -561,7 +562,9 @@
         (fget(F.applicant, 'asylumRequested') === 'si' ? '<p class="field__help">Completarás año, estado y fecha en el paso «Asilo del titular».</p>' : '') +
         '</div></div>';
     } else if (step === 2) {
-      html += '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Situación actual</h2></div><div class="block__body">' + documentsBlock(F.applicant, 'applicant') + '</div></div>';
+      html += '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Situación actual</h2></div><div class="block__body">' +
+        '<div class="callout callout--info">' + icons.info(16) + '<div><strong>Esto no es una subida de documentos</strong><p>Marca solo lo que ya tienes. La app no se conecta a la Administración ni comprueba tus datos. Sirve para preparar el informe y saber qué debe revisar el abogado.</p></div></div>' +
+        documentsBlock(F.applicant, 'applicant') + '</div></div>';
     } else if (step === 3) {
       html += '<div class="block"><div class="block__head">' + icons.shield(18) + '<h2>Asilo del titular</h2></div><div class="block__body">' +
         (fget(F.applicant, 'asylumRequested') === 'si'
