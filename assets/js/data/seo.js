@@ -102,6 +102,11 @@
       title: 'Publicar tu despacho en Abogados | Ruta Legal',
       description: 'Solicita aparecer en el directorio de abogados de Ruta Legal. Publicación gratuita si atiendes con aportación voluntaria; 20 €/mes (240 €/año) si cobras por tus servicios.',
       keywords: 'publicar abogado, directorio abogados, extranjería, publicar despacho'
+    },
+    'abogados-gracias': {
+      title: 'Solicitud enviada | Ruta Legal',
+      description: 'Hemos recibido tu solicitud para aparecer en el directorio de abogados de Ruta Legal.',
+      keywords: 'solicitud enviada, abogados, Ruta Legal'
     }
   };
 

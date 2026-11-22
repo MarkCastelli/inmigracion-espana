@@ -37,7 +37,7 @@
     lawyerSort: 'az'
   };
 
-  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'abogados', 'abogados-alta', 'consulta', 'docs', 'formularios', 'donar', 'ayuda', 'legal'];
+  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'abogados', 'abogados-alta', 'abogados-gracias', 'consulta', 'docs', 'formularios', 'donar', 'ayuda', 'legal'];
   var REGION_LABEL = { latam: 'América Latina', ue: 'Unión Europea', eea: 'Espacio Económico Europeo', eu: 'Europa (otros)', africa: 'África', asia: 'Asia', otro: 'Otros países' };
 
   /* Perfil de ejemplo para probar la app sin escribir nada. */
@@ -195,6 +195,7 @@
     else if (ui.view === 'directorio') renderDirectorio();
     else if (ui.view === 'abogados') renderAbogados();
     else if (ui.view === 'abogados-alta') renderAbogadosAlta();
+    else if (ui.view === 'abogados-gracias') renderAbogadosGracias();
     else if (ui.view === 'consulta') renderConsulta();
     else if (ui.view === 'docs') renderDocs();
     else if (ui.view === 'formularios') renderFormularios();
@@ -3647,7 +3648,7 @@
       '<label class="field"><span class="field__label">Idiomas de atención</span><input class="input" name="idiomas" placeholder="Ej. español, francés, árabe, inglés"></label>' +
       '<label class="field field--full"><span class="field__label">Observaciones</span><textarea class="textarea" name="mensaje" rows="4"></textarea></label>' +
       '<label class="option option--check field--full" style="margin-top:10px"><input type="checkbox" name="consentimiento" required><span class="option__box"></span><span class="option__body"><span class="option__label">Declaro que soy abogado/a colegiado/a, que los datos son ciertos y acepto la <a href="#/legal">política de privacidad</a>. No incluyo datos de clientes.</span></span></label>' +
-      '<div class="field--full"><button class="btn btn--primary" type="submit">Enviar solicitud</button><p id="lawyerFormStatus" class="muted" role="status" style="margin:10px 0 0"></p></div>' +
+      '<div class="field--full lawyer-submit"><button class="btn btn--primary" type="submit">Enviar solicitud</button><p id="lawyerFormStatus" class="muted" role="status" style="margin:10px 0 0"></p></div>' +
       '</form></div></div>';
     html += '<div class="callout callout--info mt-3"><div><strong>Cómo se envía</strong><p>El formulario se envía por correo al responsable mediante un servicio de formularios. La dirección de destino no se muestra en la página. No incluyas datos de clientes, documentos, NIE ni información de salud.</p></div></div>';
     host.innerHTML = html;
@@ -3676,12 +3677,23 @@
         body: JSON.stringify(payload)
       }).then(function (r) {
         if (!r.ok) throw new Error('Error de envío');
-        if (status) status.textContent = 'Solicitud enviada. Te contactaré para revisar los datos y, si corresponde, enviarte el enlace de pago.';
+        if (status) status.textContent = 'Solicitud enviada.';
         form.reset();
+        go('abogados-gracias');
+        window.scrollTo(0, 0);
       }).catch(function () {
         if (status) status.textContent = 'No se pudo enviar. Inténtalo más tarde o contacta desde el repositorio de GitHub.';
       });
     });
+  }
+
+  function renderAbogadosGracias() {
+    var host = $('#view-abogados-gracias');
+    host.innerHTML = '<div class="thanks-card"><div class="thanks-icon" aria-hidden="true">' + icons.check(28) + '</div>' +
+      '<p class="eyebrow">Solicitud recibida</p><h1>Gracias por querer formar parte</h1>' +
+      '<p>Su formulario fue enviado correctamente. En breve nos pondremos en contacto con usted en el correo electrónico indicado para revisar la solicitud.</p>' +
+      '<p class="muted">No se ha realizado ningún pago. Si corresponde una publicación de pago, recibirá el enlace después de la revisión.</p>' +
+      '<div class="flex" style="justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px"><a class="btn btn--primary" href="#/abogados">Volver a Abogados</a><a class="btn btn--soft" href="#/inicio">Ir al inicio</a></div></div>';
   }
 
   function renderLegal() {
@@ -3973,7 +3985,7 @@
     if (action === 'generate-form') { generateForm(btn); return; }
     if (action === 'listen-view') {
       if (!RL.speech || !RL.speech.supported) { toast('Tu navegador no permite lectura en voz alta.'); return; }
-      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', abogados: 'Abogados', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', donar: 'Donar', ayuda: 'Ayuda', legal: 'Aviso legal y privacidad' };
+      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', abogados: 'Abogados', 'abogados-alta': 'Publicar en Abogados', 'abogados-gracias': 'Solicitud enviada', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', donar: 'Donar', ayuda: 'Ayuda', legal: 'Aviso legal y privacidad' };
       if (ui.view === 'plan' && RL.hasSavedProfile()) {
         RL.speech.speak(RL.speech.buildPlanScript(RL.buildPlan(RL.profile())), 'Tu plan');
       } else {

@@ -1194,4 +1194,14 @@ t('el alta de abogados muestra tarifas y formulario sin publicar el correo', () 
   nav(app, 'inicio');
 });
 
+t('la página de gracias confirma el envío con un mensaje formal', () => {
+  nav(app, 'abogados-gracias');
+  const html = app.document.querySelector('#view-abogados-gracias').innerHTML;
+  assert.ok(html.includes('Gracias por querer formar parte'));
+  assert.ok(html.includes('Su formulario fue enviado correctamente'));
+  assert.ok(html.includes('En breve nos pondremos en contacto'));
+  assert.ok(html.includes('No se ha realizado ningún pago'));
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

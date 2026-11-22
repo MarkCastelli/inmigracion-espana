@@ -968,3 +968,11 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 .lawyer-tools .select { min-height: 42px; }
 .lawyer-card { border-left: 3px solid #d9a441; padding-left: 12px; }
 @media (max-width: 700px) { .lawyer-tools { grid-template-columns: 1fr; } }
+
+
+/* ── Alta de abogados: separación y gracias ─────────────────── */
+.lawyer-submit { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+.thanks-card { max-width: 680px; margin: 40px auto; padding: 34px 28px; text-align: center; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+.thanks-icon { width: 58px; height: 58px; margin: 0 auto 12px; display: grid; place-items: center; border-radius: 50%; background: #e8f7ef; color: #1d7a4c; }
+.thanks-card h1 { margin: 4px 0 12px; color: var(--brand); font-size: clamp(1.7rem, 4vw, 2.3rem); }
+.thanks-card p { color: var(--ink-2); line-height: 1.65; }
