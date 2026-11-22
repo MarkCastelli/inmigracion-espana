@@ -187,8 +187,8 @@
     if (tagline) tagline.textContent = s.tagline;
     var free = document.querySelector('.pill--free');
     if (free) free.textContent = s.free;
-    var priv = document.querySelector('.pill--private');
-    if (priv) textNode(priv, ' ' + s.private);
+    var priv = document.querySelector('.pill--private .pill__label');
+    if (priv) priv.textContent = s.private;
 
     var eyebrow = document.querySelector('.hero .eyebrow');
     if (eyebrow) eyebrow.textContent = s.heroEyebrow;
