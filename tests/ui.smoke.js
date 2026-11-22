@@ -851,4 +851,26 @@ t('datos personales identifica al titular y pregunta por asilo', () => {
   nav(app, 'inicio');
 });
 
+t('discapacidad identifica a cada integrante por su nombre', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 2;
+  f.applicant.name = 'Ana';
+  f.applicant.disability = 'si';
+  f.members = [{ name: 'Luis', age: '10', relation: 'hijo_comun', data: RL.formulario.person() }];
+  f.children = [RL.formulario.person()];
+  f.children[0].name = 'Luis';
+  f.children[0].disability = 'si';
+  f.step = 7;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Ana'));
+  assert.ok(html.includes('Luis'));
+  assert.ok(html.includes('Datos de discapacidad y dependencia de:'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

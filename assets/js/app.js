@@ -548,15 +548,15 @@
       html += '</div></div>';
     } else if (step === 7) {
       html += '<div class="block"><div class="block__head">' + icons.shield(18) + '<h2>Discapacidad y dependencia</h2></div><div class="block__body">';
-      var members = [{ key: 'applicant', label: 'Titular', obj: F.applicant }];
-      if (F.mode === 'family') members.push({ key: 'spouse', label: 'Pareja', obj: F.spouse });
-      F.children.forEach(function (ch, i) { members.push({ key: 'children.' + i, label: 'Hijo/a ' + (i + 1), obj: ch }); });
-      (F.members || []).forEach(function (m, i) { members.push({ key: 'members.' + i + '.data', label: m.name || ('Integrante ' + (i + 1)), obj: m.data || {} }); });
+      var members = [{ key: 'applicant', label: F.applicant.name || 'Titular', role: 'Titular', obj: F.applicant }];
+      if (F.mode === 'family') members.push({ key: 'spouse', label: F.spouse.name || 'Pareja', role: 'Pareja', obj: F.spouse });
+      F.children.forEach(function (ch, i) { members.push({ key: 'children.' + i, label: ch.name || ('Hijo/a ' + (i + 1)), role: 'Hijo/a', obj: ch }); });
+      (F.members || []).forEach(function (m, i) { members.push({ key: 'members.' + i + '.data', label: m.name || ('Integrante ' + (i + 1)), role: m.relation || 'Integrante', obj: m.data || {} }); });
       var any = false;
       members.forEach(function (m) {
         if (fget(m.obj, 'disability') !== 'si') return;
         any = true;
-        html += '<div class="family-child"><h3>' + fEsc(m.label) + '</h3><div class="form-grid">' +
+        html += '<div class="family-child"><h3>' + fEsc(m.label) + '</h3><p class="muted">Datos de discapacidad y dependencia de: ' + fEsc(m.role) + '</p><div class="form-grid">' +
           fRadio(m.key + '.disabilityRecognized', '¿Reconocida en España?', fget(m.obj, 'disabilityRecognized'), RL.formulario.yesNo) +
           fInput(m.key + '.disabilityDegree', 'Nivel concedido', fget(m.obj, 'disabilityDegree'), 'text', '33 %, 45 %, 65 %…') +
           fSelect(m.key + '.disabilityExpiryStatus', '¿El certificado tiene vencimiento?', fget(m.obj, 'disabilityExpiryStatus'), [
@@ -663,14 +663,14 @@
     var exp = mortgage > 0 ? mortgage : housing;
     ['luz', 'agua', 'gas', 'comunidad', 'internet'].forEach(function (k) { exp += fnum(fget(F.applicant, 'expenses.' + k)); });
     var balance = income - exp;
-    var members = [{ key: 'applicant', label: 'Titular', obj: F.applicant }];
+    var members = [{ key: 'applicant', label: F.applicant.name || 'Titular', obj: F.applicant }];
     var childMeta = [];
     if (F.mode === 'family') {
-      members.push({ key: 'spouse', label: 'Pareja', obj: F.spouse });
+      members.push({ key: 'spouse', label: F.spouse.name || 'Pareja', obj: F.spouse });
       childMeta = (F.members || []).filter(function (m) {
         return ['hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1;
       });
-      F.children.forEach(function (ch, i) { members.push({ key: 'children.' + i, label: 'Hijo/a ' + (i + 1), obj: ch }); });
+      F.children.forEach(function (ch, i) { members.push({ key: 'children.' + i, label: ch.name || ('Hijo/a ' + (i + 1)), obj: ch }); });
     }
     var html = '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Resumen del caso</h2></div><div class="block__body">';
     if (editable) {

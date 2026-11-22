@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **198 pruebas pasando**.
+- **199 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -104,6 +104,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 74. **Objetivos comunes**: si se marca «Objetivos comunes para todo el grupo familiar», se eligen una vez y se aplican a todos; al desmarcar vuelven los objetivos individuales.
 75. **Tipo de contrato**: se distingue indefinido, temporal, fijo-discontinuo, autónomo, sin contrato u otro; si es temporal se pide fecha de vencimiento y se muestra en el resumen.
 76. **Titular y asilo**: el paso 1 se llama «Datos personales del titular o jefe de familia» y pregunta si solicitó asilo; el paso 3 solo amplía los detalles si la respuesta es sí.
+77. **Discapacidad identificada**: cada bloque del paso 7 muestra el nombre y el rol (titular, pareja, hijo/a u otro) de la persona cuyos datos se están cargando.
 
 ## Comandos
 
