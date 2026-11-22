@@ -3919,6 +3919,7 @@
       <p>Ruta Legal no comparte los datos del formulario con terceros. El sitio se aloja en <strong>GitHub Pages</strong> (GitHub, Inc./Microsoft), que puede registrar datos técnicos como la dirección IP, la fecha y el navegador en sus registros de servidor. GitHub puede tratar esos datos fuera del Espacio Económico Europeo al amparo de sus garantías contractuales; consulta la <a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">política de privacidad de GitHub</a>.</p>
       <p>Cuando pulsas un enlace externo (BOE, ministerios, ONG, YouTube, DeepSeek, etc.), pasas al servicio de ese tercero y se aplican sus propias políticas. La app no controla esos sitios.</p>
       <p><strong>Formulario de alta de abogados:</strong> si eres abogado/a y envías la solicitud, los datos del formulario se transmiten a <strong>FormSubmit</strong> y se reenvían por correo al responsable para revisar la publicación y, si corresponde, enviarte el enlace de pago. La base jurídica es tu consentimiento y la finalidad es gestionar tu solicitud. No incluyas datos de clientes, documentos, NIE ni información de salud. Puedes solicitar la supresión escribiendo al canal de contacto.</p>
+      <p><strong>Formulario de feedback:</strong> el asunto, el contenido y la página desde la que envías la incidencia se transmiten a FormSubmit y se reenvían por correo al responsable para corregir errores o enlaces caídos. No incluyas datos personales, de salud ni documentación; este canal no es para consultas legales.</p>
 
       <h2>8. Cookies y almacenamiento local</h2>
       <p>Esta web <strong>no utiliza cookies publicitarias, píxeles de seguimiento ni herramientas de analítica</strong>. Usa almacenamiento local estrictamente necesario para recordar tus respuestas, el idioma, el tema y la preferencia de ayudas. Al no haber cookies no esenciales, no se muestra un banner de consentimiento de cookies. Puedes borrar el almacenamiento local desde la propia app o desde la configuración del navegador.</p>
@@ -3972,8 +3973,9 @@
       '<p class="muted" style="font-size:.8rem">El destinatario está oculto por seguridad. Al pulsar «Abrir correo» se abrirá tu aplicación de correo con la dirección ya puesta.</p>' +
       '<div class="field"><label class="field__label" for="feedbackSubject">Asunto</label><input class="input" id="feedbackSubject" value="Problema o error en Ruta Legal"></div>' +
       '<div class="field"><label class="field__label" for="feedbackBody">Contenido</label><textarea class="textarea" id="feedbackBody" rows="7">Hola:\n\nHe encontrado un problema en Ruta Legal.\n\nPágina: ' + esc(location.href) + '\n\nDescripción del error o enlace caído:\n</textarea></div>' +
-      '<p class="muted" style="font-size:.78rem">Revisa el texto antes de enviarlo y no incluyas datos personales, de salud, NIE ni documentación.</p>' +
-      '<div class="flex" style="justify-content:flex-end;gap:10px"><button class="btn btn--ghost" type="button" data-action="close-feedback">Cancelar</button><button class="btn btn--primary" type="button" data-action="send-feedback">Abrir correo</button></div>' +
+      '<p class="muted" style="font-size:.78rem">Revisa el texto antes de enviarlo y no incluyas datos personales, de salud, NIE ni documentación. El mensaje se envía desde esta página; no se abre tu gestor de correo.</p>' +
+      '<p id="feedbackStatus" class="muted" role="status" style="margin:8px 0"></p>' +
+      '<div class="flex" style="justify-content:flex-end;gap:10px"><button class="btn btn--ghost" type="button" data-action="close-feedback">Cancelar</button><button class="btn btn--primary" type="button" data-action="send-feedback">Enviar mensaje</button></div>' +
       '</div>';
     document.body.appendChild(wrap);
     document.body.style.overflow = 'hidden';
@@ -3990,21 +3992,42 @@
   function sendFeedbackEmail() {
     var subject = ($('#feedbackSubject') || {}).value || 'Problema o error en Ruta Legal';
     var body = ($('#feedbackBody') || {}).value || '';
+    var status = $('#feedbackStatus');
+    if (!body.trim()) {
+      if (status) status.textContent = 'Escribe una descripción del problema.';
+      return;
+    }
     var recipient = atob('cHJvZ3JhbWFuZG9ub3NvbG9zQGdtYWlsLmNvbQ==');
-    var mailto = 'mailto:' + recipient + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    closeFeedbackModal();
-    window.location.href = mailto;
-    setTimeout(function () { go('feedback-gracias'); }, 450);
+    if (status) status.textContent = 'Enviando mensaje…';
+    fetch('https://formsubmit.co/ajax/' + recipient, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        asunto: subject,
+        contenido: body,
+        pagina: location.href,
+        _subject: 'Problema o error en Ruta Legal',
+        _template: 'table',
+        _captcha: 'false'
+      })
+    }).then(function (r) {
+      if (!r.ok) throw new Error('Error de envío');
+      closeFeedbackModal();
+      go('feedback-gracias');
+      window.scrollTo(0, 0);
+    }).catch(function () {
+      if (status) status.textContent = 'No se pudo enviar. Inténtalo más tarde.';
+    });
   }
 
   function renderFeedbackGracias() {
     var host = $('#view-feedback-gracias');
     host.innerHTML = '<div class="thanks-card"><div class="thanks-icon" aria-hidden="true">' + icons.check(28) + '</div>' +
       '<p class="eyebrow">Gracias por tu ayuda</p><h1>Gracias por ayudarnos a mejorar</h1>' +
-      '<p>Se ha abierto tu aplicación de correo con el asunto y el contenido preparados. Revisa el mensaje y envíalo para que podamos corregir el error o el enlace caído.</p>' +
-      '<p class="muted">Si tu aplicación de correo no se ha abierto, vuelve a intentarlo. La dirección de destino no se muestra por seguridad.</p>' +
+      '<p>Tu mensaje fue enviado correctamente. Gracias por avisarnos del error o del enlace caído; lo revisaremos para corregirlo.</p>' +
+      '<p class="muted">La dirección de destino no se muestra por seguridad y no se abre tu gestor de correo.</p>' +
       '<div class="callout callout--info" style="text-align:left;margin-top:18px"><div><strong>Solo incidencias del sitio</strong><p>No respondemos dudas sobre el uso de la página ni damos consejos o asesoramiento jurídico por este canal. Cualquier otro correo será eliminado sin más.</p></div></div>' +
-      '<div class="flex" style="justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px"><button class="btn btn--primary" type="button" data-action="feedback">Volver a intentar</button><a class="btn btn--soft" href="#/ayuda">Volver a Ayuda</a></div></div>';
+      '<div class="flex" style="justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px"><a class="btn btn--primary" href="#/ayuda">Volver a Ayuda</a><a class="btn btn--soft" href="#/inicio">Ir al inicio</a></div></div>';
   }
 
   function renderHelp() {

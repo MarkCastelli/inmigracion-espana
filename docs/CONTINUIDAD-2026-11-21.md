@@ -153,6 +153,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 123. **Elección de PDF**: antes de imprimir se elige PDF básico (recomendado, sin nombre/contacto/pasaporte/fecha exacta/salud/discapacidad/asilo) o completo (aviso de datos sensibles). El informe básico usa roles y oculta esos datos; el completo los incluye.
 124. **SEO técnico**: navegación convertida a enlaces rastreables con `?view=`, canonical/OG sin hash, `WebApplication` + `Organization` JSON-LD, `noscript` con contenido y enlaces, sitemap con secciones y `lastmod`, hreflang dinámico y robots con sitemap. Limitación: el contenido profundo sigue renderizándose con JS.
 125. **Reserva de admisión**: la página «Quiero aparecer» avisa de que Ruta Legal puede colocar un aviso en el sitio si considera que la solicitud o la información no cumple los estándares, sin dar explicación del caso.
+126. **Feedback con FormSubmit**: el aviso de Ayuda envía asunto, contenido y página mediante el mismo sistema que el alta de abogados; no abre el gestor de correo ni muestra la dirección. Si el envío se confirma, redirige a `#/feedback-gracias`; si falla, mantiene el mensaje y muestra error. Privacidad actualizada.
 
 ## Comandos
 
