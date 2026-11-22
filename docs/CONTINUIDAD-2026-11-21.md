@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **184 pruebas pasando**.
+- **187 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -88,6 +88,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 58. **SEO**: metadatos por sección (título, descripción, keywords, canonical, Open Graph/Twitter), JSON-LD WebSite/WebPage, `robots.txt`, `sitemap.xml`, imagen social e idiomas `?lang=`/hreflang. Limitación: las secciones con hash no se indexan como URLs independientes.
 59. **Hijos de la pareja**: botón explícito «Añadir hijo/a de mi pareja» dentro de la ficha de pareja; crea la ficha como «Hijo solo de tu pareja» y conserva el campo general.
 60. **Scroll del asistente**: al pasar de paso se descuenta la altura de la cabecera fija y se espera al siguiente frame para que el inicio del formulario quede visible.
+61. **Formulario 0-11**: nuevo flujo para individuo o familia con datos personales, documentos, asilo, vivienda e hipoteca, pareja, hijos, discapacidad, ayudas, objetivos, resumen económico y PDF imprimible. Se guarda en `profile.formulario`.
 
 ## Comandos
 

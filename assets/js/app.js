@@ -34,7 +34,7 @@
     aiLastId: null
   };
 
-  var VIEWS = ['inicio', 'antes', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'consulta', 'docs', 'formularios', 'ayuda'];
+  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'consulta', 'docs', 'formularios', 'ayuda'];
   var REGION_LABEL = { latam: 'América Latina', ue: 'Unión Europea', eea: 'Espacio Económico Europeo', eu: 'Europa (otros)', africa: 'África', asia: 'Asia', otro: 'Otros países' };
 
   /* Perfil de ejemplo para probar la app sin escribir nada. */
@@ -161,6 +161,7 @@
 
     if (ui.view === 'inicio') renderHome();
     else if (ui.view === 'antes') renderAntes();
+    else if (ui.view === 'formulario') renderFormulario();
     else if (ui.view === 'diagnostico') renderWizard();
     else if (ui.view === 'plan') renderPlan();
     else if (ui.view === 'vias') renderCatalog();
@@ -179,6 +180,383 @@
     window.scrollTo(0, 0);
     var main = $('#main');
     if (main && ui.view !== 'inicio') main.focus({ preventScroll: true });
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     FORMULARIO GUIADO 0-11
+     ══════════════════════════════════════════════════════════ */
+  var formState = null;
+  var FORM_TITLES = [
+    'Tipo de consulta', 'Datos personales', 'Situación actual', 'Asilo', 'Vivienda',
+    'Pareja', 'Hijos', 'Discapacidad', 'Ayudas', 'Objetivos', 'Resumen', 'Documento final'
+  ];
+
+  function getForm() {
+    if (formState) return formState;
+    var saved = RL.state.profile && RL.state.profile.formulario;
+    formState = (saved && saved.applicant) ? saved : RL.formulario.blank();
+    if (!formState.step) formState.step = 0;
+    return formState;
+  }
+
+  function saveForm() {
+    RL.setProfile({ formulario: getForm() });
+  }
+
+  function fget(obj, path) {
+    var parts = String(path).split('.');
+    var cur = obj;
+    for (var i = 0; i < parts.length; i++) {
+      if (cur == null) return '';
+      cur = cur[parts[i]];
+    }
+    return cur == null ? '' : cur;
+  }
+
+  function fset(obj, path, value) {
+    var parts = String(path).split('.');
+    var cur = obj;
+    for (var i = 0; i < parts.length - 1; i++) {
+      var k = parts[i];
+      if (cur[k] == null) cur[k] = /^\d+$/.test(parts[i + 1]) ? [] : {};
+      cur = cur[k];
+    }
+    cur[parts[parts.length - 1]] = value;
+  }
+
+  function fEsc(v) { return esc(v == null ? '' : v); }
+
+  function fInput(path, label, value, type, placeholder) {
+    return '<label class="field"><span class="field__label">' + fEsc(label) + '</span>' +
+      '<input class="input" type="' + (type || 'text') + '" data-fpath="' + fEsc(path) + '" value="' + fEsc(value) + '" placeholder="' + fEsc(placeholder || '') + '"></label>';
+  }
+
+  function fSelect(path, label, value, options) {
+    return '<label class="field"><span class="field__label">' + fEsc(label) + '</span>' +
+      '<select class="select" data-fpath="' + fEsc(path) + '">' +
+      options.map(function (o) { return '<option value="' + fEsc(o.v) + '"' + (String(value) === String(o.v) ? ' selected' : '') + '>' + fEsc(o.l) + '</option>'; }).join('') +
+      '</select></label>';
+  }
+
+  function fRadio(path, label, value, options) {
+    return '<fieldset class="field"><legend class="field__label">' + fEsc(label) + '</legend>' +
+      '<div class="option-list">' + options.map(function (o) {
+        return '<label class="option"><input type="radio" name="' + fEsc(path) + '" data-fpath="' + fEsc(path) + '" value="' + fEsc(o.v) + '"' + (String(value) === String(o.v) ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">' + fEsc(o.l) + '</span></span></label>';
+      }).join('') + '</div></fieldset>';
+  }
+
+  function fChecks(path, label, values, options) {
+    var arr = Array.isArray(values) ? values : [];
+    return '<fieldset class="field"><legend class="field__label">' + fEsc(label) + '</legend>' +
+      '<div class="option-list">' + options.map(function (o) {
+        var on = arr.indexOf(o.v) !== -1;
+        return '<label class="option option--check"><input type="checkbox" data-fgroup="' + fEsc(path) + '" value="' + fEsc(o.v) + '"' + (on ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">' + fEsc(o.l) + '</span></span></label>';
+      }).join('') + '</div></fieldset>';
+  }
+
+  function personBlock(obj, prefix, includeHousing) {
+    var F = RL.formulario;
+    var h = '<div class="form-grid">' +
+      fInput(prefix + '.name', 'Nombre y apellidos', fget(obj, 'name')) +
+      fInput(prefix + '.age', 'Edad', fget(obj, 'age'), 'number') +
+      fInput(prefix + '.phone', 'Teléfono móvil', fget(obj, 'phone'), 'tel') +
+      fInput(prefix + '.email', 'Email', fget(obj, 'email'), 'email') +
+      fInput(prefix + '.entryDate', 'Fecha de ingreso en España', fget(obj, 'entryDate'), 'date') +
+      fRadio(prefix + '.familyAbroad', '¿Tienes familia en otro país?', fget(obj, 'familyAbroad'), F.yesNo) +
+      fRadio(prefix + '.bringFamily', '¿Quieres traerlos a España?', fget(obj, 'bringFamily'), F.yesNo) +
+      fRadio(prefix + '.disability', '¿Tienes discapacidad?', fget(obj, 'disability'), F.yesNo) +
+      fSelect(prefix + '.residence', 'Situación actual de residencia', fget(obj, 'residence'), F.residence) +
+      fRadio(prefix + '.works', '¿Trabajas?', fget(obj, 'works'), F.yesNo) +
+      '</div>';
+    if (fget(obj, 'works') === 'si') {
+      h += '<div class="form-grid">' +
+        fRadio(prefix + '.legalJob', '¿Tu empleo es legal?', fget(obj, 'legalJob'), F.yesNo) +
+        fSelect(prefix + '.hours', 'Horas a la semana', fget(obj, 'hours'), [
+          { v: '', l: 'Sin indicar' }, { v: '30', l: '30 horas' }, { v: '40', l: '40 horas' }, { v: '50', l: '50 horas o más' }
+        ]) +
+        fInput(prefix + '.netSalary', 'Sueldo neto mensual (€)', fget(obj, 'netSalary'), 'number') +
+        fRadio(prefix + '.bank', '¿Te lo depositan en el banco?', fget(obj, 'bank'), F.yesNo) +
+        fInput(prefix + '.jobType', '¿Qué haces? Tipo de empleo', fget(obj, 'jobType'), 'text', 'Ej. cocina, limpieza, construcción') +
+        '</div>';
+    }
+    h += '<div class="form-grid">' +
+      fRadio(prefix + '.studies', '¿Estudias?', fget(obj, 'studies'), F.yesNo) +
+      (fget(obj, 'studies') === 'si' ? fInput(prefix + '.career', '¿Qué estudias?', fget(obj, 'career'), 'text', 'Ej. FP, grado, curso de español') : '') +
+      '</div>';
+    if (includeHousing) h += housingBlock(obj, prefix);
+    return h;
+  }
+
+  function housingBlock(obj, prefix) {
+    var F = RL.formulario;
+    var h = '<div class="form-grid">' +
+      fSelect(prefix + '.housing', '¿Dónde vives?', fget(obj, 'housing'), [
+        { v: '', l: 'Sin indicar' }, { v: 'propia', l: 'Vivienda propia' }, { v: 'alquiler', l: 'Alquilo un piso' },
+        { v: 'habitacion', l: 'Alquilo una habitación' }, { v: 'compartida', l: 'Comparto con amigo/a o pareja' },
+        { v: 'familiar', l: 'Vivo con familiares' }, { v: 'otra', l: 'Otra situación' }
+      ]) +
+      fInput(prefix + '.housingCost', '¿Cuánto pagas al mes por vivienda? (€)', fget(obj, 'housingCost'), 'number') +
+      fRadio(prefix + '.mortgage', '¿Pagas hipoteca?', fget(obj, 'mortgage'), F.yesNo) +
+      (fget(obj, 'mortgage') === 'si' ? fInput(prefix + '.mortgageAmount', 'Importe mensual de la hipoteca (€)', fget(obj, 'mortgageAmount'), 'number') : '') +
+      fInput(prefix + '.expenses.luz', 'Luz (€/mes)', fget(obj, 'expenses.luz'), 'number') +
+      fInput(prefix + '.expenses.agua', 'Agua (€/mes)', fget(obj, 'expenses.agua'), 'number') +
+      fInput(prefix + '.expenses.gas', 'Gas o bombona (€/mes)', fget(obj, 'expenses.gas'), 'number') +
+      fInput(prefix + '.expenses.comunidad', 'Comunidad (€/mes)', fget(obj, 'expenses.comunidad'), 'number') +
+      fInput(prefix + '.expenses.internet', 'Internet (€/mes)', fget(obj, 'expenses.internet'), 'number') +
+      fRadio(prefix + '.computer', '¿Tienes computadora?', fget(obj, 'computer'), F.yesNo) +
+      '</div>';
+    return h;
+  }
+
+  function asylumBlock(obj, prefix) {
+    var F = RL.formulario;
+    var h = '<div class="form-grid">' +
+      fRadio(prefix + '.asylumRequested', '¿Solicitaste asilo en España?', fget(obj, 'asylumRequested'), F.yesNo) +
+      '</div>';
+    if (fget(obj, 'asylumRequested') === 'si') {
+      h += '<div class="form-grid">' +
+        fInput(prefix + '.asylumYear', '¿En qué año lo solicitaste?', fget(obj, 'asylumYear'), 'number') +
+        fSelect(prefix + '.asylumStatus', 'Situación actual del asilo', fget(obj, 'asylumStatus'), [
+          { v: '', l: 'Sin indicar' }, { v: 'esperando', l: 'Esperando resolución' }, { v: 'denegada', l: 'Denegada' },
+          { v: 'concedido', l: 'Concedido' }, { v: 'renuncie', l: 'Renuncié / desistí' }
+        ]) +
+        fInput(prefix + '.asylumDate', 'Fecha del hecho (denegación, concesión o renuncia)', fget(obj, 'asylumDate'), 'date') +
+        '</div>';
+    }
+    return h;
+  }
+
+  function documentsBlock(obj, prefix) {
+    var F = RL.formulario;
+    return fChecks(prefix + '.docs', 'Documentos y credenciales que tienes', fget(obj, 'docs'), F.docs) +
+      fRadio(prefix + '.aidReceived', '¿Recibes alguna ayuda?', fget(obj, 'aidReceived'), F.yesNo) +
+      (fget(obj, 'aidReceived') === 'si' ? fChecks(prefix + '.aidTypes', '¿Qué ayudas recibes?', fget(obj, 'aidTypes'), F.aidTypes) : '');
+  }
+
+  function memberName(obj, kind, index) {
+    return fget(obj, 'name') || (kind === 'applicant' ? 'Titular' : kind === 'spouse' ? 'Pareja' : 'Hijo/a ' + (index + 1));
+  }
+
+  function renderFormulario() {
+    var host = $('#view-formulario');
+    var F = getForm();
+    var step = Math.max(0, Math.min(11, Number(F.step) || 0));
+    var total = 12;
+    var html = '<div class="wizard"><div class="plan-head"><div><p class="eyebrow">Formulario · Paso ' + step + ' de 11</p>' +
+      '<h1>' + fEsc(FORM_TITLES[step]) + '</h1><p class="plan-head__sub">Formulario guiado para ordenar tu caso. Se guarda solo en este dispositivo.</p></div></div>' +
+      '<div class="progress" style="margin-bottom:18px"><span style="display:block;height:100%;width:' + Math.round(step / 11 * 100) + '%"></span></div>';
+
+    if (step === 0) {
+      html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>¿La consulta es para una persona o para un grupo familiar?</h2></div><div class="block__body">' +
+        '<div class="option-list">' +
+        '<label class="option"><input type="radio" name="form-mode" data-fpath="mode" value="individual"' + (F.mode === 'individual' ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">Una persona</span></span></label>' +
+        '<label class="option"><input type="radio" name="form-mode" data-fpath="mode" value="family"' + (F.mode === 'family' ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">Grupo familiar (pareja e hijos)</span></span></label>' +
+        '</div></div></div>';
+    } else if (step === 1) {
+      html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Datos personales</h2></div><div class="block__body">' + personBlock(F.applicant, 'applicant', false) + '</div></div>';
+    } else if (step === 2) {
+      html += '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Situación actual</h2></div><div class="block__body">' + documentsBlock(F.applicant, 'applicant') + '</div></div>';
+    } else if (step === 3) {
+      html += '<div class="block"><div class="block__head">' + icons.shield(18) + '<h2>Asilo</h2></div><div class="block__body">' + asylumBlock(F.applicant, 'applicant') + '</div></div>';
+    } else if (step === 4) {
+      html += '<div class="block"><div class="block__head">' + icons.home(18) + '<h2>Vivienda y gastos</h2></div><div class="block__body">' + housingBlock(F.applicant, 'applicant') + '</div></div>';
+    } else if (step === 5) {
+      html += '<div class="block"><div class="block__head">' + icons.family(18) + '<h2>Pareja: datos, documentos, asilo y vivienda</h2></div><div class="block__body">' +
+        personBlock(F.spouse, 'spouse', true) + documentsBlock(F.spouse, 'spouse') + asylumBlock(F.spouse, 'spouse') + '</div></div>';
+    } else if (step === 6) {
+      html += '<div class="block"><div class="block__head">' + icons.family(18) + '<h2>Hijos</h2></div><div class="block__body">' +
+        '<p class="muted">Añade cada hijo. Si es menor, completa sus datos y estudios; si es mayor, añade también trabajo y vivienda.</p>' +
+        '<button class="btn btn--soft btn--sm" type="button" data-form-action="add-child">+ Añadir hijo/a</button>' +
+        (F.children.length ? F.children.map(function (ch, i) {
+          return '<div class="family-child" style="margin-top:14px"><div class="flex" style="justify-content:space-between"><h3>Hijo/a ' + (i + 1) + '</h3><button class="btn btn--ghost btn--sm" type="button" data-form-action="remove-child" data-index="' + i + '">Quitar</button></div>' +
+            personBlock(ch, 'children.' + i, true) +
+            '<div class="form-grid">' +
+            fInput('children.' + i + '.educationLevel', 'Estudios actuales', fget(ch, 'educationLevel'), 'text', 'ESO, Bachillerato, FP, universidad…') +
+            '</div></div>';
+        }).join('') : '<p class="muted">Todavía no has añadido hijos.</p>') +
+        '</div></div>';
+    } else if (step === 7) {
+      html += '<div class="block"><div class="block__head">' + icons.shield(18) + '<h2>Discapacidad y dependencia</h2></div><div class="block__body">';
+      var members = [{ key: 'applicant', label: 'Titular', obj: F.applicant }];
+      if (F.mode === 'family') members.push({ key: 'spouse', label: 'Pareja', obj: F.spouse });
+      F.children.forEach(function (ch, i) { members.push({ key: 'children.' + i, label: 'Hijo/a ' + (i + 1), obj: ch }); });
+      var any = false;
+      members.forEach(function (m) {
+        if (fget(m.obj, 'disability') !== 'si') return;
+        any = true;
+        html += '<div class="family-child"><h3>' + fEsc(m.label) + '</h3><div class="form-grid">' +
+          fRadio(m.key + '.disabilityRecognized', '¿Reconocida en España?', fget(m.obj, 'disabilityRecognized'), RL.formulario.yesNo) +
+          fInput(m.key + '.disabilityDegree', 'Nivel concedido', fget(m.obj, 'disabilityDegree'), 'text', '33 %, 45 %, 65 %…') +
+          fRadio(m.key + '.dependency', '¿Tienes dependencia reconocida?', fget(m.obj, 'dependency'), RL.formulario.yesNo) +
+          fRadio(m.key + '.aidReceived', '¿Recibes ayuda o subsidio?', fget(m.obj, 'aidReceived'), RL.formulario.yesNo) +
+          '</div>';
+        if (fget(m.obj, 'aidReceived') === 'si') html += fChecks(m.key + '.aidTypes', '¿Qué ayudas?', fget(m.obj, 'aidTypes'), RL.formulario.aidTypes);
+        html += '</div>';
+      });
+      if (!any) html += '<p class="muted">Nadie ha marcado discapacidad. Este paso se puede saltar.</p>';
+      html += '</div></div>';
+    } else if (step === 8) {
+      html += '<div class="block"><div class="block__head">' + icons.family(18) + '<h2>Ayudas que recibes</h2></div><div class="block__body">' +
+        fRadio('applicant.aidReceived', '¿Recibes ayudas económicas, alimentos, luz, gas, alquiler…?', fget(F.applicant, 'aidReceived'), RL.formulario.yesNo) +
+        (fget(F.applicant, 'aidReceived') === 'si' ? fChecks('applicant.aidTypes', '¿Qué recibes?', fget(F.applicant, 'aidTypes'), RL.formulario.aidTypes) + fChecks('applicant.aidWho', '¿Quién te ayuda?', fget(F.applicant, 'aidWho'), RL.formulario.aidWho) + fInput('applicant.aidDetail', 'Detalle (opcional)', fget(F.applicant, 'aidDetail')) : '') +
+        '</div></div>';
+    } else if (step === 9) {
+      html += '<div class="block"><div class="block__head">' + icons.route(18) + '<h2>¿Qué esperas conseguir?</h2></div><div class="block__body">';
+      html += '<h3>Titular</h3>' + fChecks('applicant.goals', 'Objetivos', fget(F.applicant, 'goals'), RL.formulario.goals);
+      if (F.mode === 'family') {
+        html += '<h3>Pareja</h3>' + fChecks('spouse.goals', 'Objetivos', fget(F.spouse, 'goals'), RL.formulario.goals);
+        F.children.forEach(function (ch, i) { html += '<h3>Hijo/a ' + (i + 1) + '</h3>' + fChecks('children.' + i + '.goals', 'Objetivos', fget(ch, 'goals'), RL.formulario.goals); });
+      }
+      html += '</div></div>';
+    } else if (step === 10) {
+      html += formSummaryHTML(F, true);
+    } else {
+      html += formSummaryHTML(F, false);
+      html += '<div class="callout callout--info">' + icons.doc(18) + '<div><strong>Documento preparado</strong><p>Revisa el resumen y pulsa imprimir. En el diálogo del navegador elige «Guardar como PDF». Puedes quitar secciones en el paso anterior.</p><button class="btn btn--primary mt-2" type="button" data-form-action="print">Imprimir / guardar PDF</button></div></div>';
+    }
+
+    html += '<div class="wizard__nav" style="display:flex;justify-content:space-between;gap:10px;margin-top:18px">' +
+      '<button class="btn btn--ghost" type="button" data-form-action="prev"' + (step === 0 ? ' disabled' : '') + '>Atrás</button>' +
+      '<button class="btn btn--primary" type="button" data-form-action="next">' + (step === 11 ? 'Volver a empezar' : 'Siguiente') + '</button></div>';
+    html += '</div>';
+    host.innerHTML = html;
+
+    host.querySelectorAll('[data-fpath], [data-fgroup]').forEach(function (el) {
+      var ev = el.type === 'checkbox' || el.type === 'radio' || el.tagName === 'SELECT' ? 'change' : 'input';
+      el.addEventListener(ev, function () {
+        if (el.hasAttribute('data-fgroup')) {
+          var groupPath = el.getAttribute('data-fgroup');
+          var vals = [];
+          host.querySelectorAll('[data-fgroup="' + groupPath + '"]:checked').forEach(function (x) { vals.push(x.value); });
+          fset(F, groupPath, vals);
+        } else {
+          fset(F, el.getAttribute('data-fpath'), el.value);
+        }
+        saveForm();
+      });
+    });
+    host.querySelectorAll('[data-form-action]').forEach(function (b) {
+      b.addEventListener('click', function () { handleFormAction(b.getAttribute('data-form-action'), b); });
+    });
+    host.querySelectorAll('[data-fprint]').forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        if (!F.print) F.print = {};
+        F.print[cb.getAttribute('data-fprint')] = cb.checked;
+        saveForm();
+      });
+    });
+  }
+
+  function formSummaryHTML(F, editable) {
+    var income = (Number(fget(F.applicant, 'netSalary')) || 0) + (F.mode === 'family' ? Number(fget(F.spouse, 'netSalary')) || 0 : 0);
+    var exp = Number(fget(F.applicant, 'housingCost')) || 0;
+    if (fget(F.applicant, 'mortgage') === 'si') exp += Number(fget(F.applicant, 'mortgageAmount')) || 0;
+    ['luz', 'agua', 'gas', 'comunidad', 'internet'].forEach(function (k) { exp += Number(fget(F.applicant, 'expenses.' + k)) || 0; });
+    var balance = income - exp;
+    var members = [{ key: 'applicant', label: 'Titular', obj: F.applicant }];
+    if (F.mode === 'family') {
+      members.push({ key: 'spouse', label: 'Pareja', obj: F.spouse });
+      F.children.forEach(function (ch, i) { members.push({ key: 'children.' + i, label: 'Hijo/a ' + (i + 1), obj: ch }); });
+    }
+    var html = '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Resumen del caso</h2></div><div class="block__body">';
+    if (editable) {
+      html += '<p class="muted">Marca qué quieres que aparezca en el PDF. Nada se envía a internet.</p><div class="option-list">' +
+        ['applicant', 'spouse', 'children', 'disability', 'aid', 'housing', 'goals', 'economy'].map(function (k) {
+          return '<label class="option option--check"><input type="checkbox" data-fprint="' + k + '"' + (F.print && F.print[k] !== false ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">' + fEsc({ applicant: 'Titular', spouse: 'Pareja', children: 'Hijos', disability: 'Discapacidad', aid: 'Ayudas', housing: 'Vivienda y gastos', goals: 'Objetivos', economy: 'Resumen económico' }[k]) + '</span></span></label>';
+        }).join('') + '</div>';
+    }
+    html += '<div class="kv">' +
+      '<div class="kv__row"><dt>Ingreso neto mensual</dt><dd>' + income.toFixed(2) + ' €</dd></div>' +
+      '<div class="kv__row"><dt>Gastos fijos declarados</dt><dd>' + exp.toFixed(2) + ' €</dd></div>' +
+      '<div class="kv__row"><dt>Diferencia</dt><dd><strong>' + balance.toFixed(2) + ' €</strong></dd></div>' +
+      '</div>';
+    if (F.print && F.print.applicant !== false) {
+      html += '<h3>Titular</h3>' + summaryPerson(F.applicant);
+    }
+    if (F.mode === 'family' && F.print && F.print.spouse !== false) html += '<h3>Pareja</h3>' + summaryPerson(F.spouse);
+    if (F.mode === 'family' && F.print && F.print.children !== false) {
+      F.children.forEach(function (ch, i) { html += '<h3>Hijo/a ' + (i + 1) + '</h3>' + summaryPerson(ch); });
+    }
+    if (F.print && F.print.disability !== false) {
+      var dis = members.filter(function (m) { return fget(m.obj, 'disability') === 'si'; });
+      if (dis.length) html += '<h3>Discapacidad</h3>' + dis.map(function (m) { return '<p><strong>' + fEsc(m.label) + ':</strong> ' + fEsc(fget(m.obj, 'disabilityDegree') || 'sin grado indicado') + ' · dependencia: ' + fEsc(fget(m.obj, 'dependency') || 'no indicada') + '</p>'; }).join('');
+    }
+    if (F.print && F.print.aid !== false && fget(F.applicant, 'aidReceived') === 'si') {
+      html += '<h3>Ayudas</h3><p>' + fEsc((fget(F.applicant, 'aidTypes') || []).join(', ')) + ' · ' + fEsc((fget(F.applicant, 'aidWho') || []).join(', ')) + '</p>';
+    }
+    if (F.print && F.print.housing !== false) {
+      html += '<h3>Vivienda y gastos</h3><p>' + fEsc(fget(F.applicant, 'housing') || 'Sin indicar') + ' · ' + exp.toFixed(2) + ' €/mes' +
+        (fget(F.applicant, 'mortgage') === 'si' ? ' · hipoteca: ' + fEsc(fget(F.applicant, 'mortgageAmount') || '0') + ' €' : '') + '</p>';
+    }
+    if (F.print && F.print.goals !== false) {
+      html += '<h3>Objetivos</h3><p><strong>Titular:</strong> ' + fEsc((fget(F.applicant, 'goals') || []).join(', ') || 'Sin indicar') + '</p>';
+      if (F.mode === 'family') html += '<p><strong>Pareja:</strong> ' + fEsc((fget(F.spouse, 'goals') || []).join(', ') || 'Sin indicar') + '</p>';
+    }
+    return html + '</div></div>';
+  }
+
+  function summaryPerson(p) {
+    var rows = [
+      ['Nombre', fget(p, 'name')], ['Edad', fget(p, 'age')], ['Teléfono', fget(p, 'phone')],
+      ['Email', fget(p, 'email')], ['Entrada en España', fget(p, 'entryDate')],
+      ['Residencia', fget(p, 'residence')], ['Trabaja', fget(p, 'works')],
+      ['Sueldo neto', fget(p, 'netSalary')], ['Estudios', fget(p, 'career')]
+    ].filter(function (r) { return r[1] !== '' && r[1] != null; });
+    return '<dl class="kv">' + rows.map(function (r) { return '<div class="kv__row"><dt>' + fEsc(r[0]) + '</dt><dd>' + fEsc(r[1]) + '</dd></div>'; }).join('') + '</dl>';
+  }
+
+  function formHasDisability(F) {
+    var members = [F.applicant, F.spouse].concat(F.children || []);
+    return members.some(function (m) { return m && m.disability === 'si'; });
+  }
+
+  function formNextIndex(F, current) {
+    var next = current + 1;
+    while (next < 12) {
+      if (next === 3 && F.applicant.asylumRequested !== 'si') { next++; continue; }
+      if (next === 5 && F.mode !== 'family') { next++; continue; }
+      if (next === 6 && !(F.children || []).length) { next++; continue; }
+      if (next === 7 && !formHasDisability(F)) { next++; continue; }
+      if (next === 8 && F.applicant.aidReceived !== 'si') { next++; continue; }
+      break;
+    }
+    return Math.min(11, next);
+  }
+
+  function formPrevIndex(F, current) {
+    var prev = current - 1;
+    while (prev > 0) {
+      if (prev === 3 && F.applicant.asylumRequested !== 'si') { prev--; continue; }
+      if (prev === 5 && F.mode !== 'family') { prev--; continue; }
+      if (prev === 6 && !(F.children || []).length) { prev--; continue; }
+      if (prev === 7 && !formHasDisability(F)) { prev--; continue; }
+      if (prev === 8 && F.applicant.aidReceived !== 'si') { prev--; continue; }
+      break;
+    }
+    return Math.max(0, prev);
+  }
+
+  function handleFormAction(action, btn) {
+    var F = getForm();
+    saveForm();
+    if (action === 'add-child') {
+      F.children.push(RL.formulario.person());
+      saveForm(); renderFormulario(); return;
+    }
+    if (action === 'remove-child') {
+      F.children.splice(Number(btn.getAttribute('data-index')), 1); saveForm(); renderFormulario(); return;
+    }
+    if (action === 'print') { window.print(); return; }
+    if (action === 'next') {
+      if (F.step >= 11) { F.step = 0; saveForm(); renderFormulario(); return; }
+      F.step = formNextIndex(F, F.step); saveForm(); renderFormulario();
+      window.scrollTo(0, 0);
+      return;
+    }
+    if (action === 'prev') {
+      F.step = formPrevIndex(F, F.step); saveForm(); renderFormulario();
+      window.scrollTo(0, 0);
+    }
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -2594,7 +2972,7 @@
     if (action === 'generate-form') { generateForm(btn); return; }
     if (action === 'listen-view') {
       if (!RL.speech || !RL.speech.supported) { toast('Tu navegador no permite lectura en voz alta.'); return; }
-      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Formularios', ayuda: 'Ayuda' };
+      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Formularios', ayuda: 'Ayuda' };
       if (ui.view === 'plan' && RL.hasSavedProfile()) {
         RL.speech.speak(RL.speech.buildPlanScript(RL.buildPlan(RL.profile())), 'Tu plan');
       } else {

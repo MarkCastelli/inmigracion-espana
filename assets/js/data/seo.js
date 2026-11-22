@@ -23,6 +23,11 @@
       description: 'Responde unas preguntas y ordena tu caso: residencia, arraigo, nacionalidad, asilo, familia, trabajo y documentos. Informe gratuito para revisar con un abogado.',
       keywords: 'diagnóstico extranjería, residencia España, arraigo, nacionalidad, asilo, reagrupación familiar'
     },
+    formulario: {
+      title: 'Formulario de caso para inmigración en España | Ruta Legal',
+      description: 'Formulario guiado para personas o familias: datos, documentos, asilo, vivienda, trabajo, discapacidad, ayudas, objetivos, gastos y PDF para ONG o abogado.',
+      keywords: 'formulario inmigración, caso familiar, residencia España, documentos, gastos, PDF abogado'
+    },
     plan: {
       title: 'Informe de tu caso para un abogado | Ruta Legal',
       description: 'Hechos, fechas, familia, documentos y dudas en un informe claro para llevar a un abogado de extranjería. Sin veredicto legal ni promesas.',

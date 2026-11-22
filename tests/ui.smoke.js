@@ -11,6 +11,7 @@ const FILES = [
   'assets/js/data/i18n.js',
   'assets/js/data/seo.js',
   'assets/js/data/antes.js',
+  'assets/js/data/formulario.js',
   'assets/js/core.js',
   'assets/js/data/countries.js',
   'assets/js/data/regions.js',
@@ -612,6 +613,18 @@ t('se puede añadir un hijo de la pareja desde su ficha', () => {
   assert.strictEqual(RL.state.profile.child2Relation, 'partner');
   const html = app.document.querySelector('#wizardFields').innerHTML;
   assert.ok(html.includes('Hijo/a 2'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
+t('el formulario guiado arranca en el paso 0', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', goals: ['regularizar'] };
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Tipo de consulta'));
+  assert.ok(html.includes('Una persona'));
+  assert.ok(html.includes('Grupo familiar'));
   RL.state.profile = saved;
   nav(app, 'inicio');
 });
