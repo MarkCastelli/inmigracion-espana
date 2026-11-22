@@ -32,10 +32,11 @@
       start: 'Empezar mi diagnóstico',
       routes: 'Ver las vías disponibles',
       demo: 'Ver un plan de ejemplo →',
+      wizard: { step: 'Paso {n} de {total}', back: 'Atrás', next: 'Continuar', finish: 'Ver mi plan', save: 'Guardar y salir' },
       noticeTitle: 'Esto es una ayuda, no asesoramiento jurídico.',
       noticeText: 'No garantizamos que sea ni el mejor ni el único camino: hacemos lo posible por acercarnos a tu caso, pero la normativa cambia y cada expediente tiene matices. Antes de presentar nada, confirma en la fuente oficial y consulta con un abogado de extranjería o una entidad social. <a href="#/ayuda" data-nav="ayuda">Ver recursos gratuitos y aviso legal</a>.',
       langNoticeTitle: 'Interfaz en español',
-      langNoticeText: 'Las guías y fichas legales detalladas están en español. La traducción completa se está preparando por fases.'
+      langNoticeText: 'Las guías y fichas legales detalladas están en español. Puedes usar la traducción del navegador para el texto largo, pero no la uses si el informe muestra datos personales.'
     },
     ar: {
       tagline: 'إسبانيا، خطوة بخطوة',
@@ -53,10 +54,11 @@
       start: 'ابدأ تشخيصي',
       routes: 'عرض المسارات المتاحة',
       demo: 'عرض خطة نموذجية ←',
+      wizard: { step: 'الخطوة {n} من {total}', back: 'رجوع', next: 'متابعة', finish: 'عرض خطتي', save: 'حفظ وخروج' },
       noticeTitle: 'هذه مساعدة، وليست استشارة قانونية.',
       noticeText: 'لا نضمن أن يكون هذا أفضل طريق أو الطريق الوحيد. نعمل على الاقتراب من حالتك، لكن القواعد تتغير ولكل ملف تفاصيله. قبل تقديم أي شيء، تحقق من المصدر الرسمي واستشر محامي هجرة أو جهة اجتماعية. <a href="#/ayuda" data-nav="ayuda">الموارد المجانية والإشعار القانوني</a>.',
       langNoticeTitle: 'الواجهة بالعربية',
-      langNoticeText: 'الأدلة والبطاقات القانونية التفصيلية لا تزال بالإسبانية. تجري الترجمة الكاملة على مراحل.'
+      langNoticeText: 'الأدلة والبطاقات القانونية التفصيلية لا تزال بالإسبانية. يمكنك استخدام ترجمة المتصفح للنصوص الطويلة، لكن لا تستخدمها إذا كان التقرير يعرض بيانات شخصية.'
     },
     fr: {
       tagline: "L'Espagne, pas à pas",
@@ -74,10 +76,11 @@
       start: 'Commencer mon diagnostic',
       routes: 'Voir les voies disponibles',
       demo: 'Voir un exemple de plan →',
+      wizard: { step: 'Étape {n} sur {total}', back: 'Retour', next: 'Continuer', finish: 'Voir mon plan', save: 'Enregistrer et sortir' },
       noticeTitle: "Ceci est une aide, pas un conseil juridique.",
       noticeText: "Nous ne garantissons pas que ce soit la meilleure ou la seule voie : nous faisons de notre mieux pour nous approcher de votre cas, mais la norme change et chaque dossier a ses nuances. Avant de présenter quoi que ce soit, vérifiez la source officielle et consultez un avocat en immigration ou une association. <a href=\"#/ayuda\" data-nav=\"ayuda\">Ressources gratuites et mentions légales</a>.",
       langNoticeTitle: "Interface en français",
-      langNoticeText: "Les guides et fiches juridiques détaillés sont encore en espagnol. La traduction complète se fera par étapes."
+      langNoticeText: "Les guides et fiches juridiques détaillés sont encore en espagnol. Vous pouvez utiliser la traduction du navigateur pour les textes longs, mais pas si le rapport contient des données personnelles."
     },
     en: {
       tagline: 'Spain, step by step',
@@ -95,10 +98,11 @@
       start: 'Start my assessment',
       routes: 'See available routes',
       demo: 'See a sample plan →',
+      wizard: { step: 'Step {n} of {total}', back: 'Back', next: 'Continue', finish: 'See my plan', save: 'Save and exit' },
       noticeTitle: 'This is help, not legal advice.',
       noticeText: 'We do not guarantee that this is the best or the only route: we do our best to get close to your case, but rules change and every file has nuances. Before submitting anything, check the official source and consult an immigration lawyer or a social organisation. <a href="#/ayuda" data-nav="ayuda">Free resources and legal notice</a>.',
       langNoticeTitle: 'Interface in English',
-      langNoticeText: 'Detailed legal guides and cards are still in Spanish. Full translation is being prepared in stages.'
+      langNoticeText: 'Detailed legal guides and cards are still in Spanish. You can use browser translation for long text, but not if the report shows personal data.'
     },
     ro: {
       tagline: 'Spania, pas cu pas',
@@ -116,10 +120,11 @@
       start: 'Începe evaluarea',
       routes: 'Vezi căile disponibile',
       demo: 'Vezi un plan exemplu →',
+      wizard: { step: 'Pasul {n} din {total}', back: 'Înapoi', next: 'Continuă', finish: 'Vezi planul meu', save: 'Salvează și ieși' },
       noticeTitle: 'Acesta este un ajutor, nu consultanță juridică.',
       noticeText: 'Nu garantăm că este cea mai bună sau singura cale: facem tot posibilul să ne apropiem de cazul tău, dar normele se schimbă și fiecare dosar are nuanțe. Înainte de a depune ceva, verifică sursa oficială și consultă un avocat de imigrare sau o organizație socială. <a href="#/ayuda" data-nav="ayuda">Resurse gratuite și aviz legal</a>.',
       langNoticeTitle: 'Interfață în română',
-      langNoticeText: 'Ghidurile și fișele juridice detaliate sunt încă în spaniolă. Traducerea completă se face pe etape.'
+      langNoticeText: 'Ghidurile și fișele juridice detaliate sunt încă în spaniolă. Poți folosi traducerea browserului pentru textele lungi, dar nu dacă raportul conține date personale.'
     }
   };
 
@@ -164,6 +169,8 @@
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     var sel = byId('langSelect');
     if (sel) sel.value = lang;
+    var main = byId('main');
+    if (main) main.setAttribute('lang', 'es');
 
     document.querySelectorAll('.nav__link[data-nav]').forEach(function (b) {
       var k = b.getAttribute('data-nav');
@@ -187,6 +194,19 @@
     document.querySelectorAll('.hero__cta [data-nav="vias"]').forEach(function (b) { b.textContent = s.routes; });
     var demo = document.querySelector('[data-action="demo"]');
     if (demo) demo.textContent = s.demo;
+    var prev = byId('prevBtn');
+    if (prev) prev.textContent = s.wizard.back;
+    var save = byId('saveExitBtn');
+    if (save) save.textContent = s.wizard.save;
+    var stepLabel = byId('wizardStepLabel');
+    if (stepLabel && /Paso\s+\d+\s+de\s+\d+/.test(stepLabel.textContent || '')) {
+      var m = String(stepLabel.textContent).match(/Paso\s+(\d+)\s+de\s+(\d+)/);
+      stepLabel.textContent = s.wizard.step.replace('{n}', m[1]).replace('{total}', m[2]);
+    }
+    var next = byId('nextBtn');
+    if (next && /Continuar|Ver mi plan/.test(next.textContent || '')) {
+      next.textContent = next.textContent.indexOf('Ver mi plan') !== -1 ? s.wizard.finish : s.wizard.next;
+    }
 
     var notice = document.querySelector('.notice-strip');
     if (notice) {

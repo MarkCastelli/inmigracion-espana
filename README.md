@@ -10,7 +10,7 @@ Ruta Legal es una aplicación web estática, gratuita y privada, pensada para pe
 - **Versión:** 1.0.0
 - **Idioma:** español
 - **Interfaz:** español, árabe (RTL), francés, inglés y rumano
-- **Contenido legal:** español; traducción completa por fases
+- **Contenido legal:** español; la prosa larga se deja a la traducción del navegador y los formularios/avisos críticos se traducen aparte
 - **Contenido:** revisado el 21/11/2026
 - **Pruebas:** 174 pasando
 

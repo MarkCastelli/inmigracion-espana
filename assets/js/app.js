@@ -206,7 +206,8 @@
     var p = RL.profile();
     var total = steps.length;
 
-    $('#wizardStepLabel').textContent = 'Paso ' + (ui.step + 1) + ' de ' + total;
+    var stepTpl = (RL.i18n && RL.i18n.t('wizard.step')) || 'Paso {n} de {total}';
+    $('#wizardStepLabel').textContent = stepTpl.replace('{n}', ui.step + 1).replace('{total}', total);
     $('#wizardIntro').textContent = step.intro;
     $('#t-wizard').textContent = step.title;
     $('#wizardError').hidden = true;
@@ -219,7 +220,8 @@
     $('#wizardFields').innerHTML = html;
 
     $('#prevBtn').style.visibility = ui.step === 0 ? 'hidden' : 'visible';
-    $('#nextBtn').textContent = ui.step === total - 1 ? 'Ver mi plan' : 'Continuar';
+    var nextLabel = ui.step === total - 1 ? ((RL.i18n && RL.i18n.t('wizard.finish')) || 'Ver mi plan') : ((RL.i18n && RL.i18n.t('wizard.next')) || 'Continuar');
+    $('#nextBtn').textContent = nextLabel;
   }
 
   function setProgress(pct) {
@@ -2394,6 +2396,11 @@
       }).join('') + '</div></div>';
 
     html += '</div>';
+
+    html += '<div class="block mt-3"><div class="block__head">' + icons.globe(18) + '<h2>Traducir el contenido largo</h2></div><div class="block__body">' +
+      '<p>La interfaz tiene selector de idioma. Las guías y fichas legales largas siguen en español para no dar una traducción automática por buena. Puedes usar la traducción del navegador para entenderlas, pero:</p>' +
+      '<ul style="padding-left:18px;font-size:.88rem;color:var(--ink-2)"><li>No la uses si el informe muestra tu nombre, NIE, familia o situación personal: el texto puede enviarse al proveedor del navegador.</li><li>Vuelve a traducir si cambias de pantalla; la app vuelve a pintar contenido en español.</li><li>Confirma fechas, tasas y nombres de trámites en la sede oficial: una traducción automática puede confundir términos legales.</li></ul>' +
+      '<p class="muted" style="font-size:.8rem">En Chrome/Edge: clic derecho → Traducir. En Firefox/Safari: botón de traducción del navegador.</p></div></div>';
 
     html += '<div class="block mt-3"><div class="block__head">' + icons.ext(18) + '<h2>Canales de YouTube</h2></div><div class="block__body">' +
       '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>Recomendados por esta página, no asesoramiento oficial</strong>' +

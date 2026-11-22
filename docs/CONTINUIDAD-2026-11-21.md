@@ -82,6 +82,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 52. **León y Cádiz**: Cáritas León, Diaconía León, Cáritas Cádiz y Fundación Márgenes y Vínculos; se muestran en cualquier municipio de su provincia.
 53. **Canales de YouTube**: Expediente Extranjero y Prixline en Ayuda, con aviso de que son canales independientes y no asesoramiento oficial.
 54. **Idiomas (fase 1)**: selector en cabecera para español, árabe RTL, francés, inglés y rumano; navegación, portada y avisos traducidos. El contenido legal detallado sigue en español y se avisa en la propia interfaz.
+55. **Política de traducción**: no se traduce la prosa larga que el navegador puede traducir; se priorizan navegación, formularios, botones, errores, avisos y RTL. Añadida guía de traducción del navegador con aviso de privacidad.
 
 ## Comandos
 
