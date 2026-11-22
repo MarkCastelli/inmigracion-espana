@@ -1194,16 +1194,18 @@
 
     var groups = [
       { id: 'todas', label: 'Todas' },
-      { id: 'nacionalidad', label: 'Nacionalidad' },
       { id: 'residencia', label: 'Residencia' },
       { id: 'visado', label: 'Visados' },
+      { id: 'nacionalidad', label: 'Nacionalidad' },
       { id: 'proteccion', label: 'Protección' }
     ];
+    var groupOrder = { residencia: 0, visado: 1, nacionalidad: 2, proteccion: 3 };
 
     var list = RL.routes.slice().sort(function (a, b) {
-      var ra = byId[a.id] || { score: 0 };
-      var rb = byId[b.id] || { score: 0 };
-      return (b.availability === 'open' ? 1 : 0) - (a.availability === 'open' ? 1 : 0) || rb.score - ra.score;
+      var ga = groupOrder[a.group] == null ? 9 : groupOrder[a.group];
+      var gb = groupOrder[b.group] == null ? 9 : groupOrder[b.group];
+      if (ga !== gb) return ga - gb;
+      return String(a.title).localeCompare(String(b.title), 'es');
     });
 
     var q = ui.search.toLowerCase();
@@ -1223,28 +1225,35 @@
       }).join('') + '</div></div>';
 
     if (p.nationality) {
-      html += '<p class="muted" style="font-size:.84rem;margin-top:-8px">Ordenadas según tu perfil. Las que no encajan aparecen al final, marcadas.</p>';
+      html += '<p class="muted" style="font-size:.84rem;margin-top:-8px">Ordenadas por tipo y después alfabéticamente. Solo marcamos una valoración cuando los datos permiten una conclusión clara; el resto queda como información.</p>';
     }
 
-    html += '<div class="catalog-grid">' + filtered.map(function (r) {
-      var res = byId[r.id];
-      var closed = r.availability === 'closed';
-      var badge = closed ? '<span class="badge badge--neutral">Cerrada</span>' :
-        (res && res.status === 'ready' ? '<span class="badge badge--ok" title="Requisitos cubiertos; no es probabilidad de concesión">Requisitos cubiertos</span>' :
-          res && res.status === 'likely' ? '<span class="badge badge--ok" title="Encaja, pero faltan datos o pruebas">Probable, faltan datos</span>' :
-            res && res.status === 'almost' ? '<span class="badge badge--warn">A tu alcance</span>' : '');
-      return '<article class="card via">' +
-        '<div class="flex" style="justify-content:space-between"><span class="badge badge--info">' + groupLabel(r.group) + '</span>' + badge + '</div>' +
-        '<h3>' + esc(r.title) + '</h3>' +
-        '<p>' + esc(r.short) + '</p>' +
-        '<div class="via__tags"><span class="chip">' + icons.pin(12) + ' ' + whereLabel(r.where) + '</span>' +
-        (r.availability === 'closed' ? '' : '<span class="chip">' + icons.euro(12) + ' ' + esc(r.cost) + '</span>') + '</div>' +
-        '<div class="via__foot"><span class="muted" style="font-size:.76rem">' + esc(r.legal || '') + '</span>' +
-        '<button class="btn btn--soft btn--sm" data-action="open-route" data-id="' + esc(r.id) + '">Ver ficha</button></div>' +
-        '</article>';
-    }).join('') + '</div>';
+    var sectionOrder = ui.filter === 'todas' ? ['residencia', 'visado', 'nacionalidad', 'proteccion'] : [ui.filter];
+    var shown = 0;
+    sectionOrder.forEach(function (gid) {
+      var items = filtered.filter(function (r) { return r.group === gid; });
+      if (!items.length) return;
+      shown += items.length;
+      html += '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.route(18) + '<h2>' + esc(groupLabel(gid)) + ' <span class="muted" style="font-size:.78rem">(' + items.length + ')</span></h2></div><div class="block__body"><div class="catalog-grid">' +
+        items.map(function (r) {
+          var res = byId[r.id];
+          var closed = r.availability === 'closed';
+          var badge = closed ? '<span class="badge badge--neutral">Plazo cerrado</span>' :
+            (res && res.status === 'ready' ? '<span class="badge badge--ok" title="Los datos cargados cubren los requisitos esenciales; no es una concesión">Cumple requisitos</span>' :
+              res && res.status === 'blocked' ? '<span class="badge badge--bad" title="Los datos cargados muestran un impedimento concreto">No encaja</span>' : '');
+          return '<article class="card via">' +
+            '<div class="flex" style="justify-content:space-between"><span class="badge badge--info">' + esc(groupLabel(r.group)) + '</span>' + badge + '</div>' +
+            '<h3>' + esc(r.title) + '</h3>' +
+            '<p>' + esc(r.short) + '</p>' +
+            '<div class="via__tags"><span class="chip">' + icons.pin(12) + ' ' + whereLabel(r.where) + '</span>' +
+            (r.availability === 'closed' ? '' : '<span class="chip">' + icons.euro(12) + ' ' + esc(r.cost) + '</span>') + '</div>' +
+            '<div class="via__foot"><span class="muted" style="font-size:.76rem">' + esc(r.legal || '') + '</span>' +
+            '<button class="btn btn--soft btn--sm" data-action="open-route" data-id="' + esc(r.id) + '">Ver ficha</button></div>' +
+            '</article>';
+        }).join('') + '</div></div></div>';
+    });
 
-    if (!filtered.length) html += '<div class="empty-state"><h2>Sin resultados</h2><p>Prueba con otra palabra: «arraigo», «nacionalidad», «estudios»…</p></div>';
+    if (!shown) html += '<div class="empty-state"><h2>Sin resultados</h2><p>Prueba con otra palabra: «arraigo», «nacionalidad», «estudios»…</p></div>';
 
     host.innerHTML = html;
 
@@ -1276,11 +1285,13 @@
     ev.results.forEach(function (r) { if (r.route.id === id) res = r; });
 
     var st = res ? RL.statusOf(res.status) : null;
+    var showStatus = res && (res.status === 'ready' || res.status === 'blocked');
+    var statusLabel = res && res.status === 'ready' ? 'Cumple requisitos' : (res && res.status === 'blocked' ? 'No encaja' : '');
     var html = '<div class="plan-head"><div><p class="eyebrow"><button class="btn btn--link" data-nav="vias" style="font-size:.75rem">← Volver al catálogo</button></p>' +
       '<h1>' + esc(route.title) + '</h1><p class="plan-head__sub">' + esc(route.summary) + '</p></div></div>';
 
     html += '<div class="flex" style="margin-bottom:20px">' +
-      (st ? '<span class="badge ' + (res.status === 'ready' ? 'badge--ok' : res.status === 'almost' ? 'badge--warn' : 'badge--neutral') + '">' + st.label + '</span>' : '') +
+      (showStatus ? '<span class="badge ' + (res.status === 'ready' ? 'badge--ok' : 'badge--bad') + '">' + statusLabel + '</span>' : '') +
       '<span class="chip">' + icons.pin(13) + ' ' + whereLabel(route.where) + '</span>' +
       '<span class="chip">' + icons.clock(13) + ' ' + esc(route.time) + '</span>' +
       '<span class="chip">' + icons.euro(13) + ' ' + esc(route.cost) + '</span>' +

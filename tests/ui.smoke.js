@@ -168,6 +168,8 @@ t('el catálogo lista las vías y sus fichas', () => {
   assert.ok(html.includes('Arraigo social'), 'falta arraigo social');
   assert.ok(html.includes('Ley de Nietos'), 'falta la Ley de Nietos');
   assert.ok(html.includes('nómada digital'), 'falta nómada digital');
+  assert.ok(html.indexOf('<h2>Residencia') < html.indexOf('<h2>Visado'), 'residencia debe ir antes que visados');
+  assert.ok(html.indexOf('<h2>Visado') < html.indexOf('<h2>Nacionalidad'), 'visados debe ir antes que nacionalidad');
 });
 
 t('la ayuda renderiza glosario, FAQ y bulos', () => {
