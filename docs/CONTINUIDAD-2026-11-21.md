@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **191 pruebas pasando**.
+- **192 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -97,6 +97,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 67. **Vínculos de hijos**: etiquetas explícitas «Hijo o hija de ambos», «Hijo o hija de él» y «Hijo o hija de ella» en el formulario nuevo y en el diagnóstico antiguo.
 68. **Un solo gasto de vivienda**: si hay hipoteca se pide solo la cuota; si no, solo alquiler/coste. El resumen usa un único importe para evitar duplicarlo.
 69. **Composición como fuente única**: nombre y edad de pareja, hijos y otros integrantes se cargan desde el paso 0; en los pasos 5 y 6 se muestran como resumen y no se vuelven a pedir.
+70. **Objetivos filtrados**: no se ofrece NIE, TIE o residencia a quien ya los tiene marcados en documentos/residencia; se conservan objetivos distintos como nacionalidad, arraigo o reagrupación.
 
 ## Comandos
 

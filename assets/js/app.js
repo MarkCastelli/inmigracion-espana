@@ -400,6 +400,24 @@
     }
   }
 
+  function availableGoals(obj) {
+    var docs = Array.isArray(obj.docs) ? obj.docs : [];
+    var residence = obj.residence || '';
+    var blocked = {};
+    if (docs.indexOf('nie') !== -1) blocked.nie = true;
+    if (docs.indexOf('tie') !== -1) blocked.tie = true;
+    if (residence && residence !== 'irregular') {
+      blocked.residencia = true;
+      blocked[residence] = true;
+    }
+    if (residence === 'larga_duracion') blocked.larga_duracion = true;
+    var goals = RL.formulario.goals.filter(function (g) { return !blocked[g.v]; });
+    obj.goals = (obj.goals || []).filter(function (v) {
+      return goals.some(function (g) { return g.v === v; });
+    });
+    return goals;
+  }
+
   function renderFormulario() {
     var host = $('#view-formulario');
     var F = getForm();
@@ -521,14 +539,15 @@
         (fget(F.applicant, 'aidReceived') === 'si' ? fChecks('applicant.aidTypes', '¿Qué recibes?', fget(F.applicant, 'aidTypes'), RL.formulario.aidTypes) + fChecks('applicant.aidWho', '¿Quién te ayuda?', fget(F.applicant, 'aidWho'), RL.formulario.aidWho) + fInput('applicant.aidDetail', 'Detalle (opcional)', fget(F.applicant, 'aidDetail')) : '') +
         '</div></div>';
     } else if (step === 9) {
-      html += '<div class="block"><div class="block__head">' + icons.route(18) + '<h2>¿Qué esperas conseguir?</h2></div><div class="block__body">';
-      html += '<h3>Titular</h3>' + fChecks('applicant.goals', 'Objetivos', fget(F.applicant, 'goals'), RL.formulario.goals);
+      html += '<div class="block"><div class="block__head">' + icons.route(18) + '<h2>¿Qué esperas conseguir?</h2></div><div class="block__body">' +
+        '<div class="callout callout--info">' + icons.info(16) + '<div><p>No mostramos objetivos que ya constan en documentos o residencia. Si algo cambió, vuelve al paso de situación actual.</p></div></div>';
+      html += '<h3>Titular</h3>' + fChecks('applicant.goals', 'Objetivos', fget(F.applicant, 'goals'), availableGoals(F.applicant));
       if (F.mode === 'family') {
-        html += '<h3>Pareja</h3>' + fChecks('spouse.goals', 'Objetivos', fget(F.spouse, 'goals'), RL.formulario.goals);
-        F.children.forEach(function (ch, i) { html += '<h3>Hijo/a ' + (i + 1) + '</h3>' + fChecks('children.' + i + '.goals', 'Objetivos', fget(ch, 'goals'), RL.formulario.goals); });
+        html += '<h3>Pareja</h3>' + fChecks('spouse.goals', 'Objetivos', fget(F.spouse, 'goals'), availableGoals(F.spouse));
+        F.children.forEach(function (ch, i) { html += '<h3>Hijo/a ' + (i + 1) + '</h3>' + fChecks('children.' + i + '.goals', 'Objetivos', fget(ch, 'goals'), availableGoals(ch)); });
         (F.members || []).forEach(function (m, i) {
           if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
-          html += '<h3>' + fEsc(m.name || ('Integrante ' + (i + 1))) + '</h3>' + fChecks('members.' + i + '.data.goals', 'Objetivos', fget(m.data || {}, 'goals'), RL.formulario.goals);
+          html += '<h3>' + fEsc(m.name || ('Integrante ' + (i + 1))) + '</h3>' + fChecks('members.' + i + '.data.goals', 'Objetivos', fget(m.data || {}, 'goals'), availableGoals(m.data || {}));
         });
       }
       html += '</div></div>';

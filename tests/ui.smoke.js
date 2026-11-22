@@ -716,4 +716,23 @@ t('nombre y edad se cargan desde la composición, sin repetirlos', () => {
   nav(app, 'inicio');
 });
 
+t('no ofrece NIE o TIE a quien ya los tiene', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 2;
+  f.members = [{ name: 'Ana', age: '40', relation: 'esposa', data: RL.formulario.person() }];
+  f.applicant.docs = ['nie', 'tie'];
+  f.spouse.docs = ['nie', 'tie', 'pasaporte'];
+  f.step = 9;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(!html.includes('value="nie"'), 'no debe ofrecer NIE ya obtenido');
+  assert.ok(!html.includes('value="tie"'), 'no debe ofrecer TIE ya obtenida');
+  assert.ok(html.includes('value="nacionalidad"'), 'debe seguir ofreciendo nacionalidad');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
