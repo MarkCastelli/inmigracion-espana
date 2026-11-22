@@ -341,6 +341,12 @@
       fInput(prefix + '.expenses.amazon', 'Amazon Prime (€/mes)', fget(obj, 'expenses.amazon'), 'number') +
       fInput(prefix + '.expenses.disney', 'Disney+ (€/mes)', fget(obj, 'expenses.disney'), 'number') +
       '<p class="field__help" style="grid-column:1/-1">Netflix, Amazon y Disney se suman como un único gasto de suscripciones.</p>' +
+      fInput(prefix + '.expenses.transport', 'Transporte (€/mes)', fget(obj, 'expenses.transport'), 'number') +
+      '<p class="field__help" style="grid-column:1/-1">Transporte tuyo o de la familia: abono, metro, bus, gasolina, etc.</p>' +
+      fInput(prefix + '.expenses.misc', 'Gastos varios (€/mes)', fget(obj, 'expenses.misc'), 'number') +
+      '<p class="field__help" style="grid-column:1/-1">Ropa, extras, salidas u otros gastos no incluidos arriba.</p>' +
+      fInput(prefix + '.expenses.credits', 'Créditos (€/mes)', fget(obj, 'expenses.credits'), 'number') +
+      '<p class="field__help" style="grid-column:1/-1">Total mensual de créditos y compras a plazos.</p>' +
       fRadio(prefix + '.computer', '¿Tienes computadora?', fget(obj, 'computer'), F.yesNo) +
       '</div><p class="field__help">Los gastos del hogar se cargan una sola vez aquí. Déjalo vacío si no pagas ese concepto: cuenta como 0 €.</p>';
     return h;
@@ -744,6 +750,11 @@
     return fnum(exp.netflix) + fnum(exp.amazon) + fnum(exp.disney);
   }
 
+  function extrasFor(p) {
+    var exp = p && p.expenses ? p.expenses : {};
+    return { transport: fnum(exp.transport), misc: fnum(exp.misc), credits: fnum(exp.credits), total: fnum(exp.transport) + fnum(exp.misc) + fnum(exp.credits) };
+  }
+
   function housingExpenseFor(p, isApplicant) {
     if (!p) return 0;
     return housingBaseFor(p, isApplicant) + utilitiesFor(p);
@@ -792,9 +803,11 @@
       var util = utilitiesFor(o);
       var food = foodFor(o);
       var subs = subscriptionsFor(o);
-      if (!base && !util && !food && !subs) return '';
+      var extras = extrasFor(o);
+      if (!base && !util && !food && !subs && !extras.total) return '';
       return '<section class="report-section"><h3>Vivienda y gastos</h3><p><strong>Vivienda:</strong> ' + base.toFixed(2) + ' €/mes · <strong>Suministros:</strong> ' + util.toFixed(2) + ' €/mes</p>' +
-        (food || subs ? '<p><strong>Comida:</strong> ' + food.toFixed(2) + ' €/mes · <strong>Suscripciones:</strong> ' + subs.toFixed(2) + ' €/mes</p>' : '') + '</section>';
+        (food || subs ? '<p><strong>Comida:</strong> ' + food.toFixed(2) + ' €/mes · <strong>Suscripciones:</strong> ' + subs.toFixed(2) + ' €/mes</p>' : '') +
+        (extras.total ? '<p><strong>Transporte:</strong> ' + extras.transport.toFixed(2) + ' €/mes · <strong>Varios:</strong> ' + extras.misc.toFixed(2) + ' €/mes · <strong>Créditos:</strong> ' + extras.credits.toFixed(2) + ' €/mes</p>' : '') + '</section>';
     }
 
     var cover = '<header class="report-cover"><p class="report-kicker">Ruta Legal · Informe de caso</p>' +
@@ -830,7 +843,8 @@
       var utilities = utilitiesFor(F.applicant);
       var food = foodFor(F.applicant);
       var subscriptions = subscriptionsFor(F.applicant);
-      var total = base + utilities + food + subscriptions;
+      var extras = extrasFor(F.applicant);
+      var total = base + utilities + food + subscriptions + extras.total;
       pages.push('<header class="report-person-head"><p class="report-kicker">Cierre del informe</p><h2>Resumen económico del hogar</h2></header>' +
         '<section class="report-section"><dl class="kv">' +
         '<div class="kv__row"><dt>Ingreso neto mensual</dt><dd>' + income.toFixed(2) + ' €</dd></div>' +
@@ -838,6 +852,9 @@
         '<div class="kv__row"><dt>Suministros</dt><dd>' + utilities.toFixed(2) + ' €</dd></div>' +
         '<div class="kv__row"><dt>Comida mensual</dt><dd>' + food.toFixed(2) + ' €</dd></div>' +
         '<div class="kv__row"><dt>Suscripciones</dt><dd>' + subscriptions.toFixed(2) + ' €</dd></div>' +
+        '<div class="kv__row"><dt>Transporte</dt><dd>' + extras.transport.toFixed(2) + ' €</dd></div>' +
+        '<div class="kv__row"><dt>Gastos varios</dt><dd>' + extras.misc.toFixed(2) + ' €</dd></div>' +
+        '<div class="kv__row"><dt>Créditos y plazos</dt><dd>' + extras.credits.toFixed(2) + ' €</dd></div>' +
         '<div class="kv__row"><dt>Gastos totales del hogar</dt><dd><strong>' + total.toFixed(2) + ' €</strong></dd></div>' +
         '<div class="kv__row"><dt>Diferencia</dt><dd><strong>' + (income - total).toFixed(2) + ' €</strong></dd></div>' +
         '</dl></section>');
@@ -856,7 +873,8 @@
     var utilities = utilitiesFor(F.applicant);
     var food = foodFor(F.applicant);
     var subscriptions = subscriptionsFor(F.applicant);
-    var exp = housingBase + utilities + food + subscriptions;
+    var extras = extrasFor(F.applicant);
+    var exp = housingBase + utilities + food + subscriptions + extras.total;
     var balance = income - exp;
     var members = [{ key: 'applicant', label: F.applicant.name || 'Titular', obj: F.applicant }];
     var childMeta = [];
@@ -879,6 +897,9 @@
       '<div class="kv__row"><dt>Gastos totales del hogar</dt><dd>' + exp.toFixed(2) + ' €</dd></div>' +
       '<div class="kv__row"><dt>Comida mensual</dt><dd>' + food.toFixed(2) + ' €</dd></div>' +
       '<div class="kv__row"><dt>Suscripciones (Netflix/Amazon/Disney)</dt><dd>' + subscriptions.toFixed(2) + ' €</dd></div>' +
+      '<div class="kv__row"><dt>Transporte</dt><dd>' + extras.transport.toFixed(2) + ' €</dd></div>' +
+      '<div class="kv__row"><dt>Gastos varios</dt><dd>' + extras.misc.toFixed(2) + ' €</dd></div>' +
+      '<div class="kv__row"><dt>Créditos y plazos</dt><dd>' + extras.credits.toFixed(2) + ' €</dd></div>' +
       '<div class="kv__row"><dt>Diferencia</dt><dd><strong>' + balance.toFixed(2) + ' €</strong></dd></div>' +
       (F.familyLocation ? '<div class="kv__row"><dt>Resto de la familia</dt><dd>' + fEsc({ todos_espana: 'Todos en España', algunos_espana: 'Algunos en España y otros fuera', todos_fuera: 'Todos fuera de España', portugal: 'En Portugal', argentina: 'En Argentina', latam: 'En América Latina', otro: 'En otro país', dontknow: 'No lo sé' }[F.familyLocation] || F.familyLocation) + '</dd></div>' : '') +
       '</div>';
@@ -908,6 +929,7 @@
       html += '<h3>Vivienda y gastos</h3><p>' + fEsc(fget(F.applicant, 'housing') || 'Sin indicar') + ' · total <strong>' + exp.toFixed(2) + ' €/mes</strong></p>' +
         '<p><strong>Hipoteca/alquiler:</strong> ' + housingBase.toFixed(2) + ' € · <strong>Suministros:</strong> ' + utilities.toFixed(2) + ' €</p>' +
         '<p><strong>Comida:</strong> ' + food.toFixed(2) + ' € · <strong>Suscripciones:</strong> ' + subscriptions.toFixed(2) + ' €</p>' +
+        '<p><strong>Transporte:</strong> ' + extras.transport.toFixed(2) + ' € · <strong>Varios:</strong> ' + extras.misc.toFixed(2) + ' € · <strong>Créditos:</strong> ' + extras.credits.toFixed(2) + ' €</p>' +
         '<p class="muted" style="font-size:.83rem">Gastos del hogar cargados una sola vez por el titular.</p>';
     }
     if (F.print && F.print.goals !== false) {

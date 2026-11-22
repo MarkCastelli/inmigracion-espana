@@ -117,6 +117,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 87. **Saltos por integrante**: CSS `break-before: page` antes de cada hoja; titular, pareja, hijos y otros integrantes no comparten página.
 88. **Comida y suscripciones**: el titular carga comida semanal (×4,33 a mes) y Netflix/Amazon/Disney; se suman al gasto del hogar y se muestran desglosados en el resumen.
 89. **Un solo origen de egresos**: pareja, hijos y otros integrantes ya no muestran campos de vivienda/gastos; el resumen usa exclusivamente los importes del titular.
+90. **Transporte, varios y créditos**: el titular carga transporte, gastos varios (ropa, extras, salidas) y el total mensual de créditos/compras a plazos; se suman al gasto del hogar y aparecen en el informe.
 
 ## Comandos
 

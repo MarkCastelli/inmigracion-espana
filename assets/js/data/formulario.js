@@ -90,7 +90,7 @@
       disabilityRecognized: '', disabilityDegree: '', disabilityExpiryStatus: '', disabilityExpiry: '', dependency: '',
       docs: [], asylumRequested: '', asylumYear: '', asylumStatus: '', asylumDate: '',
       housing: '', housingCost: '', mortgage: '', mortgageAmount: '',
-      expenses: { luz: '', agua: '', gas: '', comunidad: '', internet: '', foodWeekly: '', netflix: '', amazon: '', disney: '' },
+      expenses: { luz: '', agua: '', gas: '', comunidad: '', internet: '', foodWeekly: '', netflix: '', amazon: '', disney: '', transport: '', misc: '', credits: '' },
       computer: '', education: '', educationLevel: '', aidReceived: '', aidTypes: [], aidWho: [], aidDetail: '', goals: []
     };
   }
