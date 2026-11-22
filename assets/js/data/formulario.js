@@ -109,6 +109,7 @@
       commonGoalsOn: false,
       commonGoals: [],
       print: { applicant: true, spouse: true, children: true, disability: true, aid: true, housing: true, goals: true, economy: true },
+      printBasic: false,
       notes: ''
     };
     out.applicant.paysHousing = 'si';

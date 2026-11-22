@@ -992,3 +992,16 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 .privacy-assurance strong { display: block; margin-bottom: 4px; color: #d7f5e4; }
 .privacy-assurance p { margin: 0; font-size: .86rem; line-height: 1.55; color: #dceff1; }
 @media print { .privacy-assurance { display: none !important; } }
+
+
+/* ── Elección de PDF y aviso de versión ─────────────────────── */
+.print-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.print-choice__option { border: 1px solid var(--line); border-radius: 12px; padding: 15px; background: var(--surface); }
+.print-choice__option--basic { border: 2px solid #7fc7a0; background: #f3fbf6; }
+.print-choice__option strong { display: block; color: var(--brand); margin-bottom: 6px; }
+.print-choice__option p { font-size: .84rem; color: var(--ink-2); line-height: 1.5; min-height: 70px; }
+.report-mode { margin: 0 0 14px; padding: 8px 11px; border-radius: 7px; font-size: .78rem; font-weight: 700; letter-spacing: .02em; }
+.report-mode--basic { background: #e8f7ef; color: #1d6b45; border: 1px solid #9fd6b5; }
+.report-mode--full { background: #fff1e6; color: #8a3f00; border: 1px solid #f0b27a; }
+@media (max-width: 700px) { .print-choice { grid-template-columns: 1fr; } }
+@media print { .print-choice { display: none !important; } .report-mode { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }

@@ -1270,4 +1270,30 @@ t('cada hijo e integrante puede marcar sus documentos', () => {
   nav(app, 'inicio');
 });
 
+t('el PDF básico oculta datos identificativos y sensibles', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.applicant.name = 'Ana Secreta';
+  f.applicant.passportNumber = 'PASAPORTE-SECRETO';
+  f.applicant.disability = 'si';
+  f.applicant.disabilityDegree = '65_mas';
+  f.step = 11;
+  f.printBasic = true;
+  nav(app, 'formulario');
+  let html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('VERSIÓN BÁSICA'));
+  assert.ok(!html.includes('Ana Secreta'));
+  assert.ok(!html.includes('PASAPORTE-SECRETO'));
+  assert.ok(!html.includes('65_mas'));
+  f.printBasic = false;
+  RL.ui.render();
+  html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('VERSIÓN COMPLETA'));
+  assert.ok(html.includes('Ana Secreta'));
+  assert.ok(html.includes('PASAPORTE-SECRETO'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

@@ -195,6 +195,7 @@
       if (e.key === 'Escape') {
         closeFormModal();
         closeFeedbackModal();
+        closePrintChoice();
         var t = $('#toast'); if (t) t.remove();
       }
     });
@@ -607,6 +608,43 @@
     });
   }
 
+  function openPrintChoice() {
+    closePrintChoice();
+    var wrap = document.createElement('div');
+    wrap.id = 'printChoiceModal';
+    wrap.className = 'modal';
+    wrap.innerHTML =
+      '<div class="modal__backdrop" data-action="close-print-choice"></div>' +
+      '<div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="printChoiceTitle">' +
+      '<button class="modal__close" type="button" data-action="close-print-choice" aria-label="Cerrar">×</button>' +
+      '<p class="eyebrow">Antes de compartir</p><h2 id="printChoiceTitle">¿Qué PDF quieres generar?</h2>' +
+      '<p>Si no estás seguro de a quién se lo vas a enviar, usa la versión básica. La completa incluye datos que pueden identificarte.</p>' +
+      '<div class="print-choice">' +
+      '<div class="print-choice__option print-choice__option--basic"><strong>PDF básico · recomendado</strong><p>Sin nombre, teléfono, email, fecha exacta de nacimiento, pasaporte, salud, discapacidad ni asilo. Incluye país, edad, residencia, familia por rol, trabajo, estudios, objetivos y economía.</p><button class="btn btn--primary" type="button" data-action="print-basic">Generar PDF básico</button></div>' +
+      '<div class="print-choice__option"><strong>PDF completo</strong><p>Incluye datos identificativos y sensibles. Compártelo solo con un abogado, ONG o profesional de confianza.</p><button class="btn btn--soft" type="button" data-action="print-full">Generar PDF completo</button></div>' +
+      '</div></div>';
+    document.body.appendChild(wrap);
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePrintChoice() {
+    var m = document.getElementById('printChoiceModal');
+    if (m && m.parentNode) m.parentNode.removeChild(m);
+    document.body.style.overflow = '';
+  }
+
+  function printWithMode(basic) {
+    var F = RL.state.profile && RL.state.profile.formulario;
+    if (F) {
+      F.printBasic = !!basic;
+      try { saveForm(); } catch (e) {}
+      if (ui.view === 'formulario') renderFormulario();
+      else if (ui.view === 'plan') renderPlan();
+    }
+    closePrintChoice();
+    setTimeout(function () { window.print(); }, 180);
+  }
+
   function renderFormulario() {
     var host = $('#view-formulario');
     var F = getForm();
@@ -901,6 +939,7 @@
 
   function printReportHTML(F) {
     var people = goalPeople(F);
+    var basic = !!F.printBasic;
     var showDisability = !F.print || F.print.disability !== false;
     var showGoals = !F.print || F.print.goals !== false;
     var showHousing = !F.print || F.print.housing !== false;
@@ -916,11 +955,19 @@
     }
 
     function disabilityBlock(o) {
-      if (!showDisability || o.disability !== 'si') return '';
+      if (basic || !showDisability || o.disability !== 'si') return '';
       return '<section class="report-section"><h3>Discapacidad y dependencia</h3><p><strong>Grado:</strong> ' + fEsc(o.disabilityDegree || 'sin indicar') +
         ' · <strong>Reconocida:</strong> ' + fEsc(o.disabilityRecognized || 'sin indicar') +
         ' · <strong>Dependencia:</strong> ' + fEsc(o.dependency || 'sin indicar') +
         ' · <strong>Vencimiento:</strong> ' + fEsc(o.disabilityExpiryStatus === 'no' ? 'No caduca' : (o.disabilityExpiry || 'sin indicar')) + '</p></section>';
+    }
+
+    function displayLabel(p) {
+      if (!basic) return p.label;
+      if (p.key === 'applicant') return 'Titular';
+      if (p.key === 'spouse') return 'Pareja';
+      if (p.key.indexOf('children.') === 0) return 'Hijo/a ' + (Number(p.key.split('.')[1]) + 1);
+      return 'Integrante';
     }
 
     function goalsBlock(o) {
@@ -942,27 +989,28 @@
         (extras.total ? '<p><strong>Transporte:</strong> ' + extras.transport.toFixed(2) + ' €/mes · <strong>Varios:</strong> ' + extras.misc.toFixed(2) + ' €/mes · <strong>Créditos:</strong> ' + extras.credits.toFixed(2) + ' €/mes</p>' : '') + '</section>';
     }
 
-    var cover = '<header class="report-cover"><p class="report-kicker">Ruta Legal · Informe de caso</p>' +
+    var cover = '<div class="report-mode ' + (basic ? 'report-mode--basic' : 'report-mode--full') + '">' + (basic ? 'VERSIÓN BÁSICA · sin nombre, contacto, pasaporte, salud, discapacidad ni asilo' : 'VERSIÓN COMPLETA · incluye datos sensibles; compártela solo con quien confíes') + '</div>' +
+      '<header class="report-cover"><p class="report-kicker">Ruta Legal · Informe de caso</p>' +
       '<h1>Informe para asesoría legal</h1>' +
       '<p class="report-sub">Documento preparado para revisar con un abogado, ONG o servicio de extranjería.</p>' +
       '<p class="report-meta">' + fEsc(dateText) + ' · ' + (F.mode === 'family' ? 'Grupo familiar' : 'Consulta individual') + '</p></header>' +
       '<section class="report-section"><h2>Datos del informe</h2><dl class="kv">' +
-      '<div class="kv__row"><dt>Titular</dt><dd>' + fEsc(F.applicant.name || 'Sin nombre') + '</dd></div>' +
+      '<div class="kv__row"><dt>Titular</dt><dd>' + fEsc(basic ? 'Datos identificativos omitidos en la versión básica' : (F.applicant.name || 'Sin nombre')) + '</dd></div>' +
       '<div class="kv__row"><dt>Tipo de consulta</dt><dd>' + (F.mode === 'family' ? 'Grupo familiar' : 'Individual') + '</dd></div>' +
       '<div class="kv__row"><dt>Personas incluidas</dt><dd>' + (F.mode === 'family' ? (1 + (F.members || []).length) + ' personas' : '1 persona') + '</dd></div>' +
       '<div class="kv__row"><dt>Ubicación actual</dt><dd>' + fEsc({ espana: 'España', portugal: 'Portugal', ue: 'UE/EEE/Suiza', argentina: 'Argentina', latam: 'América Latina', otro: 'Otro país', dontknow: 'No lo sé' }[F.applicant.currentLocation] || 'Sin indicar') + '</dd></div>' +
       (F.familyLocation ? '<div class="kv__row"><dt>Resto de la familia</dt><dd>' + fEsc({ todos_espana: 'Todos en España', algunos_espana: 'Algunos en España y otros fuera', todos_fuera: 'Todos fuera de España', portugal: 'En Portugal', argentina: 'En Argentina', latam: 'En América Latina', otro: 'En otro país', dontknow: 'No lo sé' }[F.familyLocation] || F.familyLocation) + '</dd></div>' : '') +
       '</dl></section>' +
       '<section class="report-key"><h2>Puntos clave</h2><div class="report-key__grid">' +
-      '<div><span>Discapacidad reconocida</span><strong>' + (!showDisability ? 'Sección omitida' : (people.some(function (p) { return p.obj.disability === 'si'; }) ? people.filter(function (p) { return p.obj.disability === 'si'; }).map(function (p) { return fEsc(p.label); }).join(', ') : 'No consta')) + '</strong></div>' +
+      '<div><span>Discapacidad reconocida</span><strong>' + (basic ? 'Omitida en versión básica' : (!showDisability ? 'Sección omitida' : (people.some(function (p) { return p.obj.disability === 'si'; }) ? people.filter(function (p) { return p.obj.disability === 'si'; }).map(function (p) { return fEsc(p.label); }).join(', ') : 'No consta'))) + '</strong></div>' +
       '<div><span>Objetivo principal</span><strong>' + (!showGoals ? 'Sección omitida' : fEsc(F.commonGoalsOn ? (goalText(F.commonGoals) || 'Sin indicar') : (goalText(F.applicant.goals) || 'Sin indicar'))) + '</strong></div>' +
       '<div><span>Ingreso neto mensual</span><strong>' + (fnum(fget(F.applicant, 'netSalary')) + (F.mode === 'family' ? fnum(fget(F.spouse, 'netSalary')) : 0)).toFixed(2) + ' €</strong></div>' +
       '<div><span>Organización</span><strong>Una página por integrante</strong></div></div></section>';
     pages.push(cover);
 
     people.filter(selected).forEach(function (p) {
-      var content = '<header class="report-person-head"><p class="report-kicker">' + fEsc(p.key === 'applicant' ? 'Titular' : 'Integrante del grupo') + '</p><h2>' + fEsc(p.label) + '</h2></header>' +
-        '<section class="report-section"><h3>Datos personales</h3>' + summaryPerson(p.obj) + '</section>' +
+      var content = '<header class="report-person-head"><p class="report-kicker">' + fEsc(p.key === 'applicant' ? 'Titular' : 'Integrante del grupo') + '</p><h2>' + fEsc(displayLabel(p)) + '</h2></header>' +
+        '<section class="report-section"><h3>Datos personales</h3>' + summaryPerson(p.obj, basic) + '</section>' +
         disabilityBlock(p.obj) +
         goalsBlock(p.obj) +
         housingBlockFor(p.obj);
@@ -994,7 +1042,7 @@
 
     var totalPages = pages.length;
     return pages.map(function (content, i) {
-      return '<section class="report-page"><header class="report-page__head"><span>Ruta Legal · Informe de caso</span><span>' + fEsc(F.applicant.name || 'Titular') + '</span></header>' +
+      return '<section class="report-page"><header class="report-page__head"><span>Ruta Legal · Informe de caso</span><span>' + fEsc(basic ? 'Datos identificativos omitidos' : (F.applicant.name || 'Titular')) + '</span></header>' +
         content + '<footer class="report-page__foot"><span>Documento informativo · no sustituye a un abogado</span><span>Página ' + (i + 1) + ' de ' + totalPages + '</span></footer></section>';
     }).join('');
   }
@@ -1076,7 +1124,7 @@
     return html + '</div></div>';
   }
 
-  function summaryPerson(p) {
+  function summaryPerson(p, basic) {
     function label(list, value) {
       var found = (list || []).filter(function (x) { return x.v === value || x.value === value; })[0];
       return found ? (found.l || found.label) : value;
@@ -1106,7 +1154,13 @@
       ['Dependencia', p.dependency], ['Ayudas', p.aidReceived],
       ['Tipos de ayuda', aid], ['Objetivos', goals],
       ['Asilo', p.asylumRequested], ['Estado del asilo', p.asylumStatus]
-    ].filter(function (r) { return r[1] !== '' && r[1] != null; });
+    ];
+    if (basic) {
+      var hidden = ['Nombre', 'Fecha de nacimiento', 'Pasaporte', 'Teléfono', 'Email', 'Documentos', 'Discapacidad', 'Reconocida', 'Grado', 'Vencimiento', 'Dependencia', 'Asilo', 'Estado del asilo'];
+      rows = rows.filter(function (r) { return hidden.indexOf(r[0]) === -1; });
+      rows.push(['Documentos', 'Detalle omitido en la versión básica']);
+    }
+    rows = rows.filter(function (r) { return r[1] !== '' && r[1] != null; });
     return '<dl class="kv">' + rows.map(function (r) { return '<div class="kv__row"><dt>' + fEsc(r[0]) + '</dt><dd>' + fEsc(r[1]) + '</dd></div>'; }).join('') + '</dl>';
   }
 
@@ -1162,7 +1216,7 @@
     if (action === 'remove-child') {
       F.children.splice(Number(btn.getAttribute('data-index')), 1); saveForm(); renderFormulario(); return;
     }
-    if (action === 'print') { window.print(); return; }
+    if (action === 'print') { openPrintChoice(); return; }
     if (action === 'next') {
       if (F.step >= 11) { F.step = 0; F.completed = false; saveForm(); renderFormulario(); return; }
       F.step = formNextIndex(F, F.step);
@@ -4061,7 +4115,7 @@
      ACCIONES
      ══════════════════════════════════════════════════════════ */
   function handleAction(action, btn) {
-    if (action === 'print') { window.print(); return; }
+    if (action === 'print') { openPrintChoice(); return; }
     if (action === 'ai-ask') { openAIConsult(btn.getAttribute('data-question')); return; }
     if (action === 'ai-suggest') {
       ui.aiQuestion = btn.getAttribute('data-question') || '';
@@ -4167,6 +4221,9 @@
       return;
     }
     if (action === 'close-form') { closeFormModal(); return; }
+    if (action === 'close-print-choice') { closePrintChoice(); return; }
+    if (action === 'print-basic') { printWithMode(true); return; }
+    if (action === 'print-full') { printWithMode(false); return; }
     if (action === 'feedback') { openFeedbackModal(); return; }
     if (action === 'close-feedback') { closeFeedbackModal(); return; }
     if (action === 'send-feedback') { sendFeedbackEmail(); return; }
