@@ -84,6 +84,17 @@ test('no se recomienda pagar homologación sin trámite concreto', () => {
   assert.ok(con.actions.some(a => a.id === 'homologacion'), 'con trámite puedo valorarla');
 });
 
+test('la residencia humanitaria exige un supuesto concreto', () => {
+  const sin = RL.buildPlan(base({ permitStatus: 'none', humanitarianGround: 'no' }));
+  const no = sin.results.find(r => r.route.id === 'humanitarias');
+  assert.ok(no, 'falta la vía humanitaria');
+  assert.strictEqual(no.status, 'blocked', 'sin supuesto no debe encajar');
+
+  const con = RL.buildPlan(base({ permitStatus: 'none', humanitarianGround: 'serious_illness' }));
+  const si = con.results.find(r => r.route.id === 'humanitarias');
+  assert.notStrictEqual(si.status, 'blocked', 'con supuesto debe poder valorarse');
+});
+
 test('un visado que caduca pronto genera una ventana', () => {
   const plan = RL.buildPlan(base({ visaExpiry: RL.dates.addDays(RL.dates.today(), 30) }));
   assert.ok(plan.windows.some(w => /caduca en 30 días/i.test(w.title)));

@@ -2635,6 +2635,19 @@ body.has-speech-bar { padding-bottom: 86px; }
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'dontknow', l: 'No lo sé' }]
           },
           {
+            id: 'humanitarianGround', type: 'select', label: '¿Concurre alguna razón humanitaria para residir?',
+            showIf: inSpain,
+            options: [
+              { v: 'serious_illness', l: 'Enfermedad grave o riesgo para la salud' },
+              { v: 'integrity', l: 'Riesgo para mi integridad o situación de vulnerabilidad' },
+              { v: 'victim', l: 'Víctima de delito, trata o violencia' },
+              { v: 'other', l: 'Otra razón humanitaria' },
+              { v: 'no', l: 'No' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'No es una vía por pobreza ni una autorización automática: exige un supuesto concreto y pruebas (informes médicos o sociales, resolución, denuncia…).'
+          },
+          {
             id: 'notes', type: 'textarea', label: '¿Algo más que debamos saber? (opcional)', placeholder: 'Ej. tengo una denuncia pendiente, estoy esperando cita en el consulado, mi pareja acaba de obtener la nacionalidad…'
           }
         ]
@@ -3777,6 +3790,59 @@ body.has-speech-bar { padding-bottom: 86px; }
     ],
     links: [L.boe1155, L.min],
     fit: function (p, d) { return d.victim ? 'Has indicado una situación de violencia: hay una vía específica y recursos de protección. Busca apoyo especializado.' : ''; }
+  });
+
+  /* ══════════════════════════════════════════════════════════
+     8 bis. RESIDENCIA POR RAZONES HUMANITARIAS
+     ══════════════════════════════════════════════════════════ */
+  RL.routes.push({
+    id: 'humanitarias',
+    group: 'residencia',
+    title: 'Residencia por razones humanitarias',
+    short: 'Vía excepcional por enfermedad grave, riesgo o vulnerabilidad acreditada.',
+    icon: 'shield',
+    weight: 18,
+    goals: ['regularizar', 'residencia_estable'],
+    where: 'spain',
+    availability: 'open',
+    legal: 'Art. 128 RD 1155/2024',
+    summary: 'Autorización temporal por circunstancias excepcionales humanitarias. No es una vía general ni automática: exige un supuesto concreto (enfermedad grave, riesgo para la integridad, determinadas víctimas u otra razón humanitaria) y pruebas. La valora Extranjería y puede incluir autorización de trabajo.',
+    forWho: 'Personas en España que acreditan una situación humanitaria concreta y grave, no una simple dificultad económica.',
+    requirements: [
+      { label: 'Estás en España', test: inSpain, actionable: false },
+      { label: 'No eres ciudadano/a de la UE/EEE ni suizo/a', test: function (p, d) { return !d.euCitizen; }, actionable: false },
+      { label: 'Acreditas un supuesto humanitario concreto', test: function (p, d) { if (!d.humanitarianGround || d.humanitarianGround === 'dontknow') return null; return d.humanitarianGround !== 'no'; }, fix: 'Enfermedad grave, riesgo para la integridad, victimización o vulnerabilidad acreditada. La pobreza por sí sola no basta.' },
+      { label: 'Puedes aportar informe médico o social, resolución o prueba del supuesto', test: function () { return null; }, fix: 'No se concede por manifestarlo: hay que acreditarlo.' },
+      { label: 'No tienes antecedentes penales relevantes', test: criminalOK, actionable: false }
+    ],
+    blockers: [
+      { label: 'Los ciudadanos de la UE/EEE no necesitan esta autorización.', test: function (p, d) { return d.euCitizen; } },
+      { label: 'No consta un supuesto humanitario concreto en tus respuestas.', test: function (p, d) { return d.humanitarianGround === 'no' || !d.humanitarianGround; } },
+      { label: 'Es una vía para mayores de edad; los menores tienen protección específica.', test: function (p, d) { return d.minor; } }
+    ],
+    docs: [
+      D.pasaporte, D.ex10, D.ant_origen, D.ant_es, D.tasa,
+      { id: 'doc_informe_humanitario', name: 'Informe médico o social que acredite el supuesto humanitario', where: 'Servicio médico, servicios sociales o entidad especializada' }
+    ],
+    steps: [
+      { title: 'Identifica y acredita el supuesto', detail: 'Enfermedad grave, riesgo para la integridad, violencia o vulnerabilidad. Reúne informes médicos, sociales o resolución judicial.', when: 'Antes de solicitar' },
+      { title: 'Busca apoyo especializado', detail: 'CEAR, ACNUR, Cruz Roja, servicios sociales o abogado de extranjería. No presentes cualquier cosa.', when: 'Cuanto antes' },
+      { title: 'Presenta el EX-10 y la prueba', detail: 'En la Oficina de Extranjería o sede. Tasa 790-052 según el supuesto.', when: 'Día 0' },
+      { title: 'Sigue la resolución', detail: 'La autorización es temporal y puede incluir trabajo. Confirma vigencia y renovación en la resolución.', when: '+3 meses' }
+    ],
+    cost: 'Tasa 790-052 según el supuesto + TIE',
+    time: 'Variable; autorización temporal, normalmente 1 año',
+    risks: [
+      'No es una vía general ni automática.',
+      'La pobreza o la falta de trabajo no bastan por sí solas.',
+      'Sin informe o prueba del supuesto, se deniega.',
+      'Requiere revisión jurídica por la variedad de supuestos.'
+    ],
+    links: [L.boe1155, L.min],
+    fit: function (p, d) {
+      if (d.humanitarianGround && d.humanitarianGround !== 'no' && d.humanitarianGround !== 'dontknow') return 'Has indicado un posible supuesto humanitario. No es automático: hay que acreditarlo y lo valora Extranjería.';
+      return 'No consta un supuesto humanitario concreto; no es una vía por pobreza.';
+    }
   });
 
   /* ══════════════════════════════════════════════════════════
@@ -5216,6 +5282,32 @@ body.has-speech-bar { padding-bottom: 86px; }
       fee: '10,94 € + visado + TIE',
       note: 'No puedes reagrupar a alguien que ya está en España, aunque esté de turismo o en situación irregular. La reagrupación exige que el familiar esté fuera y obtenga visado. Si ya está aquí, valora familiar de español/UE, arraigo u otra vía.',
       routeIds: ['reagrupacion']
+    },
+    {
+      id: 'humanitarias', scope: 'national', cat: 'documentos', icon: 'shield',
+      title: 'Residencia por razones humanitarias',
+      when: 'Vía excepcional para personas en España que acreditan enfermedad grave, riesgo para la integridad, victimización o vulnerabilidad concreta. No es una vía general ni automática.',
+      where: 'Oficina de Extranjería de tu provincia o sede electrónica',
+      appointment: SEDE,
+      appointmentLabel: 'Abrir sede de Extranjería',
+      docs: [
+        'Pasaporte completo',
+        'Impreso EX-10',
+        'Informe médico o social que acredite el supuesto',
+        'Resolución, denuncia o prueba de la situación',
+        'Certificado de antecedentes penales',
+        'Tasa 790-052 pagada'
+      ],
+      steps: [
+        'Identifica el supuesto humanitario concreto y reúne la prueba.',
+        'Busca asesoramiento especializado antes de presentar.',
+        'Presenta el EX-10 en Extranjería o sede, con informes y antecedentes.',
+        'Paga la tasa y guarda el resguardo.',
+        'Sigue la resolución: la autorización es temporal y puede incluir trabajo.'
+      ],
+      fee: 'Tasa 790-052 según el supuesto + TIE',
+      note: 'No se concede por pobreza ni por falta de trabajo. Sin informe o prueba del supuesto, se deniega. La valoración es de Extranjería y cada caso es distinto.',
+      routeIds: ['humanitarias']
     },
     {
       id: 'asilo', scope: 'national', cat: 'ayuda', icon: 'shield',
@@ -7693,6 +7785,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     d.hasInsurance = p.healthInsurance === 'private' || p.healthInsurance === 'public';
     d.victim = p.victimViolence === 'yes';
     d.protectionNeed = p.protectionNeed === 'yes';
+    d.humanitarianGround = p.humanitarianGround || '';
 
     d.goals = Array.isArray(p.goals) ? p.goals : [];
     d.wants = function (g) { return d.goals.indexOf(g) !== -1; };

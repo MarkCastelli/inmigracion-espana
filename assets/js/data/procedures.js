@@ -152,6 +152,32 @@
       routeIds: ['reagrupacion']
     },
     {
+      id: 'humanitarias', scope: 'national', cat: 'documentos', icon: 'shield',
+      title: 'Residencia por razones humanitarias',
+      when: 'Vía excepcional para personas en España que acreditan enfermedad grave, riesgo para la integridad, victimización o vulnerabilidad concreta. No es una vía general ni automática.',
+      where: 'Oficina de Extranjería de tu provincia o sede electrónica',
+      appointment: SEDE,
+      appointmentLabel: 'Abrir sede de Extranjería',
+      docs: [
+        'Pasaporte completo',
+        'Impreso EX-10',
+        'Informe médico o social que acredite el supuesto',
+        'Resolución, denuncia o prueba de la situación',
+        'Certificado de antecedentes penales',
+        'Tasa 790-052 pagada'
+      ],
+      steps: [
+        'Identifica el supuesto humanitario concreto y reúne la prueba.',
+        'Busca asesoramiento especializado antes de presentar.',
+        'Presenta el EX-10 en Extranjería o sede, con informes y antecedentes.',
+        'Paga la tasa y guarda el resguardo.',
+        'Sigue la resolución: la autorización es temporal y puede incluir trabajo.'
+      ],
+      fee: 'Tasa 790-052 según el supuesto + TIE',
+      note: 'No se concede por pobreza ni por falta de trabajo. Sin informe o prueba del supuesto, se deniega. La valoración es de Extranjería y cada caso es distinto.',
+      routeIds: ['humanitarias']
+    },
+    {
       id: 'asilo', scope: 'national', cat: 'ayuda', icon: 'shield',
       title: 'Solicitud de protección internacional (asilo)',
       when: 'Si temes volver a tu país por persecución o violencia. Cuanto antes, mejor; no esperes a que caduque tu visado.',

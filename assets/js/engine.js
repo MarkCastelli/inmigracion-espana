@@ -457,6 +457,7 @@
     d.hasInsurance = p.healthInsurance === 'private' || p.healthInsurance === 'public';
     d.victim = p.victimViolence === 'yes';
     d.protectionNeed = p.protectionNeed === 'yes';
+    d.humanitarianGround = p.humanitarianGround || '';
 
     d.goals = Array.isArray(p.goals) ? p.goals : [];
     d.wants = function (g) { return d.goals.indexOf(g) !== -1; };

@@ -1136,6 +1136,19 @@
             options: [{ v: 'no', l: 'No' }, { v: 'yes', l: 'Sí' }, { v: 'dontknow', l: 'No lo sé' }]
           },
           {
+            id: 'humanitarianGround', type: 'select', label: '¿Concurre alguna razón humanitaria para residir?',
+            showIf: inSpain,
+            options: [
+              { v: 'serious_illness', l: 'Enfermedad grave o riesgo para la salud' },
+              { v: 'integrity', l: 'Riesgo para mi integridad o situación de vulnerabilidad' },
+              { v: 'victim', l: 'Víctima de delito, trata o violencia' },
+              { v: 'other', l: 'Otra razón humanitaria' },
+              { v: 'no', l: 'No' },
+              { v: 'dontknow', l: 'No lo sé' }
+            ],
+            help: 'No es una vía por pobreza ni una autorización automática: exige un supuesto concreto y pruebas (informes médicos o sociales, resolución, denuncia…).'
+          },
+          {
             id: 'notes', type: 'textarea', label: '¿Algo más que debamos saber? (opcional)', placeholder: 'Ej. tengo una denuncia pendiente, estoy esperando cita en el consulado, mi pareja acaba de obtener la nacionalidad…'
           }
         ]

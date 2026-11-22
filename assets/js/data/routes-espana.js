@@ -529,6 +529,59 @@
   });
 
   /* ══════════════════════════════════════════════════════════
+     8 bis. RESIDENCIA POR RAZONES HUMANITARIAS
+     ══════════════════════════════════════════════════════════ */
+  RL.routes.push({
+    id: 'humanitarias',
+    group: 'residencia',
+    title: 'Residencia por razones humanitarias',
+    short: 'Vía excepcional por enfermedad grave, riesgo o vulnerabilidad acreditada.',
+    icon: 'shield',
+    weight: 18,
+    goals: ['regularizar', 'residencia_estable'],
+    where: 'spain',
+    availability: 'open',
+    legal: 'Art. 128 RD 1155/2024',
+    summary: 'Autorización temporal por circunstancias excepcionales humanitarias. No es una vía general ni automática: exige un supuesto concreto (enfermedad grave, riesgo para la integridad, determinadas víctimas u otra razón humanitaria) y pruebas. La valora Extranjería y puede incluir autorización de trabajo.',
+    forWho: 'Personas en España que acreditan una situación humanitaria concreta y grave, no una simple dificultad económica.',
+    requirements: [
+      { label: 'Estás en España', test: inSpain, actionable: false },
+      { label: 'No eres ciudadano/a de la UE/EEE ni suizo/a', test: function (p, d) { return !d.euCitizen; }, actionable: false },
+      { label: 'Acreditas un supuesto humanitario concreto', test: function (p, d) { if (!d.humanitarianGround || d.humanitarianGround === 'dontknow') return null; return d.humanitarianGround !== 'no'; }, fix: 'Enfermedad grave, riesgo para la integridad, victimización o vulnerabilidad acreditada. La pobreza por sí sola no basta.' },
+      { label: 'Puedes aportar informe médico o social, resolución o prueba del supuesto', test: function () { return null; }, fix: 'No se concede por manifestarlo: hay que acreditarlo.' },
+      { label: 'No tienes antecedentes penales relevantes', test: criminalOK, actionable: false }
+    ],
+    blockers: [
+      { label: 'Los ciudadanos de la UE/EEE no necesitan esta autorización.', test: function (p, d) { return d.euCitizen; } },
+      { label: 'No consta un supuesto humanitario concreto en tus respuestas.', test: function (p, d) { return d.humanitarianGround === 'no' || !d.humanitarianGround; } },
+      { label: 'Es una vía para mayores de edad; los menores tienen protección específica.', test: function (p, d) { return d.minor; } }
+    ],
+    docs: [
+      D.pasaporte, D.ex10, D.ant_origen, D.ant_es, D.tasa,
+      { id: 'doc_informe_humanitario', name: 'Informe médico o social que acredite el supuesto humanitario', where: 'Servicio médico, servicios sociales o entidad especializada' }
+    ],
+    steps: [
+      { title: 'Identifica y acredita el supuesto', detail: 'Enfermedad grave, riesgo para la integridad, violencia o vulnerabilidad. Reúne informes médicos, sociales o resolución judicial.', when: 'Antes de solicitar' },
+      { title: 'Busca apoyo especializado', detail: 'CEAR, ACNUR, Cruz Roja, servicios sociales o abogado de extranjería. No presentes cualquier cosa.', when: 'Cuanto antes' },
+      { title: 'Presenta el EX-10 y la prueba', detail: 'En la Oficina de Extranjería o sede. Tasa 790-052 según el supuesto.', when: 'Día 0' },
+      { title: 'Sigue la resolución', detail: 'La autorización es temporal y puede incluir trabajo. Confirma vigencia y renovación en la resolución.', when: '+3 meses' }
+    ],
+    cost: 'Tasa 790-052 según el supuesto + TIE',
+    time: 'Variable; autorización temporal, normalmente 1 año',
+    risks: [
+      'No es una vía general ni automática.',
+      'La pobreza o la falta de trabajo no bastan por sí solas.',
+      'Sin informe o prueba del supuesto, se deniega.',
+      'Requiere revisión jurídica por la variedad de supuestos.'
+    ],
+    links: [L.boe1155, L.min],
+    fit: function (p, d) {
+      if (d.humanitarianGround && d.humanitarianGround !== 'no' && d.humanitarianGround !== 'dontknow') return 'Has indicado un posible supuesto humanitario. No es automático: hay que acreditarlo y lo valora Extranjería.';
+      return 'No consta un supuesto humanitario concreto; no es una vía por pobreza.';
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════
      9. ASILO / PROTECCIÓN INTERNACIONAL
      ══════════════════════════════════════════════════════════ */
   RL.routes.push({

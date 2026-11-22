@@ -29,7 +29,7 @@ test('cada trámite sabe a qué vías pertenece', () => {
 
 test('los trámites clave están cubiertos', () => {
   const ids = RL.procedures.all.map(p => p.id);
-  for (const id of ['nie_tie', 'arraigo', 'familiar_espanol', 'reagrupacion', 'asilo', 'nacionalidad', 'renovacion', 'modificacion_estudios', 'padron', 'tarjeta_sanitaria', 'homologacion_no_universitaria', 'homologacion_universitaria', 'unedasiss', 'vida_laboral', 'antecedentes_espana', 'antecedentes_origen', 'delitos_sexuales', 'apostilla', 'traduccion_jurada', 'denuncia_fraude_laboral', 'solicitar_ayuda_social', 'tarjeta_transporte', 'examen_ccse', 'examen_dele', 'declaracion_renta', 'recogida_tie', 'canje_permiso_extranjero', 'permiso_b', 'permiso_moto', 'permiso_profesional']) {
+  for (const id of ['nie_tie', 'arraigo', 'familiar_espanol', 'reagrupacion', 'asilo', 'nacionalidad', 'renovacion', 'modificacion_estudios', 'padron', 'tarjeta_sanitaria', 'homologacion_no_universitaria', 'homologacion_universitaria', 'unedasiss', 'vida_laboral', 'antecedentes_espana', 'antecedentes_origen', 'delitos_sexuales', 'apostilla', 'traduccion_jurada', 'denuncia_fraude_laboral', 'solicitar_ayuda_social', 'tarjeta_transporte', 'examen_ccse', 'examen_dele', 'declaracion_renta', 'recogida_tie', 'canje_permiso_extranjero', 'permiso_b', 'permiso_moto', 'permiso_profesional', 'humanitarias']) {
     assert.ok(ids.includes(id), 'falta ' + id);
   }
   const nie = RL.procedures.all.find(x => x.id === 'nie_tie');
