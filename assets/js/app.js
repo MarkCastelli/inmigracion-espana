@@ -275,22 +275,13 @@
       fRadio(prefix + '.disability', '¿Tienes discapacidad?', fget(obj, 'disability'), F.yesNo) +
       fSelect(prefix + '.residence', 'Situación actual de residencia', fget(obj, 'residence'), F.residence) +
       (fget(obj, 'residence') && fget(obj, 'residence') !== 'irregular' && fget(obj, 'residence') !== 'dontknow'
-        ? '<div class="form-grid" style="grid-column:1/-1"><div class="callout callout--info" style="grid-column:1/-1">' + icons.info(16) + '<div><strong>Fecha en que pasaste de irregular a legal</strong><p>Indica el mes y año. La fecha que suele contar es la de la <strong>resolución de concesión</strong> o la fecha de efectos que indique la resolución. La TIE es el documento, pero no siempre marca el inicio; si no lo sabes, elige «No lo sé».</p></div></div>' +
+        ? '<div class="form-grid" style="grid-column:1/-1"><div class="callout callout--info" style="grid-column:1/-1">' + icons.info(16) + '<div><strong>Fecha de tu primera resolución de residencia</strong><p>Indica el mes y el año de la <strong>primera resolución que te reconoció como residente</strong>, aunque fuera residencia temporal, por estudios, por cuenta ajena o por cuenta propia. No es la fecha del TIE ni la de tu entrada en España. Sirve para que el abogado calcule cuánto te falta para los 2, 5 o 10 años.</p></div></div>' +
           fSelect(prefix + '.legalSinceMonth', 'Mes', fget(obj, 'legalSinceMonth'), [
             { v: '', l: 'Sin indicar' }, { v: '01', l: 'Enero' }, { v: '02', l: 'Febrero' }, { v: '03', l: 'Marzo' },
             { v: '04', l: 'Abril' }, { v: '05', l: 'Mayo' }, { v: '06', l: 'Junio' }, { v: '07', l: 'Julio' },
             { v: '08', l: 'Agosto' }, { v: '09', l: 'Septiembre' }, { v: '10', l: 'Octubre' }, { v: '11', l: 'Noviembre' }, { v: '12', l: 'Diciembre' }
           ]) +
-          fInput(prefix + '.legalSinceYear', 'Año', fget(obj, 'legalSinceYear'), 'number', 'Ej. 2023') +
-          fSelect(prefix + '.legalSinceBasis', '¿Desde cuándo cuenta esa fecha?', fget(obj, 'legalSinceBasis'), [
-            { v: '', l: 'Sin indicar' },
-            { v: 'resolucion', l: 'Fecha de la resolución de concesión' },
-            { v: 'efectos', l: 'Fecha de efectos indicada en la resolución' },
-            { v: 'tie', l: 'Fecha de la TIE' },
-            { v: 'recogida', l: 'Fecha de recogida de la TIE' },
-            { v: 'otro', l: 'Otra fecha' },
-            { v: 'dontknow', l: 'No lo sé' }
-          ]) + '</div>'
+          fInput(prefix + '.legalSinceYear', 'Año', fget(obj, 'legalSinceYear'), 'number', 'Ej. 2023') + '</div>'
         : '') +
       fRadio(prefix + '.drivingLicense', '¿Tienes permiso de conducir?', fget(obj, 'drivingLicense'), F.yesNo) +
       (fget(obj, 'drivingLicense') === 'si' ? fInput(prefix + '.drivingLicenseCountry', '¿De qué país es el permiso?', fget(obj, 'drivingLicenseCountry'), 'text', 'España, Colombia, Marruecos…') : '') +
@@ -987,15 +978,13 @@
     var goals = (p.goals || []).map(function (v) { return label(RL.formulario.goals, v); }).filter(Boolean).join(', ');
     var locations = { espana: 'España', portugal: 'Portugal', ue: 'UE/EEE/Suiza', argentina: 'Argentina', latam: 'América Latina', otro: 'Otro país', dontknow: 'No lo sé' };
     var months = { '01': '01', '02': '02', '03': '03', '04': '04', '05': '05', '06': '06', '07': '07', '08': '08', '09': '09', '10': '10', '11': '11', '12': '12' };
-    var bases = { resolucion: 'Resolución de concesión', efectos: 'Fecha de efectos de la resolución', tie: 'Fecha de la TIE', recogida: 'Recogida de la TIE', otro: 'Otra fecha', dontknow: 'No lo sé' };
     var legalSince = (p.legalSinceMonth || p.legalSinceYear) ? ((months[p.legalSinceMonth] || p.legalSinceMonth || '') + '/' + (p.legalSinceYear || '')) : '';
     var rows = [
       ['Nombre', p.name], ['Edad', p.age], ['Nacionalidad', p.nationality],
       ['Dónde está ahora', locations[p.currentLocation] || p.currentLocation],
       ['Teléfono', p.phone], ['Email', p.email], ['Entrada en España', p.entryDate],
       ['Residencia', label(RL.formulario.residence, p.residence)],
-      ['Legal desde (mes/año)', legalSince],
-      ['Base de la fecha', bases[p.legalSinceBasis] || p.legalSinceBasis],
+      ['Primera residencia (mes/año)', legalSince],
       ['Permiso de conducir', p.drivingLicense],
       ['País del permiso', p.drivingLicenseCountry],
       ['Documentos', docs], ['Trabaja', p.works], ['Empleo legal', p.legalJob],

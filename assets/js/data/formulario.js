@@ -83,7 +83,7 @@
     return {
       name: '', age: '', nationality: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
       currentLocation: '',
-      disability: '', residence: '', legalSinceMonth: '', legalSinceYear: '', legalSinceBasis: '',
+      disability: '', residence: '', legalSinceMonth: '', legalSinceYear: '',
       drivingLicense: '', drivingLicenseCountry: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
       jobType: '', contractType: '', contractEnd: '', studies: '', career: '',
       paysHousing: '',
