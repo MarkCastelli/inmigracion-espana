@@ -298,9 +298,10 @@
         { v: 'habitacion', l: 'Alquilo una habitación' }, { v: 'compartida', l: 'Comparto con amigo/a o pareja' },
         { v: 'familiar', l: 'Vivo con familiares' }, { v: 'otra', l: 'Otra situación' }
       ]) +
-      fInput(prefix + '.housingCost', '¿Cuánto pagas al mes por vivienda? (€)', fget(obj, 'housingCost'), 'number') +
       fRadio(prefix + '.mortgage', '¿Pagas hipoteca?', fget(obj, 'mortgage'), F.yesNo) +
-      (fget(obj, 'mortgage') === 'si' ? fInput(prefix + '.mortgageAmount', 'Importe mensual de la hipoteca (€)', fget(obj, 'mortgageAmount'), 'number') : '') +
+      (fget(obj, 'mortgage') === 'si'
+        ? fInput(prefix + '.mortgageAmount', 'Importe mensual de la hipoteca (€)', fget(obj, 'mortgageAmount'), 'number')
+        : fInput(prefix + '.housingCost', 'Importe mensual del alquiler o vivienda (€)', fget(obj, 'housingCost'), 'number')) +
       fInput(prefix + '.expenses.luz', 'Luz (€/mes)', fget(obj, 'expenses.luz'), 'number') +
       fInput(prefix + '.expenses.agua', 'Agua (€/mes)', fget(obj, 'expenses.agua'), 'number') +
       fInput(prefix + '.expenses.gas', 'Gas o bombona (€/mes)', fget(obj, 'expenses.gas'), 'number') +

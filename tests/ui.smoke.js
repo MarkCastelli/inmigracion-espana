@@ -672,4 +672,22 @@ t('datos generales no duplica grado/fecha y permite quitar hijos de pareja', () 
   nav(app, 'inicio');
 });
 
+t('vivienda pide un solo importe: hipoteca o alquiler', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.state.profile.formulario.applicant.mortgage = 'si';
+  RL.state.profile.formulario.step = 4;
+  nav(app, 'formulario');
+  let html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('mortgageAmount'));
+  assert.ok(!html.includes('housingCost'), 'no debe pedir alquiler si hay hipoteca');
+  RL.state.profile.formulario.applicant.mortgage = 'no';
+  RL.ui.render();
+  html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('housingCost'));
+  assert.ok(!html.includes('mortgageAmount'), 'no debe pedir hipoteca si no la hay');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

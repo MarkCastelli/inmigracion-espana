@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **189 pruebas pasando**.
+- **190 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -95,6 +95,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 65. **Discapacidad sin duplicar**: datos generales deja solo sí/no de discapacidad y dependencia; grado, reconocimiento y vencimiento se piden en la ficha individual del hijo. El botón para quitar hijos de pareja también aparece en el paso general.
 66. **Paso 0 del formulario**: «Sobre ti y tu familia» con datos básicos, consulta individuo/grupo, cantidad de integrantes y filas automáticas de relación/edad (pareja, esposa, pareja de hecho, hijo común, hijo de ella/él, padres de él/ella, etc.).
 67. **Vínculos de hijos**: etiquetas explícitas «Hijo o hija de ambos», «Hijo o hija de él» y «Hijo o hija de ella» en el formulario nuevo y en el diagnóstico antiguo.
+68. **Un solo gasto de vivienda**: si hay hipoteca se pide solo la cuota; si no, solo alquiler/coste. El resumen usa un único importe para evitar duplicarlo.
 
 ## Comandos
 
