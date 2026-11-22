@@ -834,4 +834,21 @@ t('un contrato temporal pide fecha de vencimiento', () => {
   nav(app, 'inicio');
 });
 
+t('datos personales identifica al titular y pregunta por asilo', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.state.profile.formulario.step = 1;
+  nav(app, 'formulario');
+  let html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Datos personales del titular o jefe de familia'));
+  assert.ok(html.includes('¿Solicitaste asilo en España?'));
+  RL.state.profile.formulario.step = 3;
+  RL.ui.render();
+  html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('No indicaste que hayas solicitado asilo'));
+  assert.ok(!html.includes('¿Solicitaste asilo en España?'), 'no debe repetir la pregunta en el paso 3');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

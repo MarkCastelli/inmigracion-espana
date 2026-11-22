@@ -187,7 +187,7 @@
      ══════════════════════════════════════════════════════════ */
   var formState = null;
   var FORM_TITLES = [
-    'Sobre ti y tu familia', 'Datos personales', 'Situación actual', 'Asilo', 'Vivienda',
+    'Sobre ti y tu familia', 'Datos personales del titular o jefe de familia', 'Situación actual', 'Asilo', 'Vivienda',
     'Pareja', 'Hijos', 'Discapacidad', 'Ayudas', 'Objetivos', 'Resumen', 'Documento final'
   ];
 
@@ -336,11 +336,14 @@
     return h;
   }
 
-  function asylumBlock(obj, prefix) {
+  function asylumBlock(obj, prefix, includeQuestion) {
     var F = RL.formulario;
-    var h = '<div class="form-grid">' +
-      fRadio(prefix + '.asylumRequested', '¿Solicitaste asilo en España?', fget(obj, 'asylumRequested'), F.yesNo) +
-      '</div>';
+    var h = '';
+    if (includeQuestion !== false) {
+      h += '<div class="form-grid">' +
+        fRadio(prefix + '.asylumRequested', '¿Solicitaste asilo en España?', fget(obj, 'asylumRequested'), F.yesNo) +
+        '</div>';
+    }
     if (fget(obj, 'asylumRequested') === 'si') {
       h += '<div class="form-grid">' +
         fInput(prefix + '.asylumYear', '¿En qué año lo solicitaste?', fget(obj, 'asylumYear'), 'number') +
@@ -493,11 +496,15 @@
       }
       html += '</div></div>';
     } else if (step === 1) {
-      html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Datos personales</h2></div><div class="block__body">' + personBlock(F.applicant, 'applicant', false, true) + '</div></div>';
+      html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Datos personales del titular o jefe de familia</h2></div><div class="block__body">' + personBlock(F.applicant, 'applicant', false, true) +
+        '<div class="form-grid">' + fRadio('applicant.asylumRequested', '¿Solicitaste asilo en España?', fget(F.applicant, 'asylumRequested'), RL.formulario.yesNo) + '</div>' +
+        '</div></div>';
     } else if (step === 2) {
       html += '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Situación actual</h2></div><div class="block__body">' + documentsBlock(F.applicant, 'applicant') + '</div></div>';
     } else if (step === 3) {
-      html += '<div class="block"><div class="block__head">' + icons.shield(18) + '<h2>Asilo</h2></div><div class="block__body">' + asylumBlock(F.applicant, 'applicant') + '</div></div>';
+      html += '<div class="block"><div class="block__head">' + icons.shield(18) + '<h2>Asilo</h2></div><div class="block__body">' +
+        (fget(F.applicant, 'asylumRequested') === 'si' ? asylumBlock(F.applicant, 'applicant', false) : '<p class="muted">No indicaste que hayas solicitado asilo. Puedes continuar; si cambió, vuelve a «Datos personales del titular o jefe de familia».</p>') +
+        '</div></div>';
     } else if (step === 4) {
       html += '<div class="block"><div class="block__head">' + icons.home(18) + '<h2>Vivienda y gastos</h2></div><div class="block__body">' + housingBlock(F.applicant, 'applicant') + '</div></div>';
     } else if (step === 5) {
