@@ -92,6 +92,11 @@
       title: 'Donar | Ruta Legal',
       description: 'Ruta Legal es gratis. Si te resulta útil, puedes invitarme un café con PayPal para mantener el proyecto y actualizar la información.',
       keywords: 'donar Ruta Legal, PayPal, mantenimiento, proyecto gratuito'
+    },
+    abogados: {
+      title: 'Abogados de extranjería | Ruta Legal',
+      description: 'Directorio de abogados que solicitan aparecer en Ruta Legal. No verificamos colegiación, honorarios ni resultados: comprueba siempre antes de contratar.',
+      keywords: 'abogados extranjería, abogado inmigración, colegiación, honorarios, directorio'
     }
   };
 

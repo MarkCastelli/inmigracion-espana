@@ -24,7 +24,7 @@
       nav: {
         inicio: 'Inicio', antes: 'Experiencia', formulario: 'Formulario', plan: 'Plan', vias: 'Vías', tramites: 'Trámites',
         online: 'Online', preguntas: 'FAQ', derechos: 'Derechos',
-        directorio: 'Dónde ir', consulta: 'IA', docs: 'Docs',
+        directorio: 'Dónde ir', abogados: 'Abogados', consulta: 'IA', docs: 'Docs',
         formularios: 'Descargas', ayuda: 'Ayuda', donar: 'Donar'
       },
       heroEyebrow: 'Diagnóstico migratorio · España · 100 % gratuito',
@@ -70,7 +70,7 @@
       nav: {
         inicio: 'Accueil', antes: 'Expérience', formulario: 'Formulaire', plan: 'Plan', vias: 'Voies', tramites: 'Démarches',
         online: 'En ligne', preguntas: 'FAQ', derechos: 'Droits',
-        directorio: 'Où aller', consulta: 'IA', docs: 'Docs',
+        directorio: 'Où aller', abogados: 'Avocats', consulta: 'IA', docs: 'Docs',
         formularios: 'Téléchargements', ayuda: 'Aide', donar: 'Faire un don'
       },
       heroEyebrow: "Diagnostic migratoire · Espagne · 100 % gratuit",
@@ -93,7 +93,7 @@
       nav: {
         inicio: 'Home', antes: 'Experience', formulario: 'Form', plan: 'Plan', vias: 'Routes', tramites: 'Procedures',
         online: 'Online', preguntas: 'FAQ', derechos: 'Rights',
-        directorio: 'Where to go', consulta: 'AI', docs: 'Docs',
+        directorio: 'Where to go', abogados: 'Lawyers', consulta: 'AI', docs: 'Docs',
         formularios: 'Downloads', ayuda: 'Help', donar: 'Donate'
       },
       heroEyebrow: 'Immigration assessment · Spain · 100% free',
@@ -116,7 +116,7 @@
       nav: {
         inicio: 'Acasă', antes: 'Experiență', formulario: 'Formular', plan: 'Plan', vias: 'Căi', tramites: 'Proceduri',
         online: 'Online', preguntas: 'FAQ', derechos: 'Drepturi',
-        directorio: 'Unde mergi', consulta: 'IA', docs: 'Docs',
+        directorio: 'Unde mergi', abogados: 'Avocați', consulta: 'IA', docs: 'Docs',
         formularios: 'Descărcări', ayuda: 'Ajutor', donar: 'Donează'
       },
       heroEyebrow: 'Evaluare migratorie · Spania · 100% gratuit',

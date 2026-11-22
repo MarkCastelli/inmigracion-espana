@@ -13,6 +13,7 @@ const FILES = [
   'assets/js/data/antes.js',
   'assets/js/data/formulario.js',
   'assets/js/data/tooltips.js',
+  'assets/js/data/lawyers.js',
   'assets/js/core.js',
   'assets/js/data/countries.js',
   'assets/js/data/regions.js',
@@ -1160,6 +1161,17 @@ t('la página de donaciones explica el proyecto y enlaza a PayPal', () => {
   assert.ok(html.includes('https://www.paypal.com/donate/?hosted_button_id=YPZZZU5ZD4G9Y'));
   assert.ok(html.includes('no es una ONG'));
   assert.ok(!html.includes('undefined'));
+  nav(app, 'inicio');
+});
+
+t('la página de abogados avisa de que no están verificados', () => {
+  nav(app, 'abogados');
+  const html = app.document.querySelector('#view-abogados').innerHTML;
+  assert.ok(html.includes('No verifico a los abogados'));
+  assert.ok(html.includes('No me hago responsable'));
+  assert.ok(html.includes('Solicitar aparecer'));
+  assert.ok(html.includes('Cómo comprobar que es abogado'));
+  assert.ok(html.includes('Todavía no hay despachos publicados'));
   nav(app, 'inicio');
 });
 

@@ -34,7 +34,7 @@
     aiLastId: null
   };
 
-  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'consulta', 'docs', 'formularios', 'donar', 'ayuda', 'legal'];
+  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'abogados', 'consulta', 'docs', 'formularios', 'donar', 'ayuda', 'legal'];
   var REGION_LABEL = { latam: 'América Latina', ue: 'Unión Europea', eea: 'Espacio Económico Europeo', eu: 'Europa (otros)', africa: 'África', asia: 'Asia', otro: 'Otros países' };
 
   /* Perfil de ejemplo para probar la app sin escribir nada. */
@@ -190,6 +190,7 @@
     else if (ui.view === 'preguntas') renderPreguntas();
     else if (ui.view === 'derechos') renderDerechos();
     else if (ui.view === 'directorio') renderDirectorio();
+    else if (ui.view === 'abogados') renderAbogados();
     else if (ui.view === 'consulta') renderConsulta();
     else if (ui.view === 'docs') renderDocs();
     else if (ui.view === 'formularios') renderFormularios();
@@ -3513,6 +3514,58 @@
     <div class="flex mt-3"><button class="btn btn--soft btn--sm" data-nav="formulario">Preparar mi caso</button><button class="btn btn--ghost btn--sm" data-nav="ayuda">Ver ayuda gratuita</button></div>`;
   }
 
+  function renderAbogados() {
+    var host = $('#view-abogados');
+    var list = Array.isArray(RL.lawyers) ? RL.lawyers : [];
+    var fields = 'Nombre del estudio, nombre y apellidos del abogado/a, teléfono, WhatsApp, web, email, página para coger citas y dirección.';
+    var issueUrl = 'https://github.com/MarkCastelli/inmigracion-espana/issues/new?title=' +
+      encodeURIComponent('Solicitud para aparecer en Abogados') + '&body=' +
+      encodeURIComponent('Quiero aparecer en el directorio de Abogados de Ruta Legal.\n\n' + fields + '\n\nEspecialidad en extranjería:\nIdiomas:\n\nDeclaro que soy abogado/a colegiado/a y que los datos son correctos. No incluyo datos de clientes.');
+    var html = '<div class="plan-head"><div><p class="eyebrow">Directorio</p><h1>Abogados</h1>' +
+      '<p class="plan-head__sub">Despachos que solicitan aparecer para que puedas contactarlos. No es una recomendación ni un ranking.</p></div>' +
+      '<div class="plan-head__actions"><a class="btn btn--soft btn--sm" href="' + esc(issueUrl) + '" target="_blank" rel="noopener">' + icons.ext(15) + ' Solicitar aparecer</a></div></div>';
+    html += '<div class="callout callout--warn" style="border-width:2px">' + icons.alert(20) + '<div><strong>No verifico a los abogados</strong>' +
+      '<p>No compruebo identidad, colegiación, número de colegiado, especialización, seguro, honorarios, resultados ni la veracidad de los datos publicados. No me hago responsable de problemas, pagos, conflictos o daños derivados del contacto con un despacho que aparezca aquí. Antes de contratar, verifica tú mismo y desconfía de quien prometa resultados.</p></div></div>';
+    html += '<div class="callout callout--info">' + icons.info(18) + '<div><strong>Esta página es un tablón de contacto</strong><p>Los datos los aporta cada despacho. La presencia aquí no significa que Ruta Legal lo recomiende, que haya revisado su trabajo ni que tenga un acuerdo económico con él.</p></div></div>';
+    if (!list.length) {
+      html += '<div class="empty-state" style="margin-top:18px"><h2>Todavía no hay despachos publicados</h2>' +
+        '<p>Estoy preparando la base de datos. Si eres abogado/a y quieres aparecer, escribe con los datos del despacho. Revisaré la solicitud antes de publicarla.</p>' +
+        '<a class="btn btn--primary" href="' + esc(issueUrl) + '" target="_blank" rel="noopener">' + icons.ext(16) + ' Quiero aparecer en Abogados</a></div>';
+    } else {
+      html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Despachos publicados</h2></div><div class="block__body">' +
+        list.map(function (a) {
+          var wa = a.whatsapp ? 'https://wa.me/' + String(a.whatsapp).replace(/[^0-9]/g, '') : '';
+          return '<div class="family-child" style="margin-top:14px"><div class="flex" style="justify-content:space-between;gap:10px;flex-wrap:wrap"><h3>' + esc(a.studio || a.name || 'Despacho') + '</h3><span class="badge badge--warn">No verificado</span></div>' +
+            (a.name ? '<p><strong>' + esc(a.name) + '</strong></p>' : '') +
+            (a.address ? '<p class="muted">' + esc(a.address) + (a.city ? ' · ' + esc(a.city) : '') + (a.province ? ' · ' + esc(a.province) : '') + '</p>' : '') +
+            '<div class="flex" style="gap:8px;flex-wrap:wrap">' +
+            (a.phone ? '<a class="btn btn--soft btn--sm" href="tel:' + esc(a.phone) + '">' + icons.user(14) + ' Llamar</a>' : '') +
+            (wa ? '<a class="btn btn--soft btn--sm" href="' + esc(wa) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') +
+            (a.email ? '<a class="btn btn--soft btn--sm" href="mailto:' + esc(a.email) + '">Email</a>' : '') +
+            (a.web ? '<a class="btn btn--soft btn--sm" href="' + esc(RL.dom.safeUrl(a.web)) + '" target="_blank" rel="noopener">Web</a>' : '') +
+            (a.booking ? '<a class="btn btn--accent btn--sm" href="' + esc(RL.dom.safeUrl(a.booking)) + '" target="_blank" rel="noopener">Pedir cita</a>' : '') +
+            '</div>' + (a.note ? '<p class="muted" style="font-size:.82rem">' + esc(a.note) + '</p>' : '') + '</div>';
+        }).join('') + '</div></div>';
+    }
+    html += '<div class="block mt-3"><div class="block__head">' + icons.check(18) + '<h2>Cómo comprobar que es abogado y está colegiado</h2></div><div class="block__body">' +
+      '<ol style="padding-left:20px;color:var(--ink-2);line-height:1.7">' +
+      '<li>Pide su <strong>nombre completo y número de colegiado</strong>, y el Colegio de Abogados al que pertenece.</li>' +
+      '<li>Comprueba el número en el <strong>Colegio de Abogados</strong> de su provincia o en el censo del <a href="https://www.abogacia.es/" target="_blank" rel="noopener">Consejo General de la Abogacía Española</a>. No te fíes solo de una foto o de una web.</li>' +
+      '<li>Pregunta si tiene <strong>experiencia real en extranjería</strong> y pide ejemplos de expedientes similares, sin datos de otras personas.</li>' +
+      '<li>Pide por escrito <strong>presupuesto, honorarios, IVA, gastos y tasas</strong>. Que quede claro qué incluye y qué no.</li>' +
+      '<li>Exige <strong>factura y recibo</strong> de cada pago. No pagues en efectivo sin justificante ni entregues documentación original.</li>' +
+      '<li>Desconfía de quien <strong>garantiza la concesión</strong>, pide dinero para “agilizar”, presiona para firmar poderes en blanco o no quiere dar su número de colegiado.</li>' +
+      '<li>Si tienes dudas, consulta antes con una <strong>entidad gratuita</strong> o con otro abogado.</li></ol>' +
+      '<div class="callout callout--info">' + icons.help(18) + '<div><strong>Si no puedes pagar</strong><p>En <a href="#/ayuda" data-nav="ayuda">Ayuda</a> tienes entidades sociales, ONG y recursos gratuitos. No tienes que contratar al primer despacho que veas.</p></div></div></div></div>';
+    html += '<div class="block mt-3"><div class="block__head">' + icons.ext(18) + '<h2>Para abogados: cómo aparecer</h2></div><div class="block__body">' +
+      '<p>Si quieres estar en esta página, contáctame para pasar a formar parte de la base de datos. Podrás publicar:</p>' +
+      '<ul><li>Nombre del estudio.</li><li>Tu nombre y apellidos.</li><li>Teléfono y WhatsApp.</li><li>Web y email.</li><li>Página para coger citas.</li><li>Dirección.</li></ul>' +
+      '<p>La solicitud se revisa antes de publicar. No se aceptan promesas de resultados, publicidad engañosa ni datos de clientes.</p>' +
+      '<a class="btn btn--primary" href="' + esc(issueUrl) + '" target="_blank" rel="noopener">' + icons.ext(16) + ' Enviar solicitud para aparecer</a>' +
+      '<p class="muted" style="font-size:.8rem;margin-top:10px">El envío se hace por GitHub. No incluyas datos personales de clientes ni documentos.</p></div></div>';
+    host.innerHTML = html;
+  }
+
   function renderLegal() {
     var host = $('#view-legal');
     var updated = fmt.date(RL.CONTENT_DATE, { year: true });
@@ -3801,7 +3854,7 @@
     if (action === 'generate-form') { generateForm(btn); return; }
     if (action === 'listen-view') {
       if (!RL.speech || !RL.speech.supported) { toast('Tu navegador no permite lectura en voz alta.'); return; }
-      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', donar: 'Donar', ayuda: 'Ayuda', legal: 'Aviso legal y privacidad' };
+      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', abogados: 'Abogados', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', donar: 'Donar', ayuda: 'Ayuda', legal: 'Aviso legal y privacidad' };
       if (ui.view === 'plan' && RL.hasSavedProfile()) {
         RL.speech.speak(RL.speech.buildPlanScript(RL.buildPlan(RL.profile())), 'Tu plan');
       } else {
