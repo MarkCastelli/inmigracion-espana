@@ -152,6 +152,63 @@
       routeIds: ['reagrupacion']
     },
     {
+      id: 'no_lucrativa', scope: 'national', cat: 'documentos', icon: 'home',
+      title: 'Residencia no lucrativa (sin trabajar)',
+      when: 'Para vivir en España sin trabajar: pensionistas, rentistas o personas con patrimonio. Se solicita desde el exterior, antes de entrar.',
+      where: 'Consulado de España en tu país',
+      appointment: 'https://www.exteriores.gob.es/',
+      appointmentLabel: 'Ver consulados y visados',
+      docs: [
+        'Pasaporte en vigor',
+        'Impreso EX-01',
+        'Medios económicos: 2.400 €/mes para el titular y 600 €/mes por familiar',
+        'Acreditación de 12 meses por adelantado (28.800 € para una persona)',
+        'Pensión, rentas o ahorros con justificantes y traducción/apostilla',
+        'Seguro médico privado sin copagos ni carencias',
+        'Certificado de antecedentes penales',
+        'Certificado médico',
+        'Alojamiento en España'
+      ],
+      steps: [
+        'Calcula los medios: 400 % del IPREM para ti y 100 % por cada familiar. En 2026, 2.400 €/mes para una persona y 600 €/mes por acompañante.',
+        'Reúne 12 meses por adelantado o justifica ahorros/rentas suficientes; no basta con enseñar una nómina o una pensión de un mes.',
+        'Contrata un seguro médico privado sin copagos, con cobertura en España.',
+        'Pide cita en el consulado y presenta el EX-01 con todos los documentos.',
+        'Al concederlo, entra en plazo y pide la TIE. No trabajes en España con esta autorización.'
+      ],
+      fee: 'Tasa consular + 790-052 + TIE',
+      time: 'Resolución orientativa 3 meses; autorización inicial de 1 año',
+      note: 'No permite trabajar ni ser autónomo, tampoco en remoto. Si trabajas a distancia, la vía es nómada digital, no la no lucrativa. La pensión extranjera puede servir como medio económico si es estable y se acredita; no concede la residencia por sí sola.',
+      routeIds: ['visado_no_lucrativa']
+    },
+    {
+      id: 'emprendedor', scope: 'national', cat: 'documentos', icon: 'route',
+      title: 'Residencia de emprendedor',
+      when: 'Para un proyecto empresarial innovador con informe favorable de ENISA. No es lo mismo que darse de alta como autónomo.',
+      where: 'UGE-CE / consulado',
+      appointment: 'https://inclusion.gob.es/web/unidadgrandesempresas/sobre-nosotros',
+      appointmentLabel: 'Abrir UGE-CE',
+      docs: [
+        'Pasaporte',
+        'Plan de negocio y proyecto innovador',
+        'Informe favorable de ENISA',
+        'Acreditación de medios y viabilidad',
+        'Antecedentes penales',
+        'Tasa 790-038'
+      ],
+      steps: [
+        'Prepara el proyecto: innovación, escalabilidad, equipo y viabilidad.',
+        'Solicita el informe favorable de ENISA.',
+        'Presenta la solicitud ante la UGE-CE; si estás fuera, después pide el visado.',
+        'Si estás legalmente en España, puedes solicitar la autorización directa; si eres turista, no es una vía automática.',
+        'Al concederla, pide la TIE y cumple las obligaciones del proyecto.'
+      ],
+      fee: 'Tasa 790-038 + consular + TIE',
+      time: '20 días hábiles; autorización de 3 años',
+      note: 'No es la residencia no lucrativa: el emprendedor puede trabajar en su proyecto. No es el visado de nómada digital ni una autorización general para cualquier negocio; sin informe ENISA, la vía no arranca.',
+      routeIds: ['visado_emprendedor']
+    },
+    {
       id: 'humanitarias', scope: 'national', cat: 'documentos', icon: 'shield',
       title: 'Residencia por razones humanitarias',
       when: 'Vía excepcional para personas en España que acreditan enfermedad grave, riesgo para la integridad, victimización o vulnerabilidad concreta. No es una vía general ni automática.',

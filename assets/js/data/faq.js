@@ -152,6 +152,27 @@
       ]
     },
     {
+      id: 'pensionista_no_lucrativa', cat: 'documentos',
+      q: 'Soy pensionista, cobro 1.400 € y mi mujer trabaja y gana 1.200 €: ¿puedo obtener residencia sin permiso de trabajo?',
+      short: 'La vía es la residencia no lucrativa, pero no basta con que el dinero alcance para vivir: en 2026 se piden 2.400 €/mes para el titular y 600 €/mes por familiar. Para dos personas son 3.000 €/mes; 2.600 € se queda corto, salvo que complementes con ahorros o rentas. Además, la no lucrativa no permite trabajar, y la nómina de tu mujer en España no encaja sin más en esta vía.',
+      detail: [
+        'Qué es: la residencia no lucrativa permite vivir en España sin trabajar. Se pide visado en el consulado de tu país, no desde España como turista. Duración inicial de 1 año, renovable.',
+        'Umbral 2026: 400 % del IPREM para el titular (2.400 €/mes) y 100 % del IPREM por cada familiar (600 €/mes). Para dos personas: 3.000 €/mes. También se suele pedir acreditar 12 meses por adelantado: 36.000 € para dos.',
+        'Tu caso: 1.400 € de pensión + 1.200 € de tu mujer = 2.600 €/mes. En la regla general se queda 400 €/mes por debajo para dos personas. No significa denegación automática: puedes complementar con ahorros, rentas de alquiler, patrimonio u otros ingresos estables, y el consulado valora el conjunto.',
+        'La pensión extranjera sirve como medio económico si es estable, periódica y demostrable: certificado de la entidad pagadora, extractos bancarios, traducción jurada y apostilla. No basta con una transferencia suelta.',
+        'El problema de la nómina de tu mujer: la no lucrativa no permite trabajar al titular. Si ella trabaja en España, necesitará su propia autorización de trabajo; su salario no convierte automáticamente tu solicitud en no lucrativa. Si vais juntos, valora reagrupación/familiar de residente o una vía de trabajo, según quién tenga la residencia.',
+        'Trabajo en remoto: si tú vas a trabajar a distancia, la no lucrativa no es la vía; corresponde nómada digital. No uses la no lucrativa para trabajar «un poco»: puede costarte la renovación.',
+        'Salud: necesitas seguro médico privado sin copagos ni carencias. No es lo mismo que la tarjeta sanitaria de residente.',
+        'Impuestos: si pasas más de 183 días al año en España, puedes ser residente fiscal; la pensión extranjera puede tributar aquí según el convenio con tu país. Consúltalo con un asesor fiscal antes de mudarte.',
+        'Alternativas: si tienes un proyecto empresarial innovador, el visado de emprendedor; si trabajas a distancia, nómada digital; si tu mujer ya reside legalmente en España, valorar reagrupación familiar. No todas encajan a la vez.'
+      ],
+      links: [
+        ['Consulados · visados', 'https://www.exteriores.gob.es/'],
+        ['UGE-CE · emprendedor', 'https://inclusion.gob.es/web/unidadgrandesempresas/sobre-nosotros'],
+        ['BOE · RD 1155/2024', 'https://www.boe.es/eli/es/rd/2024/11/19/1155']
+      ]
+    },
+    {
       id: 'trabajo_ilegal_policia', cat: 'sanciones',
       q: 'Me han encontrado trabajando sin papeles: ¿qué puede pasar?',
       short: 'Es una infracción administrativa y laboral, no un delito por sí sola. La empresa se enfrenta a sanción y tú a un posible expediente de extranjería; la expulsión no es automática. Demostrar que trabajaste y denunciar al empleador no te da residencia automática: puede servir para reclamar salarios, para un arraigo o para una vía excepcional de explotación laboral, con requisitos.',

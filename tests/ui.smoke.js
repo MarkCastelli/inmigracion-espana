@@ -348,6 +348,8 @@ t('la guía de trámites muestra cita, documentos y pasos', () => {
   assert.ok(html.includes('Mercurio · extranjería online'));
   assert.ok(html.includes('Registro Civil · certificados online'));
   assert.ok(html.includes('Después de la nacionalidad: DNI y actualización'));
+  assert.ok(html.includes('Residencia no lucrativa (sin trabajar)'));
+  assert.ok(html.includes('Residencia de emprendedor'));
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

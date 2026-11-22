@@ -75,6 +75,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 45. **Primer día en España**: FAQ con orden de prioridades (seguridad/salud, vía legal, padrón, sanidad, menores, entidades, abogado).
 46. **Negativa de servicios sociales**: FAQ ampliada con modelo de escrito, registro municipal/autonómico/estatal, Galicia (Xunta/Vigo), resguardo y reclamaciones.
 47. **Trabajo sin papeles**: FAQ corregida; denunciar no da residencia automática. Se explican pruebas, arraigo, art. 129 RD 1155/2024 y riesgos de expulsión.
+48. **No lucrativa y pensionistas**: fichas de residencia no lucrativa y emprendedor; FAQ con umbral 2026 (2.400 € + 600 €/familiar), pensión de 1.400 €, pareja que trabaja y alternativas.
 
 ## Comandos
 
