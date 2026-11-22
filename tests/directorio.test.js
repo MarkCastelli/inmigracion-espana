@@ -26,7 +26,7 @@ test('Galicia usa Concello y Madrid Ayuntamiento', () => {
 test('el directorio incluye los sitios clave y categorías válidas', () => {
   const ids = RL.directory.entries.map(e => e.id);
   assert.strictEqual(new Set(ids).size, ids.length);
-  for (const id of ['policia', 'extranjeria', 'delegacion_gobierno', 'fnmt', 'seguridad_social', 'sepe', 'registro_civil', 'centro_salud', 'concello', 'embajada']) {
+  for (const id of ['policia', 'extranjeria', 'delegacion_gobierno', 'fnmt', 'seguridad_social', 'sepe', 'registro_civil', 'centro_salud', 'concello', 'embajada', 'diversidades_acolle']) {
     assert.ok(ids.includes(id), 'falta ' + id);
   }
   const cats = new Set(RL.directory.categories.map(c => c.id));

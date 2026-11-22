@@ -1505,6 +1505,28 @@
   /* ══════════════════════════════════════════════════════════
      DERECHOS Y AYUDAS
      ══════════════════════════════════════════════════════════ */
+  function zoneEntitiesHTML(d) {
+    if (!RL.directory) return '';
+    var entries = RL.directory.entries.filter(function (e) {
+      if (e.cat !== 'ayuda') return false;
+      if (e.scope !== 'national' && (!d.region || !d.province)) return false;
+      if (e.provinces && e.provinces.length && (!d.province || e.provinces.indexOf(d.province) === -1)) return false;
+      return true;
+    }).slice(0, 8);
+    if (!entries.length) return '';
+    return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.family(18) +
+      '<h2>Entidades de apoyo en tu zona</h2></div><div class="block__body">' +
+      '<p class="muted" style="font-size:.86rem;margin-top:0">Asociaciones y entidades que suelen orientar, acompañar o derivar. No sustituyen a un abogado ni garantizan papeles; confirma horario y cobertura.</p>' +
+      entries.map(function (e) {
+        var title = typeof e.title === 'function' ? e.title({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.title;
+        var where = typeof e.where === 'function' ? e.where({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.where;
+        return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.family(15) + '</span><div>' +
+          '<strong>' + esc(title) + '</strong><p style="font-size:.85rem;color:var(--ink-2);margin:2px 0 0">' + esc((e.what || []).join(' · ')) + '</p>' +
+          '<p class="muted" style="font-size:.78rem;margin:3px 0 0">' + esc(where) + '</p></div></div>';
+      }).join('') +
+      '<button class="btn btn--soft btn--sm mt-2" data-nav="directorio">Ver directorio completo</button></div></div>';
+  }
+
   function renderDerechos() {
     var host = $('#view-derechos');
     if (!RL.aids) {
@@ -1537,6 +1559,8 @@
       html += '<div class="callout callout--info" style="margin-bottom:16px">' + icons.info(18) +
         '<div><strong>Elige tu provincia</strong><p>Las ayudas de discapacidad, dependencia, familia numerosa y vivienda dependen de la comunidad. Sin provincia solo mostramos las nacionales.</p><button class="btn btn--soft btn--sm mt-2" data-nav="directorio">Elegir provincia</button></div></div>';
     }
+
+    html += zoneEntitiesHTML(d);
 
     if (adult.length) {
       html += '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.shield(18) +
@@ -1782,6 +1806,7 @@
 
     var list = RL.directory.entries.filter(function (e) {
       if (e.scope !== 'national' && !region) return false;
+      if (e.provinces && e.provinces.length && (!d.province || e.provinces.indexOf(d.province) === -1)) return false;
       if (ui.dirFilter !== 'todas' && e.cat !== ui.dirFilter) return false;
       if (!q) return true;
       var title = typeof e.title === 'function' ? e.title(ctx) : e.title;

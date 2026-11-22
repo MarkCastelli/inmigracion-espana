@@ -505,4 +505,15 @@ t('el empadronamiento aparece aunque no hayas elegido provincia', () => {
   nav(app, 'inicio');
 });
 
+t('las entidades locales aparecen según la provincia', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', province: 'Pontevedra', municipality: 'Vigo', goals: ['regularizar'] };
+  nav(app, 'derechos');
+  const html = app.document.querySelector('#view-derechos').innerHTML;
+  assert.ok(html.includes('Entidades de apoyo en tu zona'));
+  assert.ok(html.includes('Diversidades Acolle'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

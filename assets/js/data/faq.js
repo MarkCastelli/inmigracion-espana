@@ -513,6 +513,24 @@
       ]
     },
     {
+      id: 'asociaciones_por_zona', cat: 'ayudas',
+      q: '¿Qué asociaciones me pueden ayudar según mi zona?',
+      short: 'Hay entidades nacionales con oficinas locales (CEAR, ACCEM, Red Acoge, Cepaim, Cruz Roja, Cáritas) y asociaciones de barrio o provincia, como Diversidades Acolle en Vigo. No todas atienden sin cita ni cubren todos los trámites: confirma antes de ir.',
+      detail: [
+        'Entidades nacionales: CEAR (asilo y jurídico), ACCEM (acogida y empleo), Red Acoge (orientación jurídica), Fundación Cepaim (vivienda y empleo), Cruz Roja y Cáritas (emergencia, español, orientación). Busca la sede de tu provincia.',
+        'Asociaciones locales: Diversidades Acolle, en Vigo (Pontevedra), trabaja acogida, asesoría jurídica, formación y acompañamiento. Hay otras en cada provincia; pregunta en el ayuntamiento, en servicios sociales o en el 012 de tu comunidad.',
+        'No todas las entidades atienden sin cita, ni todos los casos, ni todos los trámites. Llama o consulta su web antes de desplazarte y lleva la documentación básica.',
+        'Desconfía de quien cobra por «conseguir papeles», promete una autorización o pide el pasaporte por adelantado. Las entidades serias no garantizan resultados.',
+        'Si no encuentras una entidad en tu zona, pide en servicios sociales una derivación y busca en el registro de entidades del Ministerio de Inclusión.'
+      ],
+      links: [
+        ['CEAR', 'https://www.cear.es/'],
+        ['ACCEM', 'https://www.accem.es/'],
+        ['Red Acoge', 'https://www.redacoge.org/'],
+        ['Diversidades Acolle', 'https://diversidades.org/']
+      ]
+    },
+    {
       id: 'escolarizacion_libros', cat: 'ayudas',
       q: '¿Cómo escolarizo a mi hijo y cómo pido libros, material o comedor?',
       short: 'La escolarización obligatoria es gratuita y no depende de la residencia. La matrícula se pide en la consejería de educación o en el centro; libros, material, comedor y becas son ayudas aparte, con plazos y requisitos de cada comunidad. No hay un cheque único nacional.',

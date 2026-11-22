@@ -4950,6 +4950,15 @@ body.has-speech-bar { padding-bottom: 86px; }
       url: 'https://www.acnur.org/es-es/'
     },
     {
+      id: 'diversidades_acolle', scope: 'local', cat: 'ayuda', icon: 'family',
+      title: 'Diversidades Acolle',
+      what: ['Acogida y orientación', 'Asesoría jurídica', 'Formación y empleo', 'Acompañamiento social'],
+      where: 'Vigo (Pontevedra)',
+      url: 'https://diversidades.org/',
+      provinces: ['Pontevedra'],
+      note: 'Entidad de Vigo que trabaja con personas migrantes y solicitantes de asilo. Confirma horario, cita y cobertura antes de desplazarte; no promete resultados ni papeles.'
+    },
+    {
       id: 'cear', scope: 'national', cat: 'ayuda', icon: 'shield',
       title: 'CEAR',
       what: ['Asesoría jurídica de asilo', 'Acogida', 'Acompañamiento'],
@@ -7107,6 +7116,24 @@ body.has-speech-bar { padding-bottom: 86px; }
       links: [
         ['IMSERSO', 'https://www.imserso.es/'],
         ['Reagrupación · Ministerio', 'https://www.inclusion.gob.es/']
+      ]
+    },
+    {
+      id: 'asociaciones_por_zona', cat: 'ayudas',
+      q: '¿Qué asociaciones me pueden ayudar según mi zona?',
+      short: 'Hay entidades nacionales con oficinas locales (CEAR, ACCEM, Red Acoge, Cepaim, Cruz Roja, Cáritas) y asociaciones de barrio o provincia, como Diversidades Acolle en Vigo. No todas atienden sin cita ni cubren todos los trámites: confirma antes de ir.',
+      detail: [
+        'Entidades nacionales: CEAR (asilo y jurídico), ACCEM (acogida y empleo), Red Acoge (orientación jurídica), Fundación Cepaim (vivienda y empleo), Cruz Roja y Cáritas (emergencia, español, orientación). Busca la sede de tu provincia.',
+        'Asociaciones locales: Diversidades Acolle, en Vigo (Pontevedra), trabaja acogida, asesoría jurídica, formación y acompañamiento. Hay otras en cada provincia; pregunta en el ayuntamiento, en servicios sociales o en el 012 de tu comunidad.',
+        'No todas las entidades atienden sin cita, ni todos los casos, ni todos los trámites. Llama o consulta su web antes de desplazarte y lleva la documentación básica.',
+        'Desconfía de quien cobra por «conseguir papeles», promete una autorización o pide el pasaporte por adelantado. Las entidades serias no garantizan resultados.',
+        'Si no encuentras una entidad en tu zona, pide en servicios sociales una derivación y busca en el registro de entidades del Ministerio de Inclusión.'
+      ],
+      links: [
+        ['CEAR', 'https://www.cear.es/'],
+        ['ACCEM', 'https://www.accem.es/'],
+        ['Red Acoge', 'https://www.redacoge.org/'],
+        ['Diversidades Acolle', 'https://diversidades.org/']
       ]
     },
     {
@@ -12234,6 +12261,28 @@ body.has-speech-bar { padding-bottom: 86px; }
   /* ══════════════════════════════════════════════════════════
      DERECHOS Y AYUDAS
      ══════════════════════════════════════════════════════════ */
+  function zoneEntitiesHTML(d) {
+    if (!RL.directory) return '';
+    var entries = RL.directory.entries.filter(function (e) {
+      if (e.cat !== 'ayuda') return false;
+      if (e.scope !== 'national' && (!d.region || !d.province)) return false;
+      if (e.provinces && e.provinces.length && (!d.province || e.provinces.indexOf(d.province) === -1)) return false;
+      return true;
+    }).slice(0, 8);
+    if (!entries.length) return '';
+    return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.family(18) +
+      '<h2>Entidades de apoyo en tu zona</h2></div><div class="block__body">' +
+      '<p class="muted" style="font-size:.86rem;margin-top:0">Asociaciones y entidades que suelen orientar, acompañar o derivar. No sustituyen a un abogado ni garantizan papeles; confirma horario y cobertura.</p>' +
+      entries.map(function (e) {
+        var title = typeof e.title === 'function' ? e.title({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.title;
+        var where = typeof e.where === 'function' ? e.where({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.where;
+        return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.family(15) + '</span><div>' +
+          '<strong>' + esc(title) + '</strong><p style="font-size:.85rem;color:var(--ink-2);margin:2px 0 0">' + esc((e.what || []).join(' · ')) + '</p>' +
+          '<p class="muted" style="font-size:.78rem;margin:3px 0 0">' + esc(where) + '</p></div></div>';
+      }).join('') +
+      '<button class="btn btn--soft btn--sm mt-2" data-nav="directorio">Ver directorio completo</button></div></div>';
+  }
+
   function renderDerechos() {
     var host = $('#view-derechos');
     if (!RL.aids) {
@@ -12266,6 +12315,8 @@ body.has-speech-bar { padding-bottom: 86px; }
       html += '<div class="callout callout--info" style="margin-bottom:16px">' + icons.info(18) +
         '<div><strong>Elige tu provincia</strong><p>Las ayudas de discapacidad, dependencia, familia numerosa y vivienda dependen de la comunidad. Sin provincia solo mostramos las nacionales.</p><button class="btn btn--soft btn--sm mt-2" data-nav="directorio">Elegir provincia</button></div></div>';
     }
+
+    html += zoneEntitiesHTML(d);
 
     if (adult.length) {
       html += '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.shield(18) +
@@ -12511,6 +12562,7 @@ body.has-speech-bar { padding-bottom: 86px; }
 
     var list = RL.directory.entries.filter(function (e) {
       if (e.scope !== 'national' && !region) return false;
+      if (e.provinces && e.provinces.length && (!d.province || e.provinces.indexOf(d.province) === -1)) return false;
       if (ui.dirFilter !== 'todas' && e.cat !== ui.dirFilter) return false;
       if (!q) return true;
       var title = typeof e.title === 'function' ? e.title(ctx) : e.title;

@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **176 pruebas pasando**.
+- **177 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -69,6 +69,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 39. **Modelos EX**: ficha Online con los códigos principales, para qué sirve cada uno y enlace al catálogo oficial de descarga.
 40. **Discapacidad y dependencia**: preguntas ordenadas por categoría alfabética; nuevos casos de titular irregular, hijo menor, hijo adulto, dependencia y padres dependientes.
 41. **Educación**: fichas de escolarización, libros/material/cheques, comedor/becas y becas generales; FAQ con plazos, documentos y diferencias por comunidad.
+42. **Entidades locales**: Diversidades Acolle (Vigo/Pontevedra) en directorio y bloque «Entidades de apoyo en tu zona»; FAQ de asociaciones por provincia.
 
 ## Comandos
 

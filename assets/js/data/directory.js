@@ -180,6 +180,15 @@
       url: 'https://www.acnur.org/es-es/'
     },
     {
+      id: 'diversidades_acolle', scope: 'local', cat: 'ayuda', icon: 'family',
+      title: 'Diversidades Acolle',
+      what: ['Acogida y orientación', 'Asesoría jurídica', 'Formación y empleo', 'Acompañamiento social'],
+      where: 'Vigo (Pontevedra)',
+      url: 'https://diversidades.org/',
+      provinces: ['Pontevedra'],
+      note: 'Entidad de Vigo que trabaja con personas migrantes y solicitantes de asilo. Confirma horario, cita y cobertura antes de desplazarte; no promete resultados ni papeles.'
+    },
+    {
       id: 'cear', scope: 'national', cat: 'ayuda', icon: 'shield',
       title: 'CEAR',
       what: ['Asesoría jurídica de asilo', 'Acogida', 'Acompañamiento'],
