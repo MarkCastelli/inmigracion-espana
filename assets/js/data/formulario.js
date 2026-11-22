@@ -81,7 +81,7 @@
 
   function person() {
     return {
-      name: '', age: '', nationality: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
+      name: '', age: '', birthDate: '', passportNumber: '', nationality: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
       currentLocation: '',
       disability: '', residence: '', legalSinceMonth: '', legalSinceYear: '',
       drivingLicense: '', drivingLicenseCountry: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',

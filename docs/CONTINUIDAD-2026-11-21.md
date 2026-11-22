@@ -147,6 +147,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 117. **Feedback con gracias**: botón en Ayuda abre una ventana con destinatario, asunto y contenido; solo para errores del sitio, no consultas legales. Al abrir el correo redirige a `#/feedback-gracias` con aviso de enviar el mensaje, email alternativo y enlaces de vuelta.
 118. **Prompt IA desde el formulario**: la consulta ya no usa el diagnóstico antiguo ni emite recomendaciones. Genera un prompt con los datos del formulario; por defecto excluye nombre, contacto, salud, discapacidad y asilo, y solo los incluye si se marca la casilla de datos sensibles. Explica qué se puede y no se puede incluir.
 119. **Documentos por integrante**: cada hijo y cada integrante adicional tiene su propio bloque de documentos; Docs muestra sus marcas en la matriz familiar, no solo las del titular y la pareja.
+120. **Nacimiento y pasaporte**: fecha de nacimiento y número de pasaporte de origen en la ficha del titular, pareja, hijos y otros integrantes; se muestran en el informe y el prompt de IA los excluye por privacidad.
 
 ## Comandos
 

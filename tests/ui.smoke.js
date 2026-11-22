@@ -1258,6 +1258,8 @@ t('cada hijo e integrante puede marcar sus documentos', () => {
   nav(app, 'formulario');
   let html = app.document.querySelector('#view-formulario').innerHTML;
   assert.ok(html.includes('data-fgroup="children.0.docs"'), 'falta documentos del hijo');
+  assert.ok(html.includes('data-fpath="children.0.birthDate"'), 'falta fecha de nacimiento del hijo');
+  assert.ok(html.includes('data-fpath="children.0.passportNumber"'), 'falta pasaporte del hijo');
   nav(app, 'docs');
   html = app.document.querySelector('#view-docs').innerHTML;
   assert.ok(html.includes('Quién tiene cada documento'));

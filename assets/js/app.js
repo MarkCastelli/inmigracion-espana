@@ -380,6 +380,8 @@
         basics += fInput(prefix + '.name', 'Nombre y apellidos', fget(obj, 'name'));
         basics += fInput(prefix + '.age', 'Edad', fget(obj, 'age'), 'number');
       }
+      basics += fInput(prefix + '.birthDate', 'Fecha de nacimiento', fget(obj, 'birthDate'), 'date');
+      basics += fInput(prefix + '.passportNumber', 'Número de pasaporte del país de origen', fget(obj, 'passportNumber'));
       basics += fInput(prefix + '.nationality', 'Nacionalidad', fget(obj, 'nationality'));
       basics += fInput(prefix + '.phone', 'Teléfono móvil', fget(obj, 'phone'), 'tel');
       basics += fInput(prefix + '.email', 'Email', fget(obj, 'email'), 'email');
@@ -622,6 +624,8 @@
         '<div class="form-grid">' +
         fInput('applicant.name', 'Nombre y apellidos', fget(F.applicant, 'name')) +
         fInput('applicant.age', 'Edad', fget(F.applicant, 'age'), 'number') +
+        fInput('applicant.birthDate', 'Fecha de nacimiento', fget(F.applicant, 'birthDate'), 'date') +
+        fInput('applicant.passportNumber', 'Número de pasaporte del país de origen', fget(F.applicant, 'passportNumber')) +
         fInput('applicant.nationality', 'Nacionalidad', fget(F.applicant, 'nationality')) +
         fSelect('applicant.currentLocation', '¿Dónde estás ahora?', fget(F.applicant, 'currentLocation'), [
           { v: '', l: 'Sin indicar' },
@@ -1084,7 +1088,8 @@
     var months = { '01': '01', '02': '02', '03': '03', '04': '04', '05': '05', '06': '06', '07': '07', '08': '08', '09': '09', '10': '10', '11': '11', '12': '12' };
     var legalSince = (p.legalSinceMonth || p.legalSinceYear) ? ((months[p.legalSinceMonth] || p.legalSinceMonth || '') + '/' + (p.legalSinceYear || '')) : '';
     var rows = [
-      ['Nombre', p.name], ['Edad', p.age], ['Nacionalidad', p.nationality],
+      ['Nombre', p.name], ['Edad', p.age], ['Fecha de nacimiento', p.birthDate],
+      ['Pasaporte', p.passportNumber], ['Nacionalidad', p.nationality],
       ['Dónde está ahora', locations[p.currentLocation] || p.currentLocation],
       ['Teléfono', p.phone], ['Email', p.email], ['Entrada en España', p.entryDate],
       ['Residencia', label(RL.formulario.residence, p.residence)],
