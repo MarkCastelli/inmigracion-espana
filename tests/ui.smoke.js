@@ -645,6 +645,9 @@ t('el grupo familiar genera filas de vínculo y edad al indicar cantidad', () =>
   assert.ok(html.includes('Familiar 2'));
   assert.ok(html.includes('Relación'));
   assert.ok(html.includes('Edad'));
+  assert.ok(html.includes('Hijo o hija de ambos'));
+  assert.ok(html.includes('Hijo o hija de ella'));
+  assert.ok(html.includes('Hijo o hija de él'));
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

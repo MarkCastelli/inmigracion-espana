@@ -358,9 +358,9 @@
       { v: 'esposa', l: 'Esposa' },
       { v: 'pareja_hecho', l: 'Pareja de hecho' },
       { v: 'pareja', l: 'Pareja' },
-      { v: 'hijo_comun', l: 'Hijo/a común' },
-      { v: 'hijo_ella', l: 'Hijo/a de ella' },
-      { v: 'hijo_el', l: 'Hijo/a de él' },
+      { v: 'hijo_comun', l: 'Hijo o hija de ambos' },
+      { v: 'hijo_ella', l: 'Hijo o hija de ella' },
+      { v: 'hijo_el', l: 'Hijo o hija de él' },
       { v: 'padre_madre_el', l: 'Padre o madre de él' },
       { v: 'padre_madre_ella', l: 'Padre o madre de ella' },
       { v: 'hermano', l: 'Hermano/a' },
@@ -762,7 +762,7 @@
     for (var c = 0; c < common; c++) relations.push('common');
     for (var o = 0; o < own; o++) relations.push('own');
     for (var q = 0; q < partnerOnly; q++) relations.push('partner');
-    var relLabels = { common: 'Hijo común', own: 'Hijo solo tuyo', partner: 'Hijo solo de tu pareja' };
+    var relLabels = { common: 'Hijo o hija de ambos', own: 'Hijo o hija solo tuyo/a', partner: 'Hijo o hija solo de tu pareja' };
 
     var html = '<div class="family-editor">';
     html += '<div class="callout callout--info">' + icons.family(18) + '<div><strong>Estos datos son de tu familia</strong><p>No son sobre ti. Rellena la pareja y cada hijo; si un dato no lo sabes, déjalo en blanco.</p></div></div>';
@@ -827,7 +827,7 @@
           familyInput('child' + i + 'Age', 'Edad', p['child' + i + 'Age'], 'number') +
           familyInput('child' + i + 'Nationality', 'Nacionalidad', p['child' + i + 'Nationality']) +
           familySelect('child' + i + 'Relation', 'Vínculo contigo', rel, [
-            ['common', 'Hijo común'], ['own', 'Hijo solo tuyo'], ['partner', 'Hijo solo de tu pareja']
+            ['common', 'Hijo o hija de ambos'], ['own', 'Hijo o hija solo tuyo/a'], ['partner', 'Hijo o hija solo de tu pareja']
           ]) +
           familySelect('child' + i + 'Disability', 'Discapacidad', childDisability, [
             ['', 'No indicado'], ['no', 'No'], ['yes', 'Sí'], ['in_progress', 'En trámite'], ['dontknow', 'No lo sé']

@@ -94,6 +94,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 64. **Caché y entrada**: la portada abre el formulario nuevo; assets versionados a `20261122c` para evitar que el navegador cargue un `app.js` antiguo.
 65. **Discapacidad sin duplicar**: datos generales deja solo sí/no de discapacidad y dependencia; grado, reconocimiento y vencimiento se piden en la ficha individual del hijo. El botón para quitar hijos de pareja también aparece en el paso general.
 66. **Paso 0 del formulario**: «Sobre ti y tu familia» con datos básicos, consulta individuo/grupo, cantidad de integrantes y filas automáticas de relación/edad (pareja, esposa, pareja de hecho, hijo común, hijo de ella/él, padres de él/ella, etc.).
+67. **Vínculos de hijos**: etiquetas explícitas «Hijo o hija de ambos», «Hijo o hija de él» y «Hijo o hija de ella» en el formulario nuevo y en el diagnóstico antiguo.
 
 ## Comandos
 
