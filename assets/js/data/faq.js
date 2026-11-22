@@ -154,12 +154,22 @@
     {
       id: 'trabajo_ilegal_policia', cat: 'sanciones',
       q: 'Me han encontrado trabajando sin papeles: ¿qué puede pasar?',
-      short: 'Es una infracción administrativa y laboral, no un delito por sí solo. Puede haber sanción a la empresa y un expediente de extranjería; la expulsión no es automática.',
+      short: 'Es una infracción administrativa y laboral, no un delito por sí sola. La empresa se enfrenta a sanción y tú a un posible expediente de extranjería; la expulsión no es automática. Demostrar que trabajaste y denunciar al empleador no te da residencia automática: puede servir para reclamar salarios, para un arraigo o para una vía excepcional de explotación laboral, con requisitos.',
       detail: [
-        'La empresa que te contrata sin autorización comete una infracción grave; la Inspección de Trabajo puede sancionarla.',
-        'Tu situación irregular puede abrir un expediente de expulsión, pero requiere procedimiento, audiencia y resolución.',
-        'Trabajar con documentos falsos sí puede ser delito: no uses papeles falsos.',
-        'Tienes derechos laborales (salario, seguridad, accidente) aunque no tengas permiso; pide ayuda a un sindicato o entidad.'
+        'No existe una regla de «denuncio a mi empleador y me dan papeles». El empresario no puede regularizarte por sí solo: la residencia se pide por una vía concreta (arraigo, trabajo, circunstancias excepcionales) y se decide en Extranjería.',
+        'La empresa que te contrata sin autorización comete una infracción grave; la Inspección de Trabajo puede sancionarla y regularizar cotizaciones. Tú tienes derechos laborales aunque estés irregular: salario, seguridad, accidente y cotizaciones.',
+        'Tu situación irregular puede abrir un expediente de expulsión, pero requiere procedimiento, audiencia y resolución. No es una deportación automática; si te citan, no ignores la notificación y busca abogado.',
+        'Demostrar que trabajaste sirve para reclamar salarios y cotizaciones. También puede ayudar en un arraigo sociolaboral, pero el arraigo exige 2 años de permanencia irregular y otros requisitos; el tiempo de asilo no cuenta.',
+        'Existe una vía excepcional de residencia por colaboración con la autoridad laboral o judicial para víctimas o testigos de explotación laboral (art. 129 RD 1155/2024). No es automática: hay que acreditar la explotación, colaborar y que la autoridad lo valore.',
+        'Denunciar solo «porque no me quiso regularizar» no activa esa vía. Si hay explotación, impago, amenazas, retención del pasaporte o condiciones ilegales, denuncia por esos hechos y busca apoyo sindical.',
+        'Pruebas útiles: contrato, nóminas, transferencias, horarios, mensajes, correos, fotos, testigos, partes de accidente y cualquier documento de la empresa. Guarda originales y copias.',
+        'No firmes un finiquito, una renuncia o un documento que no entiendas. No uses papeles falsos: eso sí puede ser delito. Pide copia de todo lo que presentes.'
+      ],
+      links: [
+        ['Inspección de Trabajo', 'https://www.mites.gob.es/itss/web/index.html'],
+        ['Sede de Trabajo', 'https://sede.mites.gob.es/'],
+        ['CCOO', 'https://www.ccoo.es/'],
+        ['UGT', 'https://www.ugt.es/']
       ]
     },
     {
