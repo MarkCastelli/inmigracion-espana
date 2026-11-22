@@ -82,6 +82,7 @@
       name: '', age: '', nationality: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
       disability: '', residence: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
       jobType: '', studies: '', career: '',
+      paysHousing: '',
       disabilityRecognized: '', disabilityDegree: '', disabilityExpiryStatus: '', disabilityExpiry: '', dependency: '',
       docs: [], asylumRequested: '', asylumYear: '', asylumStatus: '', asylumDate: '',
       housing: '', housingCost: '', mortgage: '', mortgageAmount: '',
@@ -91,7 +92,7 @@
   }
 
   function blank() {
-    return {
+    var out = {
       step: 0,
       mode: '',
       familyCount: 1,
@@ -102,6 +103,8 @@
       print: { applicant: true, spouse: true, children: true, disability: true, aid: true, housing: true, goals: true, economy: true },
       notes: ''
     };
+    out.applicant.paysHousing = 'si';
+    return out;
   }
 
   RL.formulario = {

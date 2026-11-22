@@ -226,6 +226,7 @@
   }
 
   function fEsc(v) { return esc(v == null ? '' : v); }
+  function fnum(v) { var n = Number(v); return isFinite(n) ? n : 0; }
 
   function fInput(path, label, value, type, placeholder) {
     return '<label class="field"><span class="field__label">' + fEsc(label) + '</span>' +
@@ -296,13 +297,22 @@
 
   function housingBlock(obj, prefix) {
     var F = RL.formulario;
+    var isApplicant = prefix === 'applicant';
+    var paysHousing = isApplicant || fget(obj, 'paysHousing') === 'si';
     var h = '<div class="form-grid">' +
       fSelect(prefix + '.housing', '¿Dónde vives?', fget(obj, 'housing'), [
         { v: '', l: 'Sin indicar' }, { v: 'propia', l: 'Vivienda propia' }, { v: 'alquiler', l: 'Alquilo un piso' },
         { v: 'habitacion', l: 'Alquilo una habitación' }, { v: 'compartida', l: 'Comparto con amigo/a o pareja' },
         { v: 'familiar', l: 'Vivo con familiares' }, { v: 'otra', l: 'Otra situación' }
-      ]) +
-      fRadio(prefix + '.mortgage', '¿Pagas hipoteca?', fget(obj, 'mortgage'), F.yesNo) +
+      ]);
+    if (!isApplicant) {
+      h += fRadio(prefix + '.paysHousing', '¿Paga vivienda o suministros?', fget(obj, 'paysHousing'), F.yesNo);
+    }
+    if (!paysHousing) {
+      h += '</div><p class="field__help">Si no paga vivienda ni suministros, déjalo así. No hace falta poner ceros: los importes vacíos cuentan como 0 €.</p>';
+      return h;
+    }
+    h += fRadio(prefix + '.mortgage', '¿Pagas hipoteca?', fget(obj, 'mortgage'), F.yesNo) +
       (fget(obj, 'mortgage') === 'si'
         ? fInput(prefix + '.mortgageAmount', 'Importe mensual de la hipoteca (€)', fget(obj, 'mortgageAmount'), 'number')
         : fInput(prefix + '.housingCost', 'Importe mensual del alquiler o vivienda (€)', fget(obj, 'housingCost'), 'number')) +
@@ -312,7 +322,7 @@
       fInput(prefix + '.expenses.comunidad', 'Comunidad (€/mes)', fget(obj, 'expenses.comunidad'), 'number') +
       fInput(prefix + '.expenses.internet', 'Internet (€/mes)', fget(obj, 'expenses.internet'), 'number') +
       fRadio(prefix + '.computer', '¿Tienes computadora?', fget(obj, 'computer'), F.yesNo) +
-      '</div>';
+      '</div><p class="field__help">Déjalo vacío si no pagas ese concepto: cuenta como 0 €.</p>';
     return h;
   }
 
@@ -601,11 +611,11 @@
   }
 
   function formSummaryHTML(F, editable) {
-    var income = (Number(fget(F.applicant, 'netSalary')) || 0) + (F.mode === 'family' ? Number(fget(F.spouse, 'netSalary')) || 0 : 0);
-    var housing = Number(fget(F.applicant, 'housingCost')) || 0;
-    var mortgage = fget(F.applicant, 'mortgage') === 'si' ? (Number(fget(F.applicant, 'mortgageAmount')) || 0) : 0;
+    var income = fnum(fget(F.applicant, 'netSalary')) + (F.mode === 'family' ? fnum(fget(F.spouse, 'netSalary')) : 0);
+    var housing = fnum(fget(F.applicant, 'housingCost'));
+    var mortgage = fget(F.applicant, 'mortgage') === 'si' ? fnum(fget(F.applicant, 'mortgageAmount')) : 0;
     var exp = mortgage > 0 ? mortgage : housing;
-    ['luz', 'agua', 'gas', 'comunidad', 'internet'].forEach(function (k) { exp += Number(fget(F.applicant, 'expenses.' + k)) || 0; });
+    ['luz', 'agua', 'gas', 'comunidad', 'internet'].forEach(function (k) { exp += fnum(fget(F.applicant, 'expenses.' + k)); });
     var balance = income - exp;
     var members = [{ key: 'applicant', label: 'Titular', obj: F.applicant }];
     var childMeta = [];

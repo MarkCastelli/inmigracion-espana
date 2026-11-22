@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **194 pruebas pasando**.
+- **195 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -100,6 +100,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 70. **Objetivos filtrados**: no se ofrece NIE, TIE o residencia a quien ya los tiene marcados en documentos/residencia; se conservan objetivos distintos como nacionalidad, arraigo o reagrupación.
 71. **Resumen de hijos**: cada hijo muestra vínculo, edad, residencia, documentos, estudios, discapacidad/grado/vencimiento, dependencia, ayudas y objetivos; no solo nombre y edad.
 72. **Hijos menores**: no se les piden hipoteca, alquiler ni suministros; solo aparecen para mayores de 18 años. Se muestra un aviso de que viven con su familia.
+73. **Importes vacíos = 0 €**: los campos numéricos en blanco no obligan a escribir cero; el resumen los computa como 0. Pareja/hijos solo muestran gastos si marcan que pagan vivienda o suministros.
 
 ## Comandos
 

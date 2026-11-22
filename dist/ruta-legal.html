@@ -41,7 +41,7 @@
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d4f5c'/%3E%3Cpath d='M18 44V28l14-9 14 9v16' fill='none' stroke='%23f7f4ee' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M26 44V34h12v10' fill='none' stroke='%23e8863a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
-/* ── assets/css/app.css?v=20261122j ── */
+/* ── assets/css/app.css?v=20261122k ── */
 /* ============================================================
    Ruta Legal · hoja de estilos única (sin dependencias)
    Diseño: papel cálido + verde profundo. Claro/oscuro automático.
@@ -1108,7 +1108,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 </div>
 
 <script>
-/* ── assets/js/core.js?v=20261122j ── */
+/* ── assets/js/core.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · núcleo: utilidades, estado local y fechas
    Sin dependencias. Funciona abriendo index.html directamente.
@@ -1355,7 +1355,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/i18n.js?v=20261122j ── */
+/* ── assets/js/data/i18n.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · idiomas de interfaz
    Fase 1: navegación, portada y avisos legales.
@@ -1639,7 +1639,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/seo.js?v=20261122j ── */
+/* ── assets/js/data/seo.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · SEO por sección
    Títulos, descripciones, palabras clave, Open Graph y JSON-LD.
@@ -1800,7 +1800,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/formulario.js?v=20261122j ── */
+/* ── assets/js/data/formulario.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · Formulario guiado 0-11
    Estado propio, separado del diagnóstico antiguo.
@@ -1885,6 +1885,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       name: '', age: '', nationality: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
       disability: '', residence: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
       jobType: '', studies: '', career: '',
+      paysHousing: '',
       disabilityRecognized: '', disabilityDegree: '', disabilityExpiryStatus: '', disabilityExpiry: '', dependency: '',
       docs: [], asylumRequested: '', asylumYear: '', asylumStatus: '', asylumDate: '',
       housing: '', housingCost: '', mortgage: '', mortgageAmount: '',
@@ -1894,7 +1895,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
   }
 
   function blank() {
-    return {
+    var out = {
       step: 0,
       mode: '',
       familyCount: 1,
@@ -1905,6 +1906,8 @@ html[dir="rtl"] .plan-head { text-align: right; }
       print: { applicant: true, spouse: true, children: true, disability: true, aid: true, housing: true, goals: true, economy: true },
       notes: ''
     };
+    out.applicant.paysHousing = 'si';
+    return out;
   }
 
   RL.formulario = {
@@ -1921,7 +1924,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/antes.js?v=20261122j ── */
+/* ── assets/js/data/antes.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · Mi experiencia
    Testimonio personal, corregido y ordenado por temas.
@@ -2034,7 +2037,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/countries.js?v=20261122j ── */
+/* ── assets/js/data/countries.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · países y datos que afectan a las vías
    - dos: nacionalidad por residencia en 2 años (art. 22 CC)
@@ -2168,7 +2171,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/regions.js?v=20261122j ── */
+/* ── assets/js/data/regions.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · comunidades autónomas, provincias y servicios
    ============================================================ */
@@ -2257,7 +2260,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/questions.js?v=20261122j ── */
+/* ── assets/js/data/questions.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · cuestionario (esquema declarativo)
    Cada campo: { id, type, label, help, required, showIf, options }
@@ -3584,7 +3587,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-nacionalidad.js?v=20261122j ── */
+/* ── assets/js/data/routes-nacionalidad.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · vías de NACIONALIDAD española
    Base: Código Civil arts. 17-26, Ley 20/2022 (DA 8.ª, cerrada),
@@ -4023,7 +4026,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-espana.js?v=20261122j ── */
+/* ── assets/js/data/routes-espana.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · vías que se solicitan DESDE España
    Base: RD 1155/2024 (en vigor 20/05/2025), RD 316/2026 y
@@ -4960,7 +4963,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-exterior.js?v=20261122j ── */
+/* ── assets/js/data/routes-exterior.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · visados y entrada desde el exterior
    Base: LO 4/2000, RD 1155/2024, Ley 14/2013 (modificada por
@@ -5399,7 +5402,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/resources.js?v=20261122j ── */
+/* ── assets/js/data/resources.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · recursos, glosario, FAQ y bulos
    ============================================================ */
@@ -5545,7 +5548,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/directory.js?v=20261122j ── */
+/* ── assets/js/data/directory.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · directorio de sitios de interés
    Cada ficha dice qué se puede hacer allí y enlaza a la sede.
@@ -6075,7 +6078,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/procedures.js?v=20261122j ── */
+/* ── assets/js/data/procedures.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · trámites: qué hacer, dónde, con qué cita y qué llevar
    ============================================================ */
@@ -7222,7 +7225,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/aids.js?v=20261122j ── */
+/* ── assets/js/data/aids.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · derechos, discapacidad, dependencia y ayudas
    ============================================================ */
@@ -7597,7 +7600,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/faq.js?v=20261122j ── */
+/* ── assets/js/data/faq.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · preguntas frecuentes (dudas reales de foros)
    Respuestas contrastadas con normativa y sede oficial.
@@ -8467,7 +8470,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/online.js?v=20261122j ── */
+/* ── assets/js/data/online.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · trámites online, sedes y notificaciones
    ============================================================ */
@@ -8764,7 +8767,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/engine.js?v=20261122j ── */
+/* ── assets/js/engine.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · motor de reglas
    Convierte el perfil en un plan: vías que encajan, requisitos
@@ -10018,7 +10021,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/decision.js?v=20261122j ── */
+/* ── assets/js/decision.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · capa de decisión
    No sustituye al motor de reglas: lo ordena y lo audita.
@@ -10295,7 +10298,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/forms.js?v=20261122j ── */
+/* ── assets/js/forms.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · catálogo de formularios oficiales
    Enlaces a la sede del Ministerio de Inclusión y al Ministerio
@@ -10531,7 +10534,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/ai.js?v=20261122j ── */
+/* ── assets/js/ai.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · consulta abierta a una IA
    Genera un prompt con el caso, el diagnóstico y las reglas.
@@ -10832,7 +10835,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/pdf.js?v=20261122j ── */
+/* ── assets/js/pdf.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · generador de PDF sin dependencias
    Escribe un PDF válido (A4, Helvetica, WinAnsi) con el perfil,
@@ -11482,7 +11485,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/speech.js?v=20261122j ── */
+/* ── assets/js/speech.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · lectura en voz alta con la Web Speech API
    Sin servidor, sin API key y sin enviar texto a terceros.
@@ -11866,7 +11869,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/app.js?v=20261122j ── */
+/* ── assets/js/app.js?v=20261122k ── */
 /* ============================================================
    Ruta Legal · interfaz (asistente, plan, catálogo, documentos)
    ============================================================ */
@@ -12095,6 +12098,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
   }
 
   function fEsc(v) { return esc(v == null ? '' : v); }
+  function fnum(v) { var n = Number(v); return isFinite(n) ? n : 0; }
 
   function fInput(path, label, value, type, placeholder) {
     return '<label class="field"><span class="field__label">' + fEsc(label) + '</span>' +
@@ -12165,13 +12169,22 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
   function housingBlock(obj, prefix) {
     var F = RL.formulario;
+    var isApplicant = prefix === 'applicant';
+    var paysHousing = isApplicant || fget(obj, 'paysHousing') === 'si';
     var h = '<div class="form-grid">' +
       fSelect(prefix + '.housing', '¿Dónde vives?', fget(obj, 'housing'), [
         { v: '', l: 'Sin indicar' }, { v: 'propia', l: 'Vivienda propia' }, { v: 'alquiler', l: 'Alquilo un piso' },
         { v: 'habitacion', l: 'Alquilo una habitación' }, { v: 'compartida', l: 'Comparto con amigo/a o pareja' },
         { v: 'familiar', l: 'Vivo con familiares' }, { v: 'otra', l: 'Otra situación' }
-      ]) +
-      fRadio(prefix + '.mortgage', '¿Pagas hipoteca?', fget(obj, 'mortgage'), F.yesNo) +
+      ]);
+    if (!isApplicant) {
+      h += fRadio(prefix + '.paysHousing', '¿Paga vivienda o suministros?', fget(obj, 'paysHousing'), F.yesNo);
+    }
+    if (!paysHousing) {
+      h += '</div><p class="field__help">Si no paga vivienda ni suministros, déjalo así. No hace falta poner ceros: los importes vacíos cuentan como 0 €.</p>';
+      return h;
+    }
+    h += fRadio(prefix + '.mortgage', '¿Pagas hipoteca?', fget(obj, 'mortgage'), F.yesNo) +
       (fget(obj, 'mortgage') === 'si'
         ? fInput(prefix + '.mortgageAmount', 'Importe mensual de la hipoteca (€)', fget(obj, 'mortgageAmount'), 'number')
         : fInput(prefix + '.housingCost', 'Importe mensual del alquiler o vivienda (€)', fget(obj, 'housingCost'), 'number')) +
@@ -12181,7 +12194,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       fInput(prefix + '.expenses.comunidad', 'Comunidad (€/mes)', fget(obj, 'expenses.comunidad'), 'number') +
       fInput(prefix + '.expenses.internet', 'Internet (€/mes)', fget(obj, 'expenses.internet'), 'number') +
       fRadio(prefix + '.computer', '¿Tienes computadora?', fget(obj, 'computer'), F.yesNo) +
-      '</div>';
+      '</div><p class="field__help">Déjalo vacío si no pagas ese concepto: cuenta como 0 €.</p>';
     return h;
   }
 
@@ -12470,11 +12483,11 @@ html[dir="rtl"] .plan-head { text-align: right; }
   }
 
   function formSummaryHTML(F, editable) {
-    var income = (Number(fget(F.applicant, 'netSalary')) || 0) + (F.mode === 'family' ? Number(fget(F.spouse, 'netSalary')) || 0 : 0);
-    var housing = Number(fget(F.applicant, 'housingCost')) || 0;
-    var mortgage = fget(F.applicant, 'mortgage') === 'si' ? (Number(fget(F.applicant, 'mortgageAmount')) || 0) : 0;
+    var income = fnum(fget(F.applicant, 'netSalary')) + (F.mode === 'family' ? fnum(fget(F.spouse, 'netSalary')) : 0);
+    var housing = fnum(fget(F.applicant, 'housingCost'));
+    var mortgage = fget(F.applicant, 'mortgage') === 'si' ? fnum(fget(F.applicant, 'mortgageAmount')) : 0;
     var exp = mortgage > 0 ? mortgage : housing;
-    ['luz', 'agua', 'gas', 'comunidad', 'internet'].forEach(function (k) { exp += Number(fget(F.applicant, 'expenses.' + k)) || 0; });
+    ['luz', 'agua', 'gas', 'comunidad', 'internet'].forEach(function (k) { exp += fnum(fget(F.applicant, 'expenses.' + k)); });
     var balance = income - exp;
     var members = [{ key: 'applicant', label: 'Titular', obj: F.applicant }];
     var childMeta = [];

@@ -781,4 +781,17 @@ t('un hijo menor no recibe preguntas de vivienda y gastos', () => {
   nav(app, 'inicio');
 });
 
+t('los importes vacíos cuentan como cero en el resumen', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.state.profile.formulario.step = 10;
+  RL.state.profile.formulario.applicant.netSalary = '';
+  RL.state.profile.formulario.applicant.housingCost = '';
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('0.00 €'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
