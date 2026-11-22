@@ -872,3 +872,27 @@ html[dir="rtl"] .plan-head { text-align: right; }
   .nav { justify-content: flex-start; gap: 1px 0; width: 100%; }
   .nav__link { font-size: .78rem; padding: 7px 7px; }
 }
+
+
+/* Menú principal compacto: una sola fila en escritorio */
+.nav {
+  flex-wrap: nowrap;
+  gap: 0;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.nav__link {
+  font-size: .78rem;
+  padding: 8px 5px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+@media (max-width: 980px) {
+  .nav { gap: 0; }
+  .nav__link { font-size: .72rem; padding: 7px 4px; }
+}
+@media (max-width: 720px) {
+  .nav { flex-wrap: wrap; justify-content: center; }
+  .nav__link { font-size: .76rem; padding: 7px 6px; }
+}

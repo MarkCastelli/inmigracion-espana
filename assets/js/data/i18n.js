@@ -21,9 +21,9 @@
       free: 'Gratis',
       private: 'Privado',
       nav: {
-        inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', plan: 'Mi plan', vias: 'Vías', tramites: 'Trámites',
-        online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos',
-        directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos',
+        inicio: 'Inicio', antes: 'Experiencia', formulario: 'Formulario', plan: 'Plan', vias: 'Vías', tramites: 'Trámites',
+        online: 'Online', preguntas: 'FAQ', derechos: 'Derechos',
+        directorio: 'Dónde ir', consulta: 'IA', docs: 'Docs',
         formularios: 'Descargas', ayuda: 'Ayuda'
       },
       heroEyebrow: 'Diagnóstico migratorio · España · 100 % gratuito',
@@ -65,9 +65,9 @@
       free: 'Gratuit',
       private: 'Privé',
       nav: {
-        inicio: 'Accueil', antes: 'Mon expérience', formulario: 'Formulaire', plan: 'Mon plan', vias: 'Voies', tramites: 'Démarches',
-        online: 'En ligne', preguntas: 'Questions', derechos: 'Droits',
-        directorio: 'Où aller', consulta: 'Consultation IA', docs: 'Documents',
+        inicio: 'Accueil', antes: 'Expérience', formulario: 'Formulaire', plan: 'Plan', vias: 'Voies', tramites: 'Démarches',
+        online: 'En ligne', preguntas: 'FAQ', derechos: 'Droits',
+        directorio: 'Où aller', consulta: 'IA', docs: 'Docs',
         formularios: 'Téléchargements', ayuda: 'Aide'
       },
       heroEyebrow: "Diagnostic migratoire · Espagne · 100 % gratuit",
@@ -87,9 +87,9 @@
       free: 'Free',
       private: 'Private',
       nav: {
-        inicio: 'Home', antes: 'My experience', formulario: 'Form', plan: 'My plan', vias: 'Routes', tramites: 'Procedures',
-        online: 'Online', preguntas: 'Questions', derechos: 'Rights',
-        directorio: 'Where to go', consulta: 'AI consultation', docs: 'Documents',
+        inicio: 'Home', antes: 'Experience', formulario: 'Form', plan: 'Plan', vias: 'Routes', tramites: 'Procedures',
+        online: 'Online', preguntas: 'FAQ', derechos: 'Rights',
+        directorio: 'Where to go', consulta: 'AI', docs: 'Docs',
         formularios: 'Downloads', ayuda: 'Help'
       },
       heroEyebrow: 'Immigration assessment · Spain · 100% free',
@@ -109,9 +109,9 @@
       free: 'Gratuit',
       private: 'Privat',
       nav: {
-        inicio: 'Acasă', antes: 'Experiența mea', formulario: 'Formular', plan: 'Planul meu', vias: 'Căi', tramites: 'Proceduri',
-        online: 'Online', preguntas: 'Întrebări', derechos: 'Drepturi',
-        directorio: 'Unde să mergi', consulta: 'Consultație IA', docs: 'Documente',
+        inicio: 'Acasă', antes: 'Experiență', formulario: 'Formular', plan: 'Plan', vias: 'Căi', tramites: 'Proceduri',
+        online: 'Online', preguntas: 'FAQ', derechos: 'Drepturi',
+        directorio: 'Unde mergi', consulta: 'IA', docs: 'Docs',
         formularios: 'Descărcări', ayuda: 'Ajutor'
       },
       heroEyebrow: 'Evaluare migratorie · Spania · 100% gratuit',
