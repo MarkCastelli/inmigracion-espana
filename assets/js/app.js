@@ -449,8 +449,9 @@
 
   function formSummaryHTML(F, editable) {
     var income = (Number(fget(F.applicant, 'netSalary')) || 0) + (F.mode === 'family' ? Number(fget(F.spouse, 'netSalary')) || 0 : 0);
-    var exp = Number(fget(F.applicant, 'housingCost')) || 0;
-    if (fget(F.applicant, 'mortgage') === 'si') exp += Number(fget(F.applicant, 'mortgageAmount')) || 0;
+    var housing = Number(fget(F.applicant, 'housingCost')) || 0;
+    var mortgage = fget(F.applicant, 'mortgage') === 'si' ? (Number(fget(F.applicant, 'mortgageAmount')) || 0) : 0;
+    var exp = mortgage > 0 ? mortgage : housing;
     ['luz', 'agua', 'gas', 'comunidad', 'internet'].forEach(function (k) { exp += Number(fget(F.applicant, 'expenses.' + k)) || 0; });
     var balance = income - exp;
     var members = [{ key: 'applicant', label: 'Titular', obj: F.applicant }];
