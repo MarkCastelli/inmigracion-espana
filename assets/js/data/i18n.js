@@ -241,6 +241,7 @@
     var sel = byId('langSelect');
     if (sel) {
       LANGS.forEach(function (l) {
+        if (l.id === 'es') return; // Español ya está en el HTML estático.
         var o = document.createElement('option');
         o.value = l.id;
         o.textContent = l.label;
