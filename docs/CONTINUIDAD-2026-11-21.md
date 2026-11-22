@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **188 pruebas pasando**.
+- **189 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -92,6 +92,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 62. **Composición familiar**: el grupo familiar indica cuántas personas son y añade filas con nombre, edad y vínculo (pareja, esposa/esposo, hijo/hija, padres de él/ella, hermanos, abuelos u otros); las fichas de otros integrantes recogen datos, documentos, asilo y vivienda.
 63. **Discapacidad sin caducidad**: el certificado del hijo/a permite «No caduca / sin vencimiento»; en ese caso no se pide fecha ni se inventa una caducidad en el informe.
 64. **Caché y entrada**: la portada abre el formulario nuevo; assets versionados a `20261122c` para evitar que el navegador cargue un `app.js` antiguo.
+65. **Discapacidad sin duplicar**: datos generales deja solo sí/no de discapacidad y dependencia; grado, reconocimiento y vencimiento se piden en la ficha individual del hijo. El botón para quitar hijos de pareja también aparece en el paso general.
 
 ## Comandos
 

@@ -646,4 +646,24 @@ t('el grupo familiar permite indicar integrantes, vínculo y edad', () => {
   nav(app, 'inicio');
 });
 
+t('datos generales no duplica grado/fecha y permite quitar hijos de pareja', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = {
+    nationality: 'AR', age: 36, location: 'spain', maritalStatus: 'pareja_estable',
+    childrenCommon: 1, childrenPartner: 3, childrenOwn: 0,
+    childrenDisability: 'yes', docsBase: [], docsTramites: [], goals: ['regularizar']
+  };
+  nav(app, 'diagnostico');
+  RL.ui.state.step = RL.questions.visibleSteps(RL.state.profile).findIndex(s => s.id === 'general');
+  RL.ui.render();
+  let html = app.document.querySelector('#wizardFields').innerHTML;
+  assert.ok(!html.includes('name="childrenDisabilityDegree"'), 'no debe pedir grado general');
+  assert.ok(!html.includes('name="childrenDisabilityExpiry"'), 'no debe pedir fecha general');
+  assert.ok(html.includes('Quitar el último'), 'falta botón para quitar hijos de pareja');
+  RL.ui.handleAction('remove-partner-child');
+  assert.strictEqual(Number(RL.state.profile.childrenPartner), 2);
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

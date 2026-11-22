@@ -695,6 +695,11 @@
 
     var fields = RL.questions.visibleFields(step, p);
     var html = fields.map(function (f, i) { return fieldHTML(f, p, ui.errors[f.id]); }).join('');
+    if (step && step.id === 'general' && (Number(p.childrenPartner) || 0) > 0) {
+      html += '<div class="callout callout--info" style="margin-top:14px">' + icons.family(16) +
+        '<div><strong>Hijos solo de tu pareja: ' + p.childrenPartner + '</strong><p>Si cargaste más de los que son, puedes quitar el último sin salir de este paso.</p>' +
+        '<button class="btn btn--ghost btn--sm mt-2" type="button" data-action="remove-partner-child">− Quitar el último</button></div></div>';
+    }
     $('#wizardFields').innerHTML = html;
 
     $('#prevBtn').style.visibility = ui.step === 0 ? 'hidden' : 'visible';

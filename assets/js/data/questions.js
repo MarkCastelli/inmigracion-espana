@@ -1229,16 +1229,17 @@
       'householdSize', 'maritalStatus', 'marriageType', 'childrenCommon', 'childrenOwn',
       'childrenPartner', 'childrenSpanish', 'spanishChildType', 'spouseSpanish',
       'spouseInSpain', 'spouseStatus', 'cohabitation', 'partnerDisability',
-      'partnerDisabilityRecognized', 'partnerDisabilityDegree', 'partnerDisabilityExpiry',
       'partnerDependency', 'pregnant', 'pregnantBySpanish', 'childRecognized',
-      'childLivesWithYou', 'childSupport', 'childrenDisability', 'childrenDisabilityRecognized',
-      'childrenDisabilityDegree', 'childrenDisabilityExpiry', 'householdOthers', 'householdDetails'
+      'childLivesWithYou', 'childSupport', 'childrenDisability', 'householdOthers', 'householdDetails'
     ];
     var generalFields = [];
+    var dropDetailIds = ['partnerDisabilityRecognized', 'partnerDisabilityDegree', 'partnerDisabilityExpiry',
+      'childrenDisabilityRecognized', 'childrenDisabilityDegree', 'childrenDisabilityExpiry'];
     var yo = RL.questions.steps.find(function (s) { return s.id === 'yo'; });
     if (yo) {
       yo.intro = 'Primero, tus datos como titular. Después veremos la composición familiar y las preguntas de cada persona.';
       yo.fields = yo.fields.filter(function (f) {
+        if (dropDetailIds.indexOf(f.id) !== -1) return false;
         if (generalIds.indexOf(f.id) !== -1) { generalFields.push(f); return false; }
         return true;
       });

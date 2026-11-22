@@ -141,9 +141,10 @@
     d.dependency = p.dependency === 'yes';
     d.dependencyInProgress = p.dependency === 'in_progress';
     d.familyNumerosa = p.familyNumerosa === 'yes';
-    d.childrenDisabilityRecognized = p.childrenDisabilityRecognized || (p.childrenDisability === 'yes' ? 'yes' : (p.childrenDisability === 'in_progress' ? 'in_progress' : 'no'));
-    d.childrenDisabilityDegree = p.childrenDisabilityDegree || null;
-    d.childrenDisabilityExpiry = p.childrenDisabilityExpiry || '';
+    d.childrenDisabilityRecognized = p.childrenDisabilityRecognized || (d.familyChildren.some(function (c) { return c.disability === 'yes'; }) ? 'yes' : (p.childrenDisability === 'in_progress' ? 'in_progress' : 'no'));
+    var disabledChild = d.familyChildren.filter(function (c) { return c.disability === 'yes'; })[0];
+    d.childrenDisabilityDegree = p.childrenDisabilityDegree || (disabledChild ? disabledChild.disabilityDegree : null);
+    d.childrenDisabilityExpiry = p.childrenDisabilityExpiry || (disabledChild ? disabledChild.disabilityExpiry : '');
     d.hasDisabledChild = (p.childrenDisability === 'yes' && d.childrenDisabilityRecognized !== 'no') || d.familyChildren.some(function (c) { return c.disability === 'yes' && c.disabilityRecognized !== 'no'; });
     d.familyNumerosaConsistent = !d.familyNumerosa || d.childrenCount >= 3 || (d.childrenCount === 2 && d.hasDisabledChild);
     d.disabledChildInProgress = p.childrenDisability === 'in_progress' || d.familyChildren.some(function (c) { return c.disability === 'in_progress'; });
