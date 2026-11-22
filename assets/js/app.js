@@ -255,15 +255,19 @@
       }).join('') + '</div></fieldset>';
   }
 
-  function personBlock(obj, prefix, includeHousing, skipBasics) {
+  function personBlock(obj, prefix, includeHousing, skipBasics, skipIdentity) {
     var F = RL.formulario;
-    var basics = skipBasics ? '' :
-      fInput(prefix + '.name', 'Nombre y apellidos', fget(obj, 'name')) +
-      fInput(prefix + '.age', 'Edad', fget(obj, 'age'), 'number') +
-      fInput(prefix + '.nationality', 'Nacionalidad', fget(obj, 'nationality')) +
-      fInput(prefix + '.phone', 'Teléfono móvil', fget(obj, 'phone'), 'tel') +
-      fInput(prefix + '.email', 'Email', fget(obj, 'email'), 'email') +
-      fInput(prefix + '.entryDate', 'Fecha de ingreso en España', fget(obj, 'entryDate'), 'date');
+    var basics = '';
+    if (!skipBasics) {
+      if (!skipIdentity) {
+        basics += fInput(prefix + '.name', 'Nombre y apellidos', fget(obj, 'name'));
+        basics += fInput(prefix + '.age', 'Edad', fget(obj, 'age'), 'number');
+      }
+      basics += fInput(prefix + '.nationality', 'Nacionalidad', fget(obj, 'nationality'));
+      basics += fInput(prefix + '.phone', 'Teléfono móvil', fget(obj, 'phone'), 'tel');
+      basics += fInput(prefix + '.email', 'Email', fget(obj, 'email'), 'email');
+      basics += fInput(prefix + '.entryDate', 'Fecha de ingreso en España', fget(obj, 'entryDate'), 'date');
+    }
     var h = '<div class="form-grid">' + basics +
       fRadio(prefix + '.familyAbroad', '¿Tienes familia en otro país?', fget(obj, 'familyAbroad'), F.yesNo) +
       fRadio(prefix + '.bringFamily', '¿Quieres traerlos a España?', fget(obj, 'bringFamily'), F.yesNo) +
@@ -369,10 +373,38 @@
     ];
   }
 
+  function syncFamilyFromMembers(F) {
+    if (F.mode !== 'family' || !F.members) return;
+    var spouseRelations = ['esposa', 'esposo', 'pareja', 'pareja_hecho'];
+    var childRelations = ['hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'];
+    var spouse = null;
+    var childMembers = [];
+    F.members.forEach(function (m) {
+      if (spouseRelations.indexOf(m.relation) !== -1) spouse = m;
+      if (childRelations.indexOf(m.relation) !== -1) childMembers.push(m);
+      m.data = m.data || RL.formulario.person();
+      if (m.name) m.data.name = m.name;
+      if (m.age) m.data.age = m.age;
+    });
+    if (spouse) {
+      if (spouse.name) F.spouse.name = spouse.name;
+      if (spouse.age) F.spouse.age = spouse.age;
+    }
+    if (childMembers.length) {
+      while (F.children.length < childMembers.length) F.children.push(RL.formulario.person());
+      F.children.length = childMembers.length;
+      childMembers.forEach(function (m, i) {
+        if (m.name) F.children[i].name = m.name;
+        if (m.age) F.children[i].age = m.age;
+      });
+    }
+  }
+
   function renderFormulario() {
     var host = $('#view-formulario');
     var F = getForm();
     syncFormMembers(F);
+    syncFamilyFromMembers(F);
     var step = Math.max(0, Math.min(11, Number(F.step) || 0));
     var total = 12;
     var html = '<div class="wizard"><div class="plan-head"><div><p class="eyebrow">Formulario · Paso ' + step + ' de 11</p>' +
@@ -422,15 +454,24 @@
     } else if (step === 4) {
       html += '<div class="block"><div class="block__head">' + icons.home(18) + '<h2>Vivienda y gastos</h2></div><div class="block__body">' + housingBlock(F.applicant, 'applicant') + '</div></div>';
     } else if (step === 5) {
+      var spouseMember = (F.members || []).filter(function (m) {
+        return ['esposa', 'esposo', 'pareja', 'pareja_hecho'].indexOf(m.relation) !== -1;
+      })[0];
       html += '<div class="block"><div class="block__head">' + icons.family(18) + '<h2>Pareja: datos, documentos, asilo y vivienda</h2></div><div class="block__body">' +
-        personBlock(F.spouse, 'spouse', true) + documentsBlock(F.spouse, 'spouse') + asylumBlock(F.spouse, 'spouse') + '</div></div>';
+        (spouseMember ? '<div class="callout callout--info">' + icons.info(16) + '<div><strong>' + fEsc(spouseMember.name || 'Pareja') + ' · ' + fEsc(spouseMember.age || 'edad sin indicar') + '</strong><p>Nombre y edad cargados desde el paso 0. Si quieres cambiarlos, vuelve a «Sobre ti y tu familia».</p></div></div>' : '') +
+        personBlock(F.spouse, 'spouse', true, false, !!spouseMember) + documentsBlock(F.spouse, 'spouse') + asylumBlock(F.spouse, 'spouse') + '</div></div>';
     } else if (step === 6) {
+      var childMembers = (F.members || []).filter(function (m) {
+        return ['hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1;
+      });
       html += '<div class="block"><div class="block__head">' + icons.family(18) + '<h2>Hijos</h2></div><div class="block__body">' +
         '<p class="muted">Añade cada hijo. Si es menor, completa sus datos y estudios; si es mayor, añade también trabajo y vivienda.</p>' +
         '<button class="btn btn--soft btn--sm" type="button" data-form-action="add-child">+ Añadir hijo/a</button>' +
         (F.children.length ? F.children.map(function (ch, i) {
-          return '<div class="family-child" style="margin-top:14px"><div class="flex" style="justify-content:space-between"><h3>Hijo/a ' + (i + 1) + '</h3><button class="btn btn--ghost btn--sm" type="button" data-form-action="remove-child" data-index="' + i + '">Quitar</button></div>' +
-            personBlock(ch, 'children.' + i, true) +
+          var lm = childMembers[i];
+          return '<div class="family-child" style="margin-top:14px"><div class="flex" style="justify-content:space-between"><h3>Hijo/a ' + (i + 1) + (lm && lm.name ? ': ' + fEsc(lm.name) : '') + '</h3><button class="btn btn--ghost btn--sm" type="button" data-form-action="remove-child" data-index="' + i + '">Quitar</button></div>' +
+            (lm ? '<p class="muted">Edad: ' + fEsc(lm.age || 'sin indicar') + ' · vínculo: ' + fEsc(lm.relation) + '. Nombre y edad cargados desde el paso 0.</p>' : '') +
+            personBlock(ch, 'children.' + i, true, false, !!lm) +
             '<div class="form-grid">' +
             fInput('children.' + i + '.educationLevel', 'Estudios actuales', fget(ch, 'educationLevel'), 'text', 'ESO, Bachillerato, FP, universidad…') +
             '</div></div>';
@@ -442,7 +483,8 @@
         html += '<div style="margin-top:18px"><h3>Otros integrantes del grupo</h3><p class="muted">Padres, hermanos u otros convivientes. Completa sus datos, documentos, asilo y vivienda.</p>' +
           otherMembers.map(function (x) {
             return '<div class="family-child" style="margin-top:14px"><h3>' + fEsc(x.m.name || 'Integrante ' + (x.i + 1)) + ' · ' + fEsc(x.m.relation || 'otro') + ' · ' + fEsc(x.m.age || 'edad sin indicar') + '</h3>' +
-              personBlock(x.m.data || {}, 'members.' + x.i + '.data', true) +
+              '<p class="muted">Nombre y edad cargados desde el paso 0.</p>' +
+              personBlock(x.m.data || {}, 'members.' + x.i + '.data', true, false, true) +
               '<div class="form-grid">' + fInput('members.' + x.i + '.educationLevel', 'Estudios actuales', x.m.educationLevel || '', 'text', 'ESO, Bachillerato, FP, universidad…') + '</div></div>';
           }).join('') + '</div>';
       }

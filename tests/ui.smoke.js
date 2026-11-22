@@ -690,4 +690,30 @@ t('vivienda pide un solo importe: hipoteca o alquiler', () => {
   nav(app, 'inicio');
 });
 
+t('nombre y edad se cargan desde la composición, sin repetirlos', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 3;
+  f.members = [
+    { name: 'Ana Pérez', age: '40', relation: 'esposa', data: RL.formulario.person() },
+    { name: 'Luis Pérez', age: '10', relation: 'hijo_comun', data: RL.formulario.person() }
+  ];
+  f.step = 5;
+  nav(app, 'formulario');
+  let html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Ana Pérez'));
+  assert.ok(!html.includes('name="spouse.name"'), 'no debe pedir nombre de pareja otra vez');
+  assert.ok(!html.includes('name="spouse.age"'), 'no debe pedir edad de pareja otra vez');
+  f.step = 6;
+  RL.ui.render();
+  html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Luis Pérez'));
+  assert.ok(!html.includes('name="children.0.name"'), 'no debe pedir nombre del hijo otra vez');
+  assert.ok(!html.includes('name="children.0.age"'), 'no debe pedir edad del hijo otra vez');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
