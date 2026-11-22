@@ -1140,4 +1140,16 @@ t('las ayudas contextuales aparecen y se traducen', () => {
   nav(app, 'inicio');
 });
 
+t('la página legal existe y cubre privacidad y RGPD', () => {
+  nav(app, 'legal');
+  const html = app.document.querySelector('#view-legal').innerHTML;
+  assert.ok(html.includes('Aviso legal y privacidad'));
+  assert.ok(html.includes('Responsable del sitio'));
+  assert.ok(html.includes('localStorage'));
+  assert.ok(html.includes('RGPD'));
+  assert.ok(html.includes('Agencia Española de Protección de Datos'));
+  assert.ok(!html.includes('undefined'));
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

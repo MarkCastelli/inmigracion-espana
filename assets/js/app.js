@@ -34,7 +34,7 @@
     aiLastId: null
   };
 
-  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'consulta', 'docs', 'formularios', 'ayuda'];
+  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'consulta', 'docs', 'formularios', 'ayuda', 'legal'];
   var REGION_LABEL = { latam: 'América Latina', ue: 'Unión Europea', eea: 'Espacio Económico Europeo', eu: 'Europa (otros)', africa: 'África', asia: 'Asia', otro: 'Otros países' };
 
   /* Perfil de ejemplo para probar la app sin escribir nada. */
@@ -194,6 +194,7 @@
     else if (ui.view === 'docs') renderDocs();
     else if (ui.view === 'formularios') renderFormularios();
     else if (ui.view === 'ayuda') renderHelp();
+    else if (ui.view === 'legal') renderLegal();
 
     if (RL.seo) RL.seo.apply(ui.view);
 
@@ -3477,6 +3478,79 @@
   /* ══════════════════════════════════════════════════════════
      AYUDA
      ══════════════════════════════════════════════════════════ */
+  function renderLegal() {
+    var host = $('#view-legal');
+    var updated = fmt.date(RL.CONTENT_DATE, { year: true });
+    host.innerHTML = `<div class="plan-head"><div><p class="eyebrow">Legal</p><h1>Aviso legal y privacidad</h1>
+      <p class="plan-head__sub">Información sobre el responsable, el tratamiento de datos, el almacenamiento local y tus derechos. Última revisión: ${esc(updated)}.</p></div></div>
+      <div class="callout callout--info"><div><strong>Ruta Legal no es un despacho de abogados</strong><p>Es una herramienta informativa y gratuita para ordenar tu caso. No presta asesoramiento jurídico individual, no presenta solicitudes y no garantiza ninguna concesión.</p></div></div>
+      <div class="legal-text">
+      <h2>1. Responsable del sitio</h2>
+      <p><strong>Titular:</strong> MarkCastelli, responsable del proyecto Ruta Legal. <strong>Canal de contacto:</strong> <a href="https://github.com/MarkCastelli/inmigracion-espana/issues" target="_blank" rel="noopener">incidencias del repositorio de GitHub</a>. No publiques datos personales, de salud, NIE ni documentación en una incidencia pública: pide primero un canal privado.</p>
+      <p>El sitio se publica como página estática en GitHub Pages. No existe un servidor propio de Ruta Legal que reciba, almacene o procese los datos del formulario.</p>
+
+      <h2>2. Para qué sirve esta web</h2>
+      <p>Ruta Legal permite introducir datos sobre tu situación migratoria, familiar, laboral, económica y de salud para generar un informe orientativo que puedas revisar con un abogado, ONG o servicio de extranjería. El contenido es informativo; no sustituye la valoración profesional ni la información oficial de la Administración.</p>
+
+      <h2>3. Qué datos se tratan</h2>
+      <p>Los datos que introduces voluntariamente pueden incluir: nombre y apellidos, edad o fecha de nacimiento, nacionalidad, teléfono, email, ubicación, fechas de entrada y residencia, situación administrativa, documentos que declaras tener, familia, trabajo, ingresos, vivienda, estudios, objetivos y, si decides aportarlos, datos de discapacidad, dependencia, salud o asilo.</p>
+      <p>No se solicitan números completos de NIE, pasaporte, tarjeta bancaria ni contraseñas. Si los escribes en un campo libre, quedan bajo tu responsabilidad. No subas copias de documentos a esta web: no existe un servicio de subida.</p>
+
+      <h2>4. Finalidad y base jurídica</h2>
+      <ul>
+        <li><strong>Finalidad:</strong> permitirte completar el formulario, guardar el progreso en tu navegador y generar el informe y el PDF que tú decidas descargar.</li>
+        <li><strong>Base jurídica:</strong> tu consentimiento al introducir los datos (art. 6.1.a RGPD). Para datos de salud, discapacidad, dependencia u origen étnico, tu consentimiento explícito (art. 9.2.a RGPD).</li>
+        <li><strong>No hay decisiones automatizadas</strong> que produzcan efectos jurídicos sobre ti. El informe ordena hechos; no decide una vía ni concede derechos.</li>
+        <li><strong>No hay perfilado publicitario</strong>, venta de datos ni cesión a terceros con fines comerciales.</li>
+      </ul>
+
+      <h2>5. Datos sensibles</h2>
+      <p>Los datos de salud, discapacidad, dependencia, asilo o violencia son categorías especiales. Solo debes incluirlos si quieres que aparezcan en el informe. Puedes dejar esos campos vacíos o eliminar la sección antes de generar el PDF. La base es tu consentimiento explícito; puedes retirarlo borrando los datos.</p>
+
+      <h2>6. Conservación</h2>
+      <p>Los datos se guardan en el <strong>almacenamiento local (localStorage)</strong> de este navegador y dispositivo. No se envían a un servidor de Ruta Legal. Permanecen hasta que pulses “Borrar todo”, borres los datos del navegador o desinstales el navegador. Las copias JSON y los PDF que descargues quedan en tu dispositivo y fuera del control de la web.</p>
+
+      <h2>7. Destinatarios, hosting y transferencias</h2>
+      <p>Ruta Legal no comparte los datos del formulario con terceros. El sitio se aloja en <strong>GitHub Pages</strong> (GitHub, Inc./Microsoft), que puede registrar datos técnicos como la dirección IP, la fecha y el navegador en sus registros de servidor. GitHub puede tratar esos datos fuera del Espacio Económico Europeo al amparo de sus garantías contractuales; consulta la <a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">política de privacidad de GitHub</a>.</p>
+      <p>Cuando pulsas un enlace externo (BOE, ministerios, ONG, YouTube, DeepSeek, etc.), pasas al servicio de ese tercero y se aplican sus propias políticas. La app no controla esos sitios.</p>
+
+      <h2>8. Cookies y almacenamiento local</h2>
+      <p>Esta web <strong>no utiliza cookies publicitarias, píxeles de seguimiento ni herramientas de analítica</strong>. Usa almacenamiento local estrictamente necesario para recordar tus respuestas, el idioma, el tema y la preferencia de ayudas. Al no haber cookies no esenciales, no se muestra un banner de consentimiento de cookies. Puedes borrar el almacenamiento local desde la propia app o desde la configuración del navegador.</p>
+
+      <h2>9. Seguridad</h2>
+      <p>La información se queda en tu dispositivo. La seguridad física y el acceso al navegador dependen de ti: usa un dispositivo de confianza, bloquea la pantalla y evita guardar el informe en ordenadores compartidos. Ninguna medida es infalible; si el dispositivo se pierde o se comparte, tus datos pueden quedar accesibles.</p>
+
+      <h2>10. Tus derechos</h2>
+      <p>Puedes ejercer los derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición, y retirar tu consentimiento, escribiendo al canal de contacto indicado. Como los datos están en tu navegador, la forma más directa de ejercer la supresión es usar “Borrar todo” y borrar las copias que hayas descargado.</p>
+      <p>También puedes reclamar ante la <strong>Agencia Española de Protección de Datos</strong>: <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>. Si resides en otro Estado de la UE, puedes acudir a tu autoridad nacional de protección de datos.</p>
+
+      <h2>11. Menores de edad</h2>
+      <p>La app está pensada para personas adultas que preparan su caso o el de su familia. Si introduces datos de hijos menores, hazlo como progenitor, tutor o representante legal y limita la información a lo necesario. En España, el consentimiento digital del menor exige normalmente 14 años; para menores de esa edad se necesita autorización de quien ejerza la patria potestad o tutela.</p>
+
+      <h2>12. Enlaces externos y consultas con IA</h2>
+      <p>Los enlaces oficiales y las entidades se ofrecen para que puedas verificar la información. No respondemos de sus contenidos ni de sus cambios. Si usas la consulta con IA, el prompt se genera en tu dispositivo y solo se envía cuando tú lo pegas o lo abres en el servicio externo; no incluyas datos que no quieras compartir.</p>
+
+      <h2>13. Propiedad intelectual</h2>
+      <p>© 2026 MarkCastelli. Todos los derechos reservados. No se autoriza la copia, modificación, distribución o reutilización del código, el diseño o los textos sin permiso escrito. Los enlaces a normas y páginas oficiales pertenecen a sus titulares.</p>
+
+      <h2>14. Limitación de responsabilidad</h2>
+      <p>La información es orientativa y puede quedar desactualizada. No garantizamos la exactitud, exhaustividad o vigencia de normas, tasas, plazos o criterios de oficinas. Antes de presentar una solicitud, confirma en la fuente oficial y consulta con un profesional. La decisión y la responsabilidad de presentar un expediente son tuyas.</p>
+
+      <h2>15. Cambios en esta política</h2>
+      <p>Podemos actualizar este texto para reflejar cambios legales o técnicos. La fecha de revisión aparece al principio. Si el cambio es relevante, se avisará en la propia web.</p>
+
+      <h2>16. Normativa de referencia</h2>
+      <ul>
+        <li><a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj" target="_blank" rel="noopener">Reglamento (UE) 2016/679 (RGPD)</a>.</li>
+        <li><a href="https://www.boe.es/buscar/act.php?id=BOE-A-2018-16673" target="_blank" rel="noopener">Ley Orgánica 3/2018 (LOPDGDD)</a>.</li>
+        <li><a href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-13758" target="_blank" rel="noopener">Ley 34/2002 (LSSI-CE)</a>.</li>
+        <li>Directiva 2002/58/CE y normativa europea sobre cookies y comunicaciones electrónicas.</li>
+      </ul>
+      <p class="muted" style="font-size:.82rem">Este texto es una política informativa de una web estática sin backend. No sustituye una revisión jurídica profesional de la identidad, el domicilio y el canal de contacto del responsable.</p>
+      </div>
+      <div class="flex mt-3"><button class="btn btn--soft btn--sm" data-nav="ayuda">Volver a Ayuda</button><button class="btn btn--ghost btn--sm" data-nav="inicio">Inicio</button></div>`;
+  }
+
   function renderHelp() {
     var host = $('#view-ayuda');
     var R = RL.resources;
@@ -3553,7 +3627,7 @@
       }).join('') + '</div></div>';
 
     html += '<div class="block mt-3"><div class="block__head">' + icons.doc(18) + '<h2>' + esc(R.legal.title) + '</h2></div><div class="block__body legal-text">' +
-      '<p class="muted" style="font-size:.82rem">Última revisión: ' + esc(R.legal.updated) + '</p>' +
+      '<p class="muted" style="font-size:.82rem">Última revisión: ' + esc(R.legal.updated) + ' · <a href="#/legal" data-nav="legal">Leer el aviso legal y la política de privacidad completa</a></p>' +
       R.legal.blocks.map(function (b) { return '<h3>' + esc(b.h) + '</h3><p>' + esc(b.p) + '</p>'; }).join('') +
       '<h3>Tus datos y este dispositivo</h3>' +
       '<p>Puedes exportar una copia de tu perfil y tu checklist, importarla en otro navegador o borrarlo todo. Nada sale de tu equipo.</p>' +
@@ -3692,7 +3766,7 @@
     if (action === 'generate-form') { generateForm(btn); return; }
     if (action === 'listen-view') {
       if (!RL.speech || !RL.speech.supported) { toast('Tu navegador no permite lectura en voz alta.'); return; }
-      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', ayuda: 'Ayuda' };
+      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', ayuda: 'Ayuda', legal: 'Aviso legal y privacidad' };
       if (ui.view === 'plan' && RL.hasSavedProfile()) {
         RL.speech.speak(RL.speech.buildPlanScript(RL.buildPlan(RL.profile())), 'Tu plan');
       } else {

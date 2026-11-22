@@ -82,6 +82,11 @@
       title: 'Ayuda, recursos y aviso legal | Ruta Legal',
       description: 'Recursos oficiales, entidades, canales de YouTube, glosario, preguntas frecuentes, bulos y aviso legal.',
       keywords: 'ayuda inmigrantes, recursos, ONG, YouTube, aviso legal'
+    },
+    legal: {
+      title: 'Aviso legal y privacidad | Ruta Legal',
+      description: 'Aviso legal, privacidad, RGPD, almacenamiento local, cookies y derechos de las personas usuarias de Ruta Legal.',
+      keywords: 'aviso legal, privacidad, RGPD, LOPDGDD, cookies, derechos'
     }
   };
 

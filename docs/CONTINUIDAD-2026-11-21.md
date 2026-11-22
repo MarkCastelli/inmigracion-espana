@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **214 pruebas pasando**.
+- **215 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -131,6 +131,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 101. **Formulario multilingüe**: etiquetas y opciones del formulario traducidas a francés, inglés, árabe y rumano; el informe/PDF sigue siempre en español. Ayuda con instrucciones de traducción del navegador en cinco idiomas y aviso de no traducir el PDF.
 102. **Tooltips**: archivo aparte `assets/js/data/tooltips.js` con textos en es/fr/en/ar/ro; iconos junto a los campos y casilla «Ayudas» arriba para activar/desactivar. No salen en el PDF.
 103. **Teléfonos de urgencia**: 112 primero (universal), 061 sanitario, 062 Guardia Civil, 091 Policía Nacional, 080/085 bomberos, 016, 024 y trata; enlaces `tel:` y aviso de que el 112 puede conectar con intérprete.
+104. **Aviso legal y privacidad**: nueva vista `#/legal` enlazada desde el pie y Ayuda; cubre responsable, datos, bases jurídicas, datos sensibles, conservación, GitHub Pages, cookies/localStorage, derechos, AEPD, menores, propiedad intelectual y limitación de responsabilidad. Pendiente completar identidad/NIF/domicilio/email del responsable y revisión jurídica profesional.
 
 ## Comandos
 
