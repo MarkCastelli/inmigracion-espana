@@ -68,6 +68,25 @@
       ]
     },
     {
+      id: 'asilo_2026', cat: 'asilo',
+      q: '¿Vale la pena solicitar asilo en 2026? ¿Qué gano, qué pierdo y qué posibilidades tengo?',
+      short: 'Solo tiene sentido si temes de verdad volver por persecución o conflicto y puedes contarlo con pruebas. No es una vía para regularizar por trabajo o pobreza. Mientras se tramita tienes estancia legal y, tras 6 meses, opción de trabajo; pero el tiempo no cuenta para arraigo, puedes esperar años y una denegación te deja irregular. No existe una probabilidad individual fiable.',
+      detail: [
+        'Quién puede: personas no comunitarias que estén en España o en frontera y teman persecución por raza, religión, nacionalidad, opinión política, pertenencia a un grupo social, género u orientación sexual, o daños graves por conflicto. La pobreza o buscar trabajo no son motivos de asilo.',
+        'Qué ganas mientras se tramita: estancia legal, protección frente a la devolución, tarjeta de solicitante y, a los 6 meses, posibilidad de autorización de trabajo si no hay denegación. Si te conceden, tienes residencia y protección.',
+        'Qué pierdes o arriesgas: el tiempo como solicitante no cuenta para el arraigo; no puedes salir de España sin perder la protección; la espera puede ser larga; una denegación te deja en situación irregular y con plazo de recurso; la reagrupación familiar no es inmediata.',
+        'Posibilidades: no hay un porcentaje fiable para tu caso. Las tasas oficiales dependen del país, del relato, de las pruebas y del criterio de la oficina; no predicen tu resultado. Una solicitud sin relato creíble y sin pruebas suele terminar en denegación.',
+        'No es la regularización de 2026: si lo que buscas es regularizarte por arraigo, trabajo o estudios, el asilo no es un atajo y puede bloquearte otras vías mientras esté pendiente.',
+        'Antes de solicitarlo: habla con un abogado o con CEAR/ACNUR. Prepara relato, fechas, documentos, informes y testigos. Si ya lo presentaste, controla requerimientos, entrevista y plazos.',
+        'Si lo que temes es violencia de género, trata o una situación humanitaria, puede haber otra vía específica; no lo mezcles con un asilo sin asesoramiento.'
+      ],
+      links: [
+        ['ACNUR España', 'https://www.acnur.org/es-es/'],
+        ['CEAR', 'https://www.cear.es/'],
+        ['Ley 12/2009 · BOE', 'https://www.boe.es/buscar/act.php?id=BOE-A-2009-19013']
+      ]
+    },
+    {
       id: 'estudios_30h', cat: 'trabajo',
       q: 'Estudio y trabajo menos de 30 horas, ¿está permitido?',
       short: 'Sí, si el trabajo es compatible con los estudios, con contrato y alta, y no superas 30 horas semanales.',

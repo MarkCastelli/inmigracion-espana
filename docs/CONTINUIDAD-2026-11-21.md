@@ -70,6 +70,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 40. **Discapacidad y dependencia**: preguntas ordenadas por categoría alfabética; nuevos casos de titular irregular, hijo menor, hijo adulto, dependencia y padres dependientes.
 41. **Educación**: fichas de escolarización, libros/material/cheques, comedor/becas y becas generales; FAQ con plazos, documentos y diferencias por comunidad.
 42. **Entidades locales**: Diversidades Acolle (Vigo/Pontevedra) en directorio y bloque «Entidades de apoyo en tu zona»; FAQ de asociaciones por provincia.
+43. **Asilo 2026**: FAQ con quién puede solicitarlo, qué gana/pierde, por qué no hay probabilidad individual fiable y por qué no es una vía de regularización.
 
 ## Comandos
 
