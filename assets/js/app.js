@@ -427,6 +427,11 @@
         html += '<div class="family-child"><h3>' + fEsc(m.label) + '</h3><div class="form-grid">' +
           fRadio(m.key + '.disabilityRecognized', '¿Reconocida en España?', fget(m.obj, 'disabilityRecognized'), RL.formulario.yesNo) +
           fInput(m.key + '.disabilityDegree', 'Nivel concedido', fget(m.obj, 'disabilityDegree'), 'text', '33 %, 45 %, 65 %…') +
+          fSelect(m.key + '.disabilityExpiryStatus', '¿El certificado tiene vencimiento?', fget(m.obj, 'disabilityExpiryStatus'), [
+            { v: '', l: 'No indicado' }, { v: 'yes', l: 'Sí, tiene fecha' },
+            { v: 'no', l: 'No caduca / sin vencimiento' }, { v: 'dontknow', l: 'No lo sé' }
+          ]) +
+          (fget(m.obj, 'disabilityExpiryStatus') === 'yes' ? fInput(m.key + '.disabilityExpiry', 'Fecha de vencimiento', fget(m.obj, 'disabilityExpiry'), 'date') : '') +
           fRadio(m.key + '.dependency', '¿Tienes dependencia reconocida?', fget(m.obj, 'dependency'), RL.formulario.yesNo) +
           fRadio(m.key + '.aidReceived', '¿Recibes ayuda o subsidio?', fget(m.obj, 'aidReceived'), RL.formulario.yesNo) +
           '</div>';

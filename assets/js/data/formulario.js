@@ -82,11 +82,11 @@
       name: '', age: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
       disability: '', residence: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
       jobType: '', studies: '', career: '',
+      disabilityRecognized: '', disabilityDegree: '', disabilityExpiryStatus: '', disabilityExpiry: '', dependency: '',
       docs: [], asylumRequested: '', asylumYear: '', asylumStatus: '', asylumDate: '',
       housing: '', housingCost: '', mortgage: '', mortgageAmount: '',
       expenses: { luz: '', agua: '', gas: '', comunidad: '', internet: '' },
-      computer: '', education: '', educationLevel: '', dependency: '', disabilityRecognized: '',
-      disabilityDegree: '', aidReceived: '', aidTypes: [], aidWho: [], aidDetail: '', goals: []
+      computer: '', education: '', educationLevel: '', aidReceived: '', aidTypes: [], aidWho: [], aidDetail: '', goals: []
     };
   }
 
