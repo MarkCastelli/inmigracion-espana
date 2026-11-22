@@ -140,6 +140,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 110. **Confirmación de alta**: el botón de envío se separa del consentimiento; si FormSubmit responde correctamente, redirige a `#/abogados-gracias` con un mensaje formal de solicitud recibida, aviso de que no se ha pagado y enlaces de vuelta.
 111. **Borrador de alta de abogados**: los campos se guardan automáticamente en `localStorage` (`ruta-legal.lawyer-draft`) al escribir; al volver se recuperan con aviso, el consentimiento no se recupera y hay botón para borrar el borrador. Si el envío falla, no se pierde nada.
 112. **Ficha pública alineada con el alta**: el JSON usa los mismos campos que el formulario (nombre, estudio, matrícula, colegio, contacto, web, citas, domicilio, localidad, provincia, horario, especialidad, idiomas, mensaje); la matrícula/colegio se muestran y el enlace de citas aparece siempre como botón «Pedir cita».
+113. **Pago Voluntario**: etiqueta verde en negrita junto al nombre del despacho/abogado cuando `pagoVoluntario: true`; cuatro registros DEMO simulan despachos sociales/ONG con pago voluntario.
 
 ## Comandos
 

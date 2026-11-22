@@ -3569,7 +3569,7 @@
           var isDemo = !!a.demo;
           var wa = a.whatsapp && !isDemo ? 'https://wa.me/' + String(a.whatsapp).replace(/[^0-9]/g, '') : '';
           var booking = a.citas ? '<a class="btn btn--accent btn--sm" href="' + esc(RL.dom.safeUrl(a.citas)) + '" target="_blank" rel="noopener">' + icons.ext(14) + (isDemo ? ' Pedir cita (demo)' : ' Pedir cita') + '</a>' : '';
-          return '<div class="family-child lawyer-card" data-lawyer-card style="margin-top:14px"><div class="flex" style="justify-content:space-between;gap:10px;flex-wrap:wrap"><h3>' + esc(a.estudio || a.nombre || 'Despacho') + '</h3>' + (isDemo ? '<span class="badge badge--warn">DEMO · ficticio</span>' : '<span class="badge badge--warn">No verificado</span>') + '</div>' +
+          return '<div class="family-child lawyer-card" data-lawyer-card style="margin-top:14px"><div class="flex" style="justify-content:space-between;gap:10px;flex-wrap:wrap"><h3>' + esc(a.estudio || a.nombre || 'Despacho') + (a.pagoVoluntario ? ' <span class="badge badge--free">Pago Voluntario</span>' : '') + '</h3>' + (isDemo ? '<span class="badge badge--warn">DEMO · ficticio</span>' : '<span class="badge badge--warn">No verificado</span>') + '</div>' +
             (a.nombre ? '<p><strong>' + esc(a.nombre) + '</strong></p>' : '') +
             (a.matricula || a.colegio ? '<p class="muted" style="font-size:.83rem">' + (a.matricula ? 'Colegiado/a: ' + esc(a.matricula) : '') + (a.colegio ? ' · ' + esc(a.colegio) : '') + '</p>' : '') +
             '<p class="muted">' + esc(a.domicilio || '') + (a.ciudad ? ' · ' + esc(a.ciudad) : '') + (a.provincia ? ' · ' + esc(a.provincia) : '') + '</p>' +

@@ -976,3 +976,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 .thanks-icon { width: 58px; height: 58px; margin: 0 auto 12px; display: grid; place-items: center; border-radius: 50%; background: #e8f7ef; color: #1d7a4c; }
 .thanks-card h1 { margin: 4px 0 12px; color: var(--brand); font-size: clamp(1.7rem, 4vw, 2.3rem); }
 .thanks-card p { color: var(--ink-2); line-height: 1.65; }
+
+
+/* Etiqueta de pago voluntario */
+.badge--free { background: #e8f7ef; color: #1d7a4c; border: 1px solid #9fd6b5; font-weight: 800; }

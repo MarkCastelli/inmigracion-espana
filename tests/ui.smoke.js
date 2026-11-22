@@ -1179,6 +1179,7 @@ t('la página de abogados avisa de que no están verificados', () => {
   assert.ok(html.includes('DEMO-001'));
   assert.ok(html.includes('Colegio de Prueba'));
   assert.ok(html.includes('Pedir cita (demo)'));
+  assert.ok(html.includes('Pago Voluntario'));
   assert.ok(html.includes('id="lawyerSearch"'));
   assert.ok(html.includes('id="lawyerCity"'));
   assert.ok(html.includes('id="lawyerSort"'));
