@@ -423,6 +423,90 @@
     return assemble(doc.pages, 'Mi plan en Ruta Legal');
   }
 
+  function buildCaseReport(plan, profile) {
+    var p = profile || {}, d = plan.d || {};
+    var doc = new Doc();
+    doc.begin();
+    doc.title('Informe de caso para un abogado de extranjería');
+    doc.small('Generado en tu dispositivo el ' + RL.fmt.date(RL.dates.today(), { year: true }) + '. No se ha enviado a ningún servidor.');
+    doc.p('Este informe no es un diagnóstico legal ni elige una vía por ti. Recoge hechos, fechas, familia, documentos y dudas para que un abogado o una entidad especializada evalúe el caso.');
+    doc.hr();
+
+    doc.h2('Identificación y contacto');
+    doc.kv('Nombre', p.fullName || 'No indicado');
+    doc.kv('Nacimiento', [p.birthDate ? RL.fmt.date(p.birthDate) : '', p.birthPlace].filter(Boolean).join(' · ') || 'No indicado');
+    doc.kv('Contacto', [p.contactPhone, p.contactEmail].filter(Boolean).join(' · ') || 'No indicado');
+    doc.kv('Nacionalidad', RL.countryName(p.nationality));
+    doc.kv('Edad', d.age != null ? d.age + ' años' : 'No indicada');
+
+    doc.h2('Situación en España');
+    doc.kv('Dónde está', p.location === 'spain' ? 'España' : (p.location === 'origin' ? 'País de origen' : 'Otro país'));
+    if (p.province || p.municipality) doc.kv('Provincia / municipio', [p.municipality, p.province].filter(Boolean).join(' · '));
+    if (p.entryDate) doc.kv('Entrada', RL.fmt.date(p.entryDate));
+    if (d.monthsInSpain != null) doc.kv('Tiempo en España', RL.fmt.duration(d.monthsInSpain));
+    if (p.empadronado) doc.kv('Padrón', p.empadronado === 'yes' ? 'Sí' : 'No');
+    if (p.permitStatus) doc.kv('Situación de residencia', p.permitStatus);
+    if (p.permitKind) doc.kv('Tipo de autorización', p.permitKind);
+    if (p.permitYears) doc.kv('Años concedidos', p.permitYears);
+    if (p.permitSince) doc.kv('Residencia desde', RL.fmt.date(p.permitSince));
+    if (p.permitExpiry) doc.kv('Vencimiento TIE', RL.fmt.date(p.permitExpiry));
+    if (p.residenceApproved === 'yes') doc.kv('Residencia aprobada', (p.residenceApprovedYears ? p.residenceApprovedYears + ' años' : 'Sí') + (p.residenceApprovedDate ? ' · ' + RL.fmt.date(p.residenceApprovedDate) : ''));
+    if (p.renewalMercurio) doc.kv('Renovación presentada', p.renewalMercurio);
+    if (p.renewalApproved) doc.kv('Renovación aprobada', p.renewalApproved);
+    if (p.huellasAppointment) doc.kv('Cita de huellas', p.huellasAppointment);
+    if (p.tiePickupAppointment) doc.kv('Cita de retirada TIE', p.tiePickupAppointment);
+    if (p.hasAppointment) doc.kv('Cita para presentar', p.hasAppointment + (p.appointmentDate ? ' · ' + RL.fmt.date(p.appointmentDate) : ''));
+    if (p.asylumStage) doc.kv('Asilo', p.asylumStage + (p.postRenunciationOutcome ? ' · ' + p.postRenunciationOutcome : ''));
+    if (p.goals) doc.kv('Objetivo', goalText(p.goals));
+    if (p.urgency) doc.kv('Urgencia', p.urgency);
+
+    if (d.partnerName || (d.familyChildren && d.familyChildren.length)) {
+      doc.h2('Familia');
+      if (d.partnerName) doc.bullet('Pareja: ' + d.partnerName + (d.partnerAge != null ? ' · ' + d.partnerAge + ' años' : '') + (d.partnerLegalStatus ? ' · situación: ' + d.partnerLegalStatus : ''));
+      (d.familyChildren || []).forEach(function (c) {
+        doc.bullet('Hijo/a ' + c.index + (c.name ? ' · ' + c.name : '') + (c.age != null ? ' · ' + c.age + ' años' : '') + (c.legalStatus ? ' · situación: ' + c.legalStatus : '') + (c.education ? ' · estudios: ' + (RL.education.child[c.education] || c.education) : '') + (c.disability === 'yes' ? ' · discapacidad' : ''));
+      });
+      (d.extraPeople || []).forEach(function (x) {
+        doc.bullet('Otra persona: ' + (x.name || 'sin nombre') + (x.age != null ? ' · ' + x.age + ' años' : '') + (x.relation ? ' · ' + x.relation : ''));
+      });
+    }
+
+    var labels = (d.docsBase || []).concat(d.docsTramites || []).map(function (k) { return k; });
+    if (labels.length) {
+      doc.h2('Documentos y trámites que ya tiene');
+      labels.forEach(function (k) { doc.bullet(k); });
+    }
+    if ((d.docsEnCurso || []).length) {
+      doc.h2('Trámites en curso');
+      d.docsEnCurso.forEach(function (k) { doc.bullet(k); });
+    }
+
+    doc.h2('Preguntas para el abogado');
+    if (p.lawyerQuestions) doc.p(p.lawyerQuestions);
+    doc.bullet('¿Qué vía encaja mejor con estos hechos y por qué?');
+    doc.bullet('¿Qué documento o cita debe hacer primero y a partir de qué fecha?');
+    doc.bullet('¿Qué plazos, riesgos o incompatibilidades hay en este caso?');
+    doc.bullet('¿Qué coste y vigencia tienen los documentos que faltan?');
+
+    doc.hr();
+    doc.small('Documento de hechos para revisión profesional. No sustituye el asesoramiento jurídico ni la comprobación en la fuente oficial.');
+    doc.end();
+    return assemble(doc.pages, 'Informe de caso');
+  }
+
+  function downloadCaseReport(plan, profile) {
+    var bytes = buildCaseReport(plan, profile);
+    var blob = new Blob([bytes], { type: 'application/pdf' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'ruta-legal-informe-' + RL.dates.today() + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 800);
+  }
+
+
   function goalText(goals) {
     var m = {
       regularizar: 'Regularizarme', residencia_estable: 'Residencia estable',
@@ -552,6 +636,8 @@
   RL.pdf = {
     buildBytes: buildPlanPDF,
     download: download,
+    buildCaseReport: buildCaseReport,
+    downloadCaseReport: downloadCaseReport,
     buildFormSheet: buildFormSheet,
     downloadFormSheet: downloadFormSheet,
     buildAnswerPDF: buildAnswerPDF,

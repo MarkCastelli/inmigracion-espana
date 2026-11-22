@@ -164,6 +164,16 @@ test('genera un PDF de consulta a una IA', () => {
   assert.ok(text.toLowerCase().includes('no es asesoramiento'));
 });
 
+test('genera un informe de caso sin veredicto para el abogado', () => {
+  const plan = RL.buildPlan(demo);
+  const bytes = RL.pdf.buildCaseReport(plan, demo);
+  const doc = extractText(Buffer.from(bytes));
+  const text = doc.text.replace(/\s+/g, ' ').toLowerCase();
+  assert.ok(text.includes('informe de caso'), 'falta el título');
+  assert.ok(text.includes('hechos'), 'faltan hechos');
+  assert.ok(!text.includes('vía recomendada'), 'no debe recomendar una vía');
+});
+
 test('el PDF cambia si cambia el perfil', () => {
   const a = build(demo).str;
   const b = build(Object.assign({}, demo, { nationality: 'VE', ancestry: 'grandparent', ancestorOrigin: 'originario' })).str;

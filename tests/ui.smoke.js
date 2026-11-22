@@ -183,10 +183,10 @@ t('la ayuda renderiza glosario, FAQ y bulos', () => {
 t('sin perfil, el plan invita a hacer el diagnóstico', () => {
   nav(app, 'plan');
   const html = app.document.querySelector('#view-plan').innerHTML;
-  assert.ok(html.includes('Aún no tenemos tu diagnóstico'));
+  assert.ok(html.includes('Aún no tenemos tu informe'));
 });
 
-t('con el perfil de ejemplo, el plan renderiza vías y pasos', () => {
+t('con el perfil de ejemplo, el informe recoge hechos y documentos', () => {
   RL.state.profile = {
     nationality: 'CU', age: 34, location: 'spain', entryMode: 'tourist_visa',
     timeInSpain: '2to3y', entryDate: '2024-03-10', empadronado: 'yes',
@@ -206,26 +206,22 @@ t('con el perfil de ejemplo, el plan renderiza vías y pasos', () => {
   };
   nav(app, 'plan');
   const html = app.document.querySelector('#view-plan').innerHTML;
-  assert.ok(html.includes('Tu plan personalizado'), 'falta cabecera');
-  assert.ok(html.includes('Arraigo social'), 'falta la vía principal');
-  assert.ok(html.includes('Empieza por aquí'), 'faltan próximos pasos');
-  assert.ok(html.includes('Tus fechas clave'), 'faltan fechas');
-  assert.ok(html.includes('Documentos'), 'faltan documentos');
-  assert.ok(html.includes('Privado') || html.includes('Tu perfil'), 'falta tarjeta de perfil');
-  assert.ok(html.includes('Descargar PDF para tu abogado'), 'falta el botón de PDF');
+  assert.ok(html.includes('Informe para tu abogado'), 'falta cabecera');
+  assert.ok(html.includes('Hechos del caso'), 'faltan hechos');
+  assert.ok(html.includes('Lo que ya tienes'), 'faltan documentos');
+  assert.ok(html.includes('Datos que faltan'), 'faltan datos por confirmar');
+  assert.ok(html.includes('Descargar informe PDF'), 'falta el botón de PDF');
   assert.ok(html.includes('Lo que ya tienes'), 'falta el bloque de documentos propios');
-  assert.ok(html.includes('Cómo hemos decidido'), 'falta el bloque de decisión');
-  assert.ok(html.includes('Confianza'), 'falta la confianza del diagnóstico');
 });
 
 t('el asistente adapta el número de pasos según dónde estés', () => {
   const saved = RL.state.profile;
   RL.state.profile = { nationality: 'CU', location: 'spain' };
   nav(app, 'diagnostico');
-  assert.strictEqual(app.document.querySelector('#wizardStepLabel').textContent, 'Paso 1 de 8');
+  assert.strictEqual(app.document.querySelector('#wizardStepLabel').textContent, 'Paso 1 de 9');
   RL.state.profile.location = 'origin';
   nav(app, 'diagnostico');
-  assert.strictEqual(app.document.querySelector('#wizardStepLabel').textContent, 'Paso 1 de 6');
+  assert.strictEqual(app.document.querySelector('#wizardStepLabel').textContent, 'Paso 1 de 7');
   RL.state.profile = saved;
 });
 
@@ -314,7 +310,7 @@ t('la consulta IA muestra el prompt y los botones de IA', () => {
   RL.ui.state.aiPrompt = prev;
 });
 
-t('el plan muestra expectativa realista y supuestos familiares', () => {
+t('el informe recoge la familia y los hechos sin emitir veredicto', () => {
   const saved = RL.state.profile;
   RL.state.profile = Object.assign({}, saved, {
     nationality: 'CO', location: 'spain', maritalStatus: 'casado',
@@ -323,9 +319,9 @@ t('el plan muestra expectativa realista y supuestos familiares', () => {
   });
   nav(app, 'plan');
   const html = app.document.querySelector('#view-plan').innerHTML;
-  assert.ok(html.includes('Expectativa realista'));
-  assert.ok(html.includes('Supuestos familiares'));
-  assert.ok(html.includes('Me caso con un español'));
+  assert.ok(html.includes('Hechos del caso'));
+  assert.ok(html.includes('Esto no es un diagnóstico legal'));
+  assert.ok(!html.includes('Arraigo social'), 'no debe emitir una vía como veredicto');
   RL.state.profile = saved;
   nav(app, 'inicio');
 });
@@ -471,7 +467,7 @@ t('las preguntas de discapacidad de un hijo solo salen si tiene discapacidad', (
   nav(app, 'inicio');
 });
 
-t('la nacionalidad calcula los meses que faltan', () => {
+t('el informe recoge la residencia sin calcular un veredicto', () => {
   const saved = RL.state.profile;
   RL.state.profile = {
     nationality: 'AR', age: 34, location: 'spain', entryMode: 'tourist_free',
@@ -482,8 +478,9 @@ t('la nacionalidad calcula los meses que faltan', () => {
   };
   nav(app, 'plan');
   const html = app.document.querySelector('#view-plan').innerHTML;
-  assert.ok(!html.includes('Comprueba tus 2 años de residencia'), 'no debe mostrar el paso genérico');
-  assert.ok(html.includes('Te faltan') || html.includes('Ya cumples'), 'debe calcular el tiempo real');
+  assert.ok(html.includes('Hechos del caso'));
+  assert.ok(html.includes('Residencia desde'));
+  assert.ok(!html.includes('Te faltan'), 'no debe emitir un veredicto de nacionalidad');
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

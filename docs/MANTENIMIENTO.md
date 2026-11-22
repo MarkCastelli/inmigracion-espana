@@ -186,7 +186,7 @@ node tests/housing.test.js    # 3 pruebas de vivienda y prueba de domicilio
 node tests/docs.test.js       # 8 pruebas de trámites terminados vs. en curso
 node tests/education.test.js  # 4 pruebas de Bachillerato, SEPE y estudios por hijo
 node tests/persistence.test.js # 2 pruebas de copia JSON y reanudación
-node tests/pdf.test.js        # 10 pruebas del PDF
+node tests/pdf.test.js        # 11 pruebas del PDF y del informe
 node tests/speech.test.js     # 5 pruebas del lector de voz
 node tests/speech.mock.test.js # 3 pruebas con API simulada
 node tests/ui.smoke.js        # 24 pruebas de interfaz

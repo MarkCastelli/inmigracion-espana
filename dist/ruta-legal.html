@@ -2778,6 +2778,33 @@ body.has-speech-bar { padding-bottom: 86px; }
     };
     RL.questions.steps.splice(situation + 1, 0, asylumStep);
   })();
+
+  /* Datos que necesita un abogado para el informe de caso. */
+  RL.questions.steps.push({
+    id: 'abogado',
+    title: 'Datos para tu abogado',
+    intro: 'No es un diagnóstico. Son los datos que un abogado de extranjería necesita para revisar tu caso: identificación, contacto, solicitudes anteriores y tus dudas.',
+    fields: [
+      { id: 'fullName', type: 'text', label: 'Nombre y apellidos', placeholder: 'Solo si quieres incluirlos en el informe' },
+      { id: 'birthDate', type: 'date', label: 'Fecha de nacimiento' },
+      { id: 'birthPlace', type: 'text', label: 'Lugar de nacimiento' },
+      { id: 'contactPhone', type: 'text', label: 'Teléfono de contacto (opcional)' },
+      { id: 'contactEmail', type: 'text', label: 'Correo de contacto (opcional)' },
+      {
+        id: 'urgency', type: 'select', label: '¿Hay algún plazo urgente?',
+        options: [
+          { v: 'none', l: 'No, puedo esperar' },
+          { v: 'days', l: 'Sí, días' },
+          { v: 'weeks', l: 'Sí, semanas' },
+          { v: 'months', l: 'Sí, meses' },
+          { v: 'dontknow', l: 'No lo sé' }
+        ]
+      },
+      { id: 'priorApplications', type: 'textarea', label: 'Solicitudes o expedientes anteriores', placeholder: 'Qué pediste, cuándo y en qué quedó' },
+      { id: 'denials', type: 'textarea', label: 'Denegaciones, recursos o problemas', placeholder: 'Denegaciones, recursos, silencios, prohibiciones de entrada…' },
+      { id: 'lawyerQuestions', type: 'textarea', label: '¿Qué quieres preguntar al abogado?', placeholder: 'Ej. ¿Me conviene arraigo o nacionalidad? ¿Qué documento pido primero?' }
+    ]
+  });
 })();
 
 </script>
@@ -9698,6 +9725,90 @@ body.has-speech-bar { padding-bottom: 86px; }
     return assemble(doc.pages, 'Mi plan en Ruta Legal');
   }
 
+  function buildCaseReport(plan, profile) {
+    var p = profile || {}, d = plan.d || {};
+    var doc = new Doc();
+    doc.begin();
+    doc.title('Informe de caso para un abogado de extranjería');
+    doc.small('Generado en tu dispositivo el ' + RL.fmt.date(RL.dates.today(), { year: true }) + '. No se ha enviado a ningún servidor.');
+    doc.p('Este informe no es un diagnóstico legal ni elige una vía por ti. Recoge hechos, fechas, familia, documentos y dudas para que un abogado o una entidad especializada evalúe el caso.');
+    doc.hr();
+
+    doc.h2('Identificación y contacto');
+    doc.kv('Nombre', p.fullName || 'No indicado');
+    doc.kv('Nacimiento', [p.birthDate ? RL.fmt.date(p.birthDate) : '', p.birthPlace].filter(Boolean).join(' · ') || 'No indicado');
+    doc.kv('Contacto', [p.contactPhone, p.contactEmail].filter(Boolean).join(' · ') || 'No indicado');
+    doc.kv('Nacionalidad', RL.countryName(p.nationality));
+    doc.kv('Edad', d.age != null ? d.age + ' años' : 'No indicada');
+
+    doc.h2('Situación en España');
+    doc.kv('Dónde está', p.location === 'spain' ? 'España' : (p.location === 'origin' ? 'País de origen' : 'Otro país'));
+    if (p.province || p.municipality) doc.kv('Provincia / municipio', [p.municipality, p.province].filter(Boolean).join(' · '));
+    if (p.entryDate) doc.kv('Entrada', RL.fmt.date(p.entryDate));
+    if (d.monthsInSpain != null) doc.kv('Tiempo en España', RL.fmt.duration(d.monthsInSpain));
+    if (p.empadronado) doc.kv('Padrón', p.empadronado === 'yes' ? 'Sí' : 'No');
+    if (p.permitStatus) doc.kv('Situación de residencia', p.permitStatus);
+    if (p.permitKind) doc.kv('Tipo de autorización', p.permitKind);
+    if (p.permitYears) doc.kv('Años concedidos', p.permitYears);
+    if (p.permitSince) doc.kv('Residencia desde', RL.fmt.date(p.permitSince));
+    if (p.permitExpiry) doc.kv('Vencimiento TIE', RL.fmt.date(p.permitExpiry));
+    if (p.residenceApproved === 'yes') doc.kv('Residencia aprobada', (p.residenceApprovedYears ? p.residenceApprovedYears + ' años' : 'Sí') + (p.residenceApprovedDate ? ' · ' + RL.fmt.date(p.residenceApprovedDate) : ''));
+    if (p.renewalMercurio) doc.kv('Renovación presentada', p.renewalMercurio);
+    if (p.renewalApproved) doc.kv('Renovación aprobada', p.renewalApproved);
+    if (p.huellasAppointment) doc.kv('Cita de huellas', p.huellasAppointment);
+    if (p.tiePickupAppointment) doc.kv('Cita de retirada TIE', p.tiePickupAppointment);
+    if (p.hasAppointment) doc.kv('Cita para presentar', p.hasAppointment + (p.appointmentDate ? ' · ' + RL.fmt.date(p.appointmentDate) : ''));
+    if (p.asylumStage) doc.kv('Asilo', p.asylumStage + (p.postRenunciationOutcome ? ' · ' + p.postRenunciationOutcome : ''));
+    if (p.goals) doc.kv('Objetivo', goalText(p.goals));
+    if (p.urgency) doc.kv('Urgencia', p.urgency);
+
+    if (d.partnerName || (d.familyChildren && d.familyChildren.length)) {
+      doc.h2('Familia');
+      if (d.partnerName) doc.bullet('Pareja: ' + d.partnerName + (d.partnerAge != null ? ' · ' + d.partnerAge + ' años' : '') + (d.partnerLegalStatus ? ' · situación: ' + d.partnerLegalStatus : ''));
+      (d.familyChildren || []).forEach(function (c) {
+        doc.bullet('Hijo/a ' + c.index + (c.name ? ' · ' + c.name : '') + (c.age != null ? ' · ' + c.age + ' años' : '') + (c.legalStatus ? ' · situación: ' + c.legalStatus : '') + (c.education ? ' · estudios: ' + (RL.education.child[c.education] || c.education) : '') + (c.disability === 'yes' ? ' · discapacidad' : ''));
+      });
+      (d.extraPeople || []).forEach(function (x) {
+        doc.bullet('Otra persona: ' + (x.name || 'sin nombre') + (x.age != null ? ' · ' + x.age + ' años' : '') + (x.relation ? ' · ' + x.relation : ''));
+      });
+    }
+
+    var labels = (d.docsBase || []).concat(d.docsTramites || []).map(function (k) { return k; });
+    if (labels.length) {
+      doc.h2('Documentos y trámites que ya tiene');
+      labels.forEach(function (k) { doc.bullet(k); });
+    }
+    if ((d.docsEnCurso || []).length) {
+      doc.h2('Trámites en curso');
+      d.docsEnCurso.forEach(function (k) { doc.bullet(k); });
+    }
+
+    doc.h2('Preguntas para el abogado');
+    if (p.lawyerQuestions) doc.p(p.lawyerQuestions);
+    doc.bullet('¿Qué vía encaja mejor con estos hechos y por qué?');
+    doc.bullet('¿Qué documento o cita debe hacer primero y a partir de qué fecha?');
+    doc.bullet('¿Qué plazos, riesgos o incompatibilidades hay en este caso?');
+    doc.bullet('¿Qué coste y vigencia tienen los documentos que faltan?');
+
+    doc.hr();
+    doc.small('Documento de hechos para revisión profesional. No sustituye el asesoramiento jurídico ni la comprobación en la fuente oficial.');
+    doc.end();
+    return assemble(doc.pages, 'Informe de caso');
+  }
+
+  function downloadCaseReport(plan, profile) {
+    var bytes = buildCaseReport(plan, profile);
+    var blob = new Blob([bytes], { type: 'application/pdf' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'ruta-legal-informe-' + RL.dates.today() + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 800);
+  }
+
+
   function goalText(goals) {
     var m = {
       regularizar: 'Regularizarme', residencia_estable: 'Residencia estable',
@@ -9827,6 +9938,8 @@ body.has-speech-bar { padding-bottom: 86px; }
   RL.pdf = {
     buildBytes: buildPlanPDF,
     download: download,
+    buildCaseReport: buildCaseReport,
+    downloadCaseReport: downloadCaseReport,
     buildFormSheet: buildFormSheet,
     downloadFormSheet: downloadFormSheet,
     buildAnswerPDF: buildAnswerPDF,
@@ -10806,6 +10919,86 @@ body.has-speech-bar { padding-bottom: 86px; }
      PLAN
      ══════════════════════════════════════════════════════════ */
   function renderPlan() {
+    var host = $('#view-plan');
+    var p = RL.profile();
+    if (!p.nationality || !p.location) {
+      host.innerHTML = emptyState('Aún no tenemos tu informe',
+        'Responde las preguntas y generaremos un informe de caso para que lo revise un abogado de extranjería.',
+        'Empezar mi informe', 'diagnostico');
+      return;
+    }
+    var plan = RL.buildPlan(p);
+    var d = plan.d;
+    var html = '<div class="plan-head"><div><p class="eyebrow">Informe de caso</p>' +
+      '<h1>Informe para tu abogado de extranjería</h1>' +
+      '<p class="plan-head__sub">Este documento recoge tus hechos, fechas, familia, documentos y dudas. No emite un veredicto ni elige una vía por ti: eso lo valora un abogado.</p></div>' +
+      '<div class="plan-head__actions">' +
+      '<button class="btn btn--accent btn--sm" data-action="pdf">' + icons.doc(16) + ' Descargar informe PDF</button>' +
+      '<button class="btn btn--soft btn--sm" data-action="print">' + icons.print(16) + ' Imprimir</button>' +
+      '<button class="btn btn--soft btn--sm" data-action="export">' + icons.save(16) + ' Guardar copia JSON</button>' +
+      '<button class="btn btn--ghost btn--sm" data-action="edit">' + icons.user(16) + ' Editar respuestas</button>' +
+      '</div></div>';
+    html += profileChips(p, d);
+    html += '<div class="callout callout--info" style="margin:0 0 18px">' + icons.info(18) + '<div><strong>Esto no es un diagnóstico legal</strong><p>La app no decide qué vía te corresponde. Ordena la información para que un abogado o una entidad especializada pueda evaluar tu caso con menos idas y venidas.</p></div></div>';
+    html += caseFactsHTML(p, d);
+    html += ownedDocsHTML(d);
+    html += familyMembersHTML(plan);
+    html += caseQuestionsHTML(p, d);
+    html += spendGuardHTML();
+    html += '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>Antes de enviar el informe</strong><p>Revisa que las fechas y documentos sean correctos. El abogado necesitará además copias de las resoluciones, TIE, pasaporte y justificantes que aquí solo se describen.</p></div></div>';
+    html += '<div class="flex mt-2"><button class="btn btn--soft btn--sm" data-nav="tramites">Ver guías de trámites</button><button class="btn btn--soft btn--sm" data-nav="vias">Ver información general de vías</button><button class="btn btn--soft btn--sm" data-nav="ayuda">Buscar abogado o entidad</button></div>';
+    host.innerHTML = html;
+  }
+
+  function caseFactsHTML(p, d) {
+    var rows = [];
+    function row(k, v) { if (v != null && v !== '') rows.push([k, v]); }
+    row('Nombre', p.fullName);
+    row('Nacimiento', [p.birthDate ? fmt.date(p.birthDate) : '', p.birthPlace].filter(Boolean).join(' · '));
+    row('Contacto', [p.contactPhone, p.contactEmail].filter(Boolean).join(' · '));
+    row('Nacionalidad', RL.countryName(p.nationality));
+    row('Edad', d.age != null ? d.age + ' años' : '');
+    row('Dónde está', p.location === 'spain' ? 'España' : (p.location === 'origin' ? 'País de origen' : 'Otro país'));
+    row('Provincia / municipio', [p.municipality, p.province].filter(Boolean).join(' · '));
+    row('Entrada', p.entryDate ? fmt.date(p.entryDate) : '');
+    row('Tiempo en España', d.monthsInSpain != null ? fmt.duration(d.monthsInSpain) : '');
+    row('Padrón', p.empadronado === 'yes' ? 'Sí' : (p.empadronado === 'no' ? 'No' : ''));
+    row('Situación de residencia', p.permitStatus ? permitLabel(p.permitStatus) : '');
+    row('Tipo de autorización', p.permitKind);
+    row('Años concedidos', p.permitYears);
+    row('Residencia desde', p.permitSince ? fmt.date(p.permitSince) : '');
+    row('Vence', p.permitExpiry ? fmt.date(p.permitExpiry) : '');
+    row('Residencia aprobada', p.residenceApproved === 'yes' ? 'Sí' + (p.residenceApprovedYears ? ' · ' + p.residenceApprovedYears + ' años' : '') : '');
+    row('Renovación', [p.renewalMercurio, p.renewalApproved, p.huellasAppointment, p.tiePickupAppointment].filter(Boolean).join(' · '));
+    row('Cita para presentar', p.appointmentDate ? fmt.date(p.appointmentDate) : p.hasAppointment);
+    row('Asilo', p.asylumStage ? p.asylumStage + (p.postRenunciationOutcome ? ' · ' + p.postRenunciationOutcome : '') : '');
+    row('Objetivo', goalLabel(p.goals));
+    row('Urgencia', p.urgency);
+    row('Solicitudes anteriores', p.priorApplications);
+    row('Denegaciones / recursos', p.denials);
+    row('Dudas para el abogado', p.lawyerQuestions);
+    row('Notas', p.notes);
+    if (!rows.length) return '';
+    return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.user(18) + '<h2>Hechos del caso</h2></div><div class="block__body"><div class="form-grid">' +
+      rows.map(function (r) { return '<div class="field"><span class="field__label">' + esc(r[0]) + '</span><p style="margin:0;font-size:.9rem;color:var(--ink-2)">' + esc(r[1]) + '</p></div>'; }).join('') +
+      '</div></div></div>';
+  }
+
+  function caseQuestionsHTML(p, d) {
+    var missing = [];
+    if (!p.nationality) missing.push('nacionalidad');
+    if (!p.location) missing.push('dónde está');
+    if (p.location === 'spain' && !p.entryDate) missing.push('fecha de entrada');
+    if (d.hasPermit && !p.permitExpiry) missing.push('vencimiento de la TIE');
+    if (d.hasPermit && !p.permitSince) missing.push('fecha desde la que tiene residencia legal');
+    if (!p.hasAppointment) missing.push('si tiene cita y para qué fecha');
+    if (!p.lawyerQuestions) missing.push('qué quiere preguntar al abogado');
+    return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.help(18) + '<h2>Datos que faltan o debe confirmar el abogado</h2></div><div class="block__body">' +
+      (missing.length ? '<p><strong>Faltan en el informe:</strong> ' + esc(missing.join(', ')) + '.</p>' : '<p>Los datos principales están cubiertos. El abogado deberá confirmar las resoluciones, los documentos originales y las fechas exactas.</p>') +
+      '<p class="muted" style="font-size:.86rem">No interpretamos estos datos como una vía legal. El informe sirve para que el profesional pregunte, compruebe y decida.</p></div></div>';
+  }
+
+  function renderPlanLegacy() {
     var host = $('#view-plan');
     var p = RL.profile();
 
@@ -12597,8 +12790,8 @@ body.has-speech-bar { padding-bottom: 86px; }
       if (!RL.hasSavedProfile()) { toast('Primero completa el diagnóstico para generar tu PDF.'); return; }
       try {
         var plan = RL.buildPlan(RL.profile());
-        RL.pdf.download(plan, RL.profile());
-        toast('PDF generado en tu dispositivo. Llévalo a tu abogado de extranjería.');
+        RL.pdf.downloadCaseReport(plan, RL.profile());
+        toast('Informe generado en tu dispositivo. Llévalo a tu abogado de extranjería.');
       } catch (e) {
         toast('No se pudo generar el PDF en este navegador. Prueba a imprimir y guardar como PDF.');
       }

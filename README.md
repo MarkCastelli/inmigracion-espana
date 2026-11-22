@@ -2,7 +2,7 @@
 
 # Ruta Legal
 
-**Tu situación en España, paso a paso.** Una app web que hace un diagnóstico guiado y devuelve un plan personalizado: qué vías legales encajan contigo, qué requisitos cumples, qué te falta, qué documentos necesitas y en qué orden.
+**Recoge tu caso y lo ordena para un abogado.** Una app web que hace las preguntas necesarias, guarda los hechos, fechas, familia y documentos, y genera un **informe de caso** para que lo revise un abogado de extranjería. No emite un veredicto ni elige una vía por ti.
 
 - **Contenido revisado:** 20 de noviembre de 2026
 - **Versión:** 1.0.0
@@ -67,7 +67,7 @@ Muestra una URL de tu red local (`http://192.168.x.x:8765`). Ábrela en el móvi
 
 ## Qué hace
 
-1. **Diagnóstico guiado** (6 pasos si estás fuera y hasta 10 si estás en España, ~40 preguntas, muchas condicionales): nacionalidad, edad, ubicación, entrada, padrón, permiso, **datos generales de la familia**, **ficha de pareja y de cada hijo**, **página única de asilo**, objetivo, documentos, ascendencia, trabajo, estudios, medios y antecedentes.
+1. **Informe guiado** (7 pasos si estás fuera y hasta 10 si estás en España, ~40 preguntas, muchas condicionales): nacionalidad, edad, ubicación, entrada, padrón, permiso, **datos generales de la familia**, **ficha de pareja y de cada hijo**, **página única de asilo**, objetivo, documentos, ascendencia, trabajo, estudios, medios, antecedentes y **datos para el abogado**.
 2. **Motor de reglas + capa de decisión** que evalúa el perfil contra **33 vías** y devuelve:
    - vías recomendadas, ordenadas por encaje y urgencia;
    - requisitos cumplidos, pendientes y por confirmar;
@@ -83,7 +83,7 @@ Muestra una URL de tu red local (`http://192.168.x.x:8765`). Ábrela en el móvi
 8. **Online**: portales para iniciar trámites, consultar expedientes y recibir notificaciones: Cl@ve, FNMT, DEHú, Carpeta Ciudadana, sede de Extranjería, Mercurio, DGT (canje de permiso), Import@ss, SEPE, AEAT, Justicia, tasas 790, ICPP y sedes autonómicas/locales. Se adapta a tu comunidad y avisa de lo que exige cita presencial.
 9. **Preguntas frecuentes**: dudas reales de foros y consultas, ordenadas alfabéticamente y por tema: entrada, asilo, arraigo, estudios/trabajo, policía/sanciones, familia, documentos y ayudas. Con búsqueda y respuestas legales, no opiniones.
 10. **Derechos y ayudas**: discapacidad, incapacidad permanente, dependencia, familia numerosa, menores, IMV, rentas mínimas, pensiones no contributivas, vivienda, transporte, asistencia jurídica gratuita y entidades. Explica qué es cada cosa, dónde se pide y qué no debes confundir.
-11. **Consulta abierta con IA**: para lo que la app no puede resolver, genera un prompt con tu perfil, el diagnóstico, los motivos y las instrucciones; abre **DeepSeek** con el texto precargado, permite pegar la respuesta, descargarla en PDF y **repreguntar**. No se envía nada solo y no se guarda nada sin pulsar «Guardar».
+11. **Consulta abierta con IA**: para lo que la app no puede resolver, genera un prompt con los hechos del caso, los documentos, las dudas y las instrucciones; abre **DeepSeek** con el texto precargado, permite pegar la respuesta, descargarla en PDF y **repreguntar**. No se envía nada solo y no se guarda nada sin pulsar «Guardar».
 12. **Escuchar en voz alta** con la voz del navegador (Web Speech API): el plan, la portada o cualquier sección, con selección de voz, velocidad, pausa y parada. Sin servidor y sin enviar texto a terceros.
 13. **Ayuda**: glosario, preguntas frecuentes, teléfonos de emergencia, entidades gratuitas y una sección de **bulos** con la realidad normativa.
 
@@ -95,36 +95,21 @@ Muestra una URL de tu red local (`http://192.168.x.x:8765`). Ábrela en el móvi
 
 La lista vive en `assets/js/data/routes-*.js`; añadir una vía nueva no requiere tocar la interfaz.
 
-### Cómo decide la app
+### Cómo se genera el informe
 
-No ordena por una puntuación bonita. Aplica este orden:
+La app no elige una vía ni calcula un porcentaje. Ordena:
 
-1. **Hechos**: normaliza el perfil y calcula tiempo en España, situación, permisos, documentos y familia.
-2. **Puertas legales**: si una vía no es legalmente posible (nacionalidad, edad, permiso en vigor, asilo en curso, expediente abierto, plazo cerrado), se descarta con el motivo.
-3. **Madurez**: primero las vías que puedes activar ya (`ready`/`likely`); después las que aún necesitan tiempo o requisitos (`almost`).
-4. **Objetivo**: entre las vías posibles, prioriza la que responde a lo que quieres (regularizarte, trabajar, nacionalidad, familia).
-5. **Derechos y plazos**: a igualdad de objetivo, prefiere la que da más derechos (5 años y trabajo libre frente a 1 año) y la que puedes sostener.
-6. **Confianza y seguridad**: si faltan datos clave, lo marca como «por confirmar»; si hay una orden de salida, una denegación de asilo o violencia, la prioridad es buscar ayuda profesional.
+1. **Hechos**: identificación, entrada, tiempo, residencia, familia, trabajo, estudios, salud y documentos.
+2. **Fechas**: concesión, vencimiento, cita, renovación, huellas y retirada.
+3. **Documentos**: los que ya tienes, los que están en curso y los que faltan.
+4. **Dudas**: lo que no sabes y lo que quieres preguntar al abogado.
+5. **Informe**: un PDF y un JSON con todo, sin veredicto.
 
-El plan muestra **«Cómo hemos decidido»** con la prioridad, la confianza y los datos que faltan. La puntuación es solo un indicador de encaje, no la razón de la elección.
+### Qué incluye y qué no
 
-### Expectativa realista y supuestos familiares
+Incluye hechos, fechas, familia, documentos y preguntas. **No** incluye una vía recomendada, una probabilidad de concesión ni una lista de “esto es lo que tienes que hacer”. Eso lo decide un abogado tras revisar las resoluciones y los originales.
 
-La app no da un **porcentaje de concesión**: no existe un dato fiable sin expediente, pruebas y criterio de la oficina. Lo que sí da es un nivel:
-
-- **Vía sólida**: requisitos esenciales cubiertos, pero la concesión no es automática.
-- **Vía condicionada**: encaja, pero faltan pruebas o datos.
-- **Vía frágil**: existe en abstracto, pero hoy no es realista.
-- **Sin vía ordinaria**: no aparece una vía con esos datos; no es lo mismo que «imposible».
-
-Y explica los supuestos que más se malinterpretan:
-
-- **Casarse con un español/a** no legaliza automáticamente. Permite solicitar la tarjeta de familiar de español (5 años, trabajo) si el matrimonio es válido, está inscrito y convivís; hay que presentar la solicitud y probar el vínculo. Un matrimonio de conveniencia se deniega.
-- **Pareja estable no registrada**: 12 meses de convivencia continuada o hijo en común, y hay que acreditarlo. Una relación ocasional no basta.
-- **Embarazo de un español**: el embarazo no da residencia. El hijo será español si el padre lo reconoce; si no, puede hacer falta filiación judicial. Después, la madre puede solicitar como progenitor de menor español si el niño está a su cargo y convive con ella (o cumple obligaciones). No es automático.
-- **Hijo nacido en España**: no es español por nacer aquí. Solo en los supuestos del art. 17 CC (progenitor español, progenitor nacido en España, apatridia…). Un hijo español no legaliza automáticamente al progenitor: hay que solicitar y acreditar cargo/convivencia u obligaciones.
-
-El detalle legal está en [`docs/FUENTES.md`](docs/FUENTES.md). Puedes ver un plan de ejemplo con matrimonio y expectativa realista en [`docs/ejemplo-plan-familiar.pdf`](docs/ejemplo-plan-familiar.pdf).
+La app mantiene las guías de trámites y la información general de vías como material de consulta, separadas del informe del caso.
 
 ### Formularios oficiales
 
@@ -341,7 +326,7 @@ ruta-legal/
 │   ├── docs.test.js            # 8 pruebas de trámites terminados/en curso
 │   ├── education.test.js       # 4 pruebas de Bachillerato, SEPE y estudios por hijo
 │   ├── persistence.test.js     # 2 pruebas de copia JSON y reanudación
-│   ├── pdf.test.js             # 10 pruebas del PDF
+│   ├── pdf.test.js             # 11 pruebas del PDF y del informe de caso
 │   ├── speech.test.js          # 5 pruebas del lector de voz
 │   ├── speech.mock.test.js     # 3 pruebas con Web Speech API simulada
 │   └── ui.smoke.js             # 24 pruebas de interfaz con DOM mínimo

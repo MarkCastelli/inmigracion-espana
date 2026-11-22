@@ -1279,4 +1279,31 @@
     };
     RL.questions.steps.splice(situation + 1, 0, asylumStep);
   })();
+
+  /* Datos que necesita un abogado para el informe de caso. */
+  RL.questions.steps.push({
+    id: 'abogado',
+    title: 'Datos para tu abogado',
+    intro: 'No es un diagnóstico. Son los datos que un abogado de extranjería necesita para revisar tu caso: identificación, contacto, solicitudes anteriores y tus dudas.',
+    fields: [
+      { id: 'fullName', type: 'text', label: 'Nombre y apellidos', placeholder: 'Solo si quieres incluirlos en el informe' },
+      { id: 'birthDate', type: 'date', label: 'Fecha de nacimiento' },
+      { id: 'birthPlace', type: 'text', label: 'Lugar de nacimiento' },
+      { id: 'contactPhone', type: 'text', label: 'Teléfono de contacto (opcional)' },
+      { id: 'contactEmail', type: 'text', label: 'Correo de contacto (opcional)' },
+      {
+        id: 'urgency', type: 'select', label: '¿Hay algún plazo urgente?',
+        options: [
+          { v: 'none', l: 'No, puedo esperar' },
+          { v: 'days', l: 'Sí, días' },
+          { v: 'weeks', l: 'Sí, semanas' },
+          { v: 'months', l: 'Sí, meses' },
+          { v: 'dontknow', l: 'No lo sé' }
+        ]
+      },
+      { id: 'priorApplications', type: 'textarea', label: 'Solicitudes o expedientes anteriores', placeholder: 'Qué pediste, cuándo y en qué quedó' },
+      { id: 'denials', type: 'textarea', label: 'Denegaciones, recursos o problemas', placeholder: 'Denegaciones, recursos, silencios, prohibiciones de entrada…' },
+      { id: 'lawyerQuestions', type: 'textarea', label: '¿Qué quieres preguntar al abogado?', placeholder: 'Ej. ¿Me conviene arraigo o nacionalidad? ¿Qué documento pido primero?' }
+    ]
+  });
 })();
