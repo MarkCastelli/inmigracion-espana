@@ -1396,6 +1396,7 @@
     var ctx = {
       region: region,
       regionName: region ? region.name : 'tu comunidad',
+      regionLabel: region ? region.regionLabel : 'tu comunidad',
       healthName: region ? region.healthName : 'Servicio de salud',
       localLabel: region ? region.localLabel : 'Ayuntamiento',
       municipality: d.municipality

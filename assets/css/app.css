@@ -143,6 +143,7 @@ svg { display: block; flex: none; }
 .nav { display: flex; gap: 2px; margin-left: 0; flex-wrap: wrap; order: 3; flex-basis: 100%; border-top: 1px solid var(--line); padding-top: 6px; }
 .nav__link {
   appearance: none; border: 0; background: transparent; cursor: pointer;
+  display: inline-flex; align-items: center; text-decoration: none;
   font: inherit; font-size: .9rem; font-weight: 550; color: var(--ink-2);
   padding: 9px 12px; border-radius: 999px; white-space: nowrap;
 }

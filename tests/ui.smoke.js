@@ -574,4 +574,16 @@ t('la sección Antes de emigrar carga el testimonio corregido', () => {
   assert.ok(html.includes('prestación por desempleo no es automática'));
 });
 
+t('Online muestra la Xunta y el registro electrónico en Galicia', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', province: 'Pontevedra', municipality: 'Vigo', goals: ['regularizar'] };
+  nav(app, 'online');
+  const html = app.document.querySelector('#view-online').innerHTML;
+  assert.ok(html.includes('Xunta de Galicia'));
+  assert.ok(html.includes('Registro electrónico'));
+  assert.ok(html.includes('Rexistro Xeral da Xunta'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

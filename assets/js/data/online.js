@@ -208,12 +208,30 @@
     },
     {
       id: 'ccaa_sede', scope: 'region', cat: 'ccaa', mode: 'partial',
-      title: 'Sede de tu comunidad',
-      what: ['Sanidad, educación y servicios sociales', 'Ayudas y vivienda', 'Notificaciones autonómicas'],
-      requires: 'Cl@ve o certificado; algunos trámites son presenciales.',
-      where: function (c) { return 'Sede de ' + c.regionName; },
+      title: function (c) { return 'Sede electrónica · ' + (c.regionLabel || c.regionName); },
+      what: ['Registro electrónico de escritos', 'Certificados y notificaciones', 'Ayudas, educación y sanidad', 'Consultar expedientes'],
+      requires: 'Cl@ve o certificado digital; algunos trámites requieren cita.',
+      where: function (c) { return 'Sede de ' + (c.regionLabel || c.regionName); },
       urlKey: 'sede',
-      note: 'Cada comunidad tiene su propia sede. En Madrid no sirve la sede de Galicia, y al contrario. Si el enlace va al portal principal, busca «sede electrónica» o «trámites».'
+      note: 'En Galicia es la sede de la Xunta; en otras comunidades, la sede de la Junta, Generalitat, Gobierno o Cabildo. Cada una tiene su propio registro y sus trámites.'
+    },
+    {
+      id: 'registro_autonomico', scope: 'region', cat: 'ccaa', mode: 'total',
+      title: function (c) { return 'Registro electrónico · ' + (c.regionLabel || c.regionName); },
+      what: ['Presentar solicitudes y escritos', 'Aportar documentos a un expediente', 'Recursos y reclamaciones', 'Obtener justificante de presentación'],
+      requires: 'Certificado digital o Cl@ve. No todos los procedimientos admiten registro electrónico; comprueba el trámite.',
+      where: function (c) { return 'Rexistro/sede de ' + (c.regionLabel || c.regionName); },
+      urlKey: 'sede',
+      note: 'En Galicia: Rexistro Xeral da Xunta, en sede.xunta.gal. En otras comunidades, busca «registro electrónico» o «sede electrónica» de tu comunidad. Guarda siempre el justificante.'
+    },
+    {
+      id: 'registro_general', scope: 'national', cat: 'notificaciones', mode: 'total',
+      title: 'Registro General del Estado',
+      what: ['Presentar escritos ante la Administración General del Estado', 'Aportar documentos', 'Recursos y reclamaciones', 'Obtener justificante'],
+      requires: 'Certificado digital o Cl@ve, según el trámite. También se puede presentar en registro presencial.',
+      where: 'Sede de la Administración General del Estado',
+      url: 'https://sede.administracion.gob.es/',
+      note: 'No es el registro de tu comunidad ni el de tu ayuntamiento. Sirve para trámites estatales; comprueba el órgano destinatario antes de presentar.'
     },
     {
       id: 'ccaa_salud', scope: 'region', cat: 'ccaa', mode: 'partial',
