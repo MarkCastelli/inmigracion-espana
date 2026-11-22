@@ -1049,4 +1049,19 @@ t('mi plan usa los datos del formulario nuevo', () => {
   nav(app, 'inicio');
 });
 
+t('documentos muestra lo ya marcado sin volver a preguntar', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.state.profile.formulario.applicant.name = 'Ana';
+  RL.state.profile.formulario.applicant.docs = ['pasaporte', 'nie'];
+  nav(app, 'docs');
+  const html = app.document.querySelector('#view-docs').innerHTML;
+  assert.ok(html.includes('Esto es lo que ya marcaste'));
+  assert.ok(html.includes('Pasaporte de tu país'));
+  assert.ok(html.includes('Número de NIE'));
+  assert.ok(!html.includes('data-doc='), 'no debe volver a pedir checkboxes');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

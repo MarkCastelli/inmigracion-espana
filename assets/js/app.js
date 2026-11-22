@@ -3101,8 +3101,37 @@
   /* ══════════════════════════════════════════════════════════
      DOCUMENTOS
      ══════════════════════════════════════════════════════════ */
+  function formDocsHTML(F) {
+    var people = goalPeople(F);
+    var html = '<div class="plan-head"><div><p class="eyebrow">Documentos</p><h1>Tus documentos</h1>' +
+      '<p class="plan-head__sub">Esto es lo que ya marcaste en el formulario. No tienes que volver a marcarlo.</p></div>' +
+      '<div class="plan-head__actions"><button class="btn btn--soft btn--sm" data-nav="formulario">' + icons.user(15) + ' Editar formulario</button></div></div>';
+    var any = false;
+    html += '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Documentos que ya tienes</h2></div><div class="block__body">';
+    people.forEach(function (p) {
+      var docs = (p.obj.docs || []).map(function (v) {
+        var found = RL.formulario.docs.filter(function (d) { return d.v === v; })[0];
+        return found ? found.l : v;
+      });
+      if (!docs.length) return;
+      any = true;
+      html += '<div class="family-child" style="margin-top:10px"><h3>' + fEsc(p.label) + '</h3><p>' + fEsc(docs.join(' · ')) + '</p></div>';
+    });
+    if (!any) html += '<p class="muted">No marcaste ningún documento en el formulario.</p>';
+    html += '</div></div>';
+    html += '<div class="callout callout--info mt-3">' + icons.info(18) + '<div><strong>No es un checklist de lo que falta</strong><p>Aquí solo se muestran los documentos que declaraste. El abogado o la entidad deben comprobar originales, validez y qué documentación adicional necesita tu caso.</p></div></div>';
+    html += '<div class="flex mt-3"><button class="btn btn--soft btn--sm" data-nav="plan">Volver al plan</button>' +
+      '<button class="btn btn--accent btn--sm" data-action="print">' + icons.print(16) + ' Imprimir</button></div>';
+    return html;
+  }
+
   function renderDocs() {
     var host = $('#view-docs');
+    var F = RL.state.profile && RL.state.profile.formulario;
+    if (F && F.applicant && (F.applicant.name || F.applicant.nationality || F.mode)) {
+      host.innerHTML = formDocsHTML(F);
+      return;
+    }
     var p = RL.profile();
     if (!p.nationality) {
       host.innerHTML = emptyState('Todavía no hay documentos que mostrar',
