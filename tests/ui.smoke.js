@@ -1064,4 +1064,26 @@ t('documentos muestra lo ya marcado sin volver a preguntar', () => {
   nav(app, 'inicio');
 });
 
+t('documentos muestra una columna por integrante', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 2;
+  f.applicant.name = 'Ana';
+  f.applicant.docs = ['pasaporte'];
+  f.members = [{ name: 'Luis', age: '40', relation: 'esposo', data: RL.formulario.person() }];
+  f.spouse.name = 'Luis';
+  f.spouse.docs = ['nie'];
+  nav(app, 'docs');
+  const html = app.document.querySelector('#view-docs').innerHTML;
+  assert.ok(html.includes('Quién tiene cada documento'));
+  assert.ok(html.includes('Pasaporte de tu país'));
+  assert.ok(html.includes('Número de NIE'));
+  assert.ok(html.includes('Ana'));
+  assert.ok(html.includes('Luis'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

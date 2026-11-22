@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **210 pruebas pasando**.
+- **211 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -122,6 +122,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 92. **Mi plan desde el formulario**: si hay datos en `formulario`, “Mi plan” muestra el informe generado con ellos (paginado, con discapacidad y objetivos) en vez del perfil antiguo del diagnóstico.
 93. **Documentos claros**: el paso 2 explica que no se suben archivos ni se consulta la Administración; solo se marca lo que ya se tiene para preparar el informe y la revisión del abogado.
 94. **Vista Documentos sin duplicar**: si hay formulario, la vista del menú muestra los documentos ya marcados por integrante y no vuelve a pedir checkboxes.
+95. **Matriz familiar de documentos**: tabla con una columna por integrante y una fila por documento, con ✓/— y lista de documentos sin marcar por nadie; imprime en A4.
 
 ## Comandos
 

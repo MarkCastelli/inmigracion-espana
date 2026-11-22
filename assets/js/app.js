@@ -3103,22 +3103,33 @@
      ══════════════════════════════════════════════════════════ */
   function formDocsHTML(F) {
     var people = goalPeople(F);
+    var docTypes = RL.formulario.docs;
+    var rows = docTypes.filter(function (d) {
+      return people.some(function (p) { return (p.obj.docs || []).indexOf(d.v) !== -1; });
+    });
     var html = '<div class="plan-head"><div><p class="eyebrow">Documentos</p><h1>Tus documentos</h1>' +
       '<p class="plan-head__sub">Esto es lo que ya marcaste en el formulario. No tienes que volver a marcarlo.</p></div>' +
       '<div class="plan-head__actions"><button class="btn btn--soft btn--sm" data-nav="formulario">' + icons.user(15) + ' Editar formulario</button></div></div>';
-    var any = false;
-    html += '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Documentos que ya tienes</h2></div><div class="block__body">';
-    people.forEach(function (p) {
-      var docs = (p.obj.docs || []).map(function (v) {
-        var found = RL.formulario.docs.filter(function (d) { return d.v === v; })[0];
-        return found ? found.l : v;
+    if (!rows.length) {
+      html += '<div class="block"><div class="block__body"><p class="muted">No marcaste ningún documento en el formulario.</p></div></div>';
+    } else {
+      html += '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Quién tiene cada documento</h2></div><div class="block__body">' +
+        '<div class="doc-matrix-wrap"><table class="doc-matrix"><thead><tr><th>Documento</th>' +
+        people.map(function (p) { return '<th>' + fEsc(p.label) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        rows.map(function (d) {
+          return '<tr><td>' + fEsc(d.l) + '</td>' + people.map(function (p) {
+            return '<td>' + ((p.obj.docs || []).indexOf(d.v) !== -1 ? '<span class="doc-yes" aria-label="Sí">✓</span>' : '<span class="doc-no" aria-label="No">—</span>') + '</td>';
+          }).join('') + '</tr>';
+        }).join('') + '</tbody></table></div>' +
+        '<p class="field__help">✓ = lo marcó esa persona. — = no lo marcó. No significa que no lo necesite: el abogado debe revisarlo.</p></div></div>';
+      var unmarked = docTypes.filter(function (d) {
+        return !people.some(function (p) { return (p.obj.docs || []).indexOf(d.v) !== -1; });
       });
-      if (!docs.length) return;
-      any = true;
-      html += '<div class="family-child" style="margin-top:10px"><h3>' + fEsc(p.label) + '</h3><p>' + fEsc(docs.join(' · ')) + '</p></div>';
-    });
-    if (!any) html += '<p class="muted">No marcaste ningún documento en el formulario.</p>';
-    html += '</div></div>';
+      if (unmarked.length) {
+        html += '<div class="block" style="margin-top:14px"><div class="block__body"><p><strong>Sin marcar por nadie:</strong> ' +
+          fEsc(unmarked.map(function (d) { return d.l; }).join(', ')) + '.</p><p class="muted">Puede que no lo tengáis o que no lo necesitéis; no es una lista de requisitos.</p></div></div>';
+      }
+    }
     html += '<div class="callout callout--info mt-3">' + icons.info(18) + '<div><strong>No es un checklist de lo que falta</strong><p>Aquí solo se muestran los documentos que declaraste. El abogado o la entidad deben comprobar originales, validez y qué documentación adicional necesita tu caso.</p></div></div>';
     html += '<div class="flex mt-3"><button class="btn btn--soft btn--sm" data-nav="plan">Volver al plan</button>' +
       '<button class="btn btn--accent btn--sm" data-action="print">' + icons.print(16) + ' Imprimir</button></div>';

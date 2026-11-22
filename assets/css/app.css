@@ -838,3 +838,20 @@ html[dir="rtl"] .plan-head { text-align: right; }
   .report-page { break-after: page; page-break-after: always; }
   .report-page:last-child { break-after: auto; page-break-after: auto; }
 }
+
+
+/* ── Matriz de documentos por integrante ─────────────────────── */
+.doc-matrix-wrap { overflow-x: auto; }
+.doc-matrix { width: 100%; border-collapse: collapse; font-size: .86rem; min-width: 520px; }
+.doc-matrix th, .doc-matrix td { border: 1px solid var(--line); padding: 8px 10px; text-align: center; vertical-align: middle; }
+.doc-matrix thead th { background: var(--surface-2, #f1f7f8); color: var(--ink); font-weight: 700; }
+.doc-matrix th:first-child, .doc-matrix td:first-child { text-align: left; min-width: 190px; }
+.doc-matrix tbody tr:nth-child(even) { background: #fafcfc; }
+.doc-yes { color: #1d7a4c; font-weight: 800; }
+.doc-no { color: #9aa9ad; }
+@media print {
+  .doc-matrix { font-size: 9pt; min-width: 0; }
+  .doc-matrix th, .doc-matrix td { padding: 5px 6px; }
+  .doc-matrix thead { display: table-header-group; }
+  .doc-matrix tr { break-inside: avoid; }
+}
