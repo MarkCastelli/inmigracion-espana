@@ -3643,7 +3643,7 @@
       '</div>' +
       '<fieldset class="field"><legend class="field__label">Modalidad de publicación *</legend><div class="option-list">' +
       '<label class="option"><input type="radio" name="modalidad" value="solidaria" required><span class="option__box"></span><span class="option__body"><span class="option__label">Ayudo sin cobrar; acepto aportación voluntaria (publicación gratis)</span></span></label>' +
-      '<label class="option"><input type="radio" name="modalidad" value="cobra"><span class="option__box"></span><span class="option__body"><span class="option__label">Cobro por mis servicios (20 €/mes · 240 €/año por adelantado)</span></span></label>' +
+      '<label class="option"><input type="radio" name="modalidad" value="cobra"><span class="option__box"></span><span class="option__body"><span class="option__label">Cobro por mis servicios: acepto pagar el importe anual de 240 € (20 €/mes) para que mi información sea publicada aquí.</span></span></label>' +
       '</div></fieldset>' +
       '<label class="field"><span class="field__label">Idiomas de atención</span><input class="input" name="idiomas" placeholder="Ej. español, francés, árabe, inglés"></label>' +
       '<label class="field field--full"><span class="field__label">Observaciones</span><textarea class="textarea" name="mensaje" rows="4"></textarea></label>' +
