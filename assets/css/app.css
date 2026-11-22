@@ -943,3 +943,9 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 .donate-small { font-size: .8rem !important; color: var(--muted) !important; }
 .donate-aside ul { padding-left: 18px; color: var(--ink-2); line-height: 1.65; font-size: .9rem; }
 @media (max-width: 820px) { .donate-grid { grid-template-columns: 1fr; } }
+
+
+/* Separación de avisos en Donar */
+#view-donar .donate-grid + .callout { margin-top: 26px; }
+#view-donar .callout + .callout { margin-top: 16px; }
+#view-donar .callout { margin-bottom: 0; }

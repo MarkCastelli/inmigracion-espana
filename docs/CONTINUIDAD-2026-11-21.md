@@ -132,7 +132,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 102. **Tooltips**: archivo aparte `assets/js/data/tooltips.js` con textos en es/fr/en/ar/ro; iconos junto a los campos y casilla «Ayudas» arriba para activar/desactivar. No salen en el PDF.
 103. **Teléfonos de urgencia**: 112 primero (universal), 061 sanitario, 062 Guardia Civil, 091 Policía Nacional, 080/085 bomberos, 016, 024 y trata; enlaces `tel:` y aviso de que el 112 puede conectar con intérprete.
 104. **Aviso legal y privacidad**: nueva vista `#/legal` enlazada desde el pie y Ayuda; cubre responsable, datos, bases jurídicas, datos sensibles, conservación, GitHub Pages, cookies/localStorage, derechos, AEPD, menores, propiedad intelectual y limitación de responsabilidad. Pendiente completar identidad/NIF/domicilio/email del responsable y revisión jurídica profesional.
-105. **Donar**: nueva vista `#/donar` y enlace en menú/pie; explica que la web es gratuita, el tiempo de mantenimiento, invita a un café y enlaza PayPal `hosted_button_id=YPZZZU5ZD4G9Y`; aclara que no es ONG, no da asesoramiento ni desgrava.
+105. **Donar**: nueva vista `#/donar` y enlace en menú/pie; explica que la web es gratuita, el tiempo de mantenimiento, invita a un café y enlaza PayPal `hosted_button_id=YPZZZU5ZD4G9Y`; aclara que no es ONG, no da asesoramiento ni desgrava. Los avisos de transparencia y “no dones si…” tienen separación visual.
 106. **Abogados**: nueva vista `#/abogados` y menú; aviso destacado de que no se verifica identidad, colegiación, matrícula, honorarios ni resultados; directorio vacío hasta recibir solicitudes; campos de contacto, CTA por GitHub y guía para comprobar colegiación.
 
 ## Comandos
