@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **224 pruebas pasando**.
+- **225 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -151,6 +151,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 121. **Email de feedback oculto**: la ventana y la página de gracias ya no muestran la dirección; el destinatario se construye con base64 en el código y el correo se abre en la aplicación del usuario. No hay enlace `mailto` visible con la dirección.
 122. **Confianza en la portada**: el bloque PDF explica que completar el formulario alimenta Docs, el resumen y el informe; aclara que los datos se guardan en el almacenamiento local, no se envían a ningún servidor de Ruta Legal y solo salen si el usuario descarga el PDF/JSON o pega el prompt en una IA externa.
 123. **Elección de PDF**: antes de imprimir se elige PDF básico (recomendado, sin nombre/contacto/pasaporte/fecha exacta/salud/discapacidad/asilo) o completo (aviso de datos sensibles). El informe básico usa roles y oculta esos datos; el completo los incluye.
+124. **SEO técnico**: navegación convertida a enlaces rastreables con `?view=`, canonical/OG sin hash, `WebApplication` + `Organization` JSON-LD, `noscript` con contenido y enlaces, sitemap con secciones y `lastmod`, hreflang dinámico y robots con sitemap. Limitación: el contenido profundo sigue renderizándose con JS.
 
 ## Comandos
 

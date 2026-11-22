@@ -7,6 +7,10 @@
   var RL = window.RL = window.RL || {};
   var BASE = 'https://markcastelli.github.io/inmigracion-espana/';
 
+  function pageUrl(view) {
+    return BASE + (view === 'inicio' ? '' : '?view=' + encodeURIComponent(view));
+  }
+
   var META = {
     inicio: {
       title: 'Ruta Legal | Residencia, arraigo y nacionalidad en España',
@@ -146,7 +150,7 @@
     setProp('og:locale', locales[lang] || 'es_ES');
     setProp('og:title', m.title);
     setProp('og:description', m.description);
-    setProp('og:url', BASE + (view === 'inicio' ? '' : '#/' + view));
+    setProp('og:url', pageUrl(view));
     setProp('og:type', 'website');
     setMeta('twitter:title', m.title);
     setMeta('twitter:description', m.description);
@@ -156,14 +160,21 @@
       canonical.setAttribute('rel', 'canonical');
       document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', BASE + (view === 'inicio' ? '' : '#/' + view));
+    canonical.setAttribute('href', pageUrl(view));
+    if (document.querySelectorAll) {
+      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(function (link) {
+        var lang = link.getAttribute('hreflang');
+        var base = pageUrl(view);
+        link.setAttribute('href', lang === 'x-default' ? base : base + (base.indexOf('?') === -1 ? '?' : '&') + 'lang=' + lang);
+      });
+    }
 
     var page = {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
       name: m.title,
       description: m.description,
-      url: BASE + (view === 'inicio' ? '' : '#/' + view),
+      url: pageUrl(view),
       inLanguage: lang,
       isPartOf: { '@type': 'WebSite', name: 'Ruta Legal', url: BASE }
     };

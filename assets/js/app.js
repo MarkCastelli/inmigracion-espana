@@ -132,9 +132,10 @@
 
   function init() {
     RL.store.load();
-    var h = parseHash();
-    if (h.view && VIEWS.indexOf(h.view) !== -1) ui.view = h.view;
     var qs = new URLSearchParams(location.search || '');
+    var h = parseHash();
+    if (location.hash && h.view && VIEWS.indexOf(h.view) !== -1) ui.view = h.view;
+    else if (qs.get('view') && VIEWS.indexOf(qs.get('view')) !== -1) ui.view = qs.get('view');
     if (qs.get('demo') === '1' && !RL.hasSavedProfile()) {
       RL.state.profile = Object.assign({}, DEMO);
       RL.store.save();
