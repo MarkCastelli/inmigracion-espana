@@ -110,6 +110,7 @@ No introduzcas datos que no quieras guardar en el navegador. Si usas un ordenado
 │       ├── pdf.js             # PDF e informe de caso
 │       ├── speech.js          # Lectura por voz
 │       ├── i18n.js            # Selector de idioma de la interfaz
+│       ├── seo.js             # Títulos, metadatos y JSON-LD por sección
 │       ├── antes.js           # Sección "Mi experiencia"
 │       ├── app.js             # Interfaz y navegación
 │       └── data/              # Preguntas, vías, trámites, FAQ, ayudas…
@@ -121,6 +122,8 @@ No introduzcas datos que no quieras guardar en el navegador. Si usas un ordenado
 ├── tests/                     # Pruebas Node y comprobaciones Python
 ├── build.py                   # Genera dist/ruta-legal.html
 ├── serve.py                   # Servidor local
+├── robots.txt                 # Instrucciones para buscadores
+├── sitemap.xml                # Mapa del sitio
 ├── LICENSE                    # Todos los derechos reservados
 └── README.md
 ```

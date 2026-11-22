@@ -9,6 +9,7 @@ const assert = require('assert');
 const ROOT = path.resolve(__dirname, '..');
 const FILES = [
   'assets/js/data/i18n.js',
+  'assets/js/data/seo.js',
   'assets/js/data/antes.js',
   'assets/js/core.js',
   'assets/js/data/countries.js',
@@ -74,6 +75,8 @@ function boot() {
   const document = {
     documentElement: makeEl('html'),
     body: makeEl('body'),
+    head: makeEl('head'),
+    title: '',
     querySelector(sel) {
       if (sel && sel[0] === '#') {
         const id = sel.slice(1);
@@ -584,6 +587,13 @@ t('Online muestra la Xunta y el registro electrónico en Galicia', () => {
   assert.ok(html.includes('Rexistro Xeral da Xunta'));
   RL.state.profile = saved;
   nav(app, 'inicio');
+});
+
+t('cada sección actualiza el título SEO', () => {
+  RL.seo.apply('tramites');
+  assert.ok(app.document.title.includes('Trámites de extranjería'));
+  RL.seo.apply('antes');
+  assert.ok(app.document.title.includes('Mi experiencia'));
 });
 
 console.log('\nSmoke test de interfaz terminado.');

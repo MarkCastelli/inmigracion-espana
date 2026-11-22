@@ -9,13 +9,39 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Ruta Legal · Tu situación en España, paso a paso</title>
-<meta name="description" content="Diagnóstico gratuito y privado de vías legales para residir, trabajar o nacionalizarte en España. Hecho para hispanohablantes, funciona sin conexión y sin registro.">
+<title>Ruta Legal | Residencia, arraigo y nacionalidad en España</title>
+<meta name="description" content="Guía gratuita y privada para inmigrantes en España: residencia, arraigo, nacionalidad, asilo, reagrupación familiar, trámites, ayudas y directorio de entidades. Prepara tu caso para un abogado.">
+<meta name="keywords" content="inmigración España, extranjería, residencia en España, arraigo, nacionalidad española, TIE, NIE, asilo, reagrupación familiar, visados, trámites de extranjería, inmigrantes">
+<meta name="author" content="MarkCastelli">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="language" content="es">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<link rel="canonical" href="https://markcastelli.github.io/inmigracion-espana/">
+<meta property="og:site_name" content="Ruta Legal">
+<meta property="og:locale" content="es_ES">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ruta Legal | Residencia, arraigo y nacionalidad en España">
+<meta property="og:description" content="Guía gratuita y privada para inmigrantes en España: residencia, arraigo, nacionalidad, asilo, reagrupación, trámites y entidades de ayuda.">
+<meta property="og:url" content="https://markcastelli.github.io/inmigracion-espana/">
+<meta property="og:image" content="https://markcastelli.github.io/inmigracion-espana/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ruta Legal: residencia, arraigo y nacionalidad en España">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ruta Legal | Residencia, arraigo y nacionalidad en España">
+<meta name="twitter:description" content="Guía gratuita y privada para inmigrantes en España: residencia, arraigo, nacionalidad, asilo, reagrupación y trámites.">
+<meta name="twitter:image" content="https://markcastelli.github.io/inmigracion-espana/assets/img/og.png">
+<link rel="alternate" hreflang="es" href="https://markcastelli.github.io/inmigracion-espana/?lang=es">
+<link rel="alternate" hreflang="ar" href="https://markcastelli.github.io/inmigracion-espana/?lang=ar">
+<link rel="alternate" hreflang="fr" href="https://markcastelli.github.io/inmigracion-espana/?lang=fr">
+<link rel="alternate" hreflang="en" href="https://markcastelli.github.io/inmigracion-espana/?lang=en">
+<link rel="alternate" hreflang="ro" href="https://markcastelli.github.io/inmigracion-espana/?lang=ro">
+<link rel="alternate" hreflang="x-default" href="https://markcastelli.github.io/inmigracion-espana/">
 <meta name="theme-color" content="#0d4f5c">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d4f5c'/%3E%3Cpath d='M18 44V28l14-9 14 9v16' fill='none' stroke='%23f7f4ee' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M26 44V34h12v10' fill='none' stroke='%23e8863a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
-/* ── assets/css/app.css ── */
+/* ── assets/css/app.css?v=20261122b ── */
 /* ============================================================
    Ruta Legal · hoja de estilos única (sin dependencias)
    Diseño: papel cálido + verde profundo. Claro/oscuro automático.
@@ -770,6 +796,9 @@ html[dir="rtl"] .plan-head { text-align: right; }
 }
 
 </style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"Ruta Legal","url":"https://markcastelli.github.io/inmigracion-espana/","description":"Guía gratuita y privada para inmigrantes en España: residencia, arraigo, nacionalidad, asilo, reagrupación familiar, trámites y entidades.","inLanguage":["es","ar","fr","en","ro"]}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Saltar al contenido</a>
@@ -962,7 +991,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
     </section>
   </section>
 
-  <!-- ══════════ ANTES DE EMIGRAR ══════════ -->
+  <!-- ══════════ MI EXPERIENCIA ══════════ -->
   <section class="view" id="view-antes" hidden aria-label="Mi experiencia"></section>
 
   <!-- ══════════ ASISTENTE ══════════ -->
@@ -1076,7 +1105,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 </div>
 
 <script>
-/* ── assets/js/core.js ── */
+/* ── assets/js/core.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · núcleo: utilidades, estado local y fechas
    Sin dependencias. Funciona abriendo index.html directamente.
@@ -1323,7 +1352,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/i18n.js ── */
+/* ── assets/js/data/i18n.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · idiomas de interfaz
    Fase 1: navegación, portada y avisos legales.
@@ -1454,7 +1483,15 @@ html[dir="rtl"] .plan-head { text-align: right; }
     }
   };
 
+  var active = '';
   function current() {
+    if (active && STR[active]) return active;
+    try {
+      if (typeof URLSearchParams !== 'undefined') {
+        var fromUrl = new URLSearchParams(location.search || '').get('lang');
+        if (fromUrl && STR[fromUrl]) return fromUrl;
+      }
+    } catch (e) {}
     var saved = '';
     try { saved = localStorage.getItem(KEY) || ''; } catch (e) {}
     return STR[saved] ? saved : 'es';
@@ -1563,7 +1600,15 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
   function setLang(lang) {
     if (!STR[lang]) lang = 'es';
+    active = lang;
     try { localStorage.setItem(KEY, lang); } catch (e) {}
+    try {
+      if (typeof history !== 'undefined' && history.replaceState && typeof URL !== 'undefined') {
+        var url = new URL(location.href);
+        url.searchParams.set('lang', lang);
+        history.replaceState(null, '', url.pathname + url.search + url.hash);
+      }
+    } catch (e) {}
     apply();
     if (typeof window.dispatchEvent === 'function' && typeof window.CustomEvent === 'function') {
       window.dispatchEvent(new window.CustomEvent('rl:langchange', { detail: { lang: lang } }));
@@ -1591,9 +1636,165 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/antes.js ── */
+/* ── assets/js/data/seo.js?v=20261122b ── */
 /* ============================================================
-   Ruta Legal · Antes de emigrar
+   Ruta Legal · SEO por sección
+   Títulos, descripciones, palabras clave, Open Graph y JSON-LD.
+   ============================================================ */
+(function () {
+  'use strict';
+  var RL = window.RL = window.RL || {};
+  var BASE = 'https://markcastelli.github.io/inmigracion-espana/';
+
+  var META = {
+    inicio: {
+      title: 'Ruta Legal | Residencia, arraigo y nacionalidad en España',
+      description: 'Guía gratuita y privada para inmigrantes en España: residencia, arraigo, nacionalidad, asilo, reagrupación familiar, trámites, ayudas y entidades. Prepara tu caso para un abogado.',
+      keywords: 'inmigración España, extranjería, residencia en España, arraigo, nacionalidad española, TIE, NIE, asilo, reagrupación familiar, visados'
+    },
+    antes: {
+      title: 'Mi experiencia: inmigrar a España sin idealizarlo | Ruta Legal',
+      description: 'Testimonio personal sobre vivir en España: trabajo, alquiler, burocracia, sanidad, educación, discriminación y costes. Una visión realista antes de emigrar.',
+      keywords: 'vivir en España, inmigrar a España, experiencia inmigrante, trabajo en España, alquiler España, coste de vida, Galicia'
+    },
+    diagnostico: {
+      title: 'Diagnóstico de residencia en España | Ruta Legal',
+      description: 'Responde unas preguntas y ordena tu caso: residencia, arraigo, nacionalidad, asilo, familia, trabajo y documentos. Informe gratuito para revisar con un abogado.',
+      keywords: 'diagnóstico extranjería, residencia España, arraigo, nacionalidad, asilo, reagrupación familiar'
+    },
+    plan: {
+      title: 'Informe de tu caso para un abogado | Ruta Legal',
+      description: 'Hechos, fechas, familia, documentos y dudas en un informe claro para llevar a un abogado de extranjería. Sin veredicto legal ni promesas.',
+      keywords: 'informe extranjería, abogado de extranjería, preparar consulta, documentos residencia'
+    },
+    vias: {
+      title: 'Vías de residencia y nacionalidad en España | Ruta Legal',
+      description: 'Catálogo de residencia, visados, nacionalidad y protección internacional, con requisitos, plazos y documentos.',
+      keywords: 'vías de residencia, visados España, nacionalidad española, asilo, arraigo, reagrupación'
+    },
+    tramites: {
+      title: 'Trámites de extranjería en España | Ruta Legal',
+      description: 'Guías paso a paso: NIE, TIE, empadronamiento, nacionalidad, extranjería, DGT, homologación y documentos.',
+      keywords: 'trámites extranjería, NIE, TIE, empadronamiento, nacionalidad, homologación, DGT'
+    },
+    online: {
+      title: 'Sedes y trámites online de extranjería | Ruta Legal',
+      description: 'Mercurio, sede de Extranjería, Xunta y comunidades, Registro Civil, Registro General del Estado, Cl@ve, DEHú y modelos EX.',
+      keywords: 'trámites online extranjería, Mercurio, sede Xunta, registro electrónico, Registro Civil, modelos EX'
+    },
+    preguntas: {
+      title: 'Preguntas sobre inmigración en España | Ruta Legal',
+      description: 'Respuestas claras sobre arraigo, asilo, trabajo, nacionalidad, familia, ayudas, discapacidad, empadronamiento y estafas.',
+      keywords: 'preguntas inmigración, arraigo, asilo, nacionalidad, trabajo sin papeles, empadronamiento'
+    },
+    derechos: {
+      title: 'Derechos y ayudas para inmigrantes | Ruta Legal',
+      description: 'Discapacidad, dependencia, menores, escolarización, libros, comedor, ayudas y entidades de apoyo por comunidad.',
+      keywords: 'ayudas inmigrantes, discapacidad, dependencia, escolarización, libros, comedor, derechos'
+    },
+    directorio: {
+      title: 'Entidades y oficinas de extranjería | Ruta Legal',
+      description: 'Direcciones y webs de Extranjería, Policía, Seguridad Social, SEPE, Registro Civil, ayuntamientos y asociaciones de ayuda.',
+      keywords: 'directorio extranjería, oficina de extranjería, asociaciones inmigrantes, servicios sociales'
+    },
+    consulta: {
+      title: 'Prepara tu consulta de extranjería | Ruta Legal',
+      description: 'Genera un prompt con tu caso para consultar con una IA o preparar la consulta con un abogado, sin enviar datos automáticamente.',
+      keywords: 'consulta extranjería, abogado, preparar consulta, IA'
+    },
+    docs: {
+      title: 'Documentos para tu expediente | Ruta Legal',
+      description: 'Checklist de documentos para residencia, arraigo, nacionalidad, familia, trabajo y trámites de extranjería.',
+      keywords: 'documentos extranjería, checklist, residencia, arraigo, nacionalidad'
+    },
+    formularios: {
+      title: 'Formularios EX y tasas de extranjería | Ruta Legal',
+      description: 'Modelos EX, tasas 790 y formularios oficiales para solicitudes y renovaciones de extranjería.',
+      keywords: 'formularios EX, EX-10, EX-31, tasas 790, extranjería'
+    },
+    ayuda: {
+      title: 'Ayuda, recursos y aviso legal | Ruta Legal',
+      description: 'Recursos oficiales, entidades, canales de YouTube, glosario, preguntas frecuentes, bulos y aviso legal.',
+      keywords: 'ayuda inmigrantes, recursos, ONG, YouTube, aviso legal'
+    }
+  };
+
+  function ensureMeta(selector, attrs) {
+    var el = document.head.querySelector(selector);
+    if (!el) {
+      el = document.createElement('meta');
+      Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
+      document.head.appendChild(el);
+    }
+    return el;
+  }
+
+  function setMeta(name, content) {
+    var el = ensureMeta('meta[name="' + name + '"]', { name: name });
+    el.setAttribute('content', content);
+  }
+
+  function setProp(property, content) {
+    var el = ensureMeta('meta[property="' + property + '"]', { property: property });
+    el.setAttribute('content', content);
+  }
+
+  function apply(view) {
+    var m = META[view] || META.inicio;
+    document.title = m.title;
+    setMeta('description', m.description);
+    setMeta('keywords', m.keywords);
+    setMeta('robots', 'index, follow, max-image-preview:large');
+    var lang = (RL.i18n && RL.i18n.current()) || 'es';
+    var locales = { es: 'es_ES', ar: 'ar_AR', fr: 'fr_FR', en: 'en_US', ro: 'ro_RO' };
+    setProp('og:locale', locales[lang] || 'es_ES');
+    setProp('og:title', m.title);
+    setProp('og:description', m.description);
+    setProp('og:url', BASE + (view === 'inicio' ? '' : '#/' + view));
+    setProp('og:type', 'website');
+    setMeta('twitter:title', m.title);
+    setMeta('twitter:description', m.description);
+    var canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', BASE + (view === 'inicio' ? '' : '#/' + view));
+
+    var page = {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: m.title,
+      description: m.description,
+      url: BASE + (view === 'inicio' ? '' : '#/' + view),
+      inLanguage: lang,
+      isPartOf: { '@type': 'WebSite', name: 'Ruta Legal', url: BASE }
+    };
+    var ld = document.getElementById ? document.getElementById('seoJsonLd') : document.querySelector('#seoJsonLd');
+    if (!ld) {
+      ld = document.createElement('script');
+      ld.id = 'seoJsonLd';
+      ld.type = 'application/ld+json';
+      document.head.appendChild(ld);
+    }
+    ld.textContent = JSON.stringify(page);
+  }
+
+  if (typeof window.addEventListener === 'function') {
+    window.addEventListener('rl:langchange', function () {
+      if (RL.ui && RL.ui.state) apply(RL.ui.state.view || 'inicio');
+    });
+  }
+
+  RL.seo = { apply: apply, meta: META, base: BASE };
+})();
+
+</script>
+<script>
+/* ── assets/js/data/antes.js?v=20261122b ── */
+/* ============================================================
+   Ruta Legal · Mi experiencia
    Testimonio personal, corregido y ordenado por temas.
    No es un estudio estadístico ni asesoramiento jurídico.
    ============================================================ */
@@ -1704,7 +1905,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/countries.js ── */
+/* ── assets/js/data/countries.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · países y datos que afectan a las vías
    - dos: nacionalidad por residencia en 2 años (art. 22 CC)
@@ -1838,7 +2039,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/regions.js ── */
+/* ── assets/js/data/regions.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · comunidades autónomas, provincias y servicios
    ============================================================ */
@@ -1927,7 +2128,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/questions.js ── */
+/* ── assets/js/data/questions.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · cuestionario (esquema declarativo)
    Cada campo: { id, type, label, help, required, showIf, options }
@@ -3253,7 +3454,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-nacionalidad.js ── */
+/* ── assets/js/data/routes-nacionalidad.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · vías de NACIONALIDAD española
    Base: Código Civil arts. 17-26, Ley 20/2022 (DA 8.ª, cerrada),
@@ -3692,7 +3893,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-espana.js ── */
+/* ── assets/js/data/routes-espana.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · vías que se solicitan DESDE España
    Base: RD 1155/2024 (en vigor 20/05/2025), RD 316/2026 y
@@ -4629,7 +4830,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-exterior.js ── */
+/* ── assets/js/data/routes-exterior.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · visados y entrada desde el exterior
    Base: LO 4/2000, RD 1155/2024, Ley 14/2013 (modificada por
@@ -5068,7 +5269,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/resources.js ── */
+/* ── assets/js/data/resources.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · recursos, glosario, FAQ y bulos
    ============================================================ */
@@ -5214,7 +5415,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/directory.js ── */
+/* ── assets/js/data/directory.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · directorio de sitios de interés
    Cada ficha dice qué se puede hacer allí y enlaza a la sede.
@@ -5744,7 +5945,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/procedures.js ── */
+/* ── assets/js/data/procedures.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · trámites: qué hacer, dónde, con qué cita y qué llevar
    ============================================================ */
@@ -6891,7 +7092,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/aids.js ── */
+/* ── assets/js/data/aids.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · derechos, discapacidad, dependencia y ayudas
    ============================================================ */
@@ -7266,7 +7467,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/faq.js ── */
+/* ── assets/js/data/faq.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · preguntas frecuentes (dudas reales de foros)
    Respuestas contrastadas con normativa y sede oficial.
@@ -8136,7 +8337,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/online.js ── */
+/* ── assets/js/data/online.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · trámites online, sedes y notificaciones
    ============================================================ */
@@ -8433,7 +8634,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/engine.js ── */
+/* ── assets/js/engine.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · motor de reglas
    Convierte el perfil en un plan: vías que encajan, requisitos
@@ -9686,7 +9887,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/decision.js ── */
+/* ── assets/js/decision.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · capa de decisión
    No sustituye al motor de reglas: lo ordena y lo audita.
@@ -9963,7 +10164,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/forms.js ── */
+/* ── assets/js/forms.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · catálogo de formularios oficiales
    Enlaces a la sede del Ministerio de Inclusión y al Ministerio
@@ -10199,7 +10400,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/ai.js ── */
+/* ── assets/js/ai.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · consulta abierta a una IA
    Genera un prompt con el caso, el diagnóstico y las reglas.
@@ -10500,7 +10701,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/pdf.js ── */
+/* ── assets/js/pdf.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · generador de PDF sin dependencias
    Escribe un PDF válido (A4, Helvetica, WinAnsi) con el perfil,
@@ -11150,7 +11351,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/speech.js ── */
+/* ── assets/js/speech.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · lectura en voz alta con la Web Speech API
    Sin servidor, sin API key y sin enviar texto a terceros.
@@ -11534,7 +11735,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/app.js ── */
+/* ── assets/js/app.js?v=20261122b ── */
 /* ============================================================
    Ruta Legal · interfaz (asistente, plan, catálogo, documentos)
    ============================================================ */
@@ -11711,13 +11912,15 @@ html[dir="rtl"] .plan-head { text-align: right; }
     else if (ui.view === 'formularios') renderFormularios();
     else if (ui.view === 'ayuda') renderHelp();
 
+    if (RL.seo) RL.seo.apply(ui.view);
+
     window.scrollTo(0, 0);
     var main = $('#main');
     if (main && ui.view !== 'inicio') main.focus({ preventScroll: true });
   }
 
   /* ══════════════════════════════════════════════════════════
-     ANTES DE EMIGRAR
+     MI EXPERIENCIA
      ══════════════════════════════════════════════════════════ */
   function renderAntes() {
     var host = $('#view-antes');

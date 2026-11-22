@@ -128,7 +128,15 @@
     }
   };
 
+  var active = '';
   function current() {
+    if (active && STR[active]) return active;
+    try {
+      if (typeof URLSearchParams !== 'undefined') {
+        var fromUrl = new URLSearchParams(location.search || '').get('lang');
+        if (fromUrl && STR[fromUrl]) return fromUrl;
+      }
+    } catch (e) {}
     var saved = '';
     try { saved = localStorage.getItem(KEY) || ''; } catch (e) {}
     return STR[saved] ? saved : 'es';
@@ -237,7 +245,15 @@
 
   function setLang(lang) {
     if (!STR[lang]) lang = 'es';
+    active = lang;
     try { localStorage.setItem(KEY, lang); } catch (e) {}
+    try {
+      if (typeof history !== 'undefined' && history.replaceState && typeof URL !== 'undefined') {
+        var url = new URL(location.href);
+        url.searchParams.set('lang', lang);
+        history.replaceState(null, '', url.pathname + url.search + url.hash);
+      }
+    } catch (e) {}
     apply();
     if (typeof window.dispatchEvent === 'function' && typeof window.CustomEvent === 'function') {
       window.dispatchEvent(new window.CustomEvent('rl:langchange', { detail: { lang: lang } }));

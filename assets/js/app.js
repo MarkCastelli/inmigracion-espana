@@ -174,13 +174,15 @@
     else if (ui.view === 'formularios') renderFormularios();
     else if (ui.view === 'ayuda') renderHelp();
 
+    if (RL.seo) RL.seo.apply(ui.view);
+
     window.scrollTo(0, 0);
     var main = $('#main');
     if (main && ui.view !== 'inicio') main.focus({ preventScroll: true });
   }
 
   /* ══════════════════════════════════════════════════════════
-     ANTES DE EMIGRAR
+     MI EXPERIENCIA
      ══════════════════════════════════════════════════════════ */
   function renderAntes() {
     var host = $('#view-antes');

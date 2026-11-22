@@ -30,6 +30,7 @@ SCRIPT_RE = re.compile(r'<script\s+src="([^"]+)"\s*>\s*</script>')
 
 
 def read(rel: str) -> str:
+    rel = rel.split("?", 1)[0]
     path = (ROOT / rel).resolve()
     if ROOT not in path.parents and path != ROOT:
         raise SystemExit("Ruta fuera del proyecto: %s" % rel)
@@ -59,7 +60,7 @@ def main() -> int:
     html = LINK_RE.sub(inline_css, html)
     html = SCRIPT_RE.sub(inline_js, html)
 
-    leftover = re.findall(r'(?:src|href)="(assets/[^"]+)"', html)
+    leftover = re.findall(r'(?:src|href)="(assets/[^"?]+)', html)
     if leftover:
         print("Aviso: quedan referencias externas: %s" % ", ".join(sorted(set(leftover))), file=sys.stderr)
 

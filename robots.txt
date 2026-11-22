@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://markcastelli.github.io/inmigracion-espana/sitemap.xml
