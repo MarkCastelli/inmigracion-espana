@@ -61,6 +61,67 @@
     consent: true, notes: 'Cuido a una señora mayor sin contrato desde que llegué.'
   };
 
+  function demoForm() {
+    var F = RL.formulario.blank();
+    F.mode = 'family';
+    F.familyCount = 3;
+    F.familyLocation = 'algunos_espana';
+    F.step = 11;
+    F.completed = true;
+    F.applicant.name = 'Lucía Ejemplo';
+    F.applicant.age = '34';
+    F.applicant.nationality = 'Cuba';
+    F.applicant.currentLocation = 'espana';
+    F.applicant.phone = '000 000 100';
+    F.applicant.email = 'lucia.ejemplo@example.com';
+    F.applicant.entryDate = '2024-03-10';
+    F.applicant.residence = 'irregular';
+    F.applicant.works = 'si';
+    F.applicant.legalJob = 'no';
+    F.applicant.hours = '40';
+    F.applicant.netSalary = '950';
+    F.applicant.jobType = 'Cuidados';
+    F.applicant.contractType = 'sin_contrato';
+    F.applicant.studies = 'si';
+    F.applicant.career = 'Auxiliar de enfermería';
+    F.applicant.docs = ['pasaporte', 'nie', 'certificado_digital', 'contrato_alquiler'];
+    F.applicant.disability = 'no';
+    F.applicant.familyAbroad = 'si';
+    F.applicant.bringFamily = 'si';
+    F.applicant.housing = 'alquiler';
+    F.applicant.housingCost = '700';
+    F.applicant.expenses.luz = '45';
+    F.applicant.expenses.agua = '25';
+    F.applicant.expenses.gas = '35';
+    F.applicant.expenses.comunidad = '30';
+    F.applicant.expenses.foodWeekly = '100';
+    F.applicant.expenses.transport = '40';
+    F.applicant.goals = ['residencia', 'trabajar'];
+    F.members = [
+      { name: 'Andrés Ejemplo', age: '38', relation: 'pareja', data: RL.formulario.person() },
+      { name: 'Mateo Ejemplo', age: '9', relation: 'hijo_comun', data: RL.formulario.person() }
+    ];
+    F.spouse.name = 'Andrés Ejemplo';
+    F.spouse.age = '38';
+    F.spouse.nationality = 'Cuba';
+    F.spouse.residence = 'irregular';
+    F.spouse.works = 'si';
+    F.spouse.legalJob = 'no';
+    F.spouse.contractType = 'sin_contrato';
+    F.spouse.goals = ['residencia', 'trabajar'];
+    F.children = [RL.formulario.person()];
+    F.children[0].name = 'Mateo Ejemplo';
+    F.children[0].age = '9';
+    F.children[0].nationality = 'Cuba';
+    F.children[0].residence = 'irregular';
+    F.children[0].studies = 'si';
+    F.children[0].educationLevel = 'Primaria';
+    F.children[0].disability = 'no';
+    F.notes = 'Ejemplo ficticio para probar el informe. No es un caso real.';
+    return F;
+  }
+  RL.demoForm = demoForm;
+
   /* ══════════════════════════════════════════════════════════
      ARRANQUE
      ══════════════════════════════════════════════════════════ */
@@ -4075,10 +4136,10 @@
     if (action === 'edit') { ui.step = RL.state.meta.lastStep || 0; go('diagnostico'); return; }
     if (action === 'demo') {
       if (RL.hasSavedProfile() && !window.confirm('Esto sustituirá tus respuestas guardadas por un perfil de ejemplo. ¿Quieres continuar?')) return;
-      RL.state.profile = Object.assign({}, DEMO);
+      RL.state.profile = Object.assign({}, DEMO, { formulario: demoForm() });
       RL.store.save();
       go('plan');
-      toast('Este es un plan de ejemplo. Puedes editarlo con tus datos.');
+      toast('Este es un informe de ejemplo. Puedes editarlo con tus datos.');
       return;
     }
     if (action === 'filter') { ui.filter = btn.getAttribute('data-filter'); renderCatalog(); return; }

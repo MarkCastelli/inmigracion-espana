@@ -300,11 +300,10 @@ test('la portada comunica gratuidad, privacidad, honestidad y PDF', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').toLowerCase();
   const phrases = [
     'es totalmente gratis para el inmigrante',
-    'es una ayuda, no una garantía',
-    'no garantizamos que sea ni el mejor ni el único camino',
-    'siempre te recomendaremos un abogado de extranjería',
+    'no evaluamos tu caso',
+    'la decisión es tuya',
     'tus datos no se envían ni se comparten con nadie',
-    'puedes descargar tu plan en pdf',
+    'puedes descargar tu informe en pdf',
     'compromisos contigo'
   ];
   for (const phrase of phrases) {

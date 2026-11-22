@@ -1211,4 +1211,21 @@ t('la página de gracias confirma el envío con un mensaje formal', () => {
   nav(app, 'inicio');
 });
 
+t('el informe de ejemplo usa el formulario nuevo sin errores', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = {};
+  const btn = app.document.createElement('button');
+  RL.ui.handleAction('demo', btn);
+  RL.ui.render();
+  assert.strictEqual(RL.state.profile.formulario.completed, true);
+  assert.strictEqual(RL.state.profile.formulario.step, 11);
+  const html = app.document.querySelector('#view-plan').innerHTML;
+  assert.ok(html.includes('Informe para asesoría legal'));
+  assert.ok(html.includes('Lucía Ejemplo'));
+  assert.ok(!html.includes('[object Object]'));
+  assert.ok(!html.includes('undefined'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
