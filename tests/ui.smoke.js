@@ -613,6 +613,8 @@ t('se puede añadir un hijo de la pareja desde su ficha', () => {
   assert.strictEqual(RL.state.profile.child2Relation, 'partner');
   const html = app.document.querySelector('#wizardFields').innerHTML;
   assert.ok(html.includes('Hijo/a 2'));
+  RL.ui.handleAction('remove-partner-child');
+  assert.strictEqual(Number(RL.state.profile.childrenPartner), 0);
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

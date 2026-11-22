@@ -12611,9 +12611,10 @@ html[dir="rtl"] .plan-head { text-align: right; }
         '</div>' +
         '<div class="callout callout--info" style="margin:14px 0 0">' + icons.family(16) +
         '<div><strong>¿Tu pareja tiene hijos de otra relación?</strong><p>Cárgalos aquí. Se añadirán como «Hijo solo de tu pareja» y podrás completar su ficha (edad, residencia, estudios, discapacidad…).</p>' +
-        '<button class="btn btn--soft btn--sm mt-2" type="button" data-action="add-partner-child">+ Añadir hijo/a de mi pareja</button>' +
-        (partnerOnly > 0 ? '<span class="chip" style="margin-left:8px">' + partnerOnly + ' cargado(s)</span>' : '') +
-        '</div></div></div></div>';
+        '<div class="flex" style="flex-wrap:wrap;margin-top:8px">' +
+        '<button class="btn btn--soft btn--sm" type="button" data-action="add-partner-child">+ Añadir hijo/a de mi pareja</button>' +
+        (partnerOnly > 0 ? '<button class="btn btn--ghost btn--sm" type="button" data-action="remove-partner-child">− Quitar el último</button><span class="chip">' + partnerOnly + ' cargado(s)</span>' : '') +
+        '</div></div></div></div></div>';
     }
 
     if (total > 0) {
@@ -14891,6 +14892,20 @@ html[dir="rtl"] .plan-head { text-align: right; }
       patch['child' + totalChildren + 'Relation'] = 'partner';
       RL.setProfile(patch);
       renderWizard();
+      return;
+    }
+    if (action === 'remove-partner-child') {
+      var rp = RL.profile();
+      var partnerCount = Number(rp.childrenPartner) || 0;
+      if (partnerCount > 0) {
+        var last = (Number(rp.childrenCommon) || 0) + (Number(rp.childrenOwn) || 0) + partnerCount;
+        ['Name', 'Age', 'Nationality', 'Relation', 'Disability', 'DisabilityRecognized',
+          'DisabilityDegree', 'DisabilityExpiry', 'Lives', 'Education', 'LegalStatus',
+          'TimeInSpain', 'Need'].forEach(function (suffix) { delete rp['child' + last + suffix]; });
+        rp.childrenPartner = partnerCount - 1;
+        RL.store.save();
+        renderWizard();
+      }
       return;
     }
     if (action === 'form-sheet') {
