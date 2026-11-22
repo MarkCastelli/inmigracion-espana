@@ -1509,6 +1509,16 @@
      ══════════════════════════════════════════════════════════ */
   function renderPlan() {
     var host = $('#view-plan');
+    var F = RL.state.profile && RL.state.profile.formulario;
+    if (F && F.applicant && (F.applicant.name || F.applicant.nationality || F.mode)) {
+      host.innerHTML = '<div class="plan-head no-print"><div><p class="eyebrow">Mi plan</p>' +
+        '<h1>Informe basado en tu formulario</h1>' +
+        '<p class="plan-head__sub">Estos son los datos que cargaste. El informe se actualiza cuando cambias el formulario.</p></div>' +
+        '<div class="plan-head__actions"><button class="btn btn--soft btn--sm" data-nav="formulario">' + icons.user(16) + ' Editar formulario</button>' +
+        '<button class="btn btn--accent btn--sm" data-action="print">' + icons.print(16) + ' Imprimir / PDF</button></div></div>' +
+        printReportHTML(F);
+      return;
+    }
     var p = RL.profile();
     if (!p.nationality || !p.location) {
       host.innerHTML = emptyState('Aún no tenemos tu informe',

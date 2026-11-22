@@ -1035,4 +1035,18 @@ t('el informe distingue alquiler de hipoteca', () => {
   nav(app, 'inicio');
 });
 
+t('mi plan usa los datos del formulario nuevo', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.state.profile.formulario.applicant.name = 'Ana Formulario';
+  RL.state.profile.formulario.applicant.goals = ['nacionalidad'];
+  nav(app, 'plan');
+  const html = app.document.querySelector('#view-plan').innerHTML;
+  assert.ok(html.includes('Informe basado en tu formulario'));
+  assert.ok(html.includes('Ana Formulario'));
+  assert.ok(html.includes('Objetivos'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
