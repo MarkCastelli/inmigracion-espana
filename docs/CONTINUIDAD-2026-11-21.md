@@ -141,6 +141,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 111. **Borrador de alta de abogados**: los campos se guardan automáticamente en `localStorage` (`ruta-legal.lawyer-draft`) al escribir; al volver se recuperan con aviso, el consentimiento no se recupera y hay botón para borrar el borrador. Si el envío falla, no se pierde nada.
 112. **Ficha pública alineada con el alta**: el JSON usa los mismos campos que el formulario (nombre, estudio, matrícula, colegio, contacto, web, citas, domicilio, localidad, provincia, horario, especialidad, idiomas, mensaje); la matrícula/colegio se muestran y el enlace de citas aparece siempre como botón «Pedir cita».
 113. **Pago Voluntario**: etiqueta verde en negrita junto al nombre del despacho/abogado cuando `pagoVoluntario: true`; cuatro registros DEMO simulan despachos sociales/ONG con pago voluntario.
+114. **Compromiso de actualización**: aviso antes del formulario y en la declaración: datos actualizados, una actualización gratuita al año, 10 € por solicitud adicional; varios campos en la misma solicitud cuentan como una (email+teléfono el mismo día = 10 €; enero+junio = 20 €).
 
 ## Comandos
 

@@ -1192,6 +1192,9 @@ t('el alta de abogados muestra tarifas y formulario sin publicar el correo', () 
   assert.ok(html.includes('Opción solidaria'));
   assert.ok(html.includes('20 €/mes'));
   assert.ok(html.includes('240 € al año'));
+  assert.ok(html.includes('Compromiso de datos actualizados'));
+  assert.ok(html.includes('10 € por solicitud'));
+  assert.ok(html.includes('20 €'));
   assert.ok(html.includes('Número de matrícula'));
   assert.ok(html.includes('Horario de atención'));
   assert.ok(!html.includes('programandonosolos'), 'el correo no debe ser visible');
