@@ -994,4 +994,31 @@ t('cada integrante del informe ocupa una página', () => {
   nav(app, 'inicio');
 });
 
+t('suma comida semanal y suscripciones al gasto del hogar', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 2;
+  f.members = [{ name: 'Ana', age: '40', relation: 'esposa', data: RL.formulario.person() }];
+  f.applicant.mortgage = 'si';
+  f.applicant.mortgageAmount = '225';
+  f.applicant.expenses.luz = '100';
+  f.applicant.expenses.foodWeekly = '100';
+  f.applicant.expenses.netflix = '10';
+  f.applicant.expenses.amazon = '5';
+  f.applicant.expenses.disney = '8';
+  f.spouse.paysHousing = 'si';
+  f.spouse.mortgage = 'si';
+  f.spouse.mortgageAmount = '225';
+  f.step = 10;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Comida mensual'));
+  assert.ok(html.includes('Suscripciones (Netflix/Amazon/Disney)'));
+  assert.ok(html.includes('1006.00 €'), '225 + 100 + 433 + 23 = 1006');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
