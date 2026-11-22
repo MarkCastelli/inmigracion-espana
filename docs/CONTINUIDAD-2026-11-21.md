@@ -99,13 +99,13 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 69. **Composición como fuente única**: nombre y edad de pareja, hijos y otros integrantes se cargan desde el paso 0; en los pasos 5 y 6 se muestran como resumen y no se vuelven a pedir.
 70. **Objetivos filtrados**: no se ofrece NIE, TIE o residencia a quien ya los tiene marcados en documentos/residencia; se conservan objetivos distintos como nacionalidad, arraigo o reagrupación.
 71. **Resumen de hijos**: cada hijo muestra vínculo, edad, residencia, documentos, estudios, discapacidad/grado/vencimiento, dependencia, ayudas y objetivos; no solo nombre y edad.
-72. **Hijos menores**: no se les piden hipoteca, alquiler ni suministros; solo aparecen para mayores de 18 años. Se muestra un aviso de que viven con su familia.
+72. **Hijos sin gastos**: la vivienda y los suministros no se piden en la ficha de los hijos; se cargan una sola vez en el titular.
 73. **Importes vacíos = 0 €**: los campos numéricos en blanco no obligan a escribir cero; el resumen los computa como 0. Pareja/hijos solo muestran gastos si marcan que pagan vivienda o suministros.
 74. **Objetivos comunes**: si se marca «Objetivos comunes para todo el grupo familiar», se eligen una vez y se aplican a todos; al desmarcar vuelven los objetivos individuales.
 75. **Tipo de contrato**: se distingue indefinido, temporal, fijo-discontinuo, autónomo, sin contrato u otro; si es temporal se pide fecha de vencimiento y se muestra en el resumen.
 76. **Titular y asilo**: el paso 1 se llama «Datos personales del titular o jefe de familia» y pregunta si solicitó asilo; el paso 3 solo amplía los detalles si la respuesta es sí.
 77. **Discapacidad identificada**: cada bloque del paso 7 muestra el nombre y el rol (titular, pareja, hijo/a u otro) de la persona cuyos datos se están cargando.
-78. **Gastos compartidos**: el resumen suma hipoteca/alquiler y suministros de todos los integrantes que declaren pagarlos; 225 € del titular + 225 € de la pareja + 100 € de luz = 550 € del hogar.
+78. **Gasto único de vivienda**: hipoteca/alquiler, suministros, comida y suscripciones se cargan solo en el titular y se suman una sola vez; los ingresos sí suman titular y pareja.
 79. **Asilo del titular**: si responde que sí en datos personales, el paso 3 muestra año, estado y fecha de la solicitud, igual que la ficha de la pareja.
 80. **Permiso de conducir**: se pregunta si lo tiene y de qué país; se añade a documentos y a objetivos como «Obtener o canjear el permiso de conducir».
 81. **Permiso individual**: no se aplica como objetivo común; cada adulto sin permiso decide si quiere obtenerlo/canjearlo, y los menores no lo ven.
@@ -116,6 +116,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 86. **Informe paginado**: portada con datos generales, una página por integrante y cierre económico; cada página lleva “Página X de Y” y salto de página al imprimir.
 87. **Saltos por integrante**: CSS `break-before: page` antes de cada hoja; titular, pareja, hijos y otros integrantes no comparten página.
 88. **Comida y suscripciones**: el titular carga comida semanal (×4,33 a mes) y Netflix/Amazon/Disney; se suman al gasto del hogar y se muestran desglosados en el resumen.
+89. **Un solo origen de egresos**: pareja, hijos y otros integrantes ya no muestran campos de vivienda/gastos; el resumen usa exclusivamente los importes del titular.
 
 ## Comandos
 

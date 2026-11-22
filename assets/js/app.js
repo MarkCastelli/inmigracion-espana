@@ -319,21 +319,14 @@
   function housingBlock(obj, prefix) {
     var F = RL.formulario;
     var isApplicant = prefix === 'applicant';
-    var paysHousing = isApplicant || fget(obj, 'paysHousing') === 'si';
+    if (!isApplicant) return '';
     var h = '<div class="form-grid">' +
       fSelect(prefix + '.housing', '¿Dónde vives?', fget(obj, 'housing'), [
         { v: '', l: 'Sin indicar' }, { v: 'propia', l: 'Vivienda propia' }, { v: 'alquiler', l: 'Alquilo un piso' },
         { v: 'habitacion', l: 'Alquilo una habitación' }, { v: 'compartida', l: 'Comparto con amigo/a o pareja' },
         { v: 'familiar', l: 'Vivo con familiares' }, { v: 'otra', l: 'Otra situación' }
-      ]);
-    if (!isApplicant) {
-      h += fRadio(prefix + '.paysHousing', '¿Paga vivienda o suministros?', fget(obj, 'paysHousing'), F.yesNo);
-    }
-    if (!paysHousing) {
-      h += '</div><p class="field__help">Si no paga vivienda ni suministros, déjalo así. No hace falta poner ceros: los importes vacíos cuentan como 0 €.</p>';
-      return h;
-    }
-    h += fRadio(prefix + '.mortgage', '¿Pagas hipoteca?', fget(obj, 'mortgage'), F.yesNo) +
+      ]) +
+      fRadio(prefix + '.mortgage', '¿Pagas hipoteca?', fget(obj, 'mortgage'), F.yesNo) +
       (fget(obj, 'mortgage') === 'si'
         ? fInput(prefix + '.mortgageAmount', 'Importe mensual de la hipoteca (€)', fget(obj, 'mortgageAmount'), 'number')
         : fInput(prefix + '.housingCost', 'Importe mensual del alquiler o vivienda (€)', fget(obj, 'housingCost'), 'number')) +
@@ -342,16 +335,14 @@
       fInput(prefix + '.expenses.gas', 'Gas o bombona (€/mes)', fget(obj, 'expenses.gas'), 'number') +
       fInput(prefix + '.expenses.comunidad', 'Comunidad (€/mes)', fget(obj, 'expenses.comunidad'), 'number') +
       fInput(prefix + '.expenses.internet', 'Internet (€/mes)', fget(obj, 'expenses.internet'), 'number') +
-      (isApplicant
-        ? fInput(prefix + '.expenses.foodWeekly', 'Comida (€/semana)', fget(obj, 'expenses.foodWeekly'), 'number') +
-          '<p class="field__help" style="grid-column:1/-1">La comida semanal se convierte a mes multiplicando por 4,33.</p>' +
-          fInput(prefix + '.expenses.netflix', 'Netflix (€/mes)', fget(obj, 'expenses.netflix'), 'number') +
-          fInput(prefix + '.expenses.amazon', 'Amazon Prime (€/mes)', fget(obj, 'expenses.amazon'), 'number') +
-          fInput(prefix + '.expenses.disney', 'Disney+ (€/mes)', fget(obj, 'expenses.disney'), 'number') +
-          '<p class="field__help" style="grid-column:1/-1">Netflix, Amazon y Disney se suman como un único gasto de suscripciones.</p>'
-        : '') +
+      fInput(prefix + '.expenses.foodWeekly', 'Comida (€/semana)', fget(obj, 'expenses.foodWeekly'), 'number') +
+      '<p class="field__help" style="grid-column:1/-1">La comida semanal se convierte a mes multiplicando por 4,33.</p>' +
+      fInput(prefix + '.expenses.netflix', 'Netflix (€/mes)', fget(obj, 'expenses.netflix'), 'number') +
+      fInput(prefix + '.expenses.amazon', 'Amazon Prime (€/mes)', fget(obj, 'expenses.amazon'), 'number') +
+      fInput(prefix + '.expenses.disney', 'Disney+ (€/mes)', fget(obj, 'expenses.disney'), 'number') +
+      '<p class="field__help" style="grid-column:1/-1">Netflix, Amazon y Disney se suman como un único gasto de suscripciones.</p>' +
       fRadio(prefix + '.computer', '¿Tienes computadora?', fget(obj, 'computer'), F.yesNo) +
-      '</div><p class="field__help">Déjalo vacío si no pagas ese concepto: cuenta como 0 €.</p>';
+      '</div><p class="field__help">Los gastos del hogar se cargan una sola vez aquí. Déjalo vacío si no pagas ese concepto: cuenta como 0 €.</p>';
     return h;
   }
 
@@ -579,7 +570,7 @@
       })[0];
       html += '<div class="block"><div class="block__head">' + icons.family(18) + '<h2>Pareja: datos, documentos, asilo y vivienda</h2></div><div class="block__body">' +
         (spouseMember ? '<div class="callout callout--info">' + icons.info(16) + '<div><strong>' + fEsc(spouseMember.name || 'Pareja') + ' · ' + fEsc(spouseMember.age || 'edad sin indicar') + '</strong><p>Nombre y edad cargados desde el paso 0. Si quieres cambiarlos, vuelve a «Sobre ti y tu familia».</p></div></div>' : '') +
-        personBlock(F.spouse, 'spouse', true, false, !!spouseMember) + documentsBlock(F.spouse, 'spouse') + asylumBlock(F.spouse, 'spouse') + '</div></div>';
+        personBlock(F.spouse, 'spouse', false, false, !!spouseMember) + documentsBlock(F.spouse, 'spouse') + asylumBlock(F.spouse, 'spouse') + '</div></div>';
     } else if (step === 6) {
       var childMembers = (F.members || []).filter(function (m) {
         return ['hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1;
@@ -589,11 +580,9 @@
         '<button class="btn btn--soft btn--sm" type="button" data-form-action="add-child">+ Añadir hijo/a</button>' +
         (F.children.length ? F.children.map(function (ch, i) {
           var lm = childMembers[i];
-          var childIsAdult = ch.age !== '' && Number(ch.age) >= 18;
           return '<div class="family-child" style="margin-top:14px"><div class="flex" style="justify-content:space-between"><h3>Hijo/a ' + (i + 1) + (lm && lm.name ? ': ' + fEsc(lm.name) : '') + '</h3><button class="btn btn--ghost btn--sm" type="button" data-form-action="remove-child" data-index="' + i + '">Quitar</button></div>' +
             (lm ? '<p class="muted">Edad: ' + fEsc(lm.age || 'sin indicar') + ' · vínculo: ' + fEsc(lm.relation) + '. Nombre y edad cargados desde el paso 0.</p>' : '') +
-            (!childIsAdult ? '<div class="callout callout--info">' + icons.info(16) + '<div><p>Menor de edad: no se le piden hipoteca, alquiler ni suministros. Se entiende que vive con su familia.</p></div></div>' : '') +
-            personBlock(ch, 'children.' + i, childIsAdult, false, !!lm) +
+            personBlock(ch, 'children.' + i, false, false, !!lm) +
             '<div class="form-grid">' +
             fInput('children.' + i + '.educationLevel', 'Estudios actuales', fget(ch, 'educationLevel'), 'text', 'ESO, Bachillerato, FP, universidad…') +
             '</div></div>';
@@ -606,8 +595,7 @@
           otherMembers.map(function (x) {
             return '<div class="family-child" style="margin-top:14px"><h3>' + fEsc(x.m.name || 'Integrante ' + (x.i + 1)) + ' · ' + fEsc(x.m.relation || 'otro') + ' · ' + fEsc(x.m.age || 'edad sin indicar') + '</h3>' +
               '<p class="muted">Nombre y edad cargados desde el paso 0.</p>' +
-              (Number(x.m.age) >= 18 ? '' : '<div class="callout callout--info">' + icons.info(16) + '<div><p>Menor de edad: no se le piden gastos de vivienda.</p></div></div>') +
-              personBlock(x.m.data || {}, 'members.' + x.i + '.data', Number(x.m.age) >= 18, false, true) +
+              personBlock(x.m.data || {}, 'members.' + x.i + '.data', false, false, true) +
               '<div class="form-grid">' + fInput('members.' + x.i + '.educationLevel', 'Estudios actuales', x.m.educationLevel || '', 'text', 'ESO, Bachillerato, FP, universidad…') + '</div></div>';
           }).join('') + '</div>';
       }
@@ -799,8 +787,8 @@
     }
 
     function housingBlockFor(o) {
-      if (!showHousing) return '';
-      var base = housingBaseFor(o, o === F.applicant);
+      if (!showHousing || o !== F.applicant) return '';
+      var base = housingBaseFor(o, true);
       var util = utilitiesFor(o);
       var food = foodFor(o);
       var subs = subscriptionsFor(o);
@@ -838,22 +826,10 @@
 
     if (!F.print || F.print.economy !== false) {
       var income = fnum(fget(F.applicant, 'netSalary')) + (F.mode === 'family' ? fnum(fget(F.spouse, 'netSalary')) : 0);
-      var housingPeople = [F.applicant];
-      if (F.mode === 'family') {
-        housingPeople.push(F.spouse);
-        housingPeople = housingPeople.concat(F.children || []);
-        (F.members || []).forEach(function (m) {
-          if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
-          if (m.data) housingPeople.push(m.data);
-        });
-      }
-      var base = 0, utilities = 0, food = 0, subscriptions = 0;
-      housingPeople.forEach(function (p, i) {
-        base += housingBaseFor(p, i === 0);
-        utilities += utilitiesFor(p);
-        food += foodFor(p);
-        subscriptions += subscriptionsFor(p);
-      });
+      var base = housingBaseFor(F.applicant, true);
+      var utilities = utilitiesFor(F.applicant);
+      var food = foodFor(F.applicant);
+      var subscriptions = subscriptionsFor(F.applicant);
       var total = base + utilities + food + subscriptions;
       pages.push('<header class="report-person-head"><p class="report-kicker">Cierre del informe</p><h2>Resumen económico del hogar</h2></header>' +
         '<section class="report-section"><dl class="kv">' +
@@ -876,25 +852,10 @@
 
   function formSummaryHTML(F, editable) {
     var income = fnum(fget(F.applicant, 'netSalary')) + (F.mode === 'family' ? fnum(fget(F.spouse, 'netSalary')) : 0);
-    var housingPeople = [F.applicant];
-    if (F.mode === 'family') {
-      housingPeople.push(F.spouse);
-      housingPeople = housingPeople.concat(F.children || []);
-      (F.members || []).forEach(function (m) {
-        if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
-        if (m.data) housingPeople.push(m.data);
-      });
-    }
-    var housingBase = 0;
-    var utilities = 0;
-    var food = 0;
-    var subscriptions = 0;
-    housingPeople.forEach(function (p, i) {
-      housingBase += housingBaseFor(p, i === 0);
-      utilities += utilitiesFor(p);
-      food += foodFor(p);
-      subscriptions += subscriptionsFor(p);
-    });
+    var housingBase = housingBaseFor(F.applicant, true);
+    var utilities = utilitiesFor(F.applicant);
+    var food = foodFor(F.applicant);
+    var subscriptions = subscriptionsFor(F.applicant);
     var exp = housingBase + utilities + food + subscriptions;
     var balance = income - exp;
     var members = [{ key: 'applicant', label: F.applicant.name || 'Titular', obj: F.applicant }];
@@ -947,14 +908,7 @@
       html += '<h3>Vivienda y gastos</h3><p>' + fEsc(fget(F.applicant, 'housing') || 'Sin indicar') + ' · total <strong>' + exp.toFixed(2) + ' €/mes</strong></p>' +
         '<p><strong>Hipoteca/alquiler:</strong> ' + housingBase.toFixed(2) + ' € · <strong>Suministros:</strong> ' + utilities.toFixed(2) + ' €</p>' +
         '<p><strong>Comida:</strong> ' + food.toFixed(2) + ' € · <strong>Suscripciones:</strong> ' + subscriptions.toFixed(2) + ' €</p>' +
-        housingPeople.map(function (p, i) {
-          var base = housingBaseFor(p, i === 0);
-          var u = utilitiesFor(p);
-          var f = foodFor(p);
-          var s = subscriptionsFor(p);
-          if (!base && !u && !f && !s) return '';
-          return '<p class="muted" style="font-size:.83rem">' + fEsc(p.name || (i === 0 ? 'Titular' : 'Integrante ' + (i + 1))) + ': ' + base.toFixed(2) + ' € vivienda + ' + u.toFixed(2) + ' € suministros + ' + f.toFixed(2) + ' € comida + ' + s.toFixed(2) + ' € suscripciones</p>';
-        }).join('');
+        '<p class="muted" style="font-size:.83rem">Gastos del hogar cargados una sola vez por el titular.</p>';
     }
     if (F.print && F.print.goals !== false) {
       html += '<h3>Objetivos</h3><p><strong>Titular:</strong> ' + fEsc(goalText(fget(F.applicant, 'goals')) || 'Sin indicar') + '</p>';

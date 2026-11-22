@@ -762,7 +762,7 @@ t('el resumen incluye estudios y discapacidad de los hijos', () => {
   nav(app, 'inicio');
 });
 
-t('un hijo menor no recibe preguntas de vivienda y gastos', () => {
+t('los hijos no reciben preguntas de vivienda y gastos', () => {
   const saved = RL.state.profile;
   RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
   const f = RL.state.profile.formulario;
@@ -772,13 +772,12 @@ t('un hijo menor no recibe preguntas de vivienda y gastos', () => {
   f.step = 6;
   nav(app, 'formulario');
   let html = app.document.querySelector('#view-formulario').innerHTML;
-  assert.ok(html.includes('Menor de edad'));
-  assert.ok(!html.includes('data-fpath="children.0.housing"'), 'menor no debe tener vivienda');
-  assert.ok(!html.includes('data-fpath="children.0.mortgage"'), 'menor no debe tener hipoteca');
+  assert.ok(!html.includes('data-fpath="children.0.housing"'), 'hijo no debe tener vivienda');
+  assert.ok(!html.includes('data-fpath="children.0.mortgage"'), 'hijo no debe tener hipoteca');
   f.members[0].age = '20';
   RL.ui.render();
   html = app.document.querySelector('#view-formulario').innerHTML;
-  assert.ok(html.includes('data-fpath="children.0.housing"'), 'adulto sí debe tener vivienda');
+  assert.ok(!html.includes('data-fpath="children.0.housing"'), 'los gastos se cargan solo en el titular');
   RL.state.profile = saved;
   nav(app, 'inicio');
 });
@@ -876,7 +875,7 @@ t('discapacidad identifica a cada integrante por su nombre', () => {
   nav(app, 'inicio');
 });
 
-t('suma la hipoteca del titular y de la pareja en el gasto del hogar', () => {
+t('el gasto de vivienda se carga una sola vez en el titular', () => {
   const saved = RL.state.profile;
   RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
   const f = RL.state.profile.formulario;
@@ -884,16 +883,13 @@ t('suma la hipoteca del titular y de la pareja en el gasto del hogar', () => {
   f.familyCount = 2;
   f.members = [{ name: 'Ana', age: '40', relation: 'esposa', data: RL.formulario.person() }];
   f.applicant.mortgage = 'si';
-  f.applicant.mortgageAmount = '225';
+  f.applicant.mortgageAmount = '550';
   f.applicant.expenses.luz = '100';
-  f.spouse.paysHousing = 'si';
-  f.spouse.mortgage = 'si';
-  f.spouse.mortgageAmount = '225';
   f.step = 10;
   nav(app, 'formulario');
   const html = app.document.querySelector('#view-formulario').innerHTML;
-  assert.ok(html.includes('550.00 €'), 'debe sumar 225 + 225 + 100');
-  assert.ok(html.includes('Hipoteca/alquiler:</strong> 450.00 €'), 'debe mostrar la hipoteca total');
+  assert.ok(html.includes('650.00 €'), '550 + 100 = 650');
+  assert.ok(html.includes('Hipoteca/alquiler:</strong> 550.00 €'), 'debe mostrar la hipoteca del titular');
   assert.ok(html.includes('Suministros:</strong> 100.00 €'), 'debe mostrar los suministros');
   RL.state.profile = saved;
   nav(app, 'inicio');
@@ -1001,21 +997,18 @@ t('suma comida semanal y suscripciones al gasto del hogar', () => {
   f.familyCount = 2;
   f.members = [{ name: 'Ana', age: '40', relation: 'esposa', data: RL.formulario.person() }];
   f.applicant.mortgage = 'si';
-  f.applicant.mortgageAmount = '225';
+  f.applicant.mortgageAmount = '550';
   f.applicant.expenses.luz = '100';
   f.applicant.expenses.foodWeekly = '100';
   f.applicant.expenses.netflix = '10';
   f.applicant.expenses.amazon = '5';
   f.applicant.expenses.disney = '8';
-  f.spouse.paysHousing = 'si';
-  f.spouse.mortgage = 'si';
-  f.spouse.mortgageAmount = '225';
   f.step = 10;
   nav(app, 'formulario');
   const html = app.document.querySelector('#view-formulario').innerHTML;
   assert.ok(html.includes('Comida mensual'));
   assert.ok(html.includes('Suscripciones (Netflix/Amazon/Disney)'));
-  assert.ok(html.includes('1006.00 €'), '225 + 100 + 433 + 23 = 1006');
+  assert.ok(html.includes('1106.00 €'), '550 + 100 + 433 + 23 = 1106');
   RL.state.profile = saved;
   nav(app, 'inicio');
 });
