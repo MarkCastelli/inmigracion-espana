@@ -3549,7 +3549,7 @@
     });
     var html = '<div class="plan-head"><div><p class="eyebrow">Directorio</p><h1>Abogados</h1>' +
       '<p class="plan-head__sub">Despachos que solicitan aparecer para que puedas contactarlos. No es una recomendación ni un ranking.</p></div>' +
-      '<div class="plan-head__actions"><a class="btn btn--soft btn--sm" href="#/abogados-alta">' + icons.user(15) + ' Solicitar aparecer</a></div></div>';
+      '<div class="plan-head__actions"><a class="btn btn--soft btn--sm" href="#/abogados-alta" data-nav="abogados-alta">' + icons.user(15) + ' Solicitar aparecer</a></div></div>';
     html += '<div class="callout callout--warn" style="border-width:2px">' + icons.alert(20) + '<div><strong>No verifico a los abogados</strong>' +
       '<p>No compruebo identidad, colegiación, número de colegiado, especialización, seguro, honorarios, resultados ni la veracidad de los datos publicados. No me hago responsable de problemas, pagos, conflictos o daños derivados del contacto con un despacho que aparezca aquí. Antes de contratar, verifica tú mismo y desconfía de quien prometa resultados.</p></div></div>';
     html += '<div class="callout callout--demo" style="border:1px solid #d9a441;background:#fff8e6;color:#5b4300"><strong>Datos de prueba</strong> Los 10 registros que aparecen ahora son ficticios, creados para probar los filtros. No son abogados reales, no existen sus despachos y sus teléfonos, webs y direcciones son de ejemplo. No los contactes ni los tomes como referencia.</div>';
@@ -3597,7 +3597,7 @@
       '<p>Si quieres estar en esta página, rellena el formulario de alta. Podrás publicar:</p>' +
       '<ul><li>Nombre del estudio.</li><li>Tu nombre y apellidos.</li><li>Teléfono y WhatsApp.</li><li>Web y email.</li><li>Página para coger citas.</li><li>Dirección.</li></ul>' +
       '<p>La solicitud se revisa antes de publicar. No se aceptan promesas de resultados, publicidad engañosa ni datos de clientes.</p>' +
-      '<a class="btn btn--primary" href="#/abogados-alta">' + icons.user(16) + ' Enviar solicitud para aparecer</a>' +
+      '<a class="btn btn--primary" href="#/abogados-alta" data-nav="abogados-alta">' + icons.user(16) + ' Enviar solicitud para aparecer</a>' +
       '<p class="muted" style="font-size:.8rem;margin-top:10px">El formulario se envía por correo al responsable. No incluyas datos personales de clientes ni documentos.</p></div></div>';
     host.innerHTML = html;
     var search = $('#lawyerSearch');
