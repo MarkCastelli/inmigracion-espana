@@ -363,6 +363,9 @@ t('la vista de derechos muestra discapacidad, menores y ayudas', () => {
   const html = app.document.querySelector('#view-derechos').innerHTML;
   assert.ok(html.includes('Derechos y ayudas'));
   assert.ok(html.includes('Discapacidad y residencia'));
+  assert.ok(html.includes('Escolarización y matrícula'));
+  assert.ok(html.includes('Libros, material y cheques escolares'));
+  assert.ok(html.includes('Comedor escolar y becas'));
   assert.ok(html.includes('Certificado de discapacidad'));
   assert.ok(html.includes('No son lo mismo'));
   assert.ok(html.includes('Menores: derechos y residencia'));

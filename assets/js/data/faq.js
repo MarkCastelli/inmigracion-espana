@@ -513,6 +513,26 @@
       ]
     },
     {
+      id: 'escolarizacion_libros', cat: 'ayudas',
+      q: '¿Cómo escolarizo a mi hijo y cómo pido libros, material o comedor?',
+      short: 'La escolarización obligatoria es gratuita y no depende de la residencia. La matrícula se pide en la consejería de educación o en el centro; libros, material, comedor y becas son ayudas aparte, con plazos y requisitos de cada comunidad. No hay un cheque único nacional.',
+      detail: [
+        'Escolarización: pide plaza en la consejería de educación de tu comunidad o en el centro. Si llegas fuera del plazo, solicita «escolarización sobrevenida»; no esperes al curso siguiente.',
+        'Documentos habituales: pasaporte o documento del menor, libro de familia, empadronamiento, vacunas y, si los tienes, informes médicos o de discapacidad. La falta de residencia no debe impedir la escolarización obligatoria.',
+        'Matrícula: se formaliza en el centro adjudicado. Pregunta por el comedor, el transporte y las ayudas de libros en la misma solicitud o en el plazo que indiquen.',
+        'Libros y material: cada comunidad y algunos ayuntamientos tienen cheques, vales, préstamo o ayudas directas. Suelen pedir renta, matrícula y empadronamiento; guarda facturas y justificantes.',
+        'Fechas: la admisión suele abrirse entre marzo y junio para el curso siguiente; las ayudas de libros/material suelen resolverse antes de septiembre. Las becas generales del Ministerio se convocan aparte, normalmente en primavera-verano. Confirma el calendario de tu comunidad.',
+        'Comedor y transporte: se solicitan con la matrícula o en plazo aparte; la beca de comedor puede cubrir total o parcialmente el coste. No es automática.',
+        'Si el menor tiene discapacidad, pide valoración y apoyo educativo; puede haber ayudas de transporte, material adaptado y comedor con prioridad.',
+        'Dónde: consejería de educación, ayuntamiento, centro escolar y servicios sociales. En la app, Derechos y ayudas con tu comunidad/provincia.'
+      ],
+      links: [
+        ['Ministerio de Educación', 'https://www.educacionfpydeportes.gob.es/'],
+        ['Becas de educación', 'https://www.becaseducacion.gob.es/'],
+        ['Servicios sociales', 'https://www.mdsocialesa2030.gob.es/']
+      ]
+    },
+    {
       id: 'transporte_descuentos', cat: 'ayudas',
       q: '¿Qué tarjetas de transporte hay y quién puede obtenerlas?',
       short: 'No hay una tarjeta única nacional. Cada ciudad/comunidad tiene abonos de metro y bus, tarjeta de discapacidad, youth/estudiante y familia numerosa; para media y larga distancia hay descuentos de Renfe y autobuses. Requisitos y precio cambian por zona.',

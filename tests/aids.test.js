@@ -42,6 +42,9 @@ test('las ayudas locales se resuelven con la comunidad', () => {
   assert.ok(RL.aids.resolveUrl(cert, region).includes('xunta.gal'));
   const ctx = { regionName: 'Galicia', localLabel: 'Concello', municipality: 'Vigo' };
   assert.ok(cert.where(ctx).includes('Galicia'));
+  for (const id of ['escolarizacion', 'libros_material', 'comedor_becas', 'becas_generales']) {
+    assert.ok(RL.aids.all.some(a => a.id === id), 'falta ' + id);
+  }
 });
 
 test('comida, vivienda, asociaciones y salud mental están cubiertas', () => {

@@ -112,6 +112,42 @@
       note: 'El interés superior del menor prevalece. Un menor no acompañado tiene derecho a protección y tutela de la comunidad. Al cumplir 18 cambia el mapa: no esperes al último día.'
     },
     {
+      id: 'escolarizacion', scope: 'region', cat: 'menores', icon: 'book',
+      title: 'Escolarización y matrícula',
+      what: ['Plaza en colegio o instituto', 'Matrícula y documentación', 'Escolarización sobrevenida fuera de plazo'],
+      who: 'Menores en edad obligatoria; la situación administrativa del menor o de la familia no impide la escolarización.',
+      where: function (c) { return 'Consejería de Educación de ' + c.regionName + ' o ayuntamiento'; },
+      urlKey: 'education',
+      note: 'La educación obligatoria es gratuita y no depende de tener residencia. Si llegas fuera del plazo de admisión, pide «escolarización sobrevenida» en la consejería o en el centro. Lleva pasaporte, libro de familia, empadronamiento y vacunas si las tienes.'
+    },
+    {
+      id: 'libros_material', scope: 'region', cat: 'menores', icon: 'book',
+      title: 'Libros, material y cheques escolares',
+      what: ['Ayudas para libros de texto', 'Material escolar', 'Cheques o vales de compra'],
+      who: 'Familias con hijos escolarizados; normalmente se exige matrícula, empadronamiento y renta.',
+      where: function (c) { return 'Consejería de Educación de ' + c.regionName + ' o centro educativo'; },
+      urlKey: 'education',
+      note: 'No hay un cheque único nacional: cada comunidad y algunos ayuntamientos tienen su programa. Los plazos suelen abrirse antes del inicio del curso y las ayudas pueden ser dinero, vale o material. Guarda facturas y justificantes.'
+    },
+    {
+      id: 'comedor_becas', scope: 'region', cat: 'menores', icon: 'family',
+      title: 'Comedor escolar y becas',
+      what: ['Plaza de comedor', 'Beca de comedor', 'Ayuda de transporte escolar'],
+      who: 'Alumnos escolarizados; se suele priorizar renta baja, familia numerosa, discapacidad o distancia.',
+      where: function (c) { return 'Consejería de Educación de ' + c.regionName + ' o centro educativo'; },
+      urlKey: 'education',
+      note: 'El comedor puede ser gratuito, subvencionado o de pago según la comunidad y la renta. No es automático: se solicita junto con la matrícula o en plazo aparte. Pregunta por la beca de comedor y por el transporte.'
+    },
+    {
+      id: 'becas_generales', scope: 'national', cat: 'formacion', icon: 'book',
+      title: 'Becas generales del Ministerio',
+      what: ['Becas para secundaria, FP y universidad', 'Ayuda de matrícula y material', 'Requisitos de renta y notas'],
+      who: 'Estudiantes matriculados en enseñanzas del sistema educativo; requisitos económicos y académicos.',
+      where: 'Ministerio de Educación / universidad o centro',
+      url: 'https://www.becaseducacion.gob.es/',
+      note: 'La convocatoria general suele abrirse entre primavera y verano para el curso siguiente; las fechas cambian cada año. No es lo mismo que las ayudas autonómicas de libros o comedor: se pueden pedir por separado si cumples requisitos.'
+    },
+    {
       id: 'estudios', scope: 'national', cat: 'formacion', icon: 'book',
       title: 'Reconocer estudios extranjeros',
       what: ['Homologación de ESO, Bachillerato o FP', 'Homologación de título universitario', 'Acceso a la universidad con UNEDasiss'],
