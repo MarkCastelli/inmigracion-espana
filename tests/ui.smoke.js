@@ -889,7 +889,8 @@ t('el gasto de vivienda se carga una sola vez en el titular', () => {
   nav(app, 'formulario');
   const html = app.document.querySelector('#view-formulario').innerHTML;
   assert.ok(html.includes('650.00 €'), '550 + 100 = 650');
-  assert.ok(html.includes('Hipoteca/alquiler:</strong> 550.00 €'), 'debe mostrar la hipoteca del titular');
+  assert.ok(html.includes('Hipoteca:</strong> 550.00 €'), 'debe mostrar la hipoteca del titular');
+  assert.ok(!html.includes('Alquiler:</strong>'), 'no debe mostrar alquiler si es hipoteca');
   assert.ok(html.includes('Suministros:</strong> 100.00 €'), 'debe mostrar los suministros');
   RL.state.profile = saved;
   nav(app, 'inicio');
@@ -1015,6 +1016,21 @@ t('suma comida semanal y suscripciones al gasto del hogar', () => {
   assert.ok(html.includes('Gastos varios'));
   assert.ok(html.includes('Créditos y plazos'));
   assert.ok(html.includes('1306.00 €'), '550 + 100 + 433 + 23 + 200 = 1306');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
+t('el informe distingue alquiler de hipoteca', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.applicant.housing = 'alquiler';
+  f.applicant.housingCost = '700';
+  f.step = 10;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Alquiler:</strong> 700.00 €'));
+  assert.ok(!html.includes('Hipoteca:</strong>'), 'no debe mostrar hipoteca si es alquiler');
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

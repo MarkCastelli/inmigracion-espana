@@ -726,6 +726,13 @@
     });
   }
 
+  function housingKind(p) {
+    if (!p) return 'Vivienda';
+    if (p.mortgage === 'si') return 'Hipoteca';
+    if (['alquiler', 'habitacion', 'compartida'].indexOf(p.housing) !== -1) return 'Alquiler';
+    return 'Vivienda';
+  }
+
   function housingBaseFor(p, isApplicant) {
     if (!p) return 0;
     var hasAny = fnum(p.mortgageAmount) || fnum(p.housingCost) ||
@@ -805,7 +812,7 @@
       var subs = subscriptionsFor(o);
       var extras = extrasFor(o);
       if (!base && !util && !food && !subs && !extras.total) return '';
-      return '<section class="report-section"><h3>Vivienda y gastos</h3><p><strong>Vivienda:</strong> ' + base.toFixed(2) + ' €/mes · <strong>Suministros:</strong> ' + util.toFixed(2) + ' €/mes</p>' +
+      return '<section class="report-section"><h3>Vivienda y gastos</h3><p><strong>' + fEsc(housingKind(o)) + ':</strong> ' + base.toFixed(2) + ' €/mes · <strong>Suministros:</strong> ' + util.toFixed(2) + ' €/mes</p>' +
         (food || subs ? '<p><strong>Comida:</strong> ' + food.toFixed(2) + ' €/mes · <strong>Suscripciones:</strong> ' + subs.toFixed(2) + ' €/mes</p>' : '') +
         (extras.total ? '<p><strong>Transporte:</strong> ' + extras.transport.toFixed(2) + ' €/mes · <strong>Varios:</strong> ' + extras.misc.toFixed(2) + ' €/mes · <strong>Créditos:</strong> ' + extras.credits.toFixed(2) + ' €/mes</p>' : '') + '</section>';
     }
@@ -848,7 +855,7 @@
       pages.push('<header class="report-person-head"><p class="report-kicker">Cierre del informe</p><h2>Resumen económico del hogar</h2></header>' +
         '<section class="report-section"><dl class="kv">' +
         '<div class="kv__row"><dt>Ingreso neto mensual</dt><dd>' + income.toFixed(2) + ' €</dd></div>' +
-        '<div class="kv__row"><dt>Hipoteca/alquiler</dt><dd>' + base.toFixed(2) + ' €</dd></div>' +
+        '<div class="kv__row"><dt>' + fEsc(housingKind(F.applicant)) + '</dt><dd>' + base.toFixed(2) + ' €</dd></div>' +
         '<div class="kv__row"><dt>Suministros</dt><dd>' + utilities.toFixed(2) + ' €</dd></div>' +
         '<div class="kv__row"><dt>Comida mensual</dt><dd>' + food.toFixed(2) + ' €</dd></div>' +
         '<div class="kv__row"><dt>Suscripciones</dt><dd>' + subscriptions.toFixed(2) + ' €</dd></div>' +
@@ -927,7 +934,7 @@
     }
     if (F.print && F.print.housing !== false) {
       html += '<h3>Vivienda y gastos</h3><p>' + fEsc(fget(F.applicant, 'housing') || 'Sin indicar') + ' · total <strong>' + exp.toFixed(2) + ' €/mes</strong></p>' +
-        '<p><strong>Hipoteca/alquiler:</strong> ' + housingBase.toFixed(2) + ' € · <strong>Suministros:</strong> ' + utilities.toFixed(2) + ' €</p>' +
+        '<p><strong>' + fEsc(housingKind(F.applicant)) + ':</strong> ' + housingBase.toFixed(2) + ' € · <strong>Suministros:</strong> ' + utilities.toFixed(2) + ' €</p>' +
         '<p><strong>Comida:</strong> ' + food.toFixed(2) + ' € · <strong>Suscripciones:</strong> ' + subscriptions.toFixed(2) + ' €</p>' +
         '<p><strong>Transporte:</strong> ' + extras.transport.toFixed(2) + ' € · <strong>Varios:</strong> ' + extras.misc.toFixed(2) + ' € · <strong>Créditos:</strong> ' + extras.credits.toFixed(2) + ' €</p>' +
         '<p class="muted" style="font-size:.83rem">Gastos del hogar cargados una sola vez por el titular.</p>';

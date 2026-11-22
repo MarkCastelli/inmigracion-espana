@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **207 pruebas pasando**.
+- **208 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -118,6 +118,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 88. **Comida y suscripciones**: el titular carga comida semanal (×4,33 a mes) y Netflix/Amazon/Disney; se suman al gasto del hogar y se muestran desglosados en el resumen.
 89. **Un solo origen de egresos**: pareja, hijos y otros integrantes ya no muestran campos de vivienda/gastos; el resumen usa exclusivamente los importes del titular.
 90. **Transporte, varios y créditos**: el titular carga transporte, gastos varios (ropa, extras, salidas) y el total mensual de créditos/compras a plazos; se suman al gasto del hogar y aparecen en el informe.
+91. **Hipoteca o alquiler**: el resumen y las páginas del informe muestran “Hipoteca” o “Alquiler” según el tipo de vivienda declarado, no una etiqueta genérica.
 
 ## Comandos
 
