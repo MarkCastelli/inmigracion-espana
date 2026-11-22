@@ -304,6 +304,8 @@ test('la portada comunica gratuidad, privacidad, honestidad y PDF', () => {
     'la decisión es tuya',
     'tus datos no se envían ni se comparten con nadie',
     'puedes descargar tu informe en pdf',
+    'completar el formulario es la base de todo',
+    'no se envía a ningún servidor de ruta legal',
     'compromisos contigo'
   ];
   for (const phrase of phrases) {

@@ -149,6 +149,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 119. **Documentos por integrante**: cada hijo y cada integrante adicional tiene su propio bloque de documentos; Docs muestra sus marcas en la matriz familiar, no solo las del titular y la pareja.
 120. **Nacimiento y pasaporte**: fecha de nacimiento y número de pasaporte de origen en la ficha del titular, pareja, hijos y otros integrantes; se muestran en el informe y el prompt de IA los excluye por privacidad.
 121. **Email de feedback oculto**: la ventana y la página de gracias ya no muestran la dirección; el destinatario se construye con base64 en el código y el correo se abre en la aplicación del usuario. No hay enlace `mailto` visible con la dirección.
+122. **Confianza en la portada**: el bloque PDF explica que completar el formulario alimenta Docs, el resumen y el informe; aclara que los datos se guardan en el almacenamiento local, no se envían a ningún servidor de Ruta Legal y solo salen si el usuario descarga el PDF/JSON o pega el prompt en una IA externa.
 
 ## Comandos
 
