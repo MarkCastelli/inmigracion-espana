@@ -498,12 +498,15 @@
     } else if (step === 1) {
       html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Datos personales del titular o jefe de familia</h2></div><div class="block__body">' + personBlock(F.applicant, 'applicant', false, true) +
         '<div class="form-grid">' + fRadio('applicant.asylumRequested', '¿Solicitaste asilo en España?', fget(F.applicant, 'asylumRequested'), RL.formulario.yesNo) + '</div>' +
+        (fget(F.applicant, 'asylumRequested') === 'si' ? '<p class="field__help">Completarás año, estado y fecha en el paso «Asilo del titular».</p>' : '') +
         '</div></div>';
     } else if (step === 2) {
       html += '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Situación actual</h2></div><div class="block__body">' + documentsBlock(F.applicant, 'applicant') + '</div></div>';
     } else if (step === 3) {
-      html += '<div class="block"><div class="block__head">' + icons.shield(18) + '<h2>Asilo</h2></div><div class="block__body">' +
-        (fget(F.applicant, 'asylumRequested') === 'si' ? asylumBlock(F.applicant, 'applicant', false) : '<p class="muted">No indicaste que hayas solicitado asilo. Puedes continuar; si cambió, vuelve a «Datos personales del titular o jefe de familia».</p>') +
+      html += '<div class="block"><div class="block__head">' + icons.shield(18) + '<h2>Asilo del titular</h2></div><div class="block__body">' +
+        (fget(F.applicant, 'asylumRequested') === 'si'
+          ? '<div class="callout callout--info">' + icons.info(16) + '<div><p>En «Datos personales del titular» respondiste que sí. Completa ahora los datos de la solicitud.</p></div></div>' + asylumBlock(F.applicant, 'applicant', false)
+          : '<p class="muted">No indicaste que hayas solicitado asilo. Puedes continuar; si cambió, vuelve a «Datos personales del titular o jefe de familia».</p>') +
         '</div></div>';
     } else if (step === 4) {
       html += '<div class="block"><div class="block__head">' + icons.home(18) + '<h2>Vivienda y gastos</h2></div><div class="block__body">' + housingBlock(F.applicant, 'applicant') + '</div></div>';

@@ -894,4 +894,21 @@ t('suma la hipoteca del titular y de la pareja en el gasto del hogar', () => {
   nav(app, 'inicio');
 });
 
+
+t('el titular que pidió asilo ve los detalles igual que la pareja', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.state.profile.formulario.applicant.asylumRequested = 'si';
+  RL.state.profile.formulario.step = 3;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Asilo del titular'));
+  assert.ok(html.includes('data-fpath="applicant.asylumYear"'));
+  assert.ok(html.includes('data-fpath="applicant.asylumStatus"'));
+  assert.ok(html.includes('data-fpath="applicant.asylumDate"'));
+  assert.ok(html.includes('respondiste que sí'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
