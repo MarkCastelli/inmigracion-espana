@@ -12627,6 +12627,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
         var childDisability = p['child' + i + 'Disability'] || '';
         var childDisabilityDetails = '';
         if (childDisability === 'yes' || childDisability === 'in_progress') {
+          var expiryStatus = p['child' + i + 'DisabilityExpiryStatus'] || (p['child' + i + 'DisabilityExpiry'] ? 'yes' : 'no');
           childDisabilityDetails =
             familySelect('child' + i + 'DisabilityRecognized', '¿Discapacidad reconocida?', p['child' + i + 'DisabilityRecognized'] || '', [
               ['', 'No indicado'], ['yes', 'Sí'], ['in_progress', 'En trámite'], ['no', 'No'], ['dontknow', 'No lo sé']
@@ -12634,7 +12635,12 @@ html[dir="rtl"] .plan-head { text-align: right; }
             familySelect('child' + i + 'DisabilityDegree', 'Grado de discapacidad', p['child' + i + 'DisabilityDegree'] || '', [
               ['', 'No indicado'], ['33_44', '33-44 %'], ['45_64', '45-64 %'], ['65_mas', '65 % o más'], ['dontknow', 'No lo sé']
             ]) +
-            familyInput('child' + i + 'DisabilityExpiry', 'Vencimiento del certificado (opcional)', p['child' + i + 'DisabilityExpiry'], 'date');
+            familySelect('child' + i + 'DisabilityExpiryStatus', '¿El certificado tiene vencimiento?', expiryStatus, [
+              ['', 'No indicado'], ['yes', 'Sí, tiene fecha'], ['no', 'No caduca / sin vencimiento'], ['dontknow', 'No lo sé']
+            ]) +
+            (expiryStatus === 'yes'
+              ? familyInput('child' + i + 'DisabilityExpiry', 'Fecha de vencimiento', p['child' + i + 'DisabilityExpiry'], 'date')
+              : '<p class="field__help" style="grid-column:1/-1">Si está reconocida y no caduca, déjalo así: no hace falta inventar una fecha.</p>');
         }
         html += '<div class="family-child"><p class="eyebrow">Hijo/a ' + i + '</p><div class="form-grid">' +
           familyInput('child' + i + 'Name', 'Nombre y apellidos', p['child' + i + 'Name']) +
@@ -12829,7 +12835,12 @@ html[dir="rtl"] .plan-head { text-align: right; }
       if (!step) return;
       var before = currentVisibleIds(step).join('|');
       setValue(el, ui.step);
-      if (/^child\d+Disability$/.test(el.name)) {
+      if (/^child\d+Disability$/.test(el.name) || /^child\d+DisabilityExpiryStatus$/.test(el.name)) {
+        if (/ExpiryStatus$/.test(el.name) && el.value === 'no') {
+          var clearName = el.name.replace(/Status$/, '');
+          delete RL.state.profile[clearName];
+          RL.store.save();
+        }
         renderWizard();
         return;
       }

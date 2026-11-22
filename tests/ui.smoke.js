@@ -481,6 +481,8 @@ t('las preguntas de discapacidad de un hijo solo salen si tiene discapacidad', (
   RL.ui.render();
   let html = app.document.querySelector('#wizardFields').innerHTML;
   assert.ok(html.includes('name="child1DisabilityDegree"'), 'faltan grado/vencimiento con discapacidad');
+  assert.ok(html.includes('name="child1DisabilityExpiryStatus"'), 'falta la opción de sin vencimiento');
+  assert.ok(html.includes('No caduca / sin vencimiento'), 'falta el texto de no caduca');
   RL.state.profile.child1Disability = 'no';
   RL.ui.render();
   html = app.document.querySelector('#wizardFields').innerHTML;

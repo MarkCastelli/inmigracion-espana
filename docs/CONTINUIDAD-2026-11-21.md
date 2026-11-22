@@ -90,6 +90,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 60. **Scroll del asistente**: al pasar de paso se descuenta la altura de la cabecera fija y se espera al siguiente frame para que el inicio del formulario quede visible.
 61. **Formulario 0-11**: nuevo flujo para individuo o familia con datos personales, documentos, asilo, vivienda e hipoteca, pareja, hijos, discapacidad, ayudas, objetivos, resumen económico y PDF imprimible. Se guarda en `profile.formulario`.
 62. **Composición familiar**: el grupo familiar indica cuántas personas son y añade filas con nombre, edad y vínculo (pareja, esposa/esposo, hijo/hija, padres de él/ella, hermanos, abuelos u otros); las fichas de otros integrantes recogen datos, documentos, asilo y vivienda.
+63. **Discapacidad sin caducidad**: el certificado del hijo/a permite «No caduca / sin vencimiento»; en ese caso no se pide fecha ni se inventa una caducidad en el informe.
 
 ## Comandos
 
