@@ -80,6 +80,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 50. **Cobertura nacional**: bloque «Redes con sede local o provincial» (Cruz Roja, Cáritas, CEAR, ACCEM, Red Acoge, Cepaim, Médicos del Mundo, Movimiento por la Paz) para cualquier municipio; no se inventan sedes locales.
 51. **Auditoría de enlaces**: 187 URLs estáticas y 130 resueltas por provincia/municipio; 0 errores 404. Diversidades pasa a HTTP (su web no tiene HTTPS), se corrigen Concello/Servicios Sociales de Vigo y se retira Movimiento por la Paz (530).
 52. **León y Cádiz**: Cáritas León, Diaconía León, Cáritas Cádiz y Fundación Márgenes y Vínculos; se muestran en cualquier municipio de su provincia.
+53. **Canales de YouTube**: Expediente Extranjero y Prixline en Ayuda, con aviso de que son canales independientes y no asesoramiento oficial.
 
 ## Comandos
 

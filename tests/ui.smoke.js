@@ -178,6 +178,10 @@ t('la ayuda renderiza glosario, FAQ y bulos', () => {
   assert.ok(html.includes('Glosario'));
   assert.ok(html.includes('Preguntas frecuentes'));
   assert.ok(html.includes('Bulos frecuentes'));
+  assert.ok(html.includes('Canales de YouTube'));
+  assert.ok(html.includes('Expediente Extranjero'));
+  assert.ok(html.includes('Prixline'));
+  assert.ok(html.includes('no asesoramiento oficial'));
   assert.ok(html.includes('ilegal') || html.includes('irregular'));
   assert.ok(html.includes('Aviso legal y privacidad'));
 });

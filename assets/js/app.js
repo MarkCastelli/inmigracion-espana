@@ -2395,6 +2395,17 @@
 
     html += '</div>';
 
+    html += '<div class="block mt-3"><div class="block__head">' + icons.ext(18) + '<h2>Canales de YouTube</h2></div><div class="block__body">' +
+      '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>Recomendados por esta página, no asesoramiento oficial</strong>' +
+      '<p>Si hablas español, estos canales pueden ayudarte a entender trámites y experiencias. Son independientes: no son abogados de esta app, no conocen tu caso y pueden estar desactualizados. Para una decisión legal, confirma con la sede oficial y con un abogado.</p></div></div>' +
+      R.channels.map(function (c) {
+        return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.ext(15) + '</span><div>' +
+          '<strong>' + esc(c.name) + ' <span class="muted" style="font-weight:400">' + esc(c.handle) + '</span></strong>' +
+          '<p style="font-size:.86rem;color:var(--ink-2);margin:2px 0 0">' + esc(c.desc) + '</p>' +
+          '<p class="muted" style="font-size:.78rem;margin:3px 0 0">' + esc(c.note) + '</p>' +
+          '<a class="btn btn--soft btn--sm mt-2" href="' + esc(RL.dom.safeUrl(c.url)) + '" target="_blank" rel="noopener">' + icons.ext(13) + ' Abrir canal</a></div></div>';
+      }).join('') + '</div></div>';
+
     html += '<div class="block mt-3"><div class="block__head">' + icons.info(18) + '<h2>Glosario</h2></div><div class="block__body"><dl class="glossary">' +
       R.glossary.map(function (g) { return '<dt>' + esc(g.term) + '</dt><dd>' + esc(g.def) + '</dd>'; }).join('') + '</dl></div></div>';
 

@@ -26,6 +26,22 @@
       { t: 'Defensor del Pueblo', u: 'https://www.defensordelpueblo.es/', d: 'Quejas por mala actuación administrativa.', tag: 'Legal' },
       { t: 'Sutramiteconsular · cita de visados', u: 'https://sutramiteconsular.maec.es/', d: 'Cita previa en consulados de España.', tag: 'Consular' }
     ],
+    channels: [
+      {
+        name: 'Expediente Extranjero',
+        handle: '@expedientextranjero',
+        url: 'https://www.youtube.com/@expedientextranjero',
+        desc: 'Vídeos sobre extranjería, residencia, arraigos y trámites en España.',
+        note: 'Canal independiente. No es una administración ni un despacho de la app.'
+      },
+      {
+        name: 'Prixline',
+        handle: '@prixline',
+        url: 'https://www.youtube.com/@prixline',
+        desc: 'Contenido en español sobre trámites, residencia y vida en España.',
+        note: 'Canal independiente. Comprueba la fecha de cada vídeo y contrasta con la fuente oficial.'
+      }
+    ],
     phones: [
       { n: '016', d: 'Violencia de género. Gratuito, confidencial y 24 h. No deja rastro en la factura.' },
       { n: '024', d: 'Atención a la conducta suicida. Gratuito, confidencial y 24 h.' },
