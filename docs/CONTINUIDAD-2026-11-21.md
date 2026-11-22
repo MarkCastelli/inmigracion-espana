@@ -148,6 +148,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 118. **Prompt IA desde el formulario**: la consulta ya no usa el diagnóstico antiguo ni emite recomendaciones. Genera un prompt con los datos del formulario; por defecto excluye nombre, contacto, salud, discapacidad y asilo, y solo los incluye si se marca la casilla de datos sensibles. Explica qué se puede y no se puede incluir.
 119. **Documentos por integrante**: cada hijo y cada integrante adicional tiene su propio bloque de documentos; Docs muestra sus marcas en la matriz familiar, no solo las del titular y la pareja.
 120. **Nacimiento y pasaporte**: fecha de nacimiento y número de pasaporte de origen en la ficha del titular, pareja, hijos y otros integrantes; se muestran en el informe y el prompt de IA los excluye por privacidad.
+121. **Email de feedback oculto**: la ventana y la página de gracias ya no muestran la dirección; el destinatario se construye con base64 en el código y el correo se abre en la aplicación del usuario. No hay enlace `mailto` visible con la dirección.
 
 ## Comandos
 

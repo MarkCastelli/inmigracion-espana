@@ -1236,7 +1236,8 @@ t('el feedback lleva a una página de agradecimiento', () => {
   const html = app.document.querySelector('#view-feedback-gracias').innerHTML;
   assert.ok(html.includes('Gracias por ayudarnos a mejorar'));
   assert.ok(html.includes('Se ha abierto tu aplicación de correo'));
-  assert.ok(html.includes('programandonosolos@gmail.com'));
+  assert.ok(html.includes('La dirección de destino no se muestra por seguridad'));
+  assert.ok(!html.includes('programandonosolos'), 'el correo no debe ser visible');
   assert.ok(html.includes('Solo incidencias del sitio'));
   nav(app, 'inicio');
 });

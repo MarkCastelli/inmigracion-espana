@@ -3903,7 +3903,6 @@
 
   function openFeedbackModal() {
     closeFeedbackModal();
-    var email = 'programandonosolos@gmail.com';
     var wrap = document.createElement('div');
     wrap.id = 'feedbackModal';
     wrap.className = 'modal';
@@ -3914,10 +3913,10 @@
       '<p class="eyebrow">Solo incidencias del sitio</p><h2 id="feedbackTitle">Ayúdanos a mejorar</h2>' +
       '<p>Si ves un error, una información equivocada, un enlace caído o algo que no funciona, escríbenos con este formulario.</p>' +
       '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>No es un canal de consultas legales</strong><p>No responderemos dudas sobre el uso de la página, no daremos consejos ni asesoramiento jurídico por este medio. Solo se utiliza para problemas o mal funcionamiento del sitio. Cualquier otro correo será eliminado sin más.</p></div></div>' +
-      '<div class="field"><span class="field__label">Para</span><p style="margin:0;font-weight:650">' + esc(email) + '</p></div>' +
+      '<p class="muted" style="font-size:.8rem">El destinatario está oculto por seguridad. Al pulsar «Abrir correo» se abrirá tu aplicación de correo con la dirección ya puesta.</p>' +
       '<div class="field"><label class="field__label" for="feedbackSubject">Asunto</label><input class="input" id="feedbackSubject" value="Problema o error en Ruta Legal"></div>' +
       '<div class="field"><label class="field__label" for="feedbackBody">Contenido</label><textarea class="textarea" id="feedbackBody" rows="7">Hola:\n\nHe encontrado un problema en Ruta Legal.\n\nPágina: ' + esc(location.href) + '\n\nDescripción del error o enlace caído:\n</textarea></div>' +
-      '<p class="muted" style="font-size:.78rem">Se abrirá tu aplicación de correo. Revisa el texto antes de enviarlo y no incluyas datos personales, de salud, NIE ni documentación.</p>' +
+      '<p class="muted" style="font-size:.78rem">Revisa el texto antes de enviarlo y no incluyas datos personales, de salud, NIE ni documentación.</p>' +
       '<div class="flex" style="justify-content:flex-end;gap:10px"><button class="btn btn--ghost" type="button" data-action="close-feedback">Cancelar</button><button class="btn btn--primary" type="button" data-action="send-feedback">Abrir correo</button></div>' +
       '</div>';
     document.body.appendChild(wrap);
@@ -3935,7 +3934,8 @@
   function sendFeedbackEmail() {
     var subject = ($('#feedbackSubject') || {}).value || 'Problema o error en Ruta Legal';
     var body = ($('#feedbackBody') || {}).value || '';
-    var mailto = 'mailto:programandonosolos@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    var recipient = atob('cHJvZ3JhbWFuZG9ub3NvbG9zQGdtYWlsLmNvbQ==');
+    var mailto = 'mailto:' + recipient + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     closeFeedbackModal();
     window.location.href = mailto;
     setTimeout(function () { go('feedback-gracias'); }, 450);
@@ -3946,9 +3946,9 @@
     host.innerHTML = '<div class="thanks-card"><div class="thanks-icon" aria-hidden="true">' + icons.check(28) + '</div>' +
       '<p class="eyebrow">Gracias por tu ayuda</p><h1>Gracias por ayudarnos a mejorar</h1>' +
       '<p>Se ha abierto tu aplicación de correo con el asunto y el contenido preparados. Revisa el mensaje y envíalo para que podamos corregir el error o el enlace caído.</p>' +
-      '<p class="muted">Si tu aplicación de correo no se ha abierto, escribe directamente a <strong>programandonosolos@gmail.com</strong> con el asunto «Problema o error en Ruta Legal».</p>' +
+      '<p class="muted">Si tu aplicación de correo no se ha abierto, vuelve a intentarlo. La dirección de destino no se muestra por seguridad.</p>' +
       '<div class="callout callout--info" style="text-align:left;margin-top:18px"><div><strong>Solo incidencias del sitio</strong><p>No respondemos dudas sobre el uso de la página ni damos consejos o asesoramiento jurídico por este canal. Cualquier otro correo será eliminado sin más.</p></div></div>' +
-      '<div class="flex" style="justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px"><a class="btn btn--primary" href="#/ayuda">Volver a Ayuda</a><a class="btn btn--soft" href="#/inicio">Ir al inicio</a></div></div>';
+      '<div class="flex" style="justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px"><button class="btn btn--primary" type="button" data-action="feedback">Volver a intentar</button><a class="btn btn--soft" href="#/ayuda">Volver a Ayuda</a></div></div>';
   }
 
   function renderHelp() {
