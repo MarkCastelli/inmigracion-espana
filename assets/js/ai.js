@@ -197,6 +197,83 @@
       '- La app es orientativa y no es asesoramiento jurídico.';
   }
 
+  function formLabel(list, value) {
+    var found = (list || []).filter(function (x) { return x.v === value; })[0];
+    return found ? found.l : (value || 'sin indicar');
+  }
+
+  function formAge(p) {
+    return p && p.age ? p.age + ' años' : 'edad sin indicar';
+  }
+
+  function formPersonLine(p, role, sensitive) {
+    if (!p) return '';
+    var bits = [role];
+    if (sensitive && p.name) bits.push('nombre: ' + p.name);
+    bits.push(formAge(p));
+    if (p.nationality) bits.push('nacionalidad: ' + p.nationality);
+    if (p.residence) bits.push('residencia: ' + formLabel(RL.formulario.residence, p.residence));
+    if (p.works === 'si') {
+      bits.push('trabaja' + (p.netSalary ? ' (ingreso neto ' + p.netSalary + ' €/mes)' : ''));
+      if (p.contractType) bits.push('contrato: ' + p.contractType);
+    }
+    if (p.studies === 'si' || p.educationLevel) bits.push('estudios: ' + (p.career || p.educationLevel || 'sí'));
+    if (sensitive && p.disability === 'si') {
+      bits.push('discapacidad: ' + (p.disabilityDegree || 'sin grado') + (p.dependency === 'si' ? '; dependencia' : ''));
+    }
+    if (sensitive && p.asylumRequested === 'si') {
+      bits.push('asilo: ' + (p.asylumStatus || 'solicitado') + (p.asylumYear ? ' (' + p.asylumYear + ')' : ''));
+    }
+    return '- ' + bits.join(' · ');
+  }
+
+  function buildFormPrompt(F, question, opts) {
+    opts = opts || {};
+    var sensitive = !!opts.sensitive;
+    var q = (question || '').trim() || 'Ayúdame a preparar las preguntas y los documentos para mi consulta con un abogado de extranjería.';
+    var lines = [];
+    if (!F || !F.applicant) {
+      lines.push('No hay un formulario cargado en esta sesión. La persona no ha aportado datos de su caso.');
+    } else {
+      var a = F.applicant;
+      lines.push('DATOS DEL FORMULARIO (sin recomendación legal de la app):');
+      lines.push(formPersonLine(a, 'Titular', sensitive));
+      lines.push('- Situación de la familia: ' + (F.mode === 'family' ? 'grupo familiar' : 'consulta individual'));
+      if (F.mode === 'family') {
+        if (F.spouse) lines.push(formPersonLine(F.spouse, 'Pareja', sensitive));
+        (F.children || []).forEach(function (ch, i) { lines.push(formPersonLine(ch, 'Hijo/a ' + (i + 1), sensitive)); });
+        (F.members || []).forEach(function (m) {
+          if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
+          lines.push(formPersonLine(m.data || {}, (m.relation || 'Otro integrante'), sensitive));
+        });
+      }
+      if (sensitive) {
+        lines.push('- Contacto: ' + (a.phone || 'sin teléfono') + ' · ' + (a.email || 'sin email'));
+      } else {
+        lines.push('- Datos identificativos, contacto, salud, discapacidad y asilo: EXCLUIDOS por elección de privacidad.');
+      }
+      var docs = (a.docs || []).map(function (v) { return formLabel(RL.formulario.docs, v); });
+      if (opts.includeDocs && docs.length) lines.push('- Documentos que declara tener: ' + docs.join(', '));
+      var goals = (a.goals || []).map(function (v) { return formLabel(RL.formulario.goals, v); });
+      if (goals.length) lines.push('- Objetivos que declara: ' + goals.join(', '));
+      if (a.housing) lines.push('- Vivienda: ' + a.housing + (a.housingCost ? ' · ' + a.housingCost + ' €/mes' : ''));
+    }
+    return 'Actúa como asistente para preparar una consulta de extranjería en España. No eres abogado, no representas a ninguna administración y no debes decidir la vía legal de la persona.\n\n' +
+      'FECHA DE REFERENCIA: ' + RL.CONTENT_DATE + '. Si desconoces un cambio posterior, dilo y no inventes normas, tasas ni plazos.\n\n' +
+      (lines.length ? lines.join('\n') + '\n\n' : '') +
+      'PREGUNTA DE LA PERSONA\n' + q + '\n\n' +
+      'LO QUE NECESITO\n' +
+      '1. Resume los hechos en 5-8 líneas, separando datos, fechas y dudas.\n' +
+      '2. Señala los datos que faltan o que deben confirmarse antes de una consulta.\n' +
+      '3. Formula entre 3 y 5 preguntas concretas que la persona debería hacer a un abogado de extranjería.\n' +
+      '4. Explica los términos legales que aparezcan, sin dar por hecho que una vía es la correcta.\n' +
+      '5. Indica qué documentos o trámites conviene reunir, sin prometer resultados.\n' +
+      '6. No inventes artículos, tasas, formularios ni direcciones. Si no estás seguro, dilo.\n' +
+      '7. No sustituyas al abogado ni emitas un veredicto sobre si le concederán algo.\n' +
+      '8. Termina con una lista breve: qué llevar a la consulta, qué preguntar y cuándo buscar ayuda urgente.\n\n' +
+      'No incluyas en tu respuesta datos personales que no sean necesarios. Si el contexto excluye datos sensibles, no los pidas salvo que sean imprescindibles para orientar la consulta.';
+  }
+
   function buildPrompt(plan, question, opts) {
     opts = opts || {};
     var q = (question || '').trim() || 'Explícame mi caso, qué vías tengo y qué debería hacer ahora.';
@@ -283,6 +360,7 @@
 
   RL.ai = {
     buildPrompt: buildPrompt,
+    buildFormPrompt: buildFormPrompt,
     buildFollowUp: buildFollowUp,
     context: context,
     copy: copy,

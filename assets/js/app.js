@@ -29,7 +29,7 @@
     aiQuestion: '',
     aiPrompt: '',
     aiAnswer: '',
-    aiOpts: { includeDocs: true, includeLocation: true, includeNotes: true },
+    aiOpts: { includeDocs: true, sensitive: false },
     aiFollowBase: null,
     aiLastId: null,
     lawyerSearch: '',
@@ -3044,19 +3044,21 @@
   function renderConsulta() {
     var host = $('#view-consulta');
     if (!host) return;
-    var p = RL.profile();
-    var plan = p && p.nationality ? RL.buildPlan(p) : null;
+    var F = RL.state.profile && RL.state.profile.formulario;
+    var hasForm = !!(F && F.applicant && (F.applicant.name || F.applicant.nationality || F.mode));
     var saved = ui.aiLastId ? RL.ai.get(ui.aiLastId) : null;
     var base = ui.aiFollowBase;
 
-    var html = '<div class="plan-head"><div><p class="eyebrow">Consulta abierta</p><h1>Pregunta a una IA cuando la app no llega</h1>' +
-      '<p class="plan-head__sub">Generamos un prompt con tu caso, el diagnóstico y las instrucciones para que una IA gratuita te ayude. Tú revisas el prompt, lo envías y traes la respuesta. No se envía nada automáticamente.</p></div></div>';
+    var html = '<div class="plan-head"><div><p class="eyebrow">Preparar consulta</p><h1>Prepara un prompt para una IA externa</h1>' +
+      '<p class="plan-head__sub">La app no responde tu duda ni elige una vía por ti. Solo prepara un texto con tus datos para que tú lo lleves a una IA, lo revises y decidas qué preguntar a un profesional.</p></div></div>';
 
-    html += '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>Esto no es asesoramiento jurídico</strong>' +
-      '<p>La respuesta la genera una IA externa (DeepSeek, ChatGPT u otra). Puede equivocarse, inventar una norma o no conocer un cambio reciente. Contrasta siempre con la sede oficial o con un abogado de extranjería. El prompt incluye datos de tu perfil: revísalo antes de enviarlo.</p></div></div>';
+    html += '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>La respuesta la da una IA externa</strong>' +
+      '<p>DeepSeek, ChatGPT u otra IA pueden equivocarse, inventar una norma o no conocer un cambio reciente. No es asesoramiento jurídico. Revisa el prompt antes de enviarlo y contrasta la respuesta con la sede oficial o un abogado de extranjería.</p></div></div>';
 
-    if (!plan) {
-      html += '<div class="callout callout--info">' + icons.info(18) + '<div><strong>Sin diagnóstico previo</strong><p>El prompt será genérico. Si haces primero el cuestionario, incluiremos tu perfil, las vías y los motivos.</p><button class="btn btn--soft btn--sm mt-2" data-nav="diagnostico">Hacer diagnóstico</button></div></div>';
+    if (!hasForm) {
+      html += '<div class="callout callout--info">' + icons.info(18) + '<div><strong>Sin formulario cargado</strong><p>El prompt será genérico. Si completas primero el formulario, podremos incluir tus datos, familia, residencia, trabajo, estudios y objetivos. También puedes escribir tu pregunta ahora y generar un prompt básico.</p><button class="btn btn--soft btn--sm mt-2" data-nav="formulario">Completar el formulario</button></div></div>';
+    } else {
+      html += '<div class="callout callout--info">' + icons.check(18) + '<div><strong>Datos del formulario disponibles</strong><p>Usaremos los datos que ya cargaste para preparar el contexto. No se envían a ninguna IA hasta que tú copies el prompt y lo pegues.</p></div></div>';
     }
 
     if (base) {
@@ -3064,21 +3066,25 @@
         '<p>Se incluirá la respuesta anterior como contexto. <button class="btn btn--ghost btn--sm" data-action="ai-clear">Empezar de cero</button></p></div></div>';
     }
 
-    html += '<div class="block"><div class="block__head">' + icons.help(18) + '<h2>1. Tu pregunta</h2></div><div class="block__body">' +
-      '<textarea class="textarea" id="aiQuestion" rows="4" placeholder="Ej. Mi caso no encaja en el arraigo porque no tengo contrato. ¿Qué alternativas reales tengo?">' + esc(ui.aiQuestion) + '</textarea>' +
+    html += '<div class="block"><div class="block__head">' + icons.help(18) + '<h2>1. Tu duda</h2></div><div class="block__body">' +
+      '<textarea class="textarea" id="aiQuestion" rows="4" placeholder="Ej. No sé qué preguntar a un abogado sobre mi caso. ¿Puedes ayudarme a ordenar las preguntas?">' + esc(ui.aiQuestion) + '</textarea>' +
       '<div class="flex" style="gap:6px;margin-top:8px;flex-wrap:wrap">' +
       [
-        ['Mi caso no encaja', 'Mi caso no encaja exactamente en las vías que me recomendáis. ¿Qué alternativas reales tengo?'],
-        ['¿Puedo cambiar de vía?', 'Estoy en una vía y quiero cambiar a otra. ¿Puedo hacerlo sin salir de España y qué riesgos tengo?'],
-        ['Me han denegado', 'Me han denegado una solicitud. ¿Qué puedo hacer, qué plazos tengo y qué documentos necesito para recurrir?'],
-        ['Quiero trabajar', '¿Qué necesito para trabajar legalmente en mi situación y cuál es la vía más rápida?']
+        ['Qué preguntar al abogado', 'Ayúdame a preparar 5 preguntas concretas para mi primera consulta con un abogado de extranjería.'],
+        ['Qué documentos llevar', '¿Qué documentos y fechas debería reunir antes de la consulta?'],
+        ['Cómo explicar mi caso', 'Ayúdame a resumir mi situación de forma clara y ordenada para un abogado.'],
+        ['No entiendo un trámite', 'No entiendo un trámite de extranjería. Explícame qué significa y qué debería preguntar.']
       ].map(function (x) {
         return '<button class="btn btn--ghost btn--sm" data-action="ai-suggest" data-question="' + esc(x[1]) + '">' + esc(x[0]) + '</button>';
       }).join('') + '</div>' +
+      '<div style="margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2,#f6fafb)">' +
+      '<strong>Qué puedes incluir en el prompt</strong>' +
+      '<p style="margin:6px 0;font-size:.85rem;color:var(--ink-2)"><strong>Sí:</strong> país, edad, años o meses en España, situación administrativa, composición familiar (relación y edad), trabajo, estudios, documentos que tienes, objetivos e ingresos o gastos aproximados.</p>' +
+      '<p style="margin:0;font-size:.85rem;color:var(--ink-2)"><strong>No incluyas:</strong> nombre completo, teléfono, email, dirección exacta, NIE, pasaporte, datos de salud, discapacidad, asilo, nombres de hijos u otros datos de terceros. Tampoco números de expediente ni documentos.</p>' +
+      '</div>' +
       '<div class="flex" style="gap:14px;margin-top:12px;flex-wrap:wrap;font-size:.84rem">' +
-      '<label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="aiIncDocs"' + (ui.aiOpts.includeDocs ? ' checked' : '') + '> Incluir documentos</label>' +
-      '<label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="aiIncLoc"' + (ui.aiOpts.includeLocation ? ' checked' : '') + '> Incluir provincia/municipio</label>' +
-      '<label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="aiIncNotes"' + (ui.aiOpts.includeNotes ? ' checked' : '') + '> Incluir notas</label>' +
+      '<label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="aiIncDocs"' + (ui.aiOpts.includeDocs ? ' checked' : '') + '> Incluir lista de documentos (sin números)</label>' +
+      '<label style="display:flex;gap:7px;align-items:flex-start;max-width:520px"><input type="checkbox" id="aiSensitive"' + (ui.aiOpts.sensitive ? ' checked' : '') + '> Incluir datos sensibles: nombre, contacto, salud, discapacidad o asilo. Solo si aceptas compartirlos con la IA externa.</label>' +
       '</div>' +
       '<button class="btn btn--primary mt-3" data-action="ai-generate">' + icons.route(16) + ' Generar prompt</button>' +
       '</div></div>';
@@ -3119,7 +3125,7 @@
         }).join('') + '</div></div>';
     }
 
-    html += '<div class="callout callout--info" style="margin-top:18px">' + icons.shield(18) + '<div><strong>Privacidad</strong><p>El prompt se genera en tu dispositivo. Solo se envía a la IA cuando tú pulsas enviar en su web. Si no quieres compartir documentos o datos de salud, desmarca las casillas antes de generarlo. La respuesta se guarda solo si pulsas «Guardar respuesta».</p></div></div>';
+    html += '<div class="callout callout--info" style="margin-top:18px">' + icons.shield(18) + '<div><strong>Privacidad</strong><p>El prompt se genera en tu dispositivo y no se envía solo. Al abrirlo en DeepSeek o ChatGPT, el texto se compartirá con ese servicio externo. Revisa el prompt y no incluyas nombres, contactos, números de documento, salud, discapacidad, asilo ni datos de terceros salvo que marques la casilla de datos sensibles y aceptes el riesgo. La respuesta se guarda solo si pulsas «Guardar respuesta».</p></div></div>';
 
     host.innerHTML = html;
   }
@@ -3136,33 +3142,29 @@
 
   function generateAIPrompt() {
     var q = $('#aiQuestion') ? $('#aiQuestion').value.trim() : '';
-    if (!q) { toast('Escribe primero tu pregunta.'); return; }
+    if (!q) { toast('Escribe primero tu duda.'); return; }
     var opts = {
       includeDocs: $('#aiIncDocs') ? $('#aiIncDocs').checked : true,
-      includeLocation: $('#aiIncLoc') ? $('#aiIncLoc').checked : true,
-      includeNotes: $('#aiIncNotes') ? $('#aiIncNotes').checked : true
+      sensitive: $('#aiSensitive') ? $('#aiSensitive').checked : false
     };
-    var p = RL.profile();
-    var plan = p && p.nationality ? RL.buildPlan(p) : null;
+    var F = RL.state.profile && RL.state.profile.formulario;
     ui.aiQuestion = q;
     ui.aiOpts = opts;
-    ui.aiPrompt = ui.aiFollowBase ? RL.ai.buildFollowUp(ui.aiFollowBase, q) : RL.ai.buildPrompt(plan, q, opts);
+    ui.aiPrompt = ui.aiFollowBase ? RL.ai.buildFollowUp(ui.aiFollowBase, q) : RL.ai.buildFormPrompt(F, q, opts);
     ui.aiAnswer = '';
     ui.aiLastId = null;
     renderConsulta();
-    toast('Prompt generado. Revísalo y ábrelo en DeepSeek.');
+    toast('Prompt generado. Revísalo antes de abrirlo en la IA.');
   }
 
   function saveAIAnswer() {
     var a = $('#aiAnswer') ? $('#aiAnswer').value.trim() : '';
     if (!a) { toast('Pega primero la respuesta de la IA.'); return; }
-    var p = RL.profile();
-    var plan = p && p.nationality ? RL.buildPlan(p) : null;
     var c = RL.ai.save({
       question: ui.aiQuestion,
       prompt: ui.aiPrompt,
       answer: a,
-      context: RL.ai.context(plan, ui.aiOpts)
+      context: (ui.aiPrompt || '').slice(0, 4000)
     });
     ui.aiLastId = c.id;
     ui.aiAnswer = a;

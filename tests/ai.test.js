@@ -57,3 +57,25 @@ test('las consultas se guardan, se leen y se eliminan', () => {
   RL.ai.remove(c.id);
   assert.strictEqual(RL.ai.list().length, 0);
 });
+
+
+test('el prompt del formulario excluye datos sensibles por defecto', () => {
+  const F = RL.formulario.blank();
+  F.mode = 'family';
+  F.applicant.name = 'Ana Secreta';
+  F.applicant.age = '34';
+  F.applicant.nationality = 'Cuba';
+  F.applicant.residence = 'irregular';
+  F.applicant.phone = '600000000';
+  F.applicant.disability = 'si';
+  F.applicant.disabilityDegree = '65_mas';
+  const normal = RL.ai.buildFormPrompt(F, '¿Qué preguntas debo llevar al abogado?', { sensitive: false });
+  assert.ok(normal.includes('DATOS DEL FORMULARIO'));
+  assert.ok(normal.includes('34 años'));
+  assert.ok(!normal.includes('Ana Secreta'));
+  assert.ok(!normal.includes('600000000'));
+  assert.ok(!normal.includes('65_mas'));
+  const sensitive = RL.ai.buildFormPrompt(F, '¿Qué preguntas debo llevar al abogado?', { sensitive: true });
+  assert.ok(sensitive.includes('Ana Secreta'));
+  assert.ok(sensitive.includes('65_mas'));
+});

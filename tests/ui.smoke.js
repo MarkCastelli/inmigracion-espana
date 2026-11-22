@@ -315,10 +315,10 @@ t('el directorio adapta concello y salud a la provincia', () => {
 t('la consulta IA renderiza el generador de prompt', () => {
   nav(app, 'consulta');
   const html = app.document.querySelector('#view-consulta').innerHTML;
-  assert.ok(html.includes('Pregunta a una IA'));
+  assert.ok(html.includes('Prepara un prompt'));
   assert.ok(html.includes('Generar prompt'));
-  assert.ok(html.includes('DeepSeek'));
-  assert.ok(html.includes('No es asesoramiento') || html.includes('no es asesoramiento'));
+  assert.ok(html.includes('datos sensibles'));
+  assert.ok(html.includes('No incluyas'));
 });
 
 t('la consulta IA muestra el prompt y los botones de IA', () => {

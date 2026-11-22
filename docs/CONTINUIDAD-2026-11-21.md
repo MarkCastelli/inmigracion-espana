@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **221 pruebas pasando**.
+- **222 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -145,6 +145,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 115. **Portada honesta**: el inicio ya no promete diagnóstico ni “vías que encajan”; explica que el formulario genera un informe descargable y que no evaluamos el caso ni elegimos una vía. CTA «Crear mi informe», cómo funciona y bloque PDF reescritos; i18n y SEO actualizados.
 116. **Informe de ejemplo**: el botón «Ver un informe de ejemplo» carga un perfil ficticio en el formulario nuevo (`demoForm`), llega al paso 11 y renderiza el informe real sin errores; probado para que no aparezcan `undefined` ni objetos.
 117. **Feedback con gracias**: botón en Ayuda abre una ventana con destinatario, asunto y contenido; solo para errores del sitio, no consultas legales. Al abrir el correo redirige a `#/feedback-gracias` con aviso de enviar el mensaje, email alternativo y enlaces de vuelta.
+118. **Prompt IA desde el formulario**: la consulta ya no usa el diagnóstico antiguo ni emite recomendaciones. Genera un prompt con los datos del formulario; por defecto excluye nombre, contacto, salud, discapacidad y asilo, y solo los incluye si se marca la casilla de datos sensibles. Explica qué se puede y no se puede incluir.
 
 ## Comandos
 
