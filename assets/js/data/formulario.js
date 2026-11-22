@@ -32,6 +32,7 @@
     { v: 'roja', l: 'Tarjeta roja' },
     { v: 'seguridad_social', l: 'Tarjeta de la Seguridad Social' },
     { v: 'debito', l: 'Tarjeta de débito' },
+    { v: 'permiso_conducir', l: 'Permiso de conducir' },
     { v: 'digital', l: 'Certificado digital' },
     { v: 'clave', l: 'Cl@ve' },
     { v: 'clave360', l: 'Cl@ve 360' }
@@ -73,6 +74,7 @@
     { v: 'asilo', l: 'Asilo o protección internacional' },
     { v: 'arraigo', l: 'Arraigo' },
     { v: 'renovar', l: 'Renovar un permiso' },
+    { v: 'permiso_conducir', l: 'Obtener o canjear el permiso de conducir' },
     { v: 'abogado', l: 'Asesoría legal' },
     { v: 'otra', l: 'Otra' }
   ];
@@ -80,7 +82,7 @@
   function person() {
     return {
       name: '', age: '', nationality: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
-      disability: '', residence: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
+      disability: '', residence: '', drivingLicense: '', drivingLicenseCountry: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
       jobType: '', contractType: '', contractEnd: '', studies: '', career: '',
       paysHousing: '',
       disabilityRecognized: '', disabilityDegree: '', disabilityExpiryStatus: '', disabilityExpiry: '', dependency: '',

@@ -911,4 +911,19 @@ t('el titular que pidió asilo ve los detalles igual que la pareja', () => {
   nav(app, 'inicio');
 });
 
+t('pregunta por el permiso de conducir y su país', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.state.profile.formulario.step = 1;
+  nav(app, 'formulario');
+  let html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('¿Tienes permiso de conducir?'));
+  RL.state.profile.formulario.applicant.drivingLicense = 'si';
+  RL.ui.render();
+  html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('¿De qué país es el permiso?'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

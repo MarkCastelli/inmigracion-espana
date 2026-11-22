@@ -274,6 +274,8 @@
       fRadio(prefix + '.bringFamily', '¿Quieres traerlos a España?', fget(obj, 'bringFamily'), F.yesNo) +
       fRadio(prefix + '.disability', '¿Tienes discapacidad?', fget(obj, 'disability'), F.yesNo) +
       fSelect(prefix + '.residence', 'Situación actual de residencia', fget(obj, 'residence'), F.residence) +
+      fRadio(prefix + '.drivingLicense', '¿Tienes permiso de conducir?', fget(obj, 'drivingLicense'), F.yesNo) +
+      (fget(obj, 'drivingLicense') === 'si' ? fInput(prefix + '.drivingLicenseCountry', '¿De qué país es el permiso?', fget(obj, 'drivingLicenseCountry'), 'text', 'España, Colombia, Marruecos…') : '') +
       fRadio(prefix + '.works', '¿Trabajas?', fget(obj, 'works'), F.yesNo) +
       '</div>';
     if (fget(obj, 'works') === 'si') {
@@ -750,6 +752,8 @@
       ['Nombre', p.name], ['Edad', p.age], ['Nacionalidad', p.nationality],
       ['Teléfono', p.phone], ['Email', p.email], ['Entrada en España', p.entryDate],
       ['Residencia', label(RL.formulario.residence, p.residence)],
+      ['Permiso de conducir', p.drivingLicense],
+      ['País del permiso', p.drivingLicenseCountry],
       ['Documentos', docs], ['Trabaja', p.works], ['Empleo legal', p.legalJob],
       ['Horas', p.hours], ['Sueldo neto', p.netSalary ? p.netSalary + ' €' : ''],
       ['Tipo de empleo', p.jobType], ['Tipo de contrato', p.contractType],
