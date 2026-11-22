@@ -184,10 +184,10 @@
       title: 'Diversidades Acolle',
       what: ['Acogida y orientación', 'Asesoría jurídica', 'Formación y empleo', 'Acompañamiento social'],
       where: 'Vigo (Pontevedra)',
-      url: 'https://diversidades.org/',
+      url: 'http://diversidades.org/',
       provinces: ['Pontevedra'],
       municipalities: ['Vigo'],
-      note: 'Entidad de Vigo que trabaja con personas migrantes y solicitantes de asilo. Confirma horario, cita y cobertura antes de desplazarte; no promete resultados ni papeles.'
+      note: 'Entidad de Vigo que trabaja con personas migrantes y solicitantes de asilo. Su web funciona por HTTP; si el navegador no la abre, llama al 886 117 990. Confirma horario y cita.'
     },
     {
       id: 'cogami_vigo', scope: 'local', cat: 'ayuda', icon: 'shield',
@@ -359,6 +359,10 @@
       what: ['Padrón y certificado de empadronamiento', 'Servicios sociales', 'Policía local', 'Escuela y actividades'],
       where: function (c) { return c.municipality ? c.municipality + ' (' + c.province + ')' : 'Tu municipio'; },
       urlKey: 'portal',
+      urlFor: function (c) {
+        if (c && c.municipality === 'Vigo') return 'https://hoxe.vigo.org/';
+        return '';
+      },
       note: 'El padrón es gratuito y es la prueba principal de permanencia. Pide el certificado histórico.'
     },
     {
@@ -382,6 +386,10 @@
       what: ['Ayuda de emergencia', 'Informe de integración', 'Familia e infancia', 'Vivienda'],
       where: function (c) { return c.localLabel + ' de ' + (c.municipality || 'tu municipio'); },
       urlKey: 'social',
+      urlFor: function (c) {
+        if (c && c.municipality === 'Vigo') return 'https://hoxe.vigo.org/movemonos/atencionsocial.php?lang=cas';
+        return '';
+      },
       note: 'Pide cita en el ayuntamiento/concello. El informe de integración se emite aquí o en la comunidad.'
     },
     {
@@ -389,7 +397,11 @@
       title: 'Policía Local',
       what: ['Denuncias de convivencia', 'Tráfico', 'Auxilio inmediato'],
       where: function (c) { return c.municipality || 'Tu municipio'; },
-      urlKey: 'portal'
+      urlKey: 'portal',
+      urlFor: function (c) {
+        if (c && c.municipality === 'Vigo') return 'https://hoxe.vigo.org/';
+        return '';
+      }
     }
   ];
 
@@ -444,15 +456,26 @@
       note: 'Puede orientar sobre salud y acceso al sistema sanitario; no tramita residencia.'
     },
     {
-      title: 'Movimiento por la Paz',
-      what: ['Acogida', 'Orientación social', 'Empleo'],
-      where: 'Delegaciones autonómicas',
-      url: 'https://www.movimientoporlapaz.org/',
-      note: 'Programas de acogida e inclusión; cobertura según delegación.'
+      title: 'Provivienda',
+      what: ['Vivienda', 'Alojamiento temporal', 'Acompañamiento social'],
+      where: 'Varias provincias',
+      url: 'https://provivienda.org/',
+      note: 'Programas de vivienda y emergencia; cobertura según provincia.'
+    },
+    {
+      title: 'Fundación Secretariado Gitano',
+      what: ['Empleo', 'Educación', 'Igualdad'],
+      where: 'Varias provincias',
+      url: 'https://www.gitanos.org/',
+      note: 'Trabaja con población gitana y personas en riesgo de exclusión; confirma sede provincial.'
     }
   ];
 
-  function resolveUrl(entry, region) {
+  function resolveUrl(entry, region, ctx) {
+    if (entry.urlFor && ctx) {
+      var custom = entry.urlFor(ctx);
+      if (custom) return custom;
+    }
     if (entry.url) return entry.url;
     if (entry.urlKey && region && region[entry.urlKey]) return region[entry.urlKey];
     return region ? region.portal : 'https://www.inclusion.gob.es/';

@@ -21,9 +21,10 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-URL_RE = re.compile(r"https://[^\s\"'<>)\]]+")
+URL_RE = re.compile(r"https?://[^\s\"'<>)\]]+")
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
 CTX = ssl._create_unverified_context()
+OWN_HOSTS = ("markcastelli.github.io", "127.0.0.1", "localhost")
 
 
 def files(include_docs: bool):
@@ -46,7 +47,7 @@ def urls(include_docs: bool):
             continue
         for raw in URL_RE.findall(text):
             url = raw.rstrip(".,;:`")
-            if url.startswith(("https://fonts.", "https://www.w3.org/")):
+            if url.startswith(("https://fonts.", "https://www.w3.org/", "http://localhost", "https://localhost")):
                 continue
             found.add(url)
     return sorted(found)
@@ -66,6 +67,8 @@ def check(url: str):
 def is_error_page(result):
     url, status, final, err = result
     low = (final or "").lower()
+    if any(host in low for host in OWN_HOSTS):
+        return True
     return "/error" in low or "error.htm" in low or "error.html" in low
 
 

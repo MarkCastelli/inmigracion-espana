@@ -1935,7 +1935,7 @@
   function dirCard(e, ctx) {
     var title = typeof e.title === 'function' ? e.title(ctx) : e.title;
     var where = typeof e.where === 'function' ? e.where(ctx) : e.where;
-    var url = RL.directory.resolveUrl(e, ctx.region);
+    var url = RL.directory.resolveUrl(e, ctx.region, ctx);
     var iconFn = icons[e.icon] || icons.doc;
     var cat = (RL.directory.categories.filter(function (c) { return c.id === e.cat; })[0] || {}).label || e.cat;
     return '<article class="card dir-card">' +

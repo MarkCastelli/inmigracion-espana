@@ -78,6 +78,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 48. **No lucrativa y pensionistas**: fichas de residencia no lucrativa y emprendedor; FAQ con umbral 2026 (2.400 € + 600 €/familiar), pensión de 1.400 €, pareja que trabaja y alternativas.
 49. **Entidades de Vigo/Galicia**: COGAMI, Cáritas Tui-Vigo, APAMP, FEGAMP; filtro por provincia y municipio; bloque fijo «Entidades de tu zona» en el directorio para que no lo oculte el filtro de categoría.
 50. **Cobertura nacional**: bloque «Redes con sede local o provincial» (Cruz Roja, Cáritas, CEAR, ACCEM, Red Acoge, Cepaim, Médicos del Mundo, Movimiento por la Paz) para cualquier municipio; no se inventan sedes locales.
+51. **Auditoría de enlaces**: 183 URLs estáticas y 130 resueltas por provincia/municipio; 0 errores 404. Diversidades pasa a HTTP (su web no tiene HTTPS), se corrigen Concello/Servicios Sociales de Vigo y se retira Movimiento por la Paz (530).
 
 ## Comandos
 

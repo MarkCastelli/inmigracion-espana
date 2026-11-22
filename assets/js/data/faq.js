@@ -627,7 +627,7 @@
         ['CEAR', 'https://www.cear.es/'],
         ['ACCEM', 'https://www.accem.es/'],
         ['Red Acoge', 'https://www.redacoge.org/'],
-        ['Diversidades Acolle', 'https://diversidades.org/']
+        ['Diversidades Acolle', 'http://diversidades.org/']
       ]
     },
     {
