@@ -20,7 +20,7 @@ test('hay preguntas suficientes, únicas y con detalle', () => {
 
 test('cubre patera vs turista, asilo, arraigo, estudios y trabajo', () => {
   const ids = RL.faq.items.map(f => f.id);
-  for (const id of ['patera_vs_turista', 'patera_papeles', 'asilo_arraigo', 'asilo_denegado', 'estudios_30h', 'estudios_mas30', 'trabajo_ilegal_policia', 'inspeccion_trabajo', 'denuncia_espanol', 'ayuda_ayuntamiento', 'trabajadora_social', 'ong_encontrar', 'muebles_gafas', 'ayuda_sin_papeles', 'fraude_horas', 'denuncia_fraude', 'servicios_sociales_acceso', 'trabajadora_social_niega', 'ong_por_lugar', 'concello_xunta_gobierno', 'ong_niega', 'discapacidad_dependencia_incapacidad', 'ayuda_23_discapacidad', 'transporte_descuentos', 'ccse_dele', 'nacionalidad_plazos_paises', 'declaracion_renta', 'tie_renovacion', 'tie_foto_recogida', 'reagrupacion_fuera', 'latino_estudiar_trabajar', 'dgt_canje_permisos']) {
+  for (const id of ['patera_vs_turista', 'patera_papeles', 'asilo_arraigo', 'asilo_denegado', 'estudios_30h', 'estudios_mas30', 'trabajo_ilegal_policia', 'inspeccion_trabajo', 'denuncia_espanol', 'ayuda_ayuntamiento', 'trabajadora_social', 'ong_encontrar', 'muebles_gafas', 'ayuda_sin_papeles', 'fraude_horas', 'denuncia_fraude', 'servicios_sociales_acceso', 'trabajadora_social_niega', 'ong_por_lugar', 'concello_xunta_gobierno', 'ong_niega', 'discapacidad_dependencia_incapacidad', 'ayuda_23_discapacidad', 'transporte_descuentos', 'ccse_dele', 'nacionalidad_plazos_paises', 'declaracion_renta', 'tie_renovacion', 'tie_foto_recogida', 'reagrupacion_fuera', 'latino_estudiar_trabajar', 'dgt_canje_permisos', 'padron_renovacion']) {
     assert.ok(ids.includes(id), 'falta ' + id);
   }
   const patera = RL.faq.items.find(f => f.id === 'patera_vs_turista');

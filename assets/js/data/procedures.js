@@ -405,7 +405,7 @@
         'Si te niegan el empadronamiento, pide la denegación por escrito y acude a servicios sociales o a una entidad de apoyo.'
       ],
       fee: 'Gratuito',
-      note: 'El padrón no es un permiso de residencia, pero sin él no puedes acreditar permanencia ni acceder a sanidad, escuela o ayudas. No todos los ayuntamientos piden los mismos documentos: confirma en el tuyo.',
+      note: 'El padrón no es un permiso de residencia, pero sin él no puedes acreditar permanencia ni acceder a sanidad, escuela o ayudas. Los extranjeros no comunitarios sin residencia permanente deben renovar la inscripción cada 2 años; si no, el ayuntamiento puede dar de baja. La UE/EEE y los residentes permanentes no tienen esa renovación obligatoria, aunque el ayuntamiento puede comprobar el domicilio. No todos los ayuntamientos piden los mismos documentos: confirma en el tuyo.',
       routeIds: ['arraigo_social', 'arraigo_sociolaboral', 'arraigo_socioformativo', 'arraigo_segunda_oportunidad', 'familiar_espanol', 'reagrupacion']
     },
     {

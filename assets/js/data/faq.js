@@ -551,6 +551,23 @@
       ]
     },
     {
+      id: 'padron_renovacion', cat: 'documentos',
+      q: '¿Cada cuánto hay que renovar el empadronamiento? ¿Es igual en toda España?',
+      short: 'Los extranjeros no comunitarios sin autorización de residencia permanente deben renovar la inscripción cada 2 años. Los ciudadanos de la UE/EEE y quienes tienen residencia permanente no están obligados a esa renovación, aunque el ayuntamiento puede comprobar el domicilio. Es una norma estatal; el procedimiento y los avisos cambian por municipio.',
+      detail: [
+        'Base: artículo 16.1 de la Ley 7/1985, de Bases del Régimen Local. La renovación cada dos años se aplica a los extranjeros no comunitarios sin autorización de residencia permanente (ENCSARP).',
+        'Si no renuevas, el ayuntamiento puede declarar la caducidad y darte de baja en el padrón. Eso puede afectar a sanidad, escuela, ayudas y a la prueba de permanencia para un arraigo.',
+        'Ciudadanos de la UE/EEE y Suiza: no tienen esa renovación obligatoria cada dos años. Los residentes permanentes o de larga duración tampoco deberían estar sujetos a ella; confirma tu caso en el ayuntamiento.',
+        'Es una regla estatal, así que el criterio de fondo es el mismo en toda España. Lo que cambia es el procedimiento municipal: algunos envían aviso, otros lo comprueban de oficio y otros piden cita.',
+        'Cómo renovar: comprueba tu certificado de padrón, acude al ayuntamiento con pasaporte y TIE/residencia y confirma si la renovación es automática o requiere solicitud.',
+        'Si te han dado de baja, pide el alta de nuevo y explica tu situación; no esperes a necesitar el certificado para un trámite.'
+      ],
+      links: [
+        ['Ley 7/1985 · Régimen Local', 'https://www.boe.es/buscar/act.php?id=BOE-A-1985-5392'],
+        ['INE · renovación padronal de extranjeros', 'https://www.ine.es/prensa/np389.pdf']
+      ]
+    },
+    {
       id: 'latino_estudiar_trabajar', cat: 'entrada',
       q: 'Soy latinoamericano: ¿qué opciones tengo para venir a España a estudiar, trabajar o ambas?',
       short: 'Depende de la vía: visado de estudios (puedes trabajar hasta 30 h/semana compatible), visado de trabajo con oferta o contrato, o figuras especiales (altamente cualificado, nómada digital, emprendedor). No hay un visado para venir a buscar trabajo sin más, y la nacionalidad a 2 años no es un visado de entrada.',

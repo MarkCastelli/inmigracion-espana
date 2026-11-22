@@ -63,6 +63,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 33. **Informe para abogado**: el plan ya no emite vías recomendadas; genera hechos, familia, documentos, fechas y dudas, en pantalla y PDF. Los catálogos y guías quedan como información general.
 34. **Razones humanitarias**: añadida vía propia (art. 128 RD 1155/2024), pregunta de supuesto concreto y ficha de trámite; no se concede por pobreza ni es automática.
 35. **Empadronamiento**: ficha visible aunque no haya provincia; aviso destacado, requisitos para compartir vivienda, certificado histórico y qué hacer si lo deniegan.
+36. **Renovación del padrón**: aviso de renovación cada 2 años para extranjeros no comunitarios sin residencia permanente; UE/EEE y permanentes no obligados. FAQ y ficha actualizadas.
 
 ## Comandos
 
