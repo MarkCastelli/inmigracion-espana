@@ -83,7 +83,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 53. **Canales de YouTube**: Expediente Extranjero y Prixline en Ayuda, con aviso de que son canales independientes y no asesoramiento oficial.
 54. **Idiomas (fase 1)**: selector en cabecera para español, árabe RTL, francés, inglés y rumano; navegación, portada y avisos traducidos. El contenido legal detallado sigue en español y se avisa en la propia interfaz.
 55. **Política de traducción**: no se traduce la prosa larga que el navegador puede traducir; se priorizan navegación, formularios, botones, errores, avisos y RTL. Añadida guía de traducción del navegador con aviso de privacidad.
-56. **Antes de emigrar**: nueva sección en el menú con testimonio corregido, agrupado por trabajo, vivienda, transporte, burocracia, educación, sociedad y emprendimiento; incluye aviso de opinión personal y corrige la afirmación sobre el paro.
+56. **Mi experiencia**: nueva sección en el menú con testimonio corregido, agrupado por trabajo, vivienda, transporte, burocracia, educación, sociedad y emprendimiento; incluye aviso de opinión personal y corrige la afirmación sobre el paro.
 57. **Registros online**: Online nombra la sede autonómica real (Xunta, Junta, Generalitat…), añade registro electrónico autonómico y Registro General del Estado; distingue registro civil, autonómico y estatal.
 
 ## Comandos

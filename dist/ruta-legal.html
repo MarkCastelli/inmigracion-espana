@@ -788,7 +788,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
     <nav class="nav" aria-label="Secciones">
       <button class="nav__link" data-nav="inicio">Inicio</button>
-      <a class="nav__link" href="#/antes" data-nav="antes">Antes de emigrar</a>
+      <a class="nav__link" href="#/antes" data-nav="antes">Mi experiencia</a>
       <button class="nav__link" data-nav="plan">Mi plan</button>
       <button class="nav__link" data-nav="vias">Vías</button>
       <button class="nav__link" data-nav="tramites">Trámites</button>
@@ -963,7 +963,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
   </section>
 
   <!-- ══════════ ANTES DE EMIGRAR ══════════ -->
-  <section class="view" id="view-antes" hidden aria-label="Antes de emigrar"></section>
+  <section class="view" id="view-antes" hidden aria-label="Mi experiencia"></section>
 
   <!-- ══════════ ASISTENTE ══════════ -->
   <section class="view" id="view-diagnostico" hidden aria-labelledby="t-wizard">
@@ -1347,7 +1347,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       free: 'Gratis',
       private: 'Privado',
       nav: {
-        inicio: 'Inicio', antes: 'Antes de emigrar', plan: 'Mi plan', vias: 'Vías', tramites: 'Trámites',
+        inicio: 'Inicio', antes: 'Mi experiencia', plan: 'Mi plan', vias: 'Vías', tramites: 'Trámites',
         online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos',
         directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos',
         formularios: 'Formularios', ayuda: 'Ayuda'
@@ -1369,7 +1369,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       free: 'مجاني',
       private: 'خاص',
       nav: {
-        inicio: 'الرئيسية', antes: 'قبل الهجرة', plan: 'خطتي', vias: 'المسارات', tramites: 'الإجراءات',
+        inicio: 'الرئيسية', antes: 'تجربتي', plan: 'خطتي', vias: 'المسارات', tramites: 'الإجراءات',
         online: 'عبر الإنترنت', preguntas: 'الأسئلة', derechos: 'الحقوق',
         directorio: 'أين أذهب', consulta: 'استشارة الذكاء الاصطناعي', docs: 'الوثائق',
         formularios: 'النماذج', ayuda: 'المساعدة'
@@ -1391,7 +1391,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       free: 'Gratuit',
       private: 'Privé',
       nav: {
-        inicio: 'Accueil', antes: "Avant d'émigrer", plan: 'Mon plan', vias: 'Voies', tramites: 'Démarches',
+        inicio: 'Accueil', antes: 'Mon expérience', plan: 'Mon plan', vias: 'Voies', tramites: 'Démarches',
         online: 'En ligne', preguntas: 'Questions', derechos: 'Droits',
         directorio: 'Où aller', consulta: 'Consultation IA', docs: 'Documents',
         formularios: 'Formulaires', ayuda: 'Aide'
@@ -1413,7 +1413,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       free: 'Free',
       private: 'Private',
       nav: {
-        inicio: 'Home', antes: 'Before emigrating', plan: 'My plan', vias: 'Routes', tramites: 'Procedures',
+        inicio: 'Home', antes: 'My experience', plan: 'My plan', vias: 'Routes', tramites: 'Procedures',
         online: 'Online', preguntas: 'Questions', derechos: 'Rights',
         directorio: 'Where to go', consulta: 'AI consultation', docs: 'Documents',
         formularios: 'Forms', ayuda: 'Help'
@@ -1435,7 +1435,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       free: 'Gratuit',
       private: 'Privat',
       nav: {
-        inicio: 'Acasă', antes: 'Înainte de a emigra', plan: 'Planul meu', vias: 'Căi', tramites: 'Proceduri',
+        inicio: 'Acasă', antes: 'Experiența mea', plan: 'Planul meu', vias: 'Căi', tramites: 'Proceduri',
         online: 'Online', preguntas: 'Întrebări', derechos: 'Drepturi',
         directorio: 'Unde să mergi', consulta: 'Consultație IA', docs: 'Documente',
         formularios: 'Formulare', ayuda: 'Ajutor'
@@ -1603,7 +1603,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
   RL.antes = {
     eyebrow: 'Experiencia personal · España',
-    title: 'Antes de emigrar',
+    title: 'Mi experiencia',
     intro: 'Esto no es un folleto turístico ni una promesa. Es el testimonio de un inmigrante que vive en Galicia, corregido y ordenado para que te sirva antes de hacer las maletas. España puede ser una buena oportunidad, pero no todo es color de rosa. Tu experiencia dependerá de tu situación, tu trabajo, tu barrio y tus papeles.',
     warning: 'Es una opinión personal, no un estudio estadístico ni asesoramiento legal. No generalices por nacionalidad ni tomes una decisión solo por este texto.',
     goodTitle: 'Lo que sí puede mejorar',
@@ -14114,7 +14114,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
     if (action === 'generate-form') { generateForm(btn); return; }
     if (action === 'listen-view') {
       if (!RL.speech || !RL.speech.supported) { toast('Tu navegador no permite lectura en voz alta.'); return; }
-      var titles = { inicio: 'Inicio', antes: 'Antes de emigrar', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Formularios', ayuda: 'Ayuda' };
+      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Formularios', ayuda: 'Ayuda' };
       if (ui.view === 'plan' && RL.hasSavedProfile()) {
         RL.speech.speak(RL.speech.buildPlanScript(RL.buildPlan(RL.profile())), 'Tu plan');
       } else {

@@ -9,7 +9,7 @@
 
   RL.antes = {
     eyebrow: 'Experiencia personal · España',
-    title: 'Antes de emigrar',
+    title: 'Mi experiencia',
     intro: 'Esto no es un folleto turístico ni una promesa. Es el testimonio de un inmigrante que vive en Galicia, corregido y ordenado para que te sirva antes de hacer las maletas. España puede ser una buena oportunidad, pero no todo es color de rosa. Tu experiencia dependerá de tu situación, tu trabajo, tu barrio y tus papeles.',
     warning: 'Es una opinión personal, no un estudio estadístico ni asesoramiento legal. No generalices por nacionalidad ni tomes una decisión solo por este texto.',
     goodTitle: 'Lo que sí puede mejorar',

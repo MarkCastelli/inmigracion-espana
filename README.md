@@ -110,7 +110,7 @@ No introduzcas datos que no quieras guardar en el navegador. Si usas un ordenado
 │       ├── pdf.js             # PDF e informe de caso
 │       ├── speech.js          # Lectura por voz
 │       ├── i18n.js            # Selector de idioma de la interfaz
-│       ├── antes.js           # Guía "Antes de emigrar"
+│       ├── antes.js           # Sección "Mi experiencia"
 │       ├── app.js             # Interfaz y navegación
 │       └── data/              # Preguntas, vías, trámites, FAQ, ayudas…
 ├── docs/

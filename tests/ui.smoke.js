@@ -565,10 +565,10 @@ t('la interfaz cambia de idioma y el árabe activa RTL', () => {
   assert.strictEqual(RL.i18n.t('nav.inicio'), 'Inicio');
 });
 
-t('la sección Antes de emigrar carga el testimonio corregido', () => {
+t('la sección Mi experiencia carga el testimonio corregido', () => {
   nav(app, 'antes');
   const html = app.document.querySelector('#view-antes').innerHTML;
-  assert.ok(html.includes('Antes de emigrar'));
+  assert.ok(html.includes('Mi experiencia'));
   assert.ok(html.includes('Lo que sí puede mejorar'));
   assert.ok(html.includes('Trabajo y salario'));
   assert.ok(html.includes('prestación por desempleo no es automática'));
