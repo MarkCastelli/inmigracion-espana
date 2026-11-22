@@ -20,7 +20,7 @@ test('hay preguntas suficientes, únicas y con detalle', () => {
 
 test('cubre patera vs turista, asilo, arraigo, estudios y trabajo', () => {
   const ids = RL.faq.items.map(f => f.id);
-  for (const id of ['patera_vs_turista', 'patera_papeles', 'asilo_arraigo', 'asilo_denegado', 'estudios_30h', 'estudios_mas30', 'trabajo_ilegal_policia', 'inspeccion_trabajo', 'denuncia_espanol', 'ayuda_ayuntamiento', 'trabajadora_social', 'ong_encontrar', 'muebles_gafas', 'ayuda_sin_papeles', 'fraude_horas', 'denuncia_fraude', 'servicios_sociales_acceso', 'trabajadora_social_niega', 'ong_por_lugar', 'concello_xunta_gobierno', 'ong_niega', 'discapacidad_dependencia_incapacidad', 'ayuda_23_discapacidad', 'transporte_descuentos', 'ccse_dele', 'nacionalidad_plazos_paises', 'declaracion_renta', 'tie_renovacion', 'tie_foto_recogida', 'reagrupacion_fuera', 'latino_estudiar_trabajar', 'dgt_canje_permisos', 'padron_renovacion', 'despues_nacionalidad']) {
+  for (const id of ['patera_vs_turista', 'patera_papeles', 'asilo_arraigo', 'asilo_denegado', 'estudios_30h', 'estudios_mas30', 'trabajo_ilegal_policia', 'inspeccion_trabajo', 'denuncia_espanol', 'ayuda_ayuntamiento', 'trabajadora_social', 'ong_encontrar', 'muebles_gafas', 'ayuda_sin_papeles', 'fraude_horas', 'denuncia_fraude', 'servicios_sociales_acceso', 'trabajadora_social_niega', 'ong_por_lugar', 'concello_xunta_gobierno', 'ong_niega', 'discapacidad_dependencia_incapacidad', 'ayuda_23_discapacidad', 'discapacidad_irregular', 'hijo_menor_discapacidad', 'hijo_mayor_discapacidad', 'dependencia_quien', 'padres_dependientes', 'transporte_descuentos', 'ccse_dele', 'nacionalidad_plazos_paises', 'declaracion_renta', 'tie_renovacion', 'tie_foto_recogida', 'reagrupacion_fuera', 'latino_estudiar_trabajar', 'dgt_canje_permisos', 'padron_renovacion', 'despues_nacionalidad']) {
     assert.ok(ids.includes(id), 'falta ' + id);
   }
   const patera = RL.faq.items.find(f => f.id === 'patera_vs_turista');
@@ -61,9 +61,18 @@ test('la FAQ latinoamericana distingue estudiar, trabajar y ambas', () => {
   assert.ok(/2 años de residencia legal/i.test(f.detail.join(' ')));
 });
 
-test('las preguntas se pueden ordenar alfabéticamente', () => {
+test('las preguntas se ordenan por categoría alfabética y luego por pregunta', () => {
   const sorted = RL.faq.sort(RL.faq.items);
-  const keys = sorted.map(x => x.q.replace(/^[¿¡\s]+/, '').toLocaleLowerCase('es'));
-  const copy = keys.slice().sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
-  assert.deepStrictEqual(keys, copy);
+  const order = {};
+  RL.faq.categories.forEach((c, i) => { if (c.id !== 'todas') order[c.id] = i; });
+  for (let i = 1; i < sorted.length; i++) {
+    const prev = sorted[i - 1], cur = sorted[i];
+    const cp = order[prev.cat], cc = order[cur.cat];
+    assert.ok(cp <= cc, 'categorías desordenadas: ' + prev.cat + ' > ' + cur.cat);
+    if (cp === cc) {
+      const a = prev.q.replace(/^[¿¡\s]+/, '').toLocaleLowerCase('es');
+      const b = cur.q.replace(/^[¿¡\s]+/, '').toLocaleLowerCase('es');
+      assert.ok(a.localeCompare(b, 'es', { sensitivity: 'base' }) <= 0, 'preguntas desordenadas en ' + cur.cat);
+    }
+  }
 });

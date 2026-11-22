@@ -6569,14 +6569,14 @@ body.has-speech-bar { padding-bottom: 86px; }
 
   var CATS = [
     { id: 'todas', label: 'Todas' },
-    { id: 'entrada', label: 'Entrada y estancia' },
-    { id: 'asilo', label: 'Asilo' },
     { id: 'arraigo', label: 'Arraigo' },
-    { id: 'trabajo', label: 'Estudios y trabajo' },
-    { id: 'sanciones', label: 'Policía y sanciones' },
-    { id: 'familia', label: 'Familia' },
+    { id: 'asilo', label: 'Asilo' },
+    { id: 'ayudas', label: 'Ayudas' },
     { id: 'documentos', label: 'Documentos' },
-    { id: 'ayudas', label: 'Ayudas' }
+    { id: 'entrada', label: 'Entrada y estancia' },
+    { id: 'trabajo', label: 'Estudios y trabajo' },
+    { id: 'familia', label: 'Familia' },
+    { id: 'sanciones', label: 'Policía y sanciones' }
   ];
 
   var Q = [
@@ -6994,6 +6994,86 @@ body.has-speech-bar { padding-bottom: 86px; }
       ]
     },
     {
+      id: 'discapacidad_irregular', cat: 'ayudas',
+      q: 'Soy inmigrante irregular y tengo discapacidad: ¿puedo obtener alguna ayuda?',
+      short: 'Puede que puedas solicitar el certificado de discapacidad si estás empadronado, pero depende de tu comunidad autónoma. Sin residencia legal no suelen conceder pensión no contributiva, dependencia o IMV; sí puedes pedir ayuda de emergencia, sanidad y apoyo a entidades.',
+      detail: [
+        'El certificado de discapacidad lo expide la comunidad autónoma. Algunas permiten solicitarlo con empadronamiento aunque no tengas residencia; otras lo limitan. Pregunta en servicios sociales o en el centro de valoración de tu comunidad.',
+        'Sin residencia legal, las prestaciones económicas como la pensión no contributiva de invalidez, la dependencia o el IMV suelen exigir residencia legal y años de residencia. No las des por hechas.',
+        'Las ayudas de emergencia municipal y las entidades pueden atenderte sin residencia, pero dependen de presupuesto, valoración y requisitos. No son automáticas.',
+        'Si hay menores, enfermedad grave o riesgo, dilo en servicios sociales y en el centro de salud: activa otra valoración y protección.',
+        'No pagues a nadie por «conseguir» el certificado o una pensión: se solicita en la administración y no hay gestores con acceso privilegiado.'
+      ],
+      links: [
+        ['IMSERSO', 'https://www.imserso.es/'],
+        ['Servicios sociales', 'https://www.mdsocialesa2030.gob.es/']
+      ]
+    },
+    {
+      id: 'hijo_menor_discapacidad', cat: 'ayudas',
+      q: 'Tengo un hijo menor de 18 años con discapacidad: ¿qué ayudas puedo pedir?',
+      short: 'Depende de si está empadronado, tiene residencia legal y si la discapacidad está reconocida en España. El certificado extranjero no se aplica automáticamente. Puede optar a valoración, dependencia, apoyo escolar, transporte y ayudas autonómicas; la asignación familiar tiene requisitos.',
+      detail: [
+        'Reconocimiento: pide valoración en la comunidad autónoma. Los informes médicos extranjeros ayudan, pero no sustituyen el reconocimiento español.',
+        'Si el menor está empadronado y tiene residencia legal, puede solicitar dependencia y ayudas autonómicas de educación, transporte, atención temprana o apoyo familiar. No todas son económicas.',
+        'Si está en situación irregular, algunas comunidades permiten la valoración de discapacidad y el acceso a escuela y sanidad, pero las prestaciones económicas suelen exigir residencia. Confirma en servicios sociales.',
+        'La asignación familiar por hijo a cargo y otras prestaciones de la Seguridad Social tienen requisitos de residencia, convivencia e ingresos; no se conceden solo por tener discapacidad.',
+        'La dependencia del menor se solicita por sus padres o representante legal en la comunidad autónoma; puede dar servicios o prestación económica según el grado.'
+      ],
+      links: [
+        ['IMSERSO · dependencia', 'https://www.imserso.es/'],
+        ['Seguridad Social · prestaciones familiares', 'https://www.seg-social.es/']
+      ]
+    },
+    {
+      id: 'hijo_mayor_discapacidad', cat: 'ayudas',
+      q: 'Mi hijo es mayor de edad y tiene discapacidad: ¿qué ayuda puede solicitar?',
+      short: 'Si tiene residencia legal y discapacidad reconocida, puede pedir certificado, dependencia, pensión no contributiva si cumple 5 años de residencia y bajos ingresos, empleo y transporte. Si no es residente, quedan ayudas de emergencia y entidades; la edad no da ayudas automáticas.',
+      detail: [
+        'Certificado de discapacidad: lo expide la comunidad autónoma y sirve de base para otras ayudas. No es lo mismo que la incapacidad permanente del INSS.',
+        'Dependencia: si necesita apoyo para la vida diaria, se solicita en la comunidad autónoma (SAAD). Puede dar servicios o prestación económica, pero exige valoración y residencia legal.',
+        'Pensión no contributiva de invalidez: normalmente exige 18-64 años, discapacidad del 65 % o más, ingresos bajos y 5 años de residencia legal (algunas comunidades exigen más).',
+        'Empleo y transporte: centros especiales de empleo, programas de inserción, tarjeta de transporte y estacionamiento para movilidad reducida; requisitos por comunidad.',
+        'Si no tiene residencia legal, no se le puede prometer una pensión: acude a servicios sociales y a una entidad para valorar ayuda de emergencia y alternativas.'
+      ],
+      links: [
+        ['IMSERSO · pensiones no contributivas', 'https://www.imserso.es/'],
+        ['Seguridad Social', 'https://www.seg-social.es/']
+      ]
+    },
+    {
+      id: 'dependencia_quien', cat: 'ayudas',
+      q: '¿La dependencia para quién es? ¿Cómo se pide y qué se obtiene?',
+      short: 'La dependencia es de la persona que necesita apoyo para la vida diaria, no del cuidador. Se solicita en la comunidad autónoma (SAAD), con informe médico y social; puede dar servicios o prestación económica, pero no es automática ni equivale a la discapacidad.',
+      detail: [
+        'Puede solicitarla la propia persona dependiente o su representante legal. Se presenta en los servicios sociales de la comunidad autónoma o del ayuntamiento, según donde vivas.',
+        'Se valora el grado de dependencia (moderada, severa o gran dependencia) con informes médicos y sociales. No basta con tener una enfermedad: importa la necesidad de apoyo.',
+        'Prestaciones: ayuda a domicilio, teleasistencia, centro de día, residencia, prestación económica para cuidados en el entorno familiar, asistencia personal o prestación vinculada al servicio.',
+        'Para extranjeros suele exigirse residencia legal y, en algunas comunidades, años de residencia. Sin residencia legal no es una vía automática; pregunta en servicios sociales.',
+        'La dependencia es compatible con algunas ayudas, pero no con todas; y no sustituye a la pensión no contributiva ni a la incapacidad permanente.'
+      ],
+      links: [
+        ['IMSERSO · SAAD', 'https://www.imserso.es/'],
+        ['Dependencia · Ministerio', 'https://www.mdsocialesa2030.gob.es/']
+      ]
+    },
+    {
+      id: 'padres_dependientes', cat: 'ayudas',
+      q: '¿Puedo pedir ayuda para mis padres mayores o dependientes?',
+      short: 'Si están fuera de España, la vía es la reagrupación familiar, con requisitos del reagrupante. Si ya están aquí, depende de su residencia, empadronamiento y grado de dependencia; no hay una ayuda automática por ser mayor.',
+      detail: [
+        'Padres fuera de España: solo pueden venir por reagrupación si el reagrupante tiene residencia y cumple medios, vivienda y requisitos. La edad o la dependencia no sustituyen esos requisitos.',
+        'Padres ya en España: pueden solicitar valoración de dependencia y ayudas autonómicas si tienen residencia legal y están empadronados. La pensión no contributiva exige edad, ingresos y años de residencia.',
+        'Si están en situación irregular, las prestaciones económicas suelen estar excluidas; pueden acceder a servicios sociales de emergencia y entidades, según el municipio.',
+        'La dependencia no convierte automáticamente al hijo en cuidador ni da una prestación por cuidar: hay que solicitarla y valorar el grado.',
+        'No traigas a tus padres como turistas para «arreglarlo» después: la reagrupación exige que estén fuera y pidan visado.'
+      ],
+      links: [
+        ['IMSERSO', 'https://www.imserso.es/'],
+        ['Reagrupación · Ministerio', 'https://www.inclusion.gob.es/']
+      ]
+    },
+    {
       id: 'transporte_descuentos', cat: 'ayudas',
       q: '¿Qué tarjetas de transporte hay y quién puede obtenerlas?',
       short: 'No hay una tarjeta única nacional. Cada ciudad/comunidad tiene abonos de metro y bus, tarjeta de discapacidad, youth/estudiante y familia numerosa; para media y larga distancia hay descuentos de Renfe y autobuses. Requisitos y precio cambian por zona.',
@@ -7195,7 +7275,12 @@ body.has-speech-bar { padding-bottom: 86px; }
     return String(q || '').replace(/^[¿¡\s]+/, '').toLocaleLowerCase('es');
   }
   function sortItems(items) {
+    var order = {};
+    CATS.forEach(function (c, i) { if (c.id !== 'todas') order[c.id] = i; });
     return (items || []).slice().sort(function (a, b) {
+      var ca = order[a.cat] == null ? 99 : order[a.cat];
+      var cb = order[b.cat] == null ? 99 : order[b.cat];
+      if (ca !== cb) return ca - cb;
       return sortKey(a.q).localeCompare(sortKey(b.q), 'es', { sensitivity: 'base' });
     });
   }

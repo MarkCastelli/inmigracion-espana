@@ -67,6 +67,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 37. **Online**: fichas de Mercurio, Registro Civil, universidades/homologación y enlace directo; se distingue qué es total, parcial o solo cita.
 38. **Después de la nacionalidad**: guía ordenada (jura/promesa 180 días, Registro Civil, DNI/pasaporte, padrón, Seguridad Social, sanidad, Hacienda, banco, DGT) y FAQ con distinción entre obligatorio y recomendable.
 39. **Modelos EX**: ficha Online con los códigos principales, para qué sirve cada uno y enlace al catálogo oficial de descarga.
+40. **Discapacidad y dependencia**: preguntas ordenadas por categoría alfabética; nuevos casos de titular irregular, hijo menor, hijo adulto, dependencia y padres dependientes.
 
 ## Comandos
 
