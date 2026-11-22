@@ -72,6 +72,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 42. **Entidades locales**: Diversidades Acolle (Vigo/Pontevedra) en directorio y bloque «Entidades de apoyo en tu zona»; FAQ de asociaciones por provincia.
 43. **Asilo 2026**: FAQ con quién puede solicitarlo, qué gana/pierde, por qué no hay probabilidad individual fiable y por qué no es una vía de regularización.
 44. **Turista que quiere quedarse**: FAQ con documentos posibles (NIE, padrón, Cl@ve), límites (trabajo/estudios/arraigo) y vías excepcionales desde España.
+45. **Primer día en España**: FAQ con orden de prioridades (seguridad/salud, vía legal, padrón, sanidad, menores, entidades, abogado).
 
 ## Comandos
 
