@@ -107,6 +107,11 @@
       title: 'Solicitud enviada | Ruta Legal',
       description: 'Hemos recibido tu solicitud para aparecer en el directorio de abogados de Ruta Legal.',
       keywords: 'solicitud enviada, abogados, Ruta Legal'
+    },
+    'feedback-gracias': {
+      title: 'Gracias por ayudarnos | Ruta Legal',
+      description: 'Gracias por informar de un error o problema en Ruta Legal.',
+      keywords: 'gracias, feedback, Ruta Legal'
     }
   };
 

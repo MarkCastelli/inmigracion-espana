@@ -37,7 +37,7 @@
     lawyerSort: 'az'
   };
 
-  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'abogados', 'abogados-alta', 'abogados-gracias', 'consulta', 'docs', 'formularios', 'donar', 'ayuda', 'legal'];
+  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'abogados', 'abogados-alta', 'abogados-gracias', 'feedback-gracias', 'consulta', 'docs', 'formularios', 'donar', 'ayuda', 'legal'];
   var REGION_LABEL = { latam: 'América Latina', ue: 'Unión Europea', eea: 'Espacio Económico Europeo', eu: 'Europa (otros)', africa: 'África', asia: 'Asia', otro: 'Otros países' };
 
   /* Perfil de ejemplo para probar la app sin escribir nada. */
@@ -194,6 +194,7 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         closeFormModal();
+        closeFeedbackModal();
         var t = $('#toast'); if (t) t.remove();
       }
     });
@@ -257,6 +258,7 @@
     else if (ui.view === 'abogados') renderAbogados();
     else if (ui.view === 'abogados-alta') renderAbogadosAlta();
     else if (ui.view === 'abogados-gracias') renderAbogadosGracias();
+    else if (ui.view === 'feedback-gracias') renderFeedbackGracias();
     else if (ui.view === 'consulta') renderConsulta();
     else if (ui.view === 'docs') renderDocs();
     else if (ui.view === 'formularios') renderFormularios();
@@ -3890,11 +3892,65 @@
       <div class="flex mt-3"><button class="btn btn--soft btn--sm" data-nav="ayuda">Volver a Ayuda</button><button class="btn btn--ghost btn--sm" data-nav="inicio">Inicio</button></div>`;
   }
 
+  function openFeedbackModal() {
+    closeFeedbackModal();
+    var email = 'programandonosolos@gmail.com';
+    var wrap = document.createElement('div');
+    wrap.id = 'feedbackModal';
+    wrap.className = 'modal';
+    wrap.innerHTML =
+      '<div class="modal__backdrop" data-action="close-feedback"></div>' +
+      '<div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">' +
+      '<button class="modal__close" type="button" data-action="close-feedback" aria-label="Cerrar">×</button>' +
+      '<p class="eyebrow">Solo incidencias del sitio</p><h2 id="feedbackTitle">Ayúdanos a mejorar</h2>' +
+      '<p>Si ves un error, una información equivocada, un enlace caído o algo que no funciona, escríbenos con este formulario.</p>' +
+      '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>No es un canal de consultas legales</strong><p>No responderemos dudas sobre el uso de la página, no daremos consejos ni asesoramiento jurídico por este medio. Solo se utiliza para problemas o mal funcionamiento del sitio. Cualquier otro correo será eliminado sin más.</p></div></div>' +
+      '<div class="field"><span class="field__label">Para</span><p style="margin:0;font-weight:650">' + esc(email) + '</p></div>' +
+      '<div class="field"><label class="field__label" for="feedbackSubject">Asunto</label><input class="input" id="feedbackSubject" value="Problema o error en Ruta Legal"></div>' +
+      '<div class="field"><label class="field__label" for="feedbackBody">Contenido</label><textarea class="textarea" id="feedbackBody" rows="7">Hola:\n\nHe encontrado un problema en Ruta Legal.\n\nPágina: ' + esc(location.href) + '\n\nDescripción del error o enlace caído:\n</textarea></div>' +
+      '<p class="muted" style="font-size:.78rem">Se abrirá tu aplicación de correo. Revisa el texto antes de enviarlo y no incluyas datos personales, de salud, NIE ni documentación.</p>' +
+      '<div class="flex" style="justify-content:flex-end;gap:10px"><button class="btn btn--ghost" type="button" data-action="close-feedback">Cancelar</button><button class="btn btn--primary" type="button" data-action="send-feedback">Abrir correo</button></div>' +
+      '</div>';
+    document.body.appendChild(wrap);
+    document.body.style.overflow = 'hidden';
+    var first = $('#feedbackSubject');
+    if (first) first.focus();
+  }
+
+  function closeFeedbackModal() {
+    var m = document.getElementById('feedbackModal');
+    if (m && m.parentNode) m.parentNode.removeChild(m);
+    document.body.style.overflow = '';
+  }
+
+  function sendFeedbackEmail() {
+    var subject = ($('#feedbackSubject') || {}).value || 'Problema o error en Ruta Legal';
+    var body = ($('#feedbackBody') || {}).value || '';
+    var mailto = 'mailto:programandonosolos@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    closeFeedbackModal();
+    window.location.href = mailto;
+    setTimeout(function () { go('feedback-gracias'); }, 450);
+  }
+
+  function renderFeedbackGracias() {
+    var host = $('#view-feedback-gracias');
+    host.innerHTML = '<div class="thanks-card"><div class="thanks-icon" aria-hidden="true">' + icons.check(28) + '</div>' +
+      '<p class="eyebrow">Gracias por tu ayuda</p><h1>Gracias por ayudarnos a mejorar</h1>' +
+      '<p>Se ha abierto tu aplicación de correo con el asunto y el contenido preparados. Revisa el mensaje y envíalo para que podamos corregir el error o el enlace caído.</p>' +
+      '<p class="muted">Si tu aplicación de correo no se ha abierto, escribe directamente a <strong>programandonosolos@gmail.com</strong> con el asunto «Problema o error en Ruta Legal».</p>' +
+      '<div class="callout callout--info" style="text-align:left;margin-top:18px"><div><strong>Solo incidencias del sitio</strong><p>No respondemos dudas sobre el uso de la página ni damos consejos o asesoramiento jurídico por este canal. Cualquier otro correo será eliminado sin más.</p></div></div>' +
+      '<div class="flex" style="justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px"><a class="btn btn--primary" href="#/ayuda">Volver a Ayuda</a><a class="btn btn--soft" href="#/inicio">Ir al inicio</a></div></div>';
+  }
+
   function renderHelp() {
     var host = $('#view-ayuda');
     var R = RL.resources;
     var html = '<div class="plan-head"><div><p class="eyebrow">Ayuda</p><h1>Recursos, dudas y letra pequeña</h1>' +
       '<p class="plan-head__sub">Información oficial, entidades que ayudan gratis, glosario y los bulos que más circulan.</p></div></div>';
+
+    html += '<div class="block feedback-block"><div class="block__head">' + icons.help(18) + '<h2>Ayúdanos a mejorar</h2></div><div class="block__body">' +
+      '<p>Si ves un error, notas que alguna información está mal o encuentras un enlace caído, avísanos. Este canal es solo para problemas del sitio: no respondemos dudas sobre el uso de la página ni damos consejos o asesoramiento jurídico. Cualquier otro correo será eliminado sin más.</p>' +
+      '<button class="btn btn--primary" type="button" data-action="feedback">Informar de un error</button></div></div>';
 
     if (RL.speech && RL.speech.supported) {
       html += '<div class="callout callout--info">' + icons.speaker(18) + '<div><strong>Lectura en voz alta</strong>' +
@@ -4102,10 +4158,13 @@
       return;
     }
     if (action === 'close-form') { closeFormModal(); return; }
+    if (action === 'feedback') { openFeedbackModal(); return; }
+    if (action === 'close-feedback') { closeFeedbackModal(); return; }
+    if (action === 'send-feedback') { sendFeedbackEmail(); return; }
     if (action === 'generate-form') { generateForm(btn); return; }
     if (action === 'listen-view') {
       if (!RL.speech || !RL.speech.supported) { toast('Tu navegador no permite lectura en voz alta.'); return; }
-      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', abogados: 'Abogados', 'abogados-alta': 'Publicar en Abogados', 'abogados-gracias': 'Solicitud enviada', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', donar: 'Donar', ayuda: 'Ayuda', legal: 'Aviso legal y privacidad' };
+      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', abogados: 'Abogados', 'abogados-alta': 'Publicar en Abogados', 'abogados-gracias': 'Solicitud enviada', 'feedback-gracias': 'Gracias por ayudarnos', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', donar: 'Donar', ayuda: 'Ayuda', legal: 'Aviso legal y privacidad' };
       if (ui.view === 'plan' && RL.hasSavedProfile()) {
         RL.speech.speak(RL.speech.buildPlanScript(RL.buildPlan(RL.profile())), 'Tu plan');
       } else {

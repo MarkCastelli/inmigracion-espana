@@ -189,6 +189,9 @@ t('la ayuda renderiza glosario, FAQ y bulos', () => {
   assert.ok(html.includes('Preguntas frecuentes'));
   assert.ok(html.includes('Bulos frecuentes'));
   assert.ok(html.includes('Canales de YouTube'));
+  assert.ok(html.includes('Ayúdanos a mejorar'));
+  assert.ok(html.includes('Informar de un error'));
+  assert.ok(html.includes('No es un canal de consultas legales') || html.includes('no respondemos dudas'));
   assert.ok(html.includes('061'));
   assert.ok(html.includes('062'));
   assert.ok(html.includes('080 / 085'));
@@ -1225,6 +1228,16 @@ t('el informe de ejemplo usa el formulario nuevo sin errores', () => {
   assert.ok(!html.includes('[object Object]'));
   assert.ok(!html.includes('undefined'));
   RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
+t('el feedback lleva a una página de agradecimiento', () => {
+  nav(app, 'feedback-gracias');
+  const html = app.document.querySelector('#view-feedback-gracias').innerHTML;
+  assert.ok(html.includes('Gracias por ayudarnos a mejorar'));
+  assert.ok(html.includes('Se ha abierto tu aplicación de correo'));
+  assert.ok(html.includes('programandonosolos@gmail.com'));
+  assert.ok(html.includes('Solo incidencias del sitio'));
   nav(app, 'inicio');
 });
 
