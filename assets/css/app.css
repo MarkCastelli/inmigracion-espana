@@ -821,3 +821,20 @@ html[dir="rtl"] .plan-head { text-align: right; }
   .report-person-head h2 { font-size:18pt; }
   .report-page .kv__row { break-inside:avoid; }
 }
+
+
+/* Cada integrante del informe empieza en una hoja nueva */
+.report-page + .report-page { break-before: page; page-break-before: always; }
+.report-page { break-inside: auto; }
+.report-page .report-person-head,
+.report-page .report-section > h3,
+.report-page .kv__row { break-inside: avoid; }
+@media screen {
+  .report-page { margin-bottom: 28px; }
+  .report-page + .report-page { margin-top: 8px; }
+}
+@media print {
+  .report-page + .report-page { break-before: page !important; page-break-before: always !important; }
+  .report-page { break-after: page; page-break-after: always; }
+  .report-page:last-child { break-after: auto; page-break-after: auto; }
+}

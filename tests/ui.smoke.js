@@ -969,4 +969,29 @@ t('el paso final genera un informe profesional con puntos clave', () => {
   nav(app, 'inicio');
 });
 
+t('cada integrante del informe ocupa una página', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 3;
+  f.applicant.name = 'Ana';
+  f.spouse.name = 'Luis';
+  f.members = [
+    { name: 'Luis', age: '40', relation: 'esposo', data: RL.formulario.person() },
+    { name: 'Pedro', age: '10', relation: 'hijo_comun', data: RL.formulario.person() }
+  ];
+  f.children = [RL.formulario.person()];
+  f.children[0].name = 'Pedro';
+  f.step = 11;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  const pages = (html.match(/class="report-page"/g) || []).length;
+  assert.ok(pages >= 4, 'debe haber portada, titular, pareja e hijo');
+  assert.ok(html.includes('Página 1 de'));
+  assert.ok(html.includes('Página 4 de'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

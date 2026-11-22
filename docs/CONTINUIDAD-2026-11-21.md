@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **205 pruebas pasando**.
+- **206 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -114,6 +114,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 84. **Desglose de vivienda**: el resumen separa hipoteca/alquiler total y suministros, y muestra el desglose por integrante; ya no usa solo la cuota del titular.
 85. **Informe profesional**: paso 11 con portada, puntos clave, discapacidad reconocida, objetivos y secciones; CSS A4 para imprimir/guardar como PDF, respetando las secciones marcadas en el paso 10.
 86. **Informe paginado**: portada con datos generales, una página por integrante y cierre económico; cada página lleva “Página X de Y” y salto de página al imprimir.
+87. **Saltos por integrante**: CSS `break-before: page` antes de cada hoja; titular, pareja, hijos y otros integrantes no comparten página.
 
 ## Comandos
 
