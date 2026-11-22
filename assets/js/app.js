@@ -3537,15 +3537,15 @@
     var all = Array.isArray(RL.lawyers) ? RL.lawyers : [];
     var q = (ui.lawyerSearch || '').toLowerCase().trim();
     var cities = [];
-    all.forEach(function (a) { if (a.city && cities.indexOf(a.city) === -1) cities.push(a.city); });
+    all.forEach(function (a) { if (a.ciudad && cities.indexOf(a.ciudad) === -1) cities.push(a.ciudad); });
     cities.sort(function (a, b) { return a.localeCompare(b, 'es'); });
     var list = all.filter(function (a) {
-      if (ui.lawyerCity !== 'todas' && a.city !== ui.lawyerCity) return false;
+      if (ui.lawyerCity !== 'todas' && a.ciudad !== ui.lawyerCity) return false;
       if (!q) return true;
-      return (a.studio + ' ' + a.name + ' ' + a.city + ' ' + a.province + ' ' + (a.specialties || '')).toLowerCase().indexOf(q) !== -1;
+      return (a.estudio + ' ' + a.nombre + ' ' + a.ciudad + ' ' + a.provincia + ' ' + (a.especialidad || '')).toLowerCase().indexOf(q) !== -1;
     });
     list.sort(function (a, b) {
-      var x = (a.studio || a.name || '').localeCompare(b.studio || b.name || '', 'es', { sensitivity: 'base' });
+      var x = (a.estudio || a.nombre || '').localeCompare(b.estudio || b.nombre || '', 'es', { sensitivity: 'base' });
       return ui.lawyerSort === 'za' ? -x : x;
     });
     var html = '<div class="plan-head"><div><p class="eyebrow">Directorio</p><h1>Abogados</h1>' +
@@ -3568,20 +3568,21 @@
         list.map(function (a) {
           var isDemo = !!a.demo;
           var wa = a.whatsapp && !isDemo ? 'https://wa.me/' + String(a.whatsapp).replace(/[^0-9]/g, '') : '';
-          return '<div class="family-child lawyer-card" data-lawyer-card style="margin-top:14px"><div class="flex" style="justify-content:space-between;gap:10px;flex-wrap:wrap"><h3>' + esc(a.studio || a.name || 'Despacho') + '</h3>' + (isDemo ? '<span class="badge badge--warn">DEMO · ficticio</span>' : '<span class="badge badge--warn">No verificado</span>') + '</div>' +
-            (a.name ? '<p><strong>' + esc(a.name) + '</strong></p>' : '') +
-            '<p class="muted">' + esc(a.address || '') + (a.city ? ' · ' + esc(a.city) : '') + (a.province ? ' · ' + esc(a.province) : '') + '</p>' +
-            (a.schedule ? '<p class="muted" style="font-size:.83rem">Horario: ' + esc(a.schedule) + '</p>' : '') +
-            (a.specialties ? '<p class="muted" style="font-size:.83rem">' + esc(a.specialties) + (a.languages ? ' · ' + esc(a.languages) : '') + '</p>' : '') +
+          var booking = a.citas ? '<a class="btn btn--accent btn--sm" href="' + esc(RL.dom.safeUrl(a.citas)) + '" target="_blank" rel="noopener">' + icons.ext(14) + (isDemo ? ' Pedir cita (demo)' : ' Pedir cita') + '</a>' : '';
+          return '<div class="family-child lawyer-card" data-lawyer-card style="margin-top:14px"><div class="flex" style="justify-content:space-between;gap:10px;flex-wrap:wrap"><h3>' + esc(a.estudio || a.nombre || 'Despacho') + '</h3>' + (isDemo ? '<span class="badge badge--warn">DEMO · ficticio</span>' : '<span class="badge badge--warn">No verificado</span>') + '</div>' +
+            (a.nombre ? '<p><strong>' + esc(a.nombre) + '</strong></p>' : '') +
+            (a.matricula || a.colegio ? '<p class="muted" style="font-size:.83rem">' + (a.matricula ? 'Colegiado/a: ' + esc(a.matricula) : '') + (a.colegio ? ' · ' + esc(a.colegio) : '') + '</p>' : '') +
+            '<p class="muted">' + esc(a.domicilio || '') + (a.ciudad ? ' · ' + esc(a.ciudad) : '') + (a.provincia ? ' · ' + esc(a.provincia) : '') + '</p>' +
+            (a.horario ? '<p class="muted" style="font-size:.83rem">Horario: ' + esc(a.horario) + '</p>' : '') +
+            (a.especialidad ? '<p class="muted" style="font-size:.83rem">' + esc(a.especialidad) + (a.idiomas ? ' · ' + esc(a.idiomas) : '') + '</p>' : '') +
             '<div class="flex" style="gap:8px;flex-wrap:wrap">' +
             (isDemo
-              ? '<span class="btn btn--ghost btn--sm" title="Dato de prueba">Tel. ' + esc(a.phone) + '</span><span class="btn btn--ghost btn--sm">' + esc(a.email) + '</span><span class="btn btn--ghost btn--sm">Web de ejemplo</span>'
-              : (a.phone ? '<a class="btn btn--soft btn--sm" href="tel:' + esc(a.phone) + '">' + icons.user(14) + ' Llamar</a>' : '') +
+              ? '<span class="btn btn--ghost btn--sm" title="Dato de prueba">Tel. ' + esc(a.telefono) + '</span><span class="btn btn--ghost btn--sm">' + esc(a.email) + '</span><span class="btn btn--ghost btn--sm">Web de ejemplo</span>'
+              : (a.telefono ? '<a class="btn btn--soft btn--sm" href="tel:' + esc(a.telefono) + '">' + icons.user(14) + ' Llamar</a>' : '') +
                 (wa ? '<a class="btn btn--soft btn--sm" href="' + esc(wa) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') +
                 (a.email ? '<a class="btn btn--soft btn--sm" href="mailto:' + esc(a.email) + '">Email</a>' : '') +
-                (a.web ? '<a class="btn btn--soft btn--sm" href="' + esc(RL.dom.safeUrl(a.web)) + '" target="_blank" rel="noopener">Web</a>' : '') +
-                (a.booking ? '<a class="btn btn--accent btn--sm" href="' + esc(RL.dom.safeUrl(a.booking)) + '" target="_blank" rel="noopener">Pedir cita</a>' : '')) +
-            '</div>' + (a.note ? '<p class="muted" style="font-size:.82rem">' + esc(a.note) + '</p>' : '') + '</div>';
+                (a.web ? '<a class="btn btn--soft btn--sm" href="' + esc(RL.dom.safeUrl(a.web)) + '" target="_blank" rel="noopener">Web</a>' : '')) +
+            booking + '</div>' + (a.mensaje ? '<p class="muted" style="font-size:.82rem">' + esc(a.mensaje) + '</p>' : '') + '</div>';
         }).join('') + '</div></div>';
     }
     html += '<div class="block mt-3"><div class="block__head">' + icons.check(18) + '<h2>Cómo comprobar que es abogado y está colegiado</h2></div><div class="block__body">' +
@@ -3638,6 +3639,8 @@
       '<label class="field"><span class="field__label">Página web</span><input class="input" type="url" name="web" placeholder="https://"></label>' +
       '<label class="field"><span class="field__label">Página para coger cita</span><input class="input" type="url" name="citas" placeholder="https://"></label>' +
       '<label class="field"><span class="field__label">Domicilio del despacho</span><input class="input" name="domicilio"></label>' +
+      '<label class="field"><span class="field__label">Localidad *</span><input class="input" name="ciudad" required></label>' +
+      '<label class="field"><span class="field__label">Provincia</span><input class="input" name="provincia"></label>' +
       '<label class="field"><span class="field__label">Horario de atención al público</span><input class="input" name="horario" placeholder="Ej. L-V 9:00-14:00"></label>' +
       '<label class="field"><span class="field__label">Especialidad en extranjería</span><input class="input" name="especialidad" placeholder="Ej. arraigos, asilo, nacionalidad"></label>' +
       '</div>' +
@@ -3713,7 +3716,7 @@
       var consent = form.querySelector('[name="consentimiento"]');
       if (!consent || !consent.checked) { if (status) status.textContent = 'Debes aceptar la declaración y la privacidad.'; return; }
       var payload = {};
-      ['nombre', 'estudio', 'matricula', 'colegio', 'email', 'telefono', 'whatsapp', 'web', 'citas', 'domicilio', 'horario', 'especialidad', 'idiomas', 'mensaje'].forEach(function (k) {
+      ['nombre', 'estudio', 'matricula', 'colegio', 'email', 'telefono', 'whatsapp', 'web', 'citas', 'domicilio', 'ciudad', 'provincia', 'horario', 'especialidad', 'idiomas', 'mensaje'].forEach(function (k) {
         var el = form.querySelector('[name="' + k + '"]');
         payload[k] = el ? el.value.trim() : '';
       });

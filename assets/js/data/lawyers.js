@@ -1,5 +1,8 @@
 /* Ruta Legal · carga del directorio de abogados desde JSON.
    La base editable está en assets/js/data/lawyers.json.
+   Campos públicos: id, demo, nombre, estudio, matricula, colegio, email,
+   telefono, whatsapp, web, citas, domicilio, ciudad, provincia, horario,
+   especialidad, idiomas, mensaje.
    En el archivo único dist se inyecta window.__RL_LAWYERS__ desde build.py. */
 (function () {
   'use strict';

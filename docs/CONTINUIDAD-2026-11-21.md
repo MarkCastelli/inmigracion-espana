@@ -139,6 +139,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 109. **Enlace de alta**: los botones «Quiero aparecer» usan `data-nav="abogados-alta"` además del hash, para que abran la página aunque el navegador mantenga una caché antigua.
 110. **Confirmación de alta**: el botón de envío se separa del consentimiento; si FormSubmit responde correctamente, redirige a `#/abogados-gracias` con un mensaje formal de solicitud recibida, aviso de que no se ha pagado y enlaces de vuelta.
 111. **Borrador de alta de abogados**: los campos se guardan automáticamente en `localStorage` (`ruta-legal.lawyer-draft`) al escribir; al volver se recuperan con aviso, el consentimiento no se recupera y hay botón para borrar el borrador. Si el envío falla, no se pierde nada.
+112. **Ficha pública alineada con el alta**: el JSON usa los mismos campos que el formulario (nombre, estudio, matrícula, colegio, contacto, web, citas, domicilio, localidad, provincia, horario, especialidad, idiomas, mensaje); la matrícula/colegio se muestran y el enlace de citas aparece siempre como botón «Pedir cita».
 
 ## Comandos
 
