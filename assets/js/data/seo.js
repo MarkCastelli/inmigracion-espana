@@ -74,8 +74,8 @@
       keywords: 'documentos extranjería, checklist, residencia, arraigo, nacionalidad'
     },
     formularios: {
-      title: 'Formularios EX y tasas de extranjería | Ruta Legal',
-      description: 'Modelos EX, tasas 790 y formularios oficiales para solicitudes y renovaciones de extranjería.',
+      title: 'Descargas: formularios EX y tasas de extranjería | Ruta Legal',
+      description: 'Descarga y localiza modelos EX, tasas 790 y formularios oficiales para solicitudes y renovaciones de extranjería.',
       keywords: 'formularios EX, EX-10, EX-31, tasas 790, extranjería'
     },
     ayuda: {

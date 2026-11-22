@@ -24,7 +24,7 @@
         inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', plan: 'Mi plan', vias: 'Vías', tramites: 'Trámites',
         online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos',
         directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos',
-        formularios: 'Formularios', ayuda: 'Ayuda'
+        formularios: 'Descargas', ayuda: 'Ayuda'
       },
       heroEyebrow: 'Diagnóstico migratorio · España · 100 % gratuito',
       heroTitle: 'Tu camino hacia una situación legal en España, <em>claro y paso a paso</em>.',
@@ -46,7 +46,7 @@
         inicio: 'الرئيسية', antes: 'تجربتي', formulario: 'النموذج', plan: 'خطتي', vias: 'المسارات', tramites: 'الإجراءات',
         online: 'عبر الإنترنت', preguntas: 'الأسئلة', derechos: 'الحقوق',
         directorio: 'أين أذهب', consulta: 'استشارة الذكاء الاصطناعي', docs: 'الوثائق',
-        formularios: 'النماذج', ayuda: 'المساعدة'
+        formularios: 'التنزيلات', ayuda: 'المساعدة'
       },
       heroEyebrow: 'تشخيص الهجرة · إسبانيا · مجاني 100٪',
       heroTitle: 'طريقك إلى وضع قانوني في إسبانيا، <em>بوضوح وخطوة بخطوة</em>.',
@@ -68,7 +68,7 @@
         inicio: 'Accueil', antes: 'Mon expérience', formulario: 'Formulaire', plan: 'Mon plan', vias: 'Voies', tramites: 'Démarches',
         online: 'En ligne', preguntas: 'Questions', derechos: 'Droits',
         directorio: 'Où aller', consulta: 'Consultation IA', docs: 'Documents',
-        formularios: 'Formulaires', ayuda: 'Aide'
+        formularios: 'Téléchargements', ayuda: 'Aide'
       },
       heroEyebrow: "Diagnostic migratoire · Espagne · 100 % gratuit",
       heroTitle: "Votre chemin vers une situation légale en Espagne, <em>clair et pas à pas</em>.",
@@ -90,7 +90,7 @@
         inicio: 'Home', antes: 'My experience', formulario: 'Form', plan: 'My plan', vias: 'Routes', tramites: 'Procedures',
         online: 'Online', preguntas: 'Questions', derechos: 'Rights',
         directorio: 'Where to go', consulta: 'AI consultation', docs: 'Documents',
-        formularios: 'Forms', ayuda: 'Help'
+        formularios: 'Downloads', ayuda: 'Help'
       },
       heroEyebrow: 'Immigration assessment · Spain · 100% free',
       heroTitle: 'Your path to a legal status in Spain, <em>clear and step by step</em>.',
@@ -112,7 +112,7 @@
         inicio: 'Acasă', antes: 'Experiența mea', formulario: 'Formular', plan: 'Planul meu', vias: 'Căi', tramites: 'Proceduri',
         online: 'Online', preguntas: 'Întrebări', derechos: 'Drepturi',
         directorio: 'Unde să mergi', consulta: 'Consultație IA', docs: 'Documente',
-        formularios: 'Formulare', ayuda: 'Ajutor'
+        formularios: 'Descărcări', ayuda: 'Ajutor'
       },
       heroEyebrow: 'Evaluare migratorie · Spania · 100% gratuit',
       heroTitle: 'Drumul tău către o situație legală în Spania, <em>clar și pas cu pas</em>.',

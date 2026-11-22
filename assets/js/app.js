@@ -3051,7 +3051,7 @@
       return (f.code + ' ' + f.title + ' ' + f.purpose + ' ' + f.where).toLowerCase().indexOf(q) !== -1;
     });
 
-    var html = '<div class="plan-head"><div><p class="eyebrow">Formularios</p><h1>Modelos oficiales, en un solo sitio</h1>' +
+    var html = '<div class="plan-head"><div><p class="eyebrow">Descargas</p><h1>Modelos oficiales, en un solo sitio</h1>' +
       '<p class="plan-head__sub">EX, tasas 790 y trámites de extranjería, nacionalidad y asilo. Busca por código (EX-03, EX-17, 790-012…), abre el modelo en la sede y prepara tu hoja de datos.</p></div>' +
       '<div class="plan-head__actions"><a class="btn btn--primary btn--sm" href="' + esc(RL.dom.safeUrl(RL.forms.hub)) + '" target="_blank" rel="noopener">' + icons.ext(15) + ' Abrir sede de modelos</a></div></div>';
 
@@ -3546,7 +3546,7 @@
     if (action === 'generate-form') { generateForm(btn); return; }
     if (action === 'listen-view') {
       if (!RL.speech || !RL.speech.supported) { toast('Tu navegador no permite lectura en voz alta.'); return; }
-      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Formularios', ayuda: 'Ayuda' };
+      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', ayuda: 'Ayuda' };
       if (ui.view === 'plan' && RL.hasSavedProfile()) {
         RL.speech.speak(RL.speech.buildPlanScript(RL.buildPlan(RL.profile())), 'Tu plan');
       } else {

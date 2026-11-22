@@ -421,10 +421,10 @@ t('la sección online muestra DEHú, Mercurio y DGT', () => {
   nav(app, 'inicio');
 });
 
-t('la página de formularios muestra EX-03, EX-17 y 790-012', () => {
+t('la página de descargas muestra EX-03, EX-17 y 790-012', () => {
   nav(app, 'formularios');
   const html = app.document.querySelector('#view-formularios').innerHTML;
-  assert.ok(html.includes('Formularios'));
+  assert.ok(html.includes('Descargas'));
   assert.ok(html.includes('EX-03'));
   assert.ok(html.includes('EX-17'));
   assert.ok(html.includes('790-012'));
