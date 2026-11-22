@@ -428,11 +428,20 @@
     return goals;
   }
 
+  function applyCommonGoals(F) {
+    if (!F.commonGoalsOn) return;
+    var list = (F.commonGoals || []).slice();
+    var people = [F.applicant, F.spouse].concat(F.children || []);
+    (F.members || []).forEach(function (m) { if (m.data) people.push(m.data); });
+    people.forEach(function (p) { p.goals = list.slice(); });
+  }
+
   function renderFormulario() {
     var host = $('#view-formulario');
     var F = getForm();
     syncFormMembers(F);
     syncFamilyFromMembers(F);
+    applyCommonGoals(F);
     var step = Math.max(0, Math.min(11, Number(F.step) || 0));
     var total = 12;
     var html = '<div class="wizard"><div class="plan-head"><div><p class="eyebrow">Formulario · Paso ' + step + ' de 11</p>' +
@@ -554,14 +563,21 @@
     } else if (step === 9) {
       html += '<div class="block"><div class="block__head">' + icons.route(18) + '<h2>¿Qué esperas conseguir?</h2></div><div class="block__body">' +
         '<div class="callout callout--info">' + icons.info(16) + '<div><p>No mostramos objetivos que ya constan en documentos o residencia. Si algo cambió, vuelve al paso de situación actual.</p></div></div>';
-      html += '<h3>Titular</h3>' + fChecks('applicant.goals', 'Objetivos', fget(F.applicant, 'goals'), availableGoals(F.applicant));
       if (F.mode === 'family') {
-        html += '<h3>Pareja</h3>' + fChecks('spouse.goals', 'Objetivos', fget(F.spouse, 'goals'), availableGoals(F.spouse));
-        F.children.forEach(function (ch, i) { html += '<h3>Hijo/a ' + (i + 1) + '</h3>' + fChecks('children.' + i + '.goals', 'Objetivos', fget(ch, 'goals'), availableGoals(ch)); });
-        (F.members || []).forEach(function (m, i) {
-          if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
-          html += '<h3>' + fEsc(m.name || ('Integrante ' + (i + 1))) + '</h3>' + fChecks('members.' + i + '.data.goals', 'Objetivos', fget(m.data || {}, 'goals'), availableGoals(m.data || {}));
-        });
+        html += '<label class="option option--check" style="margin-bottom:12px"><input type="checkbox" data-fbool="commonGoalsOn"' + (F.commonGoalsOn ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">Objetivos comunes para todo el grupo familiar</span></span></label>';
+      }
+      if (F.commonGoalsOn && F.mode === 'family') {
+        html += '<h3>Objetivos del grupo</h3>' + fChecks('commonGoals', 'Lo que queréis conseguir todos', F.commonGoals, RL.formulario.goals);
+      } else {
+        html += '<h3>Titular</h3>' + fChecks('applicant.goals', 'Objetivos', fget(F.applicant, 'goals'), availableGoals(F.applicant));
+        if (F.mode === 'family') {
+          html += '<h3>Pareja</h3>' + fChecks('spouse.goals', 'Objetivos', fget(F.spouse, 'goals'), availableGoals(F.spouse));
+          F.children.forEach(function (ch, i) { html += '<h3>Hijo/a ' + (i + 1) + '</h3>' + fChecks('children.' + i + '.goals', 'Objetivos', fget(ch, 'goals'), availableGoals(ch)); });
+          (F.members || []).forEach(function (m, i) {
+            if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
+            html += '<h3>' + fEsc(m.name || ('Integrante ' + (i + 1))) + '</h3>' + fChecks('members.' + i + '.data.goals', 'Objetivos', fget(m.data || {}, 'goals'), availableGoals(m.data || {}));
+          });
+        }
       }
       html += '</div></div>';
     } else if (step === 10) {
@@ -580,11 +596,12 @@
     host.querySelectorAll('[data-fpath], [data-fgroup]').forEach(function (el) {
       var ev = el.type === 'checkbox' || el.type === 'radio' || el.tagName === 'SELECT' ? 'change' : 'input';
       el.addEventListener(ev, function () {
-        if (el.hasAttribute('data-fgroup')) {
+        if (el.getAttribute('data-fgroup')) {
           var groupPath = el.getAttribute('data-fgroup');
           var vals = [];
           host.querySelectorAll('[data-fgroup="' + groupPath + '"]:checked').forEach(function (x) { vals.push(x.value); });
           fset(F, groupPath, vals);
+          if (groupPath === 'commonGoals' && F.commonGoalsOn) applyCommonGoals(F);
         } else {
           fset(F, el.getAttribute('data-fpath'), el.value);
         }
@@ -600,6 +617,18 @@
     });
     host.querySelectorAll('[data-form-action]').forEach(function (b) {
       b.addEventListener('click', function () { handleFormAction(b.getAttribute('data-form-action'), b); });
+    });
+    host.querySelectorAll('[data-fbool]').forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        var key = cb.getAttribute('data-fbool');
+        F[key] = cb.checked;
+        if (key === 'commonGoalsOn' && cb.checked && !(F.commonGoals || []).length) {
+          F.commonGoals = (F.applicant.goals || []).slice();
+        }
+        if (key === 'commonGoalsOn' && cb.checked) applyCommonGoals(F);
+        saveForm();
+        renderFormulario();
+      });
     });
     host.querySelectorAll('[data-fprint]').forEach(function (cb) {
       cb.addEventListener('change', function () {

@@ -100,6 +100,8 @@
       applicant: person(),
       spouse: person(),
       children: [],
+      commonGoalsOn: false,
+      commonGoals: [],
       print: { applicant: true, spouse: true, children: true, disability: true, aid: true, housing: true, goals: true, economy: true },
       notes: ''
     };

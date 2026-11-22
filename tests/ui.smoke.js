@@ -794,4 +794,26 @@ t('los importes vacíos cuentan como cero en el resumen', () => {
   nav(app, 'inicio');
 });
 
+t('permite marcar objetivos comunes para todo el grupo', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 3;
+  f.members = [
+    { name: 'Ana', age: '40', relation: 'esposa', data: RL.formulario.person() },
+    { name: 'Luis', age: '10', relation: 'hijo_comun', data: RL.formulario.person() }
+  ];
+  f.commonGoalsOn = true;
+  f.commonGoals = ['nacionalidad'];
+  f.step = 9;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Objetivos comunes para todo el grupo familiar'));
+  assert.ok(html.includes('data-fgroup="commonGoals"'));
+  assert.ok(!html.includes('data-fgroup="applicant.goals"'), 'no debe pedir objetivos individuales si son comunes');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
