@@ -301,7 +301,12 @@
           ['estudiar', 'Estudiar'], ['renovar', 'Renovar su permiso'], ['nacionalidad', 'Nacionalidad'],
           ['reagrupar', 'Venir a España'], ['nothing', 'Nada'], ['dontknow', 'No lo sé']
         ]) +
-        '</div></div></div>';
+        '</div>' +
+        '<div class="callout callout--info" style="margin:14px 0 0">' + icons.family(16) +
+        '<div><strong>¿Tu pareja tiene hijos de otra relación?</strong><p>Cárgalos aquí. Se añadirán como «Hijo solo de tu pareja» y podrás completar su ficha (edad, residencia, estudios, discapacidad…).</p>' +
+        '<button class="btn btn--soft btn--sm mt-2" type="button" data-action="add-partner-child">+ Añadir hijo/a de mi pareja</button>' +
+        (partnerOnly > 0 ? '<span class="chip" style="margin-left:8px">' + partnerOnly + ' cargado(s)</span>' : '') +
+        '</div></div></div></div>';
     }
 
     if (total > 0) {
@@ -2569,6 +2574,16 @@
       ui.aiAnswer = '';
       ui.aiLastId = null;
       renderConsulta();
+      return;
+    }
+    if (action === 'add-partner-child') {
+      var cp = RL.profile();
+      var nextPartnerChild = (Number(cp.childrenPartner) || 0) + 1;
+      var totalChildren = (Number(cp.childrenCommon) || 0) + (Number(cp.childrenOwn) || 0) + nextPartnerChild;
+      var patch = { childrenPartner: nextPartnerChild };
+      patch['child' + totalChildren + 'Relation'] = 'partner';
+      RL.setProfile(patch);
+      renderWizard();
       return;
     }
     if (action === 'form-sheet') {

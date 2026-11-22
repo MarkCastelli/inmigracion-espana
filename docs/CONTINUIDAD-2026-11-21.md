@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **183 pruebas pasando**.
+- **184 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -86,6 +86,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 56. **Mi experiencia**: nueva sección en el menú con testimonio corregido, agrupado por trabajo, vivienda, transporte, burocracia, educación, sociedad y emprendimiento; incluye aviso de opinión personal y corrige la afirmación sobre el paro.
 57. **Registros online**: Online nombra la sede autonómica real (Xunta, Junta, Generalitat…), añade registro electrónico autonómico y Registro General del Estado; distingue registro civil, autonómico y estatal.
 58. **SEO**: metadatos por sección (título, descripción, keywords, canonical, Open Graph/Twitter), JSON-LD WebSite/WebPage, `robots.txt`, `sitemap.xml`, imagen social e idiomas `?lang=`/hreflang. Limitación: las secciones con hash no se indexan como URLs independientes.
+59. **Hijos de la pareja**: botón explícito «Añadir hijo/a de mi pareja» dentro de la ficha de pareja; crea la ficha como «Hijo solo de tu pareja» y conserva el campo general.
 
 ## Comandos
 

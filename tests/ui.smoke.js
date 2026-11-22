@@ -445,6 +445,7 @@ t('el paso de familia carga pareja y una ficha por hijo', () => {
   assert.ok(html.includes('Tu pareja'), 'falta la ficha de pareja');
   assert.ok(html.includes('Hijo/a 1') && html.includes('Hijo/a 2') && html.includes('Hijo/a 3'), 'faltan fichas de hijos');
   assert.ok(html.includes('name="child1Name"') && html.includes('name="child3Name"'), 'faltan campos por hijo');
+  assert.ok(html.includes('Añadir hijo/a de mi pareja'), 'falta el botón para hijos de la pareja');
   assert.ok(html.includes('name="child1Education"'), 'falta el nivel de estudios del hijo');
   assert.ok(html.includes('FP de Grado Superior'), 'falta FP de Grado Superior');
   RL.state.profile = saved;
@@ -594,6 +595,25 @@ t('cada sección actualiza el título SEO', () => {
   assert.ok(app.document.title.includes('Trámites de extranjería'));
   RL.seo.apply('antes');
   assert.ok(app.document.title.includes('Mi experiencia'));
+});
+
+t('se puede añadir un hijo de la pareja desde su ficha', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = {
+    nationality: 'AR', age: 36, location: 'spain', maritalStatus: 'pareja_estable',
+    childrenCommon: 1, childrenPartner: 0, childrenOwn: 0, childrenSpanish: 'no',
+    docsBase: [], docsTramites: [], goals: ['regularizar']
+  };
+  nav(app, 'diagnostico');
+  RL.ui.state.step = RL.questions.visibleSteps(RL.state.profile).findIndex(s => s.id === 'familia');
+  RL.ui.render();
+  RL.ui.handleAction('add-partner-child');
+  assert.strictEqual(Number(RL.state.profile.childrenPartner), 1);
+  assert.strictEqual(RL.state.profile.child2Relation, 'partner');
+  const html = app.document.querySelector('#wizardFields').innerHTML;
+  assert.ok(html.includes('Hijo/a 2'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
 });
 
 console.log('\nSmoke test de interfaz terminado.');
