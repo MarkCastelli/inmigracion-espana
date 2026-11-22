@@ -12,6 +12,7 @@ const FILES = [
   'assets/js/data/seo.js',
   'assets/js/data/antes.js',
   'assets/js/data/formulario.js',
+  'assets/js/data/tooltips.js',
   'assets/js/core.js',
   'assets/js/data/countries.js',
   'assets/js/data/regions.js',
@@ -1117,6 +1118,19 @@ t('los campos del formulario se traducen sin tocar el PDF', () => {
   html = app.document.querySelector('#view-formulario').innerHTML;
   assert.ok(html.includes('Informe para asesoría legal'), 'el PDF debe seguir en español');
   assert.ok(!html.includes('Rapport pour'), 'no debe traducir el informe');
+  RL.i18n.setLang('es');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
+t('las ayudas contextuales aparecen y se traducen', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.i18n.setLang('fr');
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('field__tip'));
+  assert.ok(html.includes('Écris ton nom complet'));
   RL.i18n.setLang('es');
   RL.state.profile = saved;
   nav(app, 'inicio');

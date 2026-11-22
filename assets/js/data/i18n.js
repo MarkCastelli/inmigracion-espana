@@ -20,6 +20,7 @@
       tagline: 'España, paso a paso',
       free: 'Gratis',
       private: 'Privado',
+      tooltips: 'Ayudas',
       nav: {
         inicio: 'Inicio', antes: 'Experiencia', formulario: 'Formulario', plan: 'Plan', vias: 'Vías', tramites: 'Trámites',
         online: 'Online', preguntas: 'FAQ', derechos: 'Derechos',
@@ -42,6 +43,7 @@
       tagline: 'إسبانيا، خطوة بخطوة',
       free: 'مجاني',
       private: 'خاص',
+      tooltips: 'مساعدة',
       nav: {
         inicio: 'الرئيسية', antes: 'تجربتي', formulario: 'النموذج', plan: 'خطتي', vias: 'المسارات', tramites: 'الإجراءات',
         online: 'عبر الإنترنت', preguntas: 'الأسئلة', derechos: 'الحقوق',
@@ -64,6 +66,7 @@
       tagline: "L'Espagne, pas à pas",
       free: 'Gratuit',
       private: 'Privé',
+      tooltips: 'Aides',
       nav: {
         inicio: 'Accueil', antes: 'Expérience', formulario: 'Formulaire', plan: 'Plan', vias: 'Voies', tramites: 'Démarches',
         online: 'En ligne', preguntas: 'FAQ', derechos: 'Droits',
@@ -86,6 +89,7 @@
       tagline: 'Spain, step by step',
       free: 'Free',
       private: 'Private',
+      tooltips: 'Help',
       nav: {
         inicio: 'Home', antes: 'Experience', formulario: 'Form', plan: 'Plan', vias: 'Routes', tramites: 'Procedures',
         online: 'Online', preguntas: 'FAQ', derechos: 'Rights',
@@ -108,6 +112,7 @@
       tagline: 'Spania, pas cu pas',
       free: 'Gratuit',
       private: 'Privat',
+      tooltips: 'Ajutor',
       nav: {
         inicio: 'Acasă', antes: 'Experiență', formulario: 'Formular', plan: 'Plan', vias: 'Căi', tramites: 'Proceduri',
         online: 'Online', preguntas: 'FAQ', derechos: 'Drepturi',
@@ -197,6 +202,8 @@
     if (free) free.textContent = s.free;
     var priv = document.querySelector('.pill--private .pill__label');
     if (priv) priv.textContent = s.private;
+    var tipLabel = byId('tooltipsToggleLabel');
+    if (tipLabel) tipLabel.textContent = s.tooltips || 'Ayudas';
 
     var eyebrow = document.querySelector('.hero .eyebrow');
     if (eyebrow) eyebrow.textContent = s.heroEyebrow;

@@ -109,6 +109,15 @@
       try { localStorage.setItem('ruta-legal.theme', next); } catch (e) {}
     });
 
+    var tipToggle = $('#tooltipsToggle');
+    if (tipToggle) {
+      try { tipToggle.checked = localStorage.getItem('ruta-legal.tooltips') !== '0'; } catch (e) {}
+      tipToggle.addEventListener('change', function () {
+        try { localStorage.setItem('ruta-legal.tooltips', tipToggle.checked ? '1' : '0'); } catch (e) {}
+        render();
+      });
+    }
+
     window.addEventListener('hashchange', function () {
       var v = parseHash().view;
       if (v && VIEWS.indexOf(v) !== -1) {
@@ -240,20 +249,44 @@
   function fnum(v) { var n = Number(v); return isFinite(n) ? n : 0; }
   function fT(v) { return RL.formText ? RL.formText(v) : v; }
 
+  function tooltipsOn() {
+    var cb = document.getElementById ? document.getElementById('tooltipsToggle') : null;
+    if (cb) return !!cb.checked;
+    try { return localStorage.getItem('ruta-legal.tooltips') !== '0'; } catch (e) { return true; }
+  }
+
+  function fTip(path) {
+    if (!tooltipsOn() || !RL.tooltipText) return '';
+    var p = String(path || '');
+    var key = p.split('.').pop();
+    var alias = {
+      contractType: 'contract', contractEnd: 'contract',
+      mortgageAmount: 'mortgage', mortgage: 'mortgage',
+      housingCost: 'housing', legalSinceMonth: 'legalSince', legalSinceYear: 'legalSince',
+      drivingLicenseCountry: 'drivingLicense', educationLevel: 'studies',
+      disabilityExpiryStatus: 'disability', disabilityExpiry: 'disability',
+      disabilityDegree: 'degree', aidTypes: 'aid', asylumStatus: 'asylum',
+      familyLocation: 'familyLocation'
+    };
+    var text = RL.tooltipText(key) || (alias[key] ? RL.tooltipText(alias[key]) : '') || (p.indexOf('expenses.') === 0 ? RL.tooltipText('expenses') : '');
+    if (!text) return '';
+    return '<span class="field__tip" tabindex="0" role="button" aria-label="' + fEsc(fT('Más información')) + '">i<span class="field__tipbox" role="tooltip">' + fEsc(text) + '</span></span>';
+  }
+
   function fInput(path, label, value, type, placeholder) {
-    return '<label class="field"><span class="field__label">' + fEsc(fT(label)) + '</span>' +
+    return '<label class="field"><span class="field__label">' + fEsc(fT(label)) + fTip(path) + '</span>' +
       '<input class="input" type="' + (type || 'text') + '" data-fpath="' + fEsc(path) + '" value="' + fEsc(value) + '" placeholder="' + fEsc(fT(placeholder || '')) + '"></label>';
   }
 
   function fSelect(path, label, value, options) {
-    return '<label class="field"><span class="field__label">' + fEsc(fT(label)) + '</span>' +
+    return '<label class="field"><span class="field__label">' + fEsc(fT(label)) + fTip(path) + '</span>' +
       '<select class="select" data-fpath="' + fEsc(path) + '">' +
       options.map(function (o) { return '<option value="' + fEsc(o.v) + '"' + (String(value) === String(o.v) ? ' selected' : '') + '>' + fEsc(fT(o.l)) + '</option>'; }).join('') +
       '</select></label>';
   }
 
   function fRadio(path, label, value, options) {
-    return '<fieldset class="field"><legend class="field__label">' + fEsc(fT(label)) + '</legend>' +
+    return '<fieldset class="field"><legend class="field__label">' + fEsc(fT(label)) + fTip(path) + '</legend>' +
       '<div class="option-list">' + options.map(function (o) {
         return '<label class="option"><input type="radio" name="' + fEsc(path) + '" data-fpath="' + fEsc(path) + '" value="' + fEsc(o.v) + '"' + (String(value) === String(o.v) ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">' + fEsc(fT(o.l)) + '</span></span></label>';
       }).join('') + '</div></fieldset>';
@@ -261,7 +294,7 @@
 
   function fChecks(path, label, values, options) {
     var arr = Array.isArray(values) ? values : [];
-    return '<fieldset class="field"><legend class="field__label">' + fEsc(fT(label)) + '</legend>' +
+    return '<fieldset class="field"><legend class="field__label">' + fEsc(fT(label)) + fTip(path) + '</legend>' +
       '<div class="option-list">' + options.map(function (o) {
         var on = arr.indexOf(o.v) !== -1;
         return '<label class="option option--check"><input type="checkbox" data-fgroup="' + fEsc(path) + '" value="' + fEsc(o.v) + '"' + (on ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">' + fEsc(fT(o.l)) + '</span></span></label>';

@@ -896,3 +896,32 @@ html[dir="rtl"] .plan-head { text-align: right; }
   .nav { flex-wrap: wrap; justify-content: center; }
   .nav__link { font-size: .76rem; padding: 7px 6px; }
 }
+
+
+/* ── Ayudas contextuales del formulario ─────────────────────── */
+.tip-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .76rem; font-weight: 650; color: var(--ink-2);
+  padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--surface); cursor: pointer; user-select: none;
+}
+.tip-toggle input { width: 14px; height: 14px; accent-color: var(--brand); margin: 0; }
+.field__label { display: inline-flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.field__tip {
+  position: relative; display: inline-grid; place-items: center;
+  width: 17px; height: 17px; border-radius: 50%; flex: none;
+  background: var(--surface-2, #e8f1f2); color: var(--brand);
+  border: 1px solid #b9d5d8; font: 700 11px/1 Georgia, serif;
+  cursor: help; outline: none;
+}
+.field__tip:hover, .field__tip:focus { background: var(--brand); color: #fff; }
+.field__tipbox {
+  display: none; position: absolute; z-index: 20; left: 0; top: 24px;
+  width: min(260px, 75vw); padding: 9px 11px; border-radius: 8px;
+  background: #102f36; color: #fff; font: 400 .78rem/1.45 system-ui, sans-serif;
+  box-shadow: 0 8px 22px rgba(0,0,0,.22); white-space: normal;
+}
+.field__tip:hover .field__tipbox, .field__tip:focus .field__tipbox { display: block; }
+html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
+@media (max-width: 720px) { .tip-toggle { padding: 4px 7px; font-size: .7rem; } }
+@media print { .tip-toggle, .field__tip { display: none !important; } }

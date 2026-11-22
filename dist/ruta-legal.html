@@ -41,7 +41,7 @@
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d4f5c'/%3E%3Cpath d='M18 44V28l14-9 14 9v16' fill='none' stroke='%23f7f4ee' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M26 44V34h12v10' fill='none' stroke='%23e8863a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
-/* ── assets/css/app.css?v=20261122ap ── */
+/* ── assets/css/app.css?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · hoja de estilos única (sin dependencias)
    Diseño: papel cálido + verde profundo. Claro/oscuro automático.
@@ -941,6 +941,35 @@ html[dir="rtl"] .plan-head { text-align: right; }
   .nav__link { font-size: .76rem; padding: 7px 6px; }
 }
 
+
+/* ── Ayudas contextuales del formulario ─────────────────────── */
+.tip-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .76rem; font-weight: 650; color: var(--ink-2);
+  padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--surface); cursor: pointer; user-select: none;
+}
+.tip-toggle input { width: 14px; height: 14px; accent-color: var(--brand); margin: 0; }
+.field__label { display: inline-flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.field__tip {
+  position: relative; display: inline-grid; place-items: center;
+  width: 17px; height: 17px; border-radius: 50%; flex: none;
+  background: var(--surface-2, #e8f1f2); color: var(--brand);
+  border: 1px solid #b9d5d8; font: 700 11px/1 Georgia, serif;
+  cursor: help; outline: none;
+}
+.field__tip:hover, .field__tip:focus { background: var(--brand); color: #fff; }
+.field__tipbox {
+  display: none; position: absolute; z-index: 20; left: 0; top: 24px;
+  width: min(260px, 75vw); padding: 9px 11px; border-radius: 8px;
+  background: #102f36; color: #fff; font: 400 .78rem/1.45 system-ui, sans-serif;
+  box-shadow: 0 8px 22px rgba(0,0,0,.22); white-space: normal;
+}
+.field__tip:hover .field__tipbox, .field__tip:focus .field__tipbox { display: block; }
+html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
+@media (max-width: 720px) { .tip-toggle { padding: 4px 7px; font-size: .7rem; } }
+@media print { .tip-toggle, .field__tip { display: none !important; } }
+
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Ruta Legal","url":"https://markcastelli.github.io/inmigracion-espana/","description":"Guía gratuita y privada para inmigrantes en España: residencia, arraigo, nacionalidad, asilo, reagrupación familiar, trámites y entidades.","inLanguage":["es","ar","fr","en","ro"]}
@@ -979,6 +1008,10 @@ html[dir="rtl"] .plan-head { text-align: right; }
     </nav>
 
     <div class="topbar__actions">
+      <label class="tip-toggle" title="Mostrar ayudas contextuales">
+        <input type="checkbox" id="tooltipsToggle" checked>
+        <span id="tooltipsToggleLabel">Ayudas</span>
+      </label>
       <label class="lang-picker">
         <span class="sr-only">Idioma</span>
         <select id="langSelect" aria-label="Idioma / Language">
@@ -1254,7 +1287,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 </div>
 
 <script>
-/* ── assets/js/core.js?v=20261122ap ── */
+/* ── assets/js/core.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · núcleo: utilidades, estado local y fechas
    Sin dependencias. Funciona abriendo index.html directamente.
@@ -1501,7 +1534,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/i18n.js?v=20261122ap ── */
+/* ── assets/js/data/i18n.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · idiomas de interfaz
    Fase 1: navegación, portada y avisos legales.
@@ -1524,6 +1557,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       tagline: 'España, paso a paso',
       free: 'Gratis',
       private: 'Privado',
+      tooltips: 'Ayudas',
       nav: {
         inicio: 'Inicio', antes: 'Experiencia', formulario: 'Formulario', plan: 'Plan', vias: 'Vías', tramites: 'Trámites',
         online: 'Online', preguntas: 'FAQ', derechos: 'Derechos',
@@ -1546,6 +1580,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       tagline: 'إسبانيا، خطوة بخطوة',
       free: 'مجاني',
       private: 'خاص',
+      tooltips: 'مساعدة',
       nav: {
         inicio: 'الرئيسية', antes: 'تجربتي', formulario: 'النموذج', plan: 'خطتي', vias: 'المسارات', tramites: 'الإجراءات',
         online: 'عبر الإنترنت', preguntas: 'الأسئلة', derechos: 'الحقوق',
@@ -1568,6 +1603,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       tagline: "L'Espagne, pas à pas",
       free: 'Gratuit',
       private: 'Privé',
+      tooltips: 'Aides',
       nav: {
         inicio: 'Accueil', antes: 'Expérience', formulario: 'Formulaire', plan: 'Plan', vias: 'Voies', tramites: 'Démarches',
         online: 'En ligne', preguntas: 'FAQ', derechos: 'Droits',
@@ -1590,6 +1626,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       tagline: 'Spain, step by step',
       free: 'Free',
       private: 'Private',
+      tooltips: 'Help',
       nav: {
         inicio: 'Home', antes: 'Experience', formulario: 'Form', plan: 'Plan', vias: 'Routes', tramites: 'Procedures',
         online: 'Online', preguntas: 'FAQ', derechos: 'Rights',
@@ -1612,6 +1649,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
       tagline: 'Spania, pas cu pas',
       free: 'Gratuit',
       private: 'Privat',
+      tooltips: 'Ajutor',
       nav: {
         inicio: 'Acasă', antes: 'Experiență', formulario: 'Formular', plan: 'Plan', vias: 'Căi', tramites: 'Proceduri',
         online: 'Online', preguntas: 'FAQ', derechos: 'Drepturi',
@@ -1701,6 +1739,8 @@ html[dir="rtl"] .plan-head { text-align: right; }
     if (free) free.textContent = s.free;
     var priv = document.querySelector('.pill--private .pill__label');
     if (priv) priv.textContent = s.private;
+    var tipLabel = byId('tooltipsToggleLabel');
+    if (tipLabel) tipLabel.textContent = s.tooltips || 'Ayudas';
 
     var eyebrow = document.querySelector('.hero .eyebrow');
     if (eyebrow) eyebrow.textContent = s.heroEyebrow;
@@ -1785,7 +1825,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/seo.js?v=20261122ap ── */
+/* ── assets/js/data/seo.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · SEO por sección
    Títulos, descripciones, palabras clave, Open Graph y JSON-LD.
@@ -1946,7 +1986,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/formulario.js?v=20261122ap ── */
+/* ── assets/js/data/formulario.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · Formulario guiado 0-11
    Estado propio, separado del diagnóstico antiguo.
@@ -2275,7 +2315,190 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/antes.js?v=20261122ap ── */
+/* ── assets/js/data/tooltips.js?v=20261122aq ── */
+/* Ruta Legal · ayudas contextuales del formulario.
+   Textos por idioma; el PDF no usa estos textos. */
+(function () {
+  'use strict';
+  var RL = window.RL = window.RL || {};
+  var T = {
+    es: {
+      name: 'Escribe el nombre completo tal como aparece en el pasaporte.',
+      age: 'Edad actual. Si no la sabes con exactitud, indica la que figura en tu documentación.',
+      nationality: 'País del que es tu pasaporte o nacionalidad actual.',
+      currentLocation: 'País donde estás ahora. No es lo mismo estar en España, Portugal o Argentina.',
+      entryDate: 'Fecha en la que entraste en España, si ya estás aquí.',
+      phone: 'Un número donde puedan localizarte. No se envía a ninguna administración.',
+      email: 'Email de contacto. Si no tienes, déjalo vacío.',
+      docs: 'Marca solo documentos que ya tienes. No subas fotos ni números.',
+      aid: 'Indica si recibes alimentos, dinero, alquiler, luz o ayudas de una entidad.',
+      asylum: 'Si pediste protección internacional en España, marca Sí para completar los detalles.',
+      residence: 'Tu situación legal actual: irregular, estudios, trabajo, familiar, etc.',
+      legalSince: 'Mes y año de la primera resolución que te reconoció como residente. No es la fecha del TIE.',
+      drivingLicense: 'Si ya tienes permiso de conducir, indica el país que lo emitió.',
+      works: 'Si trabajas actualmente, aunque sea por horas o de forma temporal.',
+      contract: 'El tipo de contrato importa: un temporal puede terminar y cambiar tus ingresos.',
+      salary: 'Sueldo neto que recibes al mes, después de impuestos.',
+      housing: 'Dónde vives y cuánto pagas. Los gastos se cargan una sola vez, en el titular.',
+      mortgage: 'Si pagas hipoteca, indica la cuota mensual total; no la dupliques en otro integrante.',
+      foodWeekly: 'Gasto aproximado de comida por semana. Se convierte a mes multiplicando por 4,33.',
+      subscriptions: 'Netflix, Amazon y Disney se suman como un único gasto mensual.',
+      transport: 'Abono, metro, bus, gasolina u otros gastos de transporte tuyos o de tu familia.',
+      misc: 'Ropa, extras, salidas u otros gastos que no encajan en los apartados anteriores.',
+      credits: 'Total mensual de créditos y compras a plazos.',
+      disability: 'Si tienes discapacidad o dependencia, marca Sí para completar grado y vencimiento.',
+      degree: 'Grado de discapacidad reconocido: 33 %, 45 %, 65 % u otro.',
+      goals: 'Lo que quieres conseguir. No se muestran objetivos que ya tienes acreditados.',
+      familyCount: 'Número total de personas del grupo, contándote a ti.',
+      familyLocation: 'Dónde está el resto de tu familia para valorar reagrupación o arraigo.',
+      relation: 'Vínculo con el titular: pareja, hijo/a de ambos, de él o de ella, padre/madre, etc.',
+      studies: 'Estudios o formación que estás cursando actualmente.',
+      expenses: 'Gastos mensuales del hogar. Si no pagas un concepto, déjalo vacío: cuenta como 0 €.'
+    },
+    fr: {
+      name: 'Écris ton nom complet tel qu’il figure sur ton passeport.',
+      age: 'Âge actuel. Si tu ne le connais pas exactement, indique celui de tes documents.',
+      nationality: 'Pays dont tu possèdes le passeport ou ta nationalité actuelle.',
+      currentLocation: 'Pays où tu es maintenant. Ce n’est pas la même chose d’être en Espagne, au Portugal ou en Argentine.',
+      entryDate: 'Date à laquelle tu es entré(e) en Espagne, si tu y es déjà.',
+      phone: 'Un numéro où te joindre. Il n’est pas envoyé à l’administration.',
+      email: 'E-mail de contact. Si tu n’en as pas, laisse vide.',
+      docs: 'Coche uniquement les documents que tu as déjà. Ne télécharge ni photos ni numéros.',
+      aid: 'Indique si tu reçois de la nourriture, de l’argent, une aide au loyer, à l’électricité ou d’une association.',
+      asylum: 'Si tu as demandé l’asile en Espagne, coche Oui pour compléter les détails.',
+      residence: 'Ta situation légale actuelle : irrégulière, études, travail, famille, etc.',
+      legalSince: 'Mois et année de la première décision qui t’a reconnu(e) comme résident(e). Ce n’est pas la date de la TIE.',
+      drivingLicense: 'Si tu as déjà le permis, indique le pays qui l’a délivré.',
+      works: 'Si tu travailles actuellement, même quelques heures ou temporairement.',
+      contract: 'Le type de contrat compte : un contrat temporaire peut se terminer et changer tes revenus.',
+      salary: 'Salaire net que tu reçois par mois, après impôts.',
+      housing: 'Où tu vis et combien tu paies. Les dépenses se saisissent une seule fois, chez le titulaire.',
+      mortgage: 'Si tu paies un crédit immobilier, indique la mensualité totale ; ne la duplique pas chez un autre membre.',
+      foodWeekly: 'Dépense approximative de nourriture par semaine. Elle est convertie en mois en multipliant par 4,33.',
+      subscriptions: 'Netflix, Amazon et Disney sont additionnés comme une seule dépense mensuelle.',
+      transport: 'Abonnement, métro, bus, essence ou autres frais de transport pour toi ou ta famille.',
+      misc: 'Vêtements, extras, sorties ou autres dépenses hors des rubriques précédentes.',
+      credits: 'Total mensuel des crédits et achats à crédit.',
+      disability: 'Si tu as un handicap ou une dépendance, coche Oui pour compléter le degré et l’expiration.',
+      degree: 'Degré de handicap reconnu : 33 %, 45 %, 65 % ou autre.',
+      goals: 'Ce que tu veux obtenir. Les objectifs déjà reconnus ne sont pas affichés.',
+      familyCount: 'Nombre total de personnes du groupe, toi compris(e).',
+      familyLocation: 'Où se trouve le reste de ta famille pour évaluer le regroupement ou l’enracinement.',
+      relation: 'Lien avec le titulaire : partenaire, enfant des deux, de lui ou d’elle, père/mère, etc.',
+      studies: 'Études ou formation que tu suis actuellement.',
+      expenses: 'Dépenses mensuelles du foyer. Si tu ne paies pas un poste, laisse vide : cela compte comme 0 €.'
+    },
+    en: {
+      name: 'Write your full name exactly as it appears on your passport.',
+      age: 'Current age. If you are not sure, use the age on your documents.',
+      nationality: 'Country of your passport or current nationality.',
+      currentLocation: 'Country where you are now. It is not the same to be in Spain, Portugal or Argentina.',
+      entryDate: 'Date you entered Spain, if you are already here.',
+      phone: 'A number where you can be reached. It is not sent to any administration.',
+      email: 'Contact email. If you do not have one, leave it empty.',
+      docs: 'Tick only documents you already have. Do not upload photos or numbers.',
+      aid: 'Say whether you receive food, money, rent or electricity help, or aid from an organisation.',
+      asylum: 'If you applied for asylum in Spain, tick Yes to complete the details.',
+      residence: 'Your current legal status: irregular, studies, work, family, etc.',
+      legalSince: 'Month and year of the first decision recognising you as a resident. It is not the TIE date.',
+      drivingLicense: 'If you already have a licence, state the issuing country.',
+      works: 'If you currently work, even part-time or temporarily.',
+      contract: 'The contract type matters: a temporary contract may end and change your income.',
+      salary: 'Net monthly salary after taxes.',
+      housing: 'Where you live and how much you pay. Expenses are entered once, for the applicant.',
+      mortgage: 'If you pay a mortgage, enter the full monthly payment; do not duplicate it under another member.',
+      foodWeekly: 'Approximate weekly food cost. It is converted to a month by multiplying by 4.33.',
+      subscriptions: 'Netflix, Amazon and Disney are added as one monthly subscription cost.',
+      transport: 'Travel pass, metro, bus, fuel or other transport costs for you or your family.',
+      misc: 'Clothing, extras, outings or other costs not covered above.',
+      credits: 'Total monthly loan and instalment payments.',
+      disability: 'If you have a disability or dependency, tick Yes to complete the degree and expiry.',
+      degree: 'Recognised disability degree: 33%, 45%, 65% or other.',
+      goals: 'What you want to achieve. Goals you already have are not shown.',
+      familyCount: 'Total number of people in the group, including you.',
+      familyLocation: 'Where the rest of your family is, to assess reunification or integration.',
+      relation: 'Relationship to the applicant: partner, child of both, of him or her, parent, etc.',
+      studies: 'Studies or training you are currently doing.',
+      expenses: 'Monthly household expenses. If you do not pay an item, leave it empty: it counts as €0.'
+    },
+    ar: {
+      name: 'اكتب اسمك الكامل كما يظهر في جواز السفر.',
+      age: 'العمر الحالي. إذا لم تكن متأكدًا استخدم العمر الموجود في وثائقك.',
+      nationality: 'بلد جواز سفرك أو جنسيتك الحالية.',
+      currentLocation: 'البلد الذي أنت فيه الآن. ليس الأمر نفسه أن تكون في إسبانيا أو البرتغال أو الأرجنتين.',
+      entryDate: 'تاريخ دخولك إلى إسبانيا، إن كنت هنا بالفعل.',
+      phone: 'رقم يمكن التواصل معك عبره. لا يُرسل إلى أي إدارة.',
+      email: 'البريد الإلكتروني للتواصل. إن لم يكن لديك، اتركه فارغًا.',
+      docs: 'حدد فقط الوثائق التي لديك بالفعل. لا ترفع صورًا أو أرقامًا.',
+      aid: 'اذكر إن كنت تتلقى طعامًا أو مالًا أو مساعدة في الإيجار أو الكهرباء أو من جمعية.',
+      asylum: 'إذا طلبت اللجوء في إسبانيا، اختر نعم لإكمال التفاصيل.',
+      residence: 'وضعك القانوني الحالي: غير نظامي، دراسة، عمل، عائلة، إلخ.',
+      legalSince: 'شهر وسنة أول قرار اعترف بإقامتك. ليس تاريخ بطاقة TIE.',
+      drivingLicense: 'إذا كان لديك رخصة قيادة، حدد البلد الذي أصدرها.',
+      works: 'إذا كنت تعمل حاليًا، ولو بضع ساعات أو بعقد مؤقت.',
+      contract: 'نوع العقد مهم: العقد المؤقت قد ينتهي ويغيّر دخلك.',
+      salary: 'الراتب الصافي الشهري بعد الضرائب.',
+      housing: 'أين تعيش وكم تدفع. تُدخل المصاريف مرة واحدة فقط لصاحب الطلب.',
+      mortgage: 'إذا كنت تدفع رهنًا عقاريًا، أدخل القسط الشهري الكامل ولا تكرره لدى فرد آخر.',
+      foodWeekly: 'تكلفة الطعام الأسبوعية التقريبية. تُحوّل إلى شهر بالضرب في 4.33.',
+      subscriptions: 'تُجمع Netflix وAmazon وDisney كتكلفة اشتراكات شهرية واحدة.',
+      transport: 'اشتراك النقل أو المترو أو الباص أو الوقود أو غيرها لك أو لعائلتك.',
+      misc: 'الملابس أو المصاريف الإضافية أو الخروج أو غيرها مما لم يُذكر أعلاه.',
+      credits: 'إجمالي أقساط القروض والدفع بالتقسيط شهريًا.',
+      disability: 'إذا كان لديك إعاقة أو اعتماد، اختر نعم لإكمال الدرجة وتاريخ الانتهاء.',
+      degree: 'درجة الإعاقة المعترف بها: 33% أو 45% أو 65% أو غيرها.',
+      goals: 'ما تريد تحقيقه. لا تُعرض الأهداف التي لديك بالفعل.',
+      familyCount: 'إجمالي عدد أفراد المجموعة، بما فيهم أنت.',
+      familyLocation: 'أين بقية عائلتك لتقييم لمّ الشمل أو الاندماج.',
+      relation: 'علاقتك بصاحب الطلب: شريك، ابن/ابنة لكما أو له أو لها، أب/أم، إلخ.',
+      studies: 'الدراسة أو التدريب الذي تتابعه حاليًا.',
+      expenses: 'مصاريف الأسرة الشهرية. إذا لم تدفع بندًا، اتركه فارغًا: يُحسب 0 €.'
+    },
+    ro: {
+      name: 'Scrie numele complet așa cum apare în pașaport.',
+      age: 'Vârsta actuală. Dacă nu o știi exact, folosește vârsta din documente.',
+      nationality: 'Țara pașaportului sau cetățenia actuală.',
+      currentLocation: 'Țara în care ești acum. Nu este același lucru să fii în Spania, Portugalia sau Argentina.',
+      entryDate: 'Data la care ai intrat în Spania, dacă ești deja aici.',
+      phone: 'Un număr la care poți fi contactat. Nu este trimis vreunei administrații.',
+      email: 'E-mail de contact. Dacă nu ai, lasă gol.',
+      docs: 'Bifează doar documentele pe care le ai deja. Nu încărca poze sau numere.',
+      aid: 'Spune dacă primești mâncare, bani, ajutor la chirie, curent sau de la o asociație.',
+      asylum: 'Dacă ai cerut azil în Spania, bifează Da pentru a completa detaliile.',
+      residence: 'Situația ta legală actuală: neregulată, studii, muncă, familie etc.',
+      legalSince: 'Luna și anul primei decizii care te-a recunoscut ca rezident. Nu este data TIE.',
+      drivingLicense: 'Dacă ai deja permis, indică țara care l-a emis.',
+      works: 'Dacă lucrezi în prezent, chiar și câteva ore sau temporar.',
+      contract: 'Tipul contractului contează: un contract temporar poate înceta și îți schimbă venitul.',
+      salary: 'Salariul net lunar după impozite.',
+      housing: 'Unde locuiești și cât plătești. Cheltuielile se introduc o singură dată, la titular.',
+      mortgage: 'Dacă plătești ipotecă, introdu rata lunară totală; nu o dubla la alt membru.',
+      foodWeekly: 'Costul aproximativ al mâncării pe săptămână. Se transformă în lună înmulțind cu 4,33.',
+      subscriptions: 'Netflix, Amazon și Disney se adună ca un singur cost lunar de abonamente.',
+      transport: 'Abonament, metrou, autobuz, combustibil sau alte costuri de transport pentru tine sau familie.',
+      misc: 'Haine, extra sau ieșiri, costuri care nu intră în celelalte rubrici.',
+      credits: 'Totalul lunar al creditelor și al plăților în rate.',
+      disability: 'Dacă ai dizabilitate sau dependență, bifează Da pentru a completa gradul și expirarea.',
+      degree: 'Gradul de dizabilitate recunoscut: 33%, 45%, 65% sau altul.',
+      goals: 'Ce vrei să obții. Obiectivele deja recunoscute nu sunt afișate.',
+      familyCount: 'Numărul total de persoane din grup, inclusiv tu.',
+      familyLocation: 'Unde este restul familiei tale pentru a evalua reunificarea sau integrarea.',
+      relation: 'Relația cu titularul: partener, copil al ambilor, al lui sau al ei, părinte etc.',
+      studies: 'Studiile sau formarea pe care o urmezi acum.',
+      expenses: 'Cheltuieli lunare ale gospodăriei. Dacă nu plătești un element, lasă gol: contează ca 0 €.'
+    }
+  };
+  function text(key) {
+    var lang = RL.i18n && RL.i18n.current ? RL.i18n.current() : 'es';
+    return (T[lang] && T[lang][key]) || T.es[key] || '';
+  }
+  RL.tooltips = T;
+  RL.tooltipText = text;
+})();
+
+</script>
+<script>
+/* ── assets/js/data/antes.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · Mi experiencia
    Testimonio personal, corregido y ordenado por temas.
@@ -2388,7 +2611,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/countries.js?v=20261122ap ── */
+/* ── assets/js/data/countries.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · países y datos que afectan a las vías
    - dos: nacionalidad por residencia en 2 años (art. 22 CC)
@@ -2522,7 +2745,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/regions.js?v=20261122ap ── */
+/* ── assets/js/data/regions.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · comunidades autónomas, provincias y servicios
    ============================================================ */
@@ -2611,7 +2834,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/questions.js?v=20261122ap ── */
+/* ── assets/js/data/questions.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · cuestionario (esquema declarativo)
    Cada campo: { id, type, label, help, required, showIf, options }
@@ -3938,7 +4161,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-nacionalidad.js?v=20261122ap ── */
+/* ── assets/js/data/routes-nacionalidad.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · vías de NACIONALIDAD española
    Base: Código Civil arts. 17-26, Ley 20/2022 (DA 8.ª, cerrada),
@@ -4376,7 +4599,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-espana.js?v=20261122ap ── */
+/* ── assets/js/data/routes-espana.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · vías que se solicitan DESDE España
    Base: RD 1155/2024 (en vigor 20/05/2025), RD 316/2026 y
@@ -5313,7 +5536,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-exterior.js?v=20261122ap ── */
+/* ── assets/js/data/routes-exterior.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · visados y entrada desde el exterior
    Base: LO 4/2000, RD 1155/2024, Ley 14/2013 (modificada por
@@ -5752,7 +5975,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/resources.js?v=20261122ap ── */
+/* ── assets/js/data/resources.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · recursos, glosario, FAQ y bulos
    ============================================================ */
@@ -5898,7 +6121,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/directory.js?v=20261122ap ── */
+/* ── assets/js/data/directory.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · directorio de sitios de interés
    Cada ficha dice qué se puede hacer allí y enlaza a la sede.
@@ -6428,7 +6651,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/procedures.js?v=20261122ap ── */
+/* ── assets/js/data/procedures.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · trámites: qué hacer, dónde, con qué cita y qué llevar
    ============================================================ */
@@ -7575,7 +7798,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/aids.js?v=20261122ap ── */
+/* ── assets/js/data/aids.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · derechos, discapacidad, dependencia y ayudas
    ============================================================ */
@@ -7950,7 +8173,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/faq.js?v=20261122ap ── */
+/* ── assets/js/data/faq.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · preguntas frecuentes (dudas reales de foros)
    Respuestas contrastadas con normativa y sede oficial.
@@ -8820,7 +9043,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/online.js?v=20261122ap ── */
+/* ── assets/js/data/online.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · trámites online, sedes y notificaciones
    ============================================================ */
@@ -9117,7 +9340,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/engine.js?v=20261122ap ── */
+/* ── assets/js/engine.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · motor de reglas
    Convierte el perfil en un plan: vías que encajan, requisitos
@@ -10371,7 +10594,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/decision.js?v=20261122ap ── */
+/* ── assets/js/decision.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · capa de decisión
    No sustituye al motor de reglas: lo ordena y lo audita.
@@ -10648,7 +10871,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/forms.js?v=20261122ap ── */
+/* ── assets/js/forms.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · catálogo de formularios oficiales
    Enlaces a la sede del Ministerio de Inclusión y al Ministerio
@@ -10884,7 +11107,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/ai.js?v=20261122ap ── */
+/* ── assets/js/ai.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · consulta abierta a una IA
    Genera un prompt con el caso, el diagnóstico y las reglas.
@@ -11185,7 +11408,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/pdf.js?v=20261122ap ── */
+/* ── assets/js/pdf.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · generador de PDF sin dependencias
    Escribe un PDF válido (A4, Helvetica, WinAnsi) con el perfil,
@@ -11835,7 +12058,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/speech.js?v=20261122ap ── */
+/* ── assets/js/speech.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · lectura en voz alta con la Web Speech API
    Sin servidor, sin API key y sin enviar texto a terceros.
@@ -12219,7 +12442,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/app.js?v=20261122ap ── */
+/* ── assets/js/app.js?v=20261122aq ── */
 /* ============================================================
    Ruta Legal · interfaz (asistente, plan, catálogo, documentos)
    ============================================================ */
@@ -12330,6 +12553,15 @@ html[dir="rtl"] .plan-head { text-align: right; }
       document.documentElement.setAttribute('data-theme', next);
       try { localStorage.setItem('ruta-legal.theme', next); } catch (e) {}
     });
+
+    var tipToggle = $('#tooltipsToggle');
+    if (tipToggle) {
+      try { tipToggle.checked = localStorage.getItem('ruta-legal.tooltips') !== '0'; } catch (e) {}
+      tipToggle.addEventListener('change', function () {
+        try { localStorage.setItem('ruta-legal.tooltips', tipToggle.checked ? '1' : '0'); } catch (e) {}
+        render();
+      });
+    }
 
     window.addEventListener('hashchange', function () {
       var v = parseHash().view;
@@ -12462,20 +12694,44 @@ html[dir="rtl"] .plan-head { text-align: right; }
   function fnum(v) { var n = Number(v); return isFinite(n) ? n : 0; }
   function fT(v) { return RL.formText ? RL.formText(v) : v; }
 
+  function tooltipsOn() {
+    var cb = document.getElementById ? document.getElementById('tooltipsToggle') : null;
+    if (cb) return !!cb.checked;
+    try { return localStorage.getItem('ruta-legal.tooltips') !== '0'; } catch (e) { return true; }
+  }
+
+  function fTip(path) {
+    if (!tooltipsOn() || !RL.tooltipText) return '';
+    var p = String(path || '');
+    var key = p.split('.').pop();
+    var alias = {
+      contractType: 'contract', contractEnd: 'contract',
+      mortgageAmount: 'mortgage', mortgage: 'mortgage',
+      housingCost: 'housing', legalSinceMonth: 'legalSince', legalSinceYear: 'legalSince',
+      drivingLicenseCountry: 'drivingLicense', educationLevel: 'studies',
+      disabilityExpiryStatus: 'disability', disabilityExpiry: 'disability',
+      disabilityDegree: 'degree', aidTypes: 'aid', asylumStatus: 'asylum',
+      familyLocation: 'familyLocation'
+    };
+    var text = RL.tooltipText(key) || (alias[key] ? RL.tooltipText(alias[key]) : '') || (p.indexOf('expenses.') === 0 ? RL.tooltipText('expenses') : '');
+    if (!text) return '';
+    return '<span class="field__tip" tabindex="0" role="button" aria-label="' + fEsc(fT('Más información')) + '">i<span class="field__tipbox" role="tooltip">' + fEsc(text) + '</span></span>';
+  }
+
   function fInput(path, label, value, type, placeholder) {
-    return '<label class="field"><span class="field__label">' + fEsc(fT(label)) + '</span>' +
+    return '<label class="field"><span class="field__label">' + fEsc(fT(label)) + fTip(path) + '</span>' +
       '<input class="input" type="' + (type || 'text') + '" data-fpath="' + fEsc(path) + '" value="' + fEsc(value) + '" placeholder="' + fEsc(fT(placeholder || '')) + '"></label>';
   }
 
   function fSelect(path, label, value, options) {
-    return '<label class="field"><span class="field__label">' + fEsc(fT(label)) + '</span>' +
+    return '<label class="field"><span class="field__label">' + fEsc(fT(label)) + fTip(path) + '</span>' +
       '<select class="select" data-fpath="' + fEsc(path) + '">' +
       options.map(function (o) { return '<option value="' + fEsc(o.v) + '"' + (String(value) === String(o.v) ? ' selected' : '') + '>' + fEsc(fT(o.l)) + '</option>'; }).join('') +
       '</select></label>';
   }
 
   function fRadio(path, label, value, options) {
-    return '<fieldset class="field"><legend class="field__label">' + fEsc(fT(label)) + '</legend>' +
+    return '<fieldset class="field"><legend class="field__label">' + fEsc(fT(label)) + fTip(path) + '</legend>' +
       '<div class="option-list">' + options.map(function (o) {
         return '<label class="option"><input type="radio" name="' + fEsc(path) + '" data-fpath="' + fEsc(path) + '" value="' + fEsc(o.v) + '"' + (String(value) === String(o.v) ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">' + fEsc(fT(o.l)) + '</span></span></label>';
       }).join('') + '</div></fieldset>';
@@ -12483,7 +12739,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
   function fChecks(path, label, values, options) {
     var arr = Array.isArray(values) ? values : [];
-    return '<fieldset class="field"><legend class="field__label">' + fEsc(fT(label)) + '</legend>' +
+    return '<fieldset class="field"><legend class="field__label">' + fEsc(fT(label)) + fTip(path) + '</legend>' +
       '<div class="option-list">' + options.map(function (o) {
         var on = arr.indexOf(o.v) !== -1;
         return '<label class="option option--check"><input type="checkbox" data-fgroup="' + fEsc(path) + '" value="' + fEsc(o.v) + '"' + (on ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">' + fEsc(fT(o.l)) + '</span></span></label>';

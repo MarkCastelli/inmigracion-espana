@@ -9,6 +9,7 @@ const FILES = [
   'assets/js/core.js',
   'assets/js/data/antes.js',
   'assets/js/data/formulario.js',
+  'assets/js/data/tooltips.js',
   'assets/js/data/countries.js',
   'assets/js/data/regions.js',
   'assets/js/data/questions.js',
