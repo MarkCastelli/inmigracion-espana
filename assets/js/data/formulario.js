@@ -82,6 +82,7 @@
   function person() {
     return {
       name: '', age: '', nationality: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
+      currentLocation: '',
       disability: '', residence: '', drivingLicense: '', drivingLicenseCountry: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
       jobType: '', contractType: '', contractEnd: '', studies: '', career: '',
       paysHousing: '',
@@ -98,6 +99,7 @@
       step: 0,
       mode: '',
       familyCount: 1,
+      familyLocation: '',
       members: [],
       applicant: person(),
       spouse: person(),

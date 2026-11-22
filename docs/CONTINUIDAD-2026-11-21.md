@@ -109,6 +109,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 79. **Asilo del titular**: si responde que sí en datos personales, el paso 3 muestra año, estado y fecha de la solicitud, igual que la ficha de la pareja.
 80. **Permiso de conducir**: se pregunta si lo tiene y de qué país; se añade a documentos y a objetivos como «Obtener o canjear el permiso de conducir».
 81. **Permiso individual**: no se aplica como objetivo común; cada adulto sin permiso decide si quiere obtenerlo/canjearlo, y los menores no lo ven.
+82. **Ubicación**: «Sobre ti» pregunta dónde está ahora (España, Portugal, UE, Argentina, Latinoamérica, otro); el grupo familiar pregunta dónde está el resto de la familia.
 
 ## Comandos
 

@@ -641,6 +641,8 @@ t('el grupo familiar genera filas de vínculo y edad al indicar cantidad', () =>
   nav(app, 'formulario');
   const html = app.document.querySelector('#view-formulario').innerHTML;
   assert.ok(html.includes('Cantidad de integrantes'));
+  assert.ok(html.includes('¿Dónde estás ahora?'));
+  assert.ok(html.includes('¿Dónde está el resto de tu familia?'));
   assert.ok(html.includes('Familiar 1'));
   assert.ok(html.includes('Familiar 2'));
   assert.ok(html.includes('Relación'));

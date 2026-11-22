@@ -492,6 +492,16 @@
         fInput('applicant.name', 'Nombre y apellidos', fget(F.applicant, 'name')) +
         fInput('applicant.age', 'Edad', fget(F.applicant, 'age'), 'number') +
         fInput('applicant.nationality', 'Nacionalidad', fget(F.applicant, 'nationality')) +
+        fSelect('applicant.currentLocation', '¿Dónde estás ahora?', fget(F.applicant, 'currentLocation'), [
+          { v: '', l: 'Sin indicar' },
+          { v: 'espana', l: 'En España' },
+          { v: 'portugal', l: 'En Portugal' },
+          { v: 'ue', l: 'En otro país de la UE/EEE/Suiza' },
+          { v: 'argentina', l: 'En Argentina' },
+          { v: 'latam', l: 'En otro país de América Latina' },
+          { v: 'otro', l: 'En otro país' },
+          { v: 'dontknow', l: 'No lo sé' }
+        ]) +
         fInput('applicant.phone', 'Teléfono móvil', fget(F.applicant, 'phone'), 'tel') +
         fInput('applicant.email', 'Email', fget(F.applicant, 'email'), 'email') +
         fInput('applicant.entryDate', 'Fecha de ingreso en España', fget(F.applicant, 'entryDate'), 'date') +
@@ -509,6 +519,17 @@
             { v: '1', l: '1 persona (solo tú)' }, { v: '2', l: '2 personas' }, { v: '3', l: '3 personas' },
             { v: '4', l: '4 personas' }, { v: '5', l: '5 personas' }, { v: '6', l: '6 personas' },
             { v: '7', l: '7 personas' }, { v: '8', l: '8 personas' }, { v: '9', l: '9 personas' }, { v: '10', l: '10 personas o más' }
+          ]) + '</div>' +
+          '<div class="form-grid">' + fSelect('familyLocation', '¿Dónde está el resto de tu familia?', F.familyLocation, [
+            { v: '', l: 'Sin indicar' },
+            { v: 'todos_espana', l: 'Todos conmigo en España' },
+            { v: 'algunos_espana', l: 'Algunos en España y otros fuera' },
+            { v: 'todos_fuera', l: 'Todos fuera de España' },
+            { v: 'portugal', l: 'En Portugal' },
+            { v: 'argentina', l: 'En Argentina' },
+            { v: 'latam', l: 'En otro país de América Latina' },
+            { v: 'otro', l: 'En otro país' },
+            { v: 'dontknow', l: 'No lo sé' }
           ]) + '</div>' +
           ((F.members || []).length ? '<div style="margin-top:12px">' + F.members.map(function (m, i) {
             return '<div class="family-child" style="margin-top:10px"><div class="flex" style="justify-content:space-between"><strong>Familiar ' + (i + 1) + '</strong><button class="btn btn--ghost btn--sm" type="button" data-form-action="remove-member" data-index="' + i + '">Quitar</button></div><div class="form-grid">' +
@@ -739,6 +760,7 @@
       '<div class="kv__row"><dt>Ingreso neto mensual</dt><dd>' + income.toFixed(2) + ' €</dd></div>' +
       '<div class="kv__row"><dt>Gastos fijos del hogar</dt><dd>' + exp.toFixed(2) + ' €</dd></div>' +
       '<div class="kv__row"><dt>Diferencia</dt><dd><strong>' + balance.toFixed(2) + ' €</strong></dd></div>' +
+      (F.familyLocation ? '<div class="kv__row"><dt>Resto de la familia</dt><dd>' + fEsc({ todos_espana: 'Todos en España', algunos_espana: 'Algunos en España y otros fuera', todos_fuera: 'Todos fuera de España', portugal: 'En Portugal', argentina: 'En Argentina', latam: 'En América Latina', otro: 'En otro país', dontknow: 'No lo sé' }[F.familyLocation] || F.familyLocation) + '</dd></div>' : '') +
       '</div>';
     if (F.print && F.print.applicant !== false) {
       html += '<h3>Titular</h3>' + summaryPerson(F.applicant);
@@ -781,8 +803,10 @@
     var docs = (p.docs || []).map(function (v) { return label(RL.formulario.docs, v); }).filter(Boolean).join(', ');
     var aid = (p.aidTypes || []).map(function (v) { return label(RL.formulario.aidTypes, v); }).filter(Boolean).join(', ');
     var goals = (p.goals || []).map(function (v) { return label(RL.formulario.goals, v); }).filter(Boolean).join(', ');
+    var locations = { espana: 'España', portugal: 'Portugal', ue: 'UE/EEE/Suiza', argentina: 'Argentina', latam: 'América Latina', otro: 'Otro país', dontknow: 'No lo sé' };
     var rows = [
       ['Nombre', p.name], ['Edad', p.age], ['Nacionalidad', p.nationality],
+      ['Dónde está ahora', locations[p.currentLocation] || p.currentLocation],
       ['Teléfono', p.phone], ['Email', p.email], ['Entrada en España', p.entryDate],
       ['Residencia', label(RL.formulario.residence, p.residence)],
       ['Permiso de conducir', p.drivingLicense],
