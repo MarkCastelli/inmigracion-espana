@@ -1086,4 +1086,20 @@ t('documentos muestra una columna por integrante', () => {
   nav(app, 'inicio');
 });
 
+t('al volver al formulario completado abre el documento final', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.applicant.name = 'Ana';
+  f.completed = true;
+  f.step = 10;
+  nav(app, 'inicio');
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Documento final'));
+  assert.ok(html.includes('Informe para asesoría legal'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

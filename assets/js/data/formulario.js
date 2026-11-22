@@ -98,6 +98,7 @@
   function blank() {
     var out = {
       step: 0,
+      completed: false,
       mode: '',
       familyCount: 1,
       familyLocation: '',

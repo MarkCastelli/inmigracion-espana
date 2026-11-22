@@ -139,6 +139,14 @@
     if (view === 'diagnostico' && ui.view !== 'diagnostico') {
       ui.step = RL.state.meta.lastStep || 0;
     }
+    if (view === 'formulario' && ui.view !== 'formulario') {
+      var savedForm = RL.state.profile && RL.state.profile.formulario;
+      if (savedForm && (savedForm.completed || Number(savedForm.step) >= 11)) {
+        savedForm.completed = true;
+        savedForm.step = 11;
+        RL.store.save();
+      }
+    }
     ui.view = view;
     ui.errors = {};
     if (location.hash !== '#/' + view) {
@@ -1041,8 +1049,10 @@
     }
     if (action === 'print') { window.print(); return; }
     if (action === 'next') {
-      if (F.step >= 11) { F.step = 0; saveForm(); renderFormulario(); return; }
-      F.step = formNextIndex(F, F.step); saveForm(); renderFormulario();
+      if (F.step >= 11) { F.step = 0; F.completed = false; saveForm(); renderFormulario(); return; }
+      F.step = formNextIndex(F, F.step);
+      if (F.step === 11) F.completed = true;
+      saveForm(); renderFormulario();
       window.scrollTo(0, 0);
       return;
     }
