@@ -135,6 +135,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 105. **Donar**: nueva vista `#/donar` y enlace en menú/pie; explica que la web es gratuita, el tiempo de mantenimiento, invita a un café y enlaza PayPal `hosted_button_id=YPZZZU5ZD4G9Y`; aclara que no es ONG, no da asesoramiento ni desgrava. Los avisos de transparencia y “no dones si…” tienen separación visual.
 106. **Abogados**: nueva vista `#/abogados` y menú; aviso destacado de que no se verifica identidad, colegiación, matrícula, honorarios ni resultados; directorio vacío hasta recibir solicitudes; campos de contacto, CTA por GitHub y guía para comprobar colegiación.
 107. **Alta de abogados**: vista `#/abogados-alta`; opción gratuita si atienden con aportación voluntaria y 20 €/mes (240 €/año por adelantado) si cobran; formulario con nombre, estudio, matrícula, colegio, contacto, web, citas, domicilio y horario; envío por FormSubmit con correo ofuscado en el código, consentimiento y privacidad actualizada.
+108. **Base JSON de abogados**: `assets/js/data/lawyers.json` contiene los registros; `lawyers.js` los carga con fetch y `build.py` inyecta una copia en `dist` para uso sin servidor. 10 registros ficticios marcados DEMO, filtros por localidad, búsqueda por estudio/abogado y orden A-Z/Z-A.
 
 ## Comandos
 

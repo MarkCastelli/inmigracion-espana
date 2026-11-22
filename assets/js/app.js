@@ -31,7 +31,10 @@
     aiAnswer: '',
     aiOpts: { includeDocs: true, includeLocation: true, includeNotes: true },
     aiFollowBase: null,
-    aiLastId: null
+    aiLastId: null,
+    lawyerSearch: '',
+    lawyerCity: 'todas',
+    lawyerSort: 'az'
   };
 
   var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'abogados', 'abogados-alta', 'consulta', 'docs', 'formularios', 'donar', 'ayuda', 'legal'];
@@ -3517,31 +3520,66 @@
 
   function renderAbogados() {
     var host = $('#view-abogados');
-    var list = Array.isArray(RL.lawyers) ? RL.lawyers : [];
-    var issueUrl = '#/abogados-alta';
+    if (!RL.lawyersLoaded && !RL.lawyersLoading) {
+      host.innerHTML = '<div class="plan-head"><div><p class="eyebrow">Directorio</p><h1>Abogados</h1><p class="plan-head__sub">Cargando la base de datos…</p></div></div>';
+      RL.lawyersLoading = true;
+      RL.loadLawyers().then(function () {
+        RL.lawyersLoading = false;
+        if (ui.view === 'abogados') renderAbogados();
+      });
+      return;
+    }
+    if (!RL.lawyersLoaded) {
+      host.innerHTML = '<div class="empty-state"><h2>Cargando abogados…</h2><p>Espera un momento.</p></div>';
+      return;
+    }
+    var all = Array.isArray(RL.lawyers) ? RL.lawyers : [];
+    var q = (ui.lawyerSearch || '').toLowerCase().trim();
+    var cities = [];
+    all.forEach(function (a) { if (a.city && cities.indexOf(a.city) === -1) cities.push(a.city); });
+    cities.sort(function (a, b) { return a.localeCompare(b, 'es'); });
+    var list = all.filter(function (a) {
+      if (ui.lawyerCity !== 'todas' && a.city !== ui.lawyerCity) return false;
+      if (!q) return true;
+      return (a.studio + ' ' + a.name + ' ' + a.city + ' ' + a.province + ' ' + (a.specialties || '')).toLowerCase().indexOf(q) !== -1;
+    });
+    list.sort(function (a, b) {
+      var x = (a.studio || a.name || '').localeCompare(b.studio || b.name || '', 'es', { sensitivity: 'base' });
+      return ui.lawyerSort === 'za' ? -x : x;
+    });
     var html = '<div class="plan-head"><div><p class="eyebrow">Directorio</p><h1>Abogados</h1>' +
       '<p class="plan-head__sub">Despachos que solicitan aparecer para que puedas contactarlos. No es una recomendación ni un ranking.</p></div>' +
       '<div class="plan-head__actions"><a class="btn btn--soft btn--sm" href="#/abogados-alta">' + icons.user(15) + ' Solicitar aparecer</a></div></div>';
     html += '<div class="callout callout--warn" style="border-width:2px">' + icons.alert(20) + '<div><strong>No verifico a los abogados</strong>' +
       '<p>No compruebo identidad, colegiación, número de colegiado, especialización, seguro, honorarios, resultados ni la veracidad de los datos publicados. No me hago responsable de problemas, pagos, conflictos o daños derivados del contacto con un despacho que aparezca aquí. Antes de contratar, verifica tú mismo y desconfía de quien prometa resultados.</p></div></div>';
+    html += '<div class="callout callout--demo" style="border:1px solid #d9a441;background:#fff8e6;color:#5b4300"><strong>Datos de prueba</strong> Los 10 registros que aparecen ahora son ficticios, creados para probar los filtros. No son abogados reales, no existen sus despachos y sus teléfonos, webs y direcciones son de ejemplo. No los contactes ni los tomes como referencia.</div>';
+    if (RL.lawyersError) html += '<div class="callout callout--warn">' + icons.alert(18) + '<div><p>' + esc(RL.lawyersError) + '</p></div></div>';
     html += '<div class="callout callout--info">' + icons.info(18) + '<div><strong>Esta página es un tablón de contacto</strong><p>Los datos los aporta cada despacho. La presencia aquí no significa que Ruta Legal lo recomiende, que haya revisado su trabajo ni que tenga un acuerdo económico con él.</p></div></div>';
+    html += '<div class="lawyer-tools"><div class="search">' + icons.search(18) + '<input class="input" type="search" id="lawyerSearch" placeholder="Buscar por estudio o abogado…" value="' + esc(ui.lawyerSearch) + '" aria-label="Buscar abogado o estudio"></div>' +
+      '<select class="select" id="lawyerCity" aria-label="Filtrar por localidad"><option value="todas">Todas las localidades</option>' +
+      cities.map(function (c) { return '<option value="' + esc(c) + '"' + (ui.lawyerCity === c ? ' selected' : '') + '>' + esc(c) + '</option>'; }).join('') + '</select>' +
+      '<select class="select" id="lawyerSort" aria-label="Ordenar por nombre"><option value="az"' + (ui.lawyerSort === 'az' ? ' selected' : '') + '>A → Z</option><option value="za"' + (ui.lawyerSort === 'za' ? ' selected' : '') + '>Z → A</option></select></div>';
+    html += '<p class="muted" style="font-size:.82rem">' + list.length + ' de ' + all.length + ' despachos · orden ' + (ui.lawyerSort === 'za' ? 'Z → A' : 'A → Z') + '</p>';
     if (!list.length) {
-      html += '<div class="empty-state" style="margin-top:18px"><h2>Todavía no hay despachos publicados</h2>' +
-        '<p>Estoy preparando la base de datos. Si eres abogado/a y quieres aparecer, escribe con los datos del despacho. Revisaré la solicitud antes de publicarla.</p>' +
-        '<a class="btn btn--primary" href="#/abogados-alta">' + icons.user(16) + ' Quiero aparecer en Abogados</a></div>';
+      html += '<div class="empty-state"><h2>Sin resultados</h2><p>Prueba con otra localidad o cambia la búsqueda. También puedes <a href="#/abogados-alta">solicitar aparecer</a> si eres abogado/a.</p></div>';
     } else {
       html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Despachos publicados</h2></div><div class="block__body">' +
         list.map(function (a) {
-          var wa = a.whatsapp ? 'https://wa.me/' + String(a.whatsapp).replace(/[^0-9]/g, '') : '';
-          return '<div class="family-child" style="margin-top:14px"><div class="flex" style="justify-content:space-between;gap:10px;flex-wrap:wrap"><h3>' + esc(a.studio || a.name || 'Despacho') + '</h3><span class="badge badge--warn">No verificado</span></div>' +
+          var isDemo = !!a.demo;
+          var wa = a.whatsapp && !isDemo ? 'https://wa.me/' + String(a.whatsapp).replace(/[^0-9]/g, '') : '';
+          return '<div class="family-child lawyer-card" data-lawyer-card style="margin-top:14px"><div class="flex" style="justify-content:space-between;gap:10px;flex-wrap:wrap"><h3>' + esc(a.studio || a.name || 'Despacho') + '</h3>' + (isDemo ? '<span class="badge badge--warn">DEMO · ficticio</span>' : '<span class="badge badge--warn">No verificado</span>') + '</div>' +
             (a.name ? '<p><strong>' + esc(a.name) + '</strong></p>' : '') +
-            (a.address ? '<p class="muted">' + esc(a.address) + (a.city ? ' · ' + esc(a.city) : '') + (a.province ? ' · ' + esc(a.province) : '') + '</p>' : '') +
+            '<p class="muted">' + esc(a.address || '') + (a.city ? ' · ' + esc(a.city) : '') + (a.province ? ' · ' + esc(a.province) : '') + '</p>' +
+            (a.schedule ? '<p class="muted" style="font-size:.83rem">Horario: ' + esc(a.schedule) + '</p>' : '') +
+            (a.specialties ? '<p class="muted" style="font-size:.83rem">' + esc(a.specialties) + (a.languages ? ' · ' + esc(a.languages) : '') + '</p>' : '') +
             '<div class="flex" style="gap:8px;flex-wrap:wrap">' +
-            (a.phone ? '<a class="btn btn--soft btn--sm" href="tel:' + esc(a.phone) + '">' + icons.user(14) + ' Llamar</a>' : '') +
-            (wa ? '<a class="btn btn--soft btn--sm" href="' + esc(wa) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') +
-            (a.email ? '<a class="btn btn--soft btn--sm" href="mailto:' + esc(a.email) + '">Email</a>' : '') +
-            (a.web ? '<a class="btn btn--soft btn--sm" href="' + esc(RL.dom.safeUrl(a.web)) + '" target="_blank" rel="noopener">Web</a>' : '') +
-            (a.booking ? '<a class="btn btn--accent btn--sm" href="' + esc(RL.dom.safeUrl(a.booking)) + '" target="_blank" rel="noopener">Pedir cita</a>' : '') +
+            (isDemo
+              ? '<span class="btn btn--ghost btn--sm" title="Dato de prueba">Tel. ' + esc(a.phone) + '</span><span class="btn btn--ghost btn--sm">' + esc(a.email) + '</span><span class="btn btn--ghost btn--sm">Web de ejemplo</span>'
+              : (a.phone ? '<a class="btn btn--soft btn--sm" href="tel:' + esc(a.phone) + '">' + icons.user(14) + ' Llamar</a>' : '') +
+                (wa ? '<a class="btn btn--soft btn--sm" href="' + esc(wa) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') +
+                (a.email ? '<a class="btn btn--soft btn--sm" href="mailto:' + esc(a.email) + '">Email</a>' : '') +
+                (a.web ? '<a class="btn btn--soft btn--sm" href="' + esc(RL.dom.safeUrl(a.web)) + '" target="_blank" rel="noopener">Web</a>' : '') +
+                (a.booking ? '<a class="btn btn--accent btn--sm" href="' + esc(RL.dom.safeUrl(a.booking)) + '" target="_blank" rel="noopener">Pedir cita</a>' : '')) +
             '</div>' + (a.note ? '<p class="muted" style="font-size:.82rem">' + esc(a.note) + '</p>' : '') + '</div>';
         }).join('') + '</div></div>';
     }
@@ -3556,12 +3594,23 @@
       '<li>Si tienes dudas, consulta antes con una <strong>entidad gratuita</strong> o con otro abogado.</li></ol>' +
       '<div class="callout callout--info">' + icons.help(18) + '<div><strong>Si no puedes pagar</strong><p>En <a href="#/ayuda" data-nav="ayuda">Ayuda</a> tienes entidades sociales, ONG y recursos gratuitos. No tienes que contratar al primer despacho que veas.</p></div></div></div></div>';
     html += '<div class="block mt-3"><div class="block__head">' + icons.ext(18) + '<h2>Para abogados: cómo aparecer</h2></div><div class="block__body">' +
-      '<p>Si quieres estar en esta página, contáctame para pasar a formar parte de la base de datos. Podrás publicar:</p>' +
+      '<p>Si quieres estar en esta página, rellena el formulario de alta. Podrás publicar:</p>' +
       '<ul><li>Nombre del estudio.</li><li>Tu nombre y apellidos.</li><li>Teléfono y WhatsApp.</li><li>Web y email.</li><li>Página para coger citas.</li><li>Dirección.</li></ul>' +
       '<p>La solicitud se revisa antes de publicar. No se aceptan promesas de resultados, publicidad engañosa ni datos de clientes.</p>' +
       '<a class="btn btn--primary" href="#/abogados-alta">' + icons.user(16) + ' Enviar solicitud para aparecer</a>' +
       '<p class="muted" style="font-size:.8rem;margin-top:10px">El formulario se envía por correo al responsable. No incluyas datos personales de clientes ni documentos.</p></div></div>';
     host.innerHTML = html;
+    var search = $('#lawyerSearch');
+    if (search) {
+      search.addEventListener('input', function () {
+        ui.lawyerSearch = search.value; renderAbogados();
+        var s2 = $('#lawyerSearch'); if (s2) { s2.focus(); s2.setSelectionRange(s2.value.length, s2.value.length); }
+      });
+    }
+    var city = $('#lawyerCity');
+    if (city) city.addEventListener('change', function () { ui.lawyerCity = city.value; renderAbogados(); });
+    var sort = $('#lawyerSort');
+    if (sort) sort.addEventListener('change', function () { ui.lawyerSort = sort.value; renderAbogados(); });
   }
 
   function renderAbogadosAlta() {

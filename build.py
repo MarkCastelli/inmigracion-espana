@@ -60,6 +60,12 @@ def main() -> int:
     html = LINK_RE.sub(inline_css, html)
     html = SCRIPT_RE.sub(inline_js, html)
 
+    # La base editable vive en JSON. En el archivo único se inyecta una copia
+    # para que el directorio funcione también sin servidor y sin fetch.
+    lawyers_json = read("assets/js/data/lawyers.json")
+    lawyers_json = lawyers_json.replace("</script", "<\\/script")
+    html = html.replace("</head>", "<script>window.__RL_LAWYERS__ = " + lawyers_json + ";</script>\n</head>", 1)
+
     leftover = re.findall(r'(?:src|href)="(assets/[^"?]+)', html)
     if leftover:
         print("Aviso: quedan referencias externas: %s" % ", ".join(sorted(set(leftover))), file=sys.stderr)

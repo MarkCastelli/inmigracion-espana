@@ -152,6 +152,8 @@ function nav(app, view) {
 
 const app = boot();
 const RL = app.sandbox.window.RL;
+RL.lawyers = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/js/data/lawyers.json'), 'utf8'));
+RL.lawyersLoaded = true;
 const t = (name, fn) => { try { fn(); console.log('✔ ' + name); } catch (e) { console.error('✖ ' + name + '\n  ' + e.message); process.exitCode = 1; } };
 
 t('arranca en la vista de inicio', () => {
@@ -1171,7 +1173,12 @@ t('la página de abogados avisa de que no están verificados', () => {
   assert.ok(html.includes('No me hago responsable'));
   assert.ok(html.includes('Solicitar aparecer'));
   assert.ok(html.includes('Cómo comprobar que es abogado'));
-  assert.ok(html.includes('Todavía no hay despachos publicados'));
+  assert.ok(html.includes('Datos de prueba'));
+  assert.ok(html.includes('10 de 10 despachos'));
+  assert.ok(html.includes('DEMO · ficticio'));
+  assert.ok(html.includes('id="lawyerSearch"'));
+  assert.ok(html.includes('id="lawyerCity"'));
+  assert.ok(html.includes('id="lawyerSort"'));
   nav(app, 'inicio');
 });
 

@@ -959,3 +959,12 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 .lawyer-form .form-grid { align-items: start; }
 .lawyer-form .field--full { grid-column: 1 / -1; }
 @media (max-width: 760px) { .price-grid { grid-template-columns: 1fr; } }
+
+
+/* ── Filtros del directorio de abogados ─────────────────────── */
+.lawyer-tools { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(180px, .55fr) minmax(130px, .35fr); gap: 10px; margin: 18px 0 8px; align-items: center; }
+.lawyer-tools .search { display: flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 10px; padding: 0 10px; background: var(--surface); }
+.lawyer-tools .search .input { border: 0; box-shadow: none; padding-left: 0; }
+.lawyer-tools .select { min-height: 42px; }
+.lawyer-card { border-left: 3px solid #d9a441; padding-left: 12px; }
+@media (max-width: 700px) { .lawyer-tools { grid-template-columns: 1fr; } }
