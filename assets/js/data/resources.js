@@ -43,11 +43,14 @@
       }
     ],
     phones: [
-      { n: '016', d: 'Violencia de género. Gratuito, confidencial y 24 h. No deja rastro en la factura.' },
-      { n: '024', d: 'Atención a la conducta suicida. Gratuito, confidencial y 24 h.' },
-      { n: '900 10 55 55', d: 'Teléfono de atención a víctimas de trata de seres humanos.' },
-      { n: '112', d: 'Emergencias (sanitarias, policía, incendios).' },
-      { n: '091 / 062', d: 'Policía Nacional / Guardia Civil.' }
+      { n: '112', tel: '112', d: 'Emergencias en toda España, 24 h y gratis: sanitaria, policía, bomberos, accidentes o peligro inmediato. Si hay riesgo para una persona, llama primero al 112.' },
+      { n: '061', tel: '061', d: 'Emergencias sanitarias en muchas comunidades autónomas. Un profesional sanitario valora tu caso y decide si envía ambulancia o te indica qué hacer. Si no funciona en tu zona, marca 112.' },
+      { n: '062', tel: '062', d: 'Guardia Civil, 24 h. Para emergencias en carretera, zonas rurales, costas y delitos de su competencia. También 900 101 062 para colaboración ciudadana.' },
+      { n: '091', tel: '091', d: 'Policía Nacional, 24 h. Para delitos, denuncias y emergencias en zonas urbanas.' },
+      { n: '080 / 085', d: 'Bomberos en muchas localidades y provincias. Si no sabes cuál es el de tu zona, llama al 112.' },
+      { n: '016', tel: '016', d: 'Violencia de género. Gratuito, confidencial y 24 h. No deja rastro en la factura.' },
+      { n: '024', tel: '024', d: 'Atención a la conducta suicida. Gratuito, confidencial y 24 h.' },
+      { n: '900 10 55 55', tel: '900105555', d: 'Teléfono de atención a víctimas de trata de seres humanos.' }
     ],
     glossary: [
       { term: 'NIE', def: 'Número de Identidad de Extranjero. Es un número, no un permiso: no te legaliza, pero lo necesitas para casi todo.' },
@@ -132,7 +135,7 @@
         { h: 'Tus datos', p: 'Todo lo que respondes se guarda únicamente en el almacenamiento local de tu navegador. No hay servidor, no hay cuentas, no hay analítica y no se envía nada a terceros. La lectura en voz alta usa las voces instaladas en tu dispositivo: el texto no se manda a ningún servicio externo. Si borras los datos del navegador o usas el botón de reinicio, la información desaparece.' },
         { h: 'Descarga en PDF', p: 'Puedes descargar tu plan en un PDF generado en tu propio dispositivo, sin enviarlo a ningún servidor. Incluye tu perfil, las vías recomendadas, los requisitos, los documentos y las fechas clave. Está pensado para que lo lleves a un abogado de extranjería o a una entidad social y ahorres tiempo en la consulta.' },
         { h: 'Formularios oficiales', p: 'La app enlaza a los modelos oficiales de la sede (por ejemplo, EX-31 para arraigo o EX-24 para familiares de personas con nacionalidad española) y puede generar una hoja de datos con tus datos campo por campo. No rellenamos, firmamos ni presentamos el formulario oficial: eso lo haces tú o tu representante. La hoja de datos se guarda solo en tu dispositivo.' },
-        { h: 'Exactitud y vigencia', p: 'El contenido se revisó por última vez el 20 de noviembre de 2026 con fuentes oficiales (BOE, ministerios, consulados) e incluye la reforma del Reglamento de Extranjería (RD 1155/2024), el RD 316/2026 y la STS de 8 de julio de 2026. La normativa cambia con frecuencia: confirma siempre en la fuente oficial antes de presentar una solicitud. Tampoco verificamos los documentos que marcas: el plan se basa en tu declaración.' },
+        { h: 'Exactitud y vigencia', p: 'El contenido se revisó por última vez el 22 de noviembre de 2026 con fuentes oficiales (BOE, ministerios, consulados) e incluye la reforma del Reglamento de Extranjería (RD 1155/2024), el RD 316/2026 y la STS de 8 de julio de 2026. La normativa cambia con frecuencia: confirma siempre en la fuente oficial antes de presentar una solicitud. Tampoco verificamos los documentos que marcas: el plan se basa en tu declaración.' },
         { h: 'Límites de responsabilidad', p: 'Los resultados son orientativos y dependen de la información que introduces. No garantizan la concesión de ninguna autorización ni sustituyen la valoración de un profesional. No nos hacemos responsables de decisiones tomadas únicamente a partir de esta herramienta.' },
         { h: 'Enlaces externos', p: 'Los enlaces apuntan a organismos oficiales y entidades sociales. No controlamos sus contenidos ni sus políticas de privacidad.' },
         { h: 'Cómo usarla bien', p: 'Responde con sinceridad, marca «no lo sé» cuando no estés seguro y lleva el plan impreso a tu cita o a tu abogado. Si tu situación es urgente (expulsión, prohibición de entrada, violencia), busca ayuda profesional inmediata.' }

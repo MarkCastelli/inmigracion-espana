@@ -3494,8 +3494,10 @@
     html += '<div class="help-grid">';
 
     html += '<div class="block"><div class="block__head">' + icons.alert(18) + '<h2>Si es urgente</h2></div><div class="block__body">' +
+      '<div class="callout callout--warn" style="margin-bottom:10px">' + icons.alert(18) + '<div><strong>Peligro inmediato: 112</strong><p>El 112 es el número universal de emergencias en España, gratuito y 24 h. Si hay riesgo para una persona, un accidente, un incendio o una agresión, llama primero al 112. Puedes decir tu idioma; intentarán conectarte con un intérprete.</p></div></div>' +
       R.phones.map(function (p) {
-        return '<div class="resource"><span class="resource__icon">' + icons.help(15) + '</span><div><strong>' + esc(p.n) + '</strong><p>' + esc(p.d) + '</p></div></div>';
+        var tel = p.tel || String(p.n).replace(/[^0-9+]/g, '');
+        return '<div class="resource"><span class="resource__icon">' + icons.help(15) + '</span><div><strong><a href="tel:' + esc(tel) + '">' + esc(p.n) + '</a></strong><p>' + esc(p.d) + '</p></div></div>';
       }).join('') + '</div></div>';
 
     html += '<div class="block"><div class="block__head">' + icons.ext(18) + '<h2>Enlaces oficiales y ayuda</h2></div><div class="block__body">' +

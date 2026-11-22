@@ -186,6 +186,10 @@ t('la ayuda renderiza glosario, FAQ y bulos', () => {
   assert.ok(html.includes('Preguntas frecuentes'));
   assert.ok(html.includes('Bulos frecuentes'));
   assert.ok(html.includes('Canales de YouTube'));
+  assert.ok(html.includes('061'));
+  assert.ok(html.includes('062'));
+  assert.ok(html.includes('080 / 085'));
+  assert.ok(html.includes('tel:112'));
   assert.ok(html.includes('Expediente Extranjero'));
   assert.ok(html.includes('Prixline'));
   assert.ok(html.includes('no asesoramiento oficial'));

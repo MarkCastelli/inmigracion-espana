@@ -130,6 +130,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 100. **Auditoría de vías (22/11/2026)**: cada ficha muestra una «Fuente oficial principal»; se corrigieron arraigo social (medios + informe), regularización 2026 (5 meses antes de solicitar), nómada digital (no es la única vía), umbral PAC y se retiró una afirmación no verificada sobre el voto CERA. Se contrastaron BOE, Ministerios de Inclusión, Justicia, Interior y Exteriores.
 101. **Formulario multilingüe**: etiquetas y opciones del formulario traducidas a francés, inglés, árabe y rumano; el informe/PDF sigue siempre en español. Ayuda con instrucciones de traducción del navegador en cinco idiomas y aviso de no traducir el PDF.
 102. **Tooltips**: archivo aparte `assets/js/data/tooltips.js` con textos en es/fr/en/ar/ro; iconos junto a los campos y casilla «Ayudas» arriba para activar/desactivar. No salen en el PDF.
+103. **Teléfonos de urgencia**: 112 primero (universal), 061 sanitario, 062 Guardia Civil, 091 Policía Nacional, 080/085 bomberos, 016, 024 y trata; enlaces `tel:` y aviso de que el 112 puede conectar con intérprete.
 
 ## Comandos
 
