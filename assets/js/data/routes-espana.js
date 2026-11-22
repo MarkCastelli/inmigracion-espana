@@ -114,7 +114,7 @@
     where: 'spain',
     availability: 'open',
     legal: 'Arts. 125-127 RD 1155/2024',
-    summary: 'Si llevas al menos 2 años en España de forma continuada, puedes solicitar una autorización de residencia de 1 año que además te habilita a trabajar. No necesitas contrato: basta con acreditar medios económicos o un informe de integración.',
+    summary: 'Si llevas al menos 2 años en España de forma continuada, puedes solicitar una autorización de residencia de 1 año que además te habilita a trabajar. No exige contrato, pero sí acreditar medios de vida (100 % del IPREM) y, si no tienes vínculos familiares con residentes, un informe de integración social.',
     forWho: 'Personas mayores de edad en situación irregular que llevan 2 años continuados en España y no tienen otra autorización ni un procedimiento abierto.',
     requirements: [
       { label: 'Estás en España', test: inSpain, actionable: false },
@@ -138,7 +138,7 @@
     steps: [
       { title: 'Comprueba los 2 años y las ausencias', detail: 'Revisa tu certificado de empadronamiento histórico: es la prueba principal. Cuenta también estancias, contratos de alquiler, billetes y cualquier documento con fechas.', when: 'Antes de nada' },
       { title: 'Reúne antecedentes penales', detail: 'Pide el certificado español (gratis) y el de tu país. No los pidas con más de 3 meses de antelación.', when: 'Mes -3' },
-      { title: 'Acredita medios o pide el informe de integración', detail: 'Con nóminas, contrato, extractos o declaración de la renta. Si no llegas al 100 % del IPREM, solicita el informe de integración en tu CCAA.', when: 'Mes -2' },
+      { title: 'Acredita medios y, si no tienes vínculos, pide el informe', detail: 'Con nóminas, contrato, extractos o declaración de la renta. Debes llegar al 100 % del IPREM; si no acreditas vínculos familiares con residentes, necesitas además el informe de integración social de tu CCAA.', when: 'Mes -2' },
       { title: 'Paga la tasa y presenta el EX-31', detail: 'Tasa 790-052 (38,28 €). Presenta en la Oficina de Extranjería de tu provincia, presencialmente o por sede electrónica. Guarda el justificante.', when: 'Día 0' },
       { title: 'Sigue el expediente', detail: 'Resolución en 3 meses, con silencio desestimatorio. Si te requieren documentación, responde en plazo. Concede 1 año de residencia y trabajo.', when: '+3 meses' }
     ],
@@ -832,7 +832,7 @@
     legal: 'DA 21.ª RD 1155/2024, añadida por RD 316/2026',
     deadline: '2026-06-30',
     deadlineNote: 'La ventana de solicitud terminó el 30 de junio de 2026 y no se ha prorrogado.',
-    summary: 'Entre el 16 de abril y el 30 de junio de 2026 se pudo solicitar una regularización extraordinaria si estabas en España antes del 1 de enero de 2026 con 5 meses de permanencia. Ya está cerrada: si no la pediste, no hay forma de solicitarla ahora.',
+    summary: 'Entre el 16 de abril y el 30 de junio de 2026 se pudo solicitar una regularización extraordinaria si estabas en España antes del 1 de enero de 2026 y acreditabas 5 meses de permanencia ininterrumpida antes de solicitar. Ya está cerrada: si no la pediste, no hay forma de solicitarla ahora.',
     forWho: 'Personas que ya la solicitaron o que quieren entender por qué su situación no encaja en ella.',
     requirements: [
       { label: 'Estabas en España antes del 1 de enero de 2026', test: function (p) { return p.entryDate ? RL.dates.diff(p.entryDate, '2026-01-01') >= 0 : null; } },

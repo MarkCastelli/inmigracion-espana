@@ -8,7 +8,7 @@
   var RL = window.RL = window.RL || {};
 
   RL.VERSION = '1.0.0';
-  RL.CONTENT_DATE = '2026-11-20';      // última revisión del contenido legal
+  RL.CONTENT_DATE = '2026-11-22';      // última revisión del contenido legal
   RL.STORAGE_KEY = 'ruta-legal.v1';
 
   /* ─────────── utilidades DOM ─────────── */

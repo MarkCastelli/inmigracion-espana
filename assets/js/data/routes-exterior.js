@@ -241,7 +241,7 @@
     where: 'both',
     availability: 'open',
     legal: 'Art. 74 bis Ley 14/2013 (Ley 28/2022)',
-    summary: 'Para teletrabajadores con ingresos de fuera de España. Exige 200 % del SMI (2.442 €/mes), título o 3 años de experiencia y empresa con al menos 1 año. Es la única vía que un turista puede solicitar sin salir de España, y da hasta 3 años.',
+    summary: 'Para teletrabajadores con ingresos de fuera de España. Exige 200 % del SMI (2.442 €/mes), título o 3 años de experiencia y empresa con al menos 1 año. Puede solicitarse en España si estás legalmente, incluso como turista, y da hasta 3 años.',
     forWho: 'Personas que trabajan en remoto para empresas o clientes extranjeros.',
     requirements: [
       { label: 'Trabajas en remoto para fuera de España', test: function (p, d) { return d.employment === 'remote'; }, fix: 'Debe ser teletrabajo real, con empresa o clientes fuera de España. Los autónomos no pueden facturar más del 20 % a empresas españolas.' },
@@ -268,7 +268,7 @@
     risks: [
       'No vale trabajar para particulares, universidades, fundaciones u ONG.',
       'La empresa debe llevar 1 año de actividad.',
-      'Si estás en España como turista, solo esta vía (y las de la Ley 14/2013) te permite quedarte sin salir.'
+      'Si estás en España como turista, la Ley 14/2013 permite solicitar algunas autorizaciones sin salir, pero debes estar en situación regular y cumplir todos los requisitos.'
     ],
     links: [L.ley14, L.uge, L.exteriores],
     fit: function (p, d) {
@@ -291,7 +291,7 @@
     where: 'consulado',
     availability: 'open',
     legal: 'Arts. 71-73 Ley 14/2013',
-    summary: 'Para titulados universitarios o de FP superior con un contrato en España de al menos 41.356 € brutos al año (umbral 2026). Se tramita por la UGE-CE en 20 días hábiles y da 3 años de residencia y trabajo, con familia desde el inicio.',
+    summary: 'Para titulados universitarios o de FP superior con un contrato en España de al menos 41.356,36 € brutos al año (umbral general 2026; hay umbral reducido para recién titulados o profesiones en escasez). Se tramita por la UGE-CE en 20 días hábiles y da 3 años de residencia y trabajo, con familia desde el inicio.',
     forWho: 'Profesionales cualificados contratados por una empresa española con salario alto.',
     requirements: [
       { label: 'Tienes título universitario o FP superior, o 5 años de experiencia', test: function (p, d) { return d.hasTertiary || d.experience >= 5 ? true : null; }, fix: 'Título o certificado de experiencia acreditable.' },

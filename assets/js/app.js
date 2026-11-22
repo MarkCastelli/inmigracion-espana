@@ -2224,6 +2224,30 @@
     return { nacionalidad: 'Nacionalidad', residencia: 'Residencia', visado: 'Visado', proteccion: 'Protección' }[g] || g;
   }
 
+  function routeOfficialSource(route) {
+    var id = route.id;
+    var MJ = { t: 'Ministerio de Justicia · Nacionalidad', u: 'https://www.mjusticia.gob.es/es/ciudadania/nacionalidad/informacion-nacionalidad' };
+    var INCLUSION = { t: 'Ministerio de Inclusión · Régimen general de extranjería', u: 'https://www.inclusion.gob.es/web/migraciones/regimen-general-de-extranjeria' };
+    var BOE1155 = { t: 'BOE · Reglamento de Extranjería (RD 1155/2024)', u: 'https://www.boe.es/buscar/act.php?id=BOE-A-2024-24099' };
+    var BOE316 = { t: 'BOE · RD 316/2026', u: 'https://www.boe.es/buscar/doc.php?id=BOE-A-2026-8284' };
+    var EXTERIORES = { t: 'Ministerio de Asuntos Exteriores · Visados', u: 'https://www.exteriores.gob.es/' };
+    var UGE = { t: 'UGE-CE · Unidad de Grandes Empresas', u: 'https://inclusion.gob.es/web/unidadgrandesempresas/sobre-nosotros' };
+    if (id.indexOf('nac_') === 0) return MJ;
+    if (id === 'asilo' || id === 'asilo_seguimiento') {
+      return { t: 'Ministerio del Interior · Asilo y refugio', u: 'https://www.interior.gob.es/' };
+    }
+    if (id === 'arraigo_social') {
+      return { t: 'Ministerio de Inclusión · Arraigo social', u: 'https://bibliovirtual.inclusion.gob.es/web/migraciones/w/autorizacion-residencia-temporal-por-circunstancias-excepcionales.-arraigo-social' };
+    }
+    if (id.indexOf('regularizacion') === 0) return BOE316;
+    if (id === 'golden_visa') {
+      return { t: 'La Moncloa · Fin de la golden visa (LO 1/2025)', u: 'https://www.lamoncloa.gob.es/serviciosdeprensa/notasprensa/vivienda-agenda-urbana/Paginas/2025/020425-fin-golden-visa.aspx' };
+    }
+    if (id === 'visado_nomada_digital' || id === 'visado_pac' || id === 'visado_emprendedor') return UGE;
+    if (id === 'entrada_turista' || id.indexOf('visado_') === 0) return EXTERIORES;
+    return INCLUSION;
+  }
+
   function renderRouteDetail(id) {
     var route = RL.routeById(id);
     if (!route) return;
@@ -2286,7 +2310,14 @@
 
     html += formsBlock(route);
 
-    html += '</div><aside class="plan-aside"><div class="block"><div class="block__head">' + icons.ext(18) + '<h2>Fuentes y enlaces</h2></div><div class="block__body">' +
+    html += '</div><aside class="plan-aside">' +
+      (function () {
+        var src = routeOfficialSource(route);
+        return '<div class="block"><div class="block__head">' + icons.check(18) + '<h2>Fuente oficial principal</h2></div><div class="block__body">' +
+          '<div class="resource"><span class="resource__icon">' + icons.ext(15) + '</span><div><a href="' + esc(RL.dom.safeUrl(src.u)) + '" target="_blank" rel="noopener">' + esc(src.t) + '</a>' +
+          '<p class="muted" style="font-size:.8rem;margin:4px 0 0">Consulta esta página antes de presentar. La ficha resume la norma, pero la Administración puede cambiar requisitos o criterios.</p></div></div></div></div>';
+      })() +
+      '<div class="block"><div class="block__head">' + icons.ext(18) + '<h2>Fuentes y enlaces</h2></div><div class="block__body">' +
       (route.links || []).map(function (l) {
         return '<div class="resource"><span class="resource__icon">' + icons.ext(15) + '</span><div><a href="' + esc(RL.dom.safeUrl(l.u)) + '" target="_blank" rel="noopener">' + esc(l.t) + '</a></div></div>';
       }).join('') + '</div></div>' +

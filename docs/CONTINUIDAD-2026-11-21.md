@@ -127,6 +127,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 97. **Hojas de datos autocompletadas**: al preparar una hoja de Descargas se elige el integrante y se cargan nombre, apellidos, nacionalidad, teléfono, email, entrada, estudios y documentos marcados; se avisa de revisar fechas/números antes de generar.
 98. **Formulario completado**: se guarda `completed` al llegar al paso 11; al pulsar de nuevo «Formulario» se abre directamente el Documento final, salvo que se haya reiniciado.
 99. **Menú en una fila**: etiquetas compactas (Experiencia, Plan, FAQ, IA, Docs) y espaciado reducido; las 14 opciones caben en una sola fila en escritorio y solo envuelven en móvil.
+100. **Auditoría de vías (22/11/2026)**: cada ficha muestra una «Fuente oficial principal»; se corrigieron arraigo social (medios + informe), regularización 2026 (5 meses antes de solicitar), nómada digital (no es la única vía), umbral PAC y se retiró una afirmación no verificada sobre el voto CERA. Se contrastaron BOE, Ministerios de Inclusión, Justicia, Interior y Exteriores.
 
 ## Comandos
 

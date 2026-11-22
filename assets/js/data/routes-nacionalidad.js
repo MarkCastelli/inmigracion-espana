@@ -392,7 +392,6 @@
     time: 'Cerrada',
     risks: [
       'No existe una «Ley de Nietos 2» ni una ampliación aprobada.',
-      'El Supremo ha suspendido el voto CERA de 163.355 nacionalizados, pero no la validez de las nacionalidades.',
       'Cuidado con quien venda una reapertura: no hay norma publicada.'
     ],
     links: [L.lmd, L.instr, L.mj],

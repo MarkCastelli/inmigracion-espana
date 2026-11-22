@@ -391,7 +391,7 @@ test('el paso de documentos solo aparece si estás en España', () => {
 
 test('index.html referencia todos los scripts y existen', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  const srcs = [...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m => m[1]);
+  const srcs = [...html.matchAll(/<script src="([^"]+)"/g)].map(m => m[1].split('?')[0]);
   assert.ok(srcs.length >= 8, 'esperaba al menos 8 scripts');
   assert.ok(srcs[0].endsWith('core.js'), 'core.js debe ir primero');
   assert.ok(srcs[srcs.length - 1].endsWith('app.js'), 'app.js debe ir último');
