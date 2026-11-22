@@ -1241,4 +1241,30 @@ t('el feedback lleva a una página de agradecimiento', () => {
   nav(app, 'inicio');
 });
 
+t('cada hijo e integrante puede marcar sus documentos', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 3;
+  f.members = [
+    { name: 'Ana', age: '40', relation: 'esposa', data: RL.formulario.person() },
+    { name: 'Luis', age: '10', relation: 'hijo_comun', data: RL.formulario.person() }
+  ];
+  f.children = [RL.formulario.person()];
+  f.children[0].name = 'Luis';
+  f.children[0].docs = ['pasaporte'];
+  f.step = 6;
+  nav(app, 'formulario');
+  let html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('data-fgroup="children.0.docs"'), 'falta documentos del hijo');
+  nav(app, 'docs');
+  html = app.document.querySelector('#view-docs').innerHTML;
+  assert.ok(html.includes('Quién tiene cada documento'));
+  assert.ok(html.includes('Luis'));
+  assert.ok(html.includes('Pasaporte de tu país'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

@@ -708,6 +708,7 @@
           return '<div class="family-child" style="margin-top:14px"><div class="flex" style="justify-content:space-between"><h3>Hijo/a ' + (i + 1) + (lm && lm.name ? ': ' + fEsc(lm.name) : '') + '</h3><button class="btn btn--ghost btn--sm" type="button" data-form-action="remove-child" data-index="' + i + '">Quitar</button></div>' +
             (lm ? '<p class="muted">Edad: ' + fEsc(lm.age || 'sin indicar') + ' · vínculo: ' + fEsc(lm.relation) + '. Nombre y edad cargados desde el paso 0.</p>' : '') +
             personBlock(ch, 'children.' + i, false, false, !!lm) +
+            documentsBlock(ch, 'children.' + i) +
             '<div class="form-grid">' +
             fInput('children.' + i + '.educationLevel', 'Estudios actuales', fget(ch, 'educationLevel'), 'text', 'ESO, Bachillerato, FP, universidad…') +
             '</div></div>';
@@ -721,6 +722,7 @@
             return '<div class="family-child" style="margin-top:14px"><h3>' + fEsc(x.m.name || 'Integrante ' + (x.i + 1)) + ' · ' + fEsc(x.m.relation || 'otro') + ' · ' + fEsc(x.m.age || 'edad sin indicar') + '</h3>' +
               '<p class="muted">Nombre y edad cargados desde el paso 0.</p>' +
               personBlock(x.m.data || {}, 'members.' + x.i + '.data', false, false, true) +
+              documentsBlock(x.m.data || {}, 'members.' + x.i + '.data') +
               '<div class="form-grid">' + fInput('members.' + x.i + '.educationLevel', 'Estudios actuales', x.m.educationLevel || '', 'text', 'ESO, Bachillerato, FP, universidad…') + '</div></div>';
           }).join('') + '</div>';
       }
