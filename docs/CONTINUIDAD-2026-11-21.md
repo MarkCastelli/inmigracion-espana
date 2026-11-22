@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **202 pruebas pasando**.
+- **203 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -108,6 +108,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 78. **Gastos compartidos**: el resumen suma hipoteca/alquiler y suministros de todos los integrantes que declaren pagarlos; 225 € del titular + 225 € de la pareja + 100 € de luz = 550 € del hogar.
 79. **Asilo del titular**: si responde que sí en datos personales, el paso 3 muestra año, estado y fecha de la solicitud, igual que la ficha de la pareja.
 80. **Permiso de conducir**: se pregunta si lo tiene y de qué país; se añade a documentos y a objetivos como «Obtener o canjear el permiso de conducir».
+81. **Permiso individual**: no se aplica como objetivo común; cada adulto sin permiso decide si quiere obtenerlo/canjearlo, y los menores no lo ven.
 
 ## Comandos
 

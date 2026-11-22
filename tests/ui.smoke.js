@@ -811,7 +811,8 @@ t('permite marcar objetivos comunes para todo el grupo', () => {
   const html = app.document.querySelector('#view-formulario').innerHTML;
   assert.ok(html.includes('Objetivos comunes para todo el grupo familiar'));
   assert.ok(html.includes('data-fgroup="commonGoals"'));
-  assert.ok(!html.includes('data-fgroup="applicant.goals"'), 'no debe pedir objetivos individuales si son comunes');
+  assert.ok(html.includes('Permiso de conducir: individual'));
+  assert.ok(html.includes('data-fgroup="applicant.goals"'), 'el permiso se decide individualmente');
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

@@ -443,12 +443,35 @@
     return goals;
   }
 
+  function isPersonalGoal(v) { return v === 'permiso_conducir'; }
+
+  function commonGoalOptions() {
+    return RL.formulario.goals.filter(function (g) { return !isPersonalGoal(g.v); });
+  }
+
+  function goalPeople(F) {
+    var out = [{ key: 'applicant', label: F.applicant.name || 'Titular', obj: F.applicant }];
+    if (F.mode === 'family') {
+      out.push({ key: 'spouse', label: F.spouse.name || 'Pareja', obj: F.spouse });
+      F.children.forEach(function (ch, i) { out.push({ key: 'children.' + i, label: ch.name || ('Hijo/a ' + (i + 1)), obj: ch }); });
+      (F.members || []).forEach(function (m, i) {
+        if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
+        out.push({ key: 'members.' + i + '.data', label: m.name || ('Integrante ' + (i + 1)), obj: m.data || {} });
+      });
+    }
+    return out;
+  }
+
   function applyCommonGoals(F) {
     if (!F.commonGoalsOn) return;
-    var list = (F.commonGoals || []).slice();
+    F.commonGoals = (F.commonGoals || []).filter(function (v) { return !isPersonalGoal(v); });
+    var list = F.commonGoals.slice();
     var people = [F.applicant, F.spouse].concat(F.children || []);
     (F.members || []).forEach(function (m) { if (m.data) people.push(m.data); });
-    people.forEach(function (p) { p.goals = list.slice(); });
+    people.forEach(function (p) {
+      var personal = (p.goals || []).filter(isPersonalGoal);
+      p.goals = list.concat(personal);
+    });
   }
 
   function renderFormulario() {
@@ -589,7 +612,17 @@
         html += '<label class="option option--check" style="margin-bottom:12px"><input type="checkbox" data-fbool="commonGoalsOn"' + (F.commonGoalsOn ? ' checked' : '') + '><span class="option__box" aria-hidden="true"></span><span class="option__body"><span class="option__label">Objetivos comunes para todo el grupo familiar</span></span></label>';
       }
       if (F.commonGoalsOn && F.mode === 'family') {
-        html += '<h3>Objetivos del grupo</h3>' + fChecks('commonGoals', 'Lo que queréis conseguir todos', F.commonGoals, RL.formulario.goals);
+        html += '<h3>Objetivos del grupo</h3>' + fChecks('commonGoals', 'Lo que queréis conseguir todos', F.commonGoals, commonGoalOptions());
+        var permitGoal = RL.formulario.goals.filter(function (g) { return g.v === 'permiso_conducir'; });
+        var permitPeople = goalPeople(F).filter(function (p) {
+          return p.obj.drivingLicense !== 'si' && !(Number(p.obj.age) > 0 && Number(p.obj.age) < 18);
+        });
+        if (permitPeople.length) {
+          html += '<div class="callout callout--info" style="margin-top:16px">' + icons.info(16) + '<div><strong>Permiso de conducir: individual</strong><p>No se aplica como objetivo común: depende de la edad, la discapacidad y de si cada persona ya lo tiene.</p></div></div>';
+          permitPeople.forEach(function (p) {
+            html += '<h3>' + fEsc(p.label) + '</h3>' + fChecks(p.key + '.goals', 'Permiso de conducir', fget(p.obj, 'goals'), permitGoal);
+          });
+        }
       } else {
         html += '<h3>Titular</h3>' + fChecks('applicant.goals', 'Objetivos', fget(F.applicant, 'goals'), availableGoals(F.applicant));
         if (F.mode === 'family') {
