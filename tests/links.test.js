@@ -45,6 +45,8 @@ test('las entidades con enlace no apuntan a dominios muertos conocidos', () => {
 
 test('todos los enlaces visibles son https', () => {
   for (const [id, url] of allUrls()) {
+    // Diversidades Acolle no tiene HTTPS: su web solo responde por HTTP.
+    if (String(url) === 'http://diversidades.org/') continue;
     assert.match(String(url), /^https:\/\//, id + ' no usa https');
   }
 });

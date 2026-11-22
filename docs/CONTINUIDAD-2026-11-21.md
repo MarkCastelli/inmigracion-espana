@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **179 pruebas pasando**.
+- **180 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -81,6 +81,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 51. **Auditoría de enlaces**: 187 URLs estáticas y 130 resueltas por provincia/municipio; 0 errores 404. Diversidades pasa a HTTP (su web no tiene HTTPS), se corrigen Concello/Servicios Sociales de Vigo y se retira Movimiento por la Paz (530).
 52. **León y Cádiz**: Cáritas León, Diaconía León, Cáritas Cádiz y Fundación Márgenes y Vínculos; se muestran en cualquier municipio de su provincia.
 53. **Canales de YouTube**: Expediente Extranjero y Prixline en Ayuda, con aviso de que son canales independientes y no asesoramiento oficial.
+54. **Idiomas (fase 1)**: selector en cabecera para español, árabe RTL, francés, inglés y rumano; navegación, portada y avisos traducidos. El contenido legal detallado sigue en español y se avisa en la propia interfaz.
 
 ## Comandos
 

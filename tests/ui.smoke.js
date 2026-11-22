@@ -8,6 +8,7 @@ const assert = require('assert');
 
 const ROOT = path.resolve(__dirname, '..');
 const FILES = [
+  'assets/js/data/i18n.js',
   'assets/js/core.js',
   'assets/js/data/countries.js',
   'assets/js/data/regions.js',
@@ -550,6 +551,17 @@ t('el directorio muestra redes también en León y Cádiz', () => {
   }
   RL.state.profile = saved;
   nav(app, 'inicio');
+});
+
+t('la interfaz cambia de idioma y el árabe activa RTL', () => {
+  RL.i18n.setLang('ar');
+  assert.strictEqual(RL.i18n.t('nav.inicio'), 'الرئيسية');
+  assert.strictEqual(app.document.documentElement.dir, 'rtl');
+  RL.i18n.setLang('fr');
+  assert.strictEqual(RL.i18n.t('nav.inicio'), 'Accueil');
+  assert.strictEqual(app.document.documentElement.dir, 'ltr');
+  RL.i18n.setLang('es');
+  assert.strictEqual(RL.i18n.t('nav.inicio'), 'Inicio');
 });
 
 console.log('\nSmoke test de interfaz terminado.');

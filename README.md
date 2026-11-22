@@ -9,6 +9,8 @@ Ruta Legal es una aplicación web estática, gratuita y privada, pensada para pe
 - **GitHub:** [MarkCastelli/inmigracion-espana](https://github.com/MarkCastelli/inmigracion-espana)
 - **Versión:** 1.0.0
 - **Idioma:** español
+- **Interfaz:** español, árabe (RTL), francés, inglés y rumano
+- **Contenido legal:** español; traducción completa por fases
 - **Contenido:** revisado el 21/11/2026
 - **Pruebas:** 174 pasando
 
@@ -107,6 +109,7 @@ No introduzcas datos que no quieras guardar en el navegador. Si usas un ordenado
 │       ├── ai.js              # Generación de prompt para IA
 │       ├── pdf.js             # PDF e informe de caso
 │       ├── speech.js          # Lectura por voz
+│       ├── i18n.js            # Selector de idioma de la interfaz
 │       ├── app.js             # Interfaz y navegación
 │       └── data/              # Preguntas, vías, trámites, FAQ, ayudas…
 ├── docs/
