@@ -81,7 +81,7 @@
     return {
       name: '', age: '', nationality: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
       disability: '', residence: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
-      jobType: '', studies: '', career: '',
+      jobType: '', contractType: '', contractEnd: '', studies: '', career: '',
       paysHousing: '',
       disabilityRecognized: '', disabilityDegree: '', disabilityExpiryStatus: '', disabilityExpiry: '', dependency: '',
       docs: [], asylumRequested: '', asylumYear: '', asylumStatus: '', asylumDate: '',

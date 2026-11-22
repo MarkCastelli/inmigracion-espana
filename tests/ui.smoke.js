@@ -816,4 +816,22 @@ t('permite marcar objetivos comunes para todo el grupo', () => {
   nav(app, 'inicio');
 });
 
+t('un contrato temporal pide fecha de vencimiento', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.state.profile.formulario.applicant.works = 'si';
+  RL.state.profile.formulario.applicant.contractType = 'temporal';
+  RL.state.profile.formulario.step = 1;
+  nav(app, 'formulario');
+  let html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Tipo de contrato'));
+  assert.ok(html.includes('data-fpath="applicant.contractEnd"'));
+  RL.state.profile.formulario.applicant.contractType = 'indefinido';
+  RL.ui.render();
+  html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(!html.includes('data-fpath="applicant.contractEnd"'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

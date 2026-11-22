@@ -285,6 +285,16 @@
         fInput(prefix + '.netSalary', 'Sueldo neto mensual (€)', fget(obj, 'netSalary'), 'number') +
         fRadio(prefix + '.bank', '¿Te lo depositan en el banco?', fget(obj, 'bank'), F.yesNo) +
         fInput(prefix + '.jobType', '¿Qué haces? Tipo de empleo', fget(obj, 'jobType'), 'text', 'Ej. cocina, limpieza, construcción') +
+        fSelect(prefix + '.contractType', 'Tipo de contrato', fget(obj, 'contractType'), [
+          { v: '', l: 'Sin indicar' },
+          { v: 'indefinido', l: 'Indefinido' },
+          { v: 'temporal', l: 'Temporal' },
+          { v: 'fijo_discontinuo', l: 'Fijo-discontinuo' },
+          { v: 'autonomo', l: 'Autónomo' },
+          { v: 'sin_contrato', l: 'Sin contrato' },
+          { v: 'otro', l: 'Otro' }
+        ]) +
+        (fget(obj, 'contractType') === 'temporal' ? fInput(prefix + '.contractEnd', 'Fecha de vencimiento del contrato', fget(obj, 'contractEnd'), 'date') : '') +
         '</div>';
     }
     h += '<div class="form-grid">' +
@@ -714,7 +724,8 @@
       ['Residencia', label(RL.formulario.residence, p.residence)],
       ['Documentos', docs], ['Trabaja', p.works], ['Empleo legal', p.legalJob],
       ['Horas', p.hours], ['Sueldo neto', p.netSalary ? p.netSalary + ' €' : ''],
-      ['Tipo de empleo', p.jobType], ['Estudia', p.studies], ['Estudios', p.career || p.educationLevel],
+      ['Tipo de empleo', p.jobType], ['Tipo de contrato', p.contractType],
+      ['Vencimiento del contrato', p.contractEnd], ['Estudia', p.studies], ['Estudios', p.career || p.educationLevel],
       ['Discapacidad', p.disability], ['Reconocida', p.disabilityRecognized],
       ['Grado', p.disabilityDegree],
       ['Vencimiento', p.disabilityExpiryStatus === 'no' ? 'No caduca / sin vencimiento' : (p.disabilityExpiryStatus === 'yes' ? p.disabilityExpiry : p.disabilityExpiryStatus)],
