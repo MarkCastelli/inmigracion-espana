@@ -533,4 +533,19 @@ t('el directorio muestra Diversidades Acolle en Vigo', () => {
   nav(app, 'inicio');
 });
 
+t('el directorio muestra redes también en León y Cádiz', () => {
+  const saved = RL.state.profile;
+  for (const province of ['León', 'Cádiz']) {
+    RL.state.profile = { nationality: 'CO', location: 'spain', province, municipality: 'Capital', goals: ['regularizar'] };
+    nav(app, 'directorio');
+    const html = app.document.querySelector('#view-directorio').innerHTML;
+    assert.ok(html.includes('Entidades de tu zona'), province + ': falta bloque entidades');
+    assert.ok(html.includes('Cruz Roja'), province + ': falta Cruz Roja');
+    if (province === 'León') assert.ok(html.includes('Cáritas Diocesana de León'), 'falta Cáritas León');
+    if (province === 'Cádiz') assert.ok(html.includes('Fundación Márgenes y Vínculos'), 'falta Márgenes y Vínculos');
+  }
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
