@@ -393,6 +393,65 @@
     }
   ];
 
+  var NETWORKS = [
+    {
+      title: 'Cruz Roja',
+      what: ['Orientación social', 'Emergencia', 'Clases de español', 'Acompañamiento'],
+      where: 'Asamblea local o provincial',
+      url: 'https://www2.cruzroja.es/',
+      note: 'No está en todos los municipios, pero tiene asambleas locales y provinciales. Busca la más cercana en su web o llama al 900 225 225.'
+    },
+    {
+      title: 'Cáritas',
+      what: ['Acogida', 'Ayuda de emergencia', 'Empleo e inclusión', 'Apoyo a familias'],
+      where: 'Cáritas diocesana o parroquial',
+      url: 'https://www.caritas.es/',
+      note: 'Actúa por diócesis y parroquias. No todas las parroquias tienen los mismos servicios; llama antes.'
+    },
+    {
+      title: 'CEAR',
+      what: ['Asilo y protección internacional', 'Asesoría jurídica', 'Acogida'],
+      where: 'Oficinas en varias provincias',
+      url: 'https://www.cear.es/',
+      note: 'Especializada en asilo. No atiende todos los trámites de extranjería; confirma oficina y cita.'
+    },
+    {
+      title: 'ACCEM',
+      what: ['Acogida', 'Orientación jurídica', 'Empleo y formación'],
+      where: 'Varias provincias',
+      url: 'https://www.accem.es/',
+      note: 'Trabaja con personas migrantes y refugiadas. Comprueba si tu provincia tiene centro o delegación.'
+    },
+    {
+      title: 'Red Acoge',
+      what: ['Orientación jurídica', 'Acogida', 'Inserción sociolaboral'],
+      where: 'Entidades federadas por provincia',
+      url: 'https://www.redacoge.org/',
+      note: 'Agrupa entidades locales. En su web puedes buscar la entidad de tu provincia.'
+    },
+    {
+      title: 'Fundación Cepaim',
+      what: ['Vivienda', 'Empleo', 'Acompañamiento jurídico'],
+      where: 'Varias provincias',
+      url: 'https://cepaim.org/',
+      note: 'No cubre toda España; consulta centros y programas disponibles.'
+    },
+    {
+      title: 'Médicos del Mundo',
+      what: ['Salud', 'Atención a personas sin recursos', 'Derivación'],
+      where: 'Delegaciones autonómicas',
+      url: 'https://www.medicosdelmundo.org/',
+      note: 'Puede orientar sobre salud y acceso al sistema sanitario; no tramita residencia.'
+    },
+    {
+      title: 'Movimiento por la Paz',
+      what: ['Acogida', 'Orientación social', 'Empleo'],
+      where: 'Delegaciones autonómicas',
+      url: 'https://www.movimientoporlapaz.org/',
+      note: 'Programas de acogida e inclusión; cobertura según delegación.'
+    }
+  ];
+
   function resolveUrl(entry, region) {
     if (entry.url) return entry.url;
     if (entry.urlKey && region && region[entry.urlKey]) return region[entry.urlKey];
@@ -402,6 +461,7 @@
   RL.directory = {
     categories: CATS,
     entries: E,
+    networks: NETWORKS,
     resolveUrl: resolveUrl
   };
 })();

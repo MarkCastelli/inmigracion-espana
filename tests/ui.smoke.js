@@ -528,6 +528,7 @@ t('el directorio muestra Diversidades Acolle en Vigo', () => {
   assert.ok(html.includes('Cáritas Diocesana de Tui-Vigo'), 'no aparece Cáritas Tui-Vigo');
   assert.ok(html.includes('APAMP'), 'no aparece APAMP');
   assert.ok(html.includes('Entidades de tu zona'), 'falta el bloque de entidades');
+  assert.ok(html.includes('Redes con sede local o provincial'), 'faltan redes provinciales');
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

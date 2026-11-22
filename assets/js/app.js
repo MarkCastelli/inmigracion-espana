@@ -1799,22 +1799,37 @@
     if (!RL.directory) return '';
     var entries = RL.directory.entries.filter(function (e) {
       if (e.cat !== 'ayuda' || e.scope === 'national') return false;
+      if (!d.region) return false;
       if (e.provinces && e.provinces.length && d.province && !inPlace(e.provinces, d.province)) return false;
       if (e.municipalities && e.municipalities.length && d.municipality && !inPlace(e.municipalities, d.municipality)) return false;
       return true;
     }).slice(0, 8);
-    if (!entries.length) return '';
-    return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.family(18) +
-      '<h2>Entidades de tu zona</h2><span class="badge badge--info">' + esc((d.municipality || '') + (d.province ? ' · ' + d.province : '')) + '</span></div><div class="block__body">' +
-      '<p class="muted" style="font-size:.86rem;margin-top:0">Asociaciones locales que pueden orientar, acompañar o derivar. No sustituyen a un abogado ni garantizan papeles; confirma cita y cobertura.</p>' +
-      entries.map(function (e) {
-        var title = typeof e.title === 'function' ? e.title({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.title;
-        var where = typeof e.where === 'function' ? e.where({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.where;
+    var networks = (RL.directory.networks || []).slice(0, 8);
+    if (!entries.length && !networks.length) return '';
+    var html = '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.family(18) +
+      '<h2>Entidades de tu zona</h2><span class="badge badge--info">' + esc((d.municipality || '') + (d.province ? ' · ' + d.province : '')) + '</span></div><div class="block__body">';
+    if (entries.length) {
+      html += '<p class="muted" style="font-size:.86rem;margin-top:0">Asociaciones locales verificadas. No sustituyen a un abogado ni garantizan papeles; confirma cita y cobertura.</p>' +
+        entries.map(function (e) {
+          var title = typeof e.title === 'function' ? e.title({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.title;
+          var where = typeof e.where === 'function' ? e.where({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.where;
+          return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.family(15) + '</span><div>' +
+            '<strong>' + esc(title) + '</strong><p style="font-size:.85rem;color:var(--ink-2);margin:2px 0 0">' + esc((e.what || []).join(' · ')) + '</p>' +
+            '<p class="muted" style="font-size:.78rem;margin:3px 0 0">' + esc(where) + '</p>' +
+            '<a class="btn btn--soft btn--sm mt-2" href="' + esc(RL.dom.safeUrl(e.url)) + '" target="_blank" rel="noopener">' + icons.ext(13) + ' Ver web</a></div></div>';
+        }).join('');
+    } else {
+      html += '<div class="callout callout--warn">' + icons.info(18) + '<div><strong>No tenemos una asociación local verificada para ' + esc(d.municipality || d.province || 'tu zona') + '</strong><p>No significa que no exista. Consulta el directorio de tu comunidad o pregunta en el ayuntamiento; abajo tienes redes con sede provincial.</p></div></div>';
+    }
+    html += '<div class="block__head" style="margin-top:18px">' + icons.family(16) + '<h3 style="font-size:1rem;margin:0">Redes con sede local o provincial</h3></div>' +
+      '<p class="muted" style="font-size:.82rem;margin:6px 0 8px">No están en todos los municipios, pero suelen tener oficina provincial, comarcal o parroquial. Busca la más cercana antes de desplazarte.</p>' +
+      networks.map(function (n) {
         return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.family(15) + '</span><div>' +
-          '<strong>' + esc(title) + '</strong><p style="font-size:.85rem;color:var(--ink-2);margin:2px 0 0">' + esc((e.what || []).join(' · ')) + '</p>' +
-          '<p class="muted" style="font-size:.78rem;margin:3px 0 0">' + esc(where) + '</p>' +
-          '<a class="btn btn--soft btn--sm mt-2" href="' + esc(RL.dom.safeUrl(e.url)) + '" target="_blank" rel="noopener">' + icons.ext(13) + ' Ver web</a></div></div>';
-      }).join('') + '</div></div>';
+          '<strong>' + esc(n.title) + '</strong><p style="font-size:.85rem;color:var(--ink-2);margin:2px 0 0">' + esc((n.what || []).join(' · ')) + '</p>' +
+          '<p class="muted" style="font-size:.78rem;margin:3px 0 0">' + esc(n.where) + '</p>' +
+          '<a class="btn btn--soft btn--sm mt-2" href="' + esc(RL.dom.safeUrl(n.url)) + '" target="_blank" rel="noopener">' + icons.ext(13) + ' Ver web</a></div></div>';
+      }).join('');
+    return html + '</div></div>';
   }
 
   function renderDirectorio() {

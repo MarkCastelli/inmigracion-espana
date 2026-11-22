@@ -5163,6 +5163,65 @@ body.has-speech-bar { padding-bottom: 86px; }
     }
   ];
 
+  var NETWORKS = [
+    {
+      title: 'Cruz Roja',
+      what: ['Orientación social', 'Emergencia', 'Clases de español', 'Acompañamiento'],
+      where: 'Asamblea local o provincial',
+      url: 'https://www2.cruzroja.es/',
+      note: 'No está en todos los municipios, pero tiene asambleas locales y provinciales. Busca la más cercana en su web o llama al 900 225 225.'
+    },
+    {
+      title: 'Cáritas',
+      what: ['Acogida', 'Ayuda de emergencia', 'Empleo e inclusión', 'Apoyo a familias'],
+      where: 'Cáritas diocesana o parroquial',
+      url: 'https://www.caritas.es/',
+      note: 'Actúa por diócesis y parroquias. No todas las parroquias tienen los mismos servicios; llama antes.'
+    },
+    {
+      title: 'CEAR',
+      what: ['Asilo y protección internacional', 'Asesoría jurídica', 'Acogida'],
+      where: 'Oficinas en varias provincias',
+      url: 'https://www.cear.es/',
+      note: 'Especializada en asilo. No atiende todos los trámites de extranjería; confirma oficina y cita.'
+    },
+    {
+      title: 'ACCEM',
+      what: ['Acogida', 'Orientación jurídica', 'Empleo y formación'],
+      where: 'Varias provincias',
+      url: 'https://www.accem.es/',
+      note: 'Trabaja con personas migrantes y refugiadas. Comprueba si tu provincia tiene centro o delegación.'
+    },
+    {
+      title: 'Red Acoge',
+      what: ['Orientación jurídica', 'Acogida', 'Inserción sociolaboral'],
+      where: 'Entidades federadas por provincia',
+      url: 'https://www.redacoge.org/',
+      note: 'Agrupa entidades locales. En su web puedes buscar la entidad de tu provincia.'
+    },
+    {
+      title: 'Fundación Cepaim',
+      what: ['Vivienda', 'Empleo', 'Acompañamiento jurídico'],
+      where: 'Varias provincias',
+      url: 'https://cepaim.org/',
+      note: 'No cubre toda España; consulta centros y programas disponibles.'
+    },
+    {
+      title: 'Médicos del Mundo',
+      what: ['Salud', 'Atención a personas sin recursos', 'Derivación'],
+      where: 'Delegaciones autonómicas',
+      url: 'https://www.medicosdelmundo.org/',
+      note: 'Puede orientar sobre salud y acceso al sistema sanitario; no tramita residencia.'
+    },
+    {
+      title: 'Movimiento por la Paz',
+      what: ['Acogida', 'Orientación social', 'Empleo'],
+      where: 'Delegaciones autonómicas',
+      url: 'https://www.movimientoporlapaz.org/',
+      note: 'Programas de acogida e inclusión; cobertura según delegación.'
+    }
+  ];
+
   function resolveUrl(entry, region) {
     if (entry.url) return entry.url;
     if (entry.urlKey && region && region[entry.urlKey]) return region[entry.urlKey];
@@ -5172,6 +5231,7 @@ body.has-speech-bar { padding-bottom: 86px; }
   RL.directory = {
     categories: CATS,
     entries: E,
+    networks: NETWORKS,
     resolveUrl: resolveUrl
   };
 })();
@@ -12752,22 +12812,37 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (!RL.directory) return '';
     var entries = RL.directory.entries.filter(function (e) {
       if (e.cat !== 'ayuda' || e.scope === 'national') return false;
+      if (!d.region) return false;
       if (e.provinces && e.provinces.length && d.province && !inPlace(e.provinces, d.province)) return false;
       if (e.municipalities && e.municipalities.length && d.municipality && !inPlace(e.municipalities, d.municipality)) return false;
       return true;
     }).slice(0, 8);
-    if (!entries.length) return '';
-    return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.family(18) +
-      '<h2>Entidades de tu zona</h2><span class="badge badge--info">' + esc((d.municipality || '') + (d.province ? ' · ' + d.province : '')) + '</span></div><div class="block__body">' +
-      '<p class="muted" style="font-size:.86rem;margin-top:0">Asociaciones locales que pueden orientar, acompañar o derivar. No sustituyen a un abogado ni garantizan papeles; confirma cita y cobertura.</p>' +
-      entries.map(function (e) {
-        var title = typeof e.title === 'function' ? e.title({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.title;
-        var where = typeof e.where === 'function' ? e.where({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.where;
+    var networks = (RL.directory.networks || []).slice(0, 8);
+    if (!entries.length && !networks.length) return '';
+    var html = '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.family(18) +
+      '<h2>Entidades de tu zona</h2><span class="badge badge--info">' + esc((d.municipality || '') + (d.province ? ' · ' + d.province : '')) + '</span></div><div class="block__body">';
+    if (entries.length) {
+      html += '<p class="muted" style="font-size:.86rem;margin-top:0">Asociaciones locales verificadas. No sustituyen a un abogado ni garantizan papeles; confirma cita y cobertura.</p>' +
+        entries.map(function (e) {
+          var title = typeof e.title === 'function' ? e.title({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.title;
+          var where = typeof e.where === 'function' ? e.where({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.where;
+          return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.family(15) + '</span><div>' +
+            '<strong>' + esc(title) + '</strong><p style="font-size:.85rem;color:var(--ink-2);margin:2px 0 0">' + esc((e.what || []).join(' · ')) + '</p>' +
+            '<p class="muted" style="font-size:.78rem;margin:3px 0 0">' + esc(where) + '</p>' +
+            '<a class="btn btn--soft btn--sm mt-2" href="' + esc(RL.dom.safeUrl(e.url)) + '" target="_blank" rel="noopener">' + icons.ext(13) + ' Ver web</a></div></div>';
+        }).join('');
+    } else {
+      html += '<div class="callout callout--warn">' + icons.info(18) + '<div><strong>No tenemos una asociación local verificada para ' + esc(d.municipality || d.province || 'tu zona') + '</strong><p>No significa que no exista. Consulta el directorio de tu comunidad o pregunta en el ayuntamiento; abajo tienes redes con sede provincial.</p></div></div>';
+    }
+    html += '<div class="block__head" style="margin-top:18px">' + icons.family(16) + '<h3 style="font-size:1rem;margin:0">Redes con sede local o provincial</h3></div>' +
+      '<p class="muted" style="font-size:.82rem;margin:6px 0 8px">No están en todos los municipios, pero suelen tener oficina provincial, comarcal o parroquial. Busca la más cercana antes de desplazarte.</p>' +
+      networks.map(function (n) {
         return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.family(15) + '</span><div>' +
-          '<strong>' + esc(title) + '</strong><p style="font-size:.85rem;color:var(--ink-2);margin:2px 0 0">' + esc((e.what || []).join(' · ')) + '</p>' +
-          '<p class="muted" style="font-size:.78rem;margin:3px 0 0">' + esc(where) + '</p>' +
-          '<a class="btn btn--soft btn--sm mt-2" href="' + esc(RL.dom.safeUrl(e.url)) + '" target="_blank" rel="noopener">' + icons.ext(13) + ' Ver web</a></div></div>';
-      }).join('') + '</div></div>';
+          '<strong>' + esc(n.title) + '</strong><p style="font-size:.85rem;color:var(--ink-2);margin:2px 0 0">' + esc((n.what || []).join(' · ')) + '</p>' +
+          '<p class="muted" style="font-size:.78rem;margin:3px 0 0">' + esc(n.where) + '</p>' +
+          '<a class="btn btn--soft btn--sm mt-2" href="' + esc(RL.dom.safeUrl(n.url)) + '" target="_blank" rel="noopener">' + icons.ext(13) + ' Ver web</a></div></div>';
+      }).join('');
+    return html + '</div></div>';
   }
 
   function renderDirectorio() {
