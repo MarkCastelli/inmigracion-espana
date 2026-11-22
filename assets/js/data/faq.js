@@ -551,6 +551,27 @@
       ]
     },
     {
+      id: 'despues_nacionalidad', cat: 'documentos',
+      q: 'Ya me concedieron la nacionalidad: ¿qué tengo que actualizar y en qué orden?',
+      short: 'Primero jura o promesa en el Registro Civil dentro de 180 días, inscripción y DNI. Después actualiza padrón, Seguridad Social, tarjeta sanitaria, Hacienda, banco, empresa y DGT. La TIE deja de ser tu documento de identidad.',
+      detail: [
+        'Jura o promesa: tienes 180 días desde la notificación para jurar o prometer la Constitución. Si no lo haces, la concesión puede decaer.',
+        'Registro Civil: tras la jura, inscribe la nacionalidad y pide el certificado literal de nacimiento español. Es la base para el DNI y el pasaporte.',
+        'DNI: pide cita en la Policía Nacional. El DNI sustituye a la TIE como documento de identidad. Si quieres, solicita también el pasaporte español.',
+        'Padrón: actualiza tu inscripción con el DNI y la nacionalidad. El certificado de empadronamiento debe reflejar tus datos nuevos.',
+        'Seguridad Social: cambia el NIE por el DNI en Import@ss o con el modelo TA.1. Tu número de afiliación y tus cotizaciones no cambian.',
+        'Sanidad: actualiza la tarjeta sanitaria en tu comunidad; puede que te den una nueva con el DNI.',
+        'Hacienda: actualiza tu NIF y tus datos en la Agencia Tributaria. También banco, empresa, seguros y DGT, para evitar bloqueos.',
+        'Si una entidad pide un certificado de concordancia NIE-DNI, solicítalo; no sustituye al DNI, solo acredita que ambos números corresponden a la misma persona.',
+        'No uses la TIE como documento vigente después de tener DNI. Guarda una copia para tu historial y sigue el orden: jura, inscripción, DNI, padrón, Seguridad Social, sanidad y resto.'
+      ],
+      links: [
+        ['Ministerio de Justicia · nacionalidad', 'https://www.mjusticia.gob.es/es/ciudadania/nacionalidad/informacion-nacionalidad'],
+        ['Seguridad Social · cambio de NIE a DNI', 'https://www.seg-social.es/'],
+        ['Policía · cita DNI/pasaporte', 'https://www.dnielectronico.es/']
+      ]
+    },
+    {
       id: 'padron_renovacion', cat: 'documentos',
       q: '¿Cada cuánto hay que renovar el empadronamiento? ¿Es igual en toda España?',
       short: 'Los extranjeros no comunitarios sin autorización de residencia permanente deben renovar la inscripción cada 2 años. Los ciudadanos de la UE/EEE y quienes tienen residencia permanente no están obligados a esa renovación, aunque el ayuntamiento puede comprobar el domicilio. Es una norma estatal; el procedimiento y los avisos cambian por municipio.',

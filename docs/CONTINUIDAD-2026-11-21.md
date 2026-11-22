@@ -65,6 +65,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 35. **Empadronamiento**: ficha visible aunque no haya provincia; aviso destacado, requisitos para compartir vivienda, certificado histórico y qué hacer si lo deniegan.
 36. **Renovación del padrón**: aviso de renovación cada 2 años para extranjeros no comunitarios sin residencia permanente; UE/EEE y permanentes no obligados. FAQ y ficha actualizadas.
 37. **Online**: fichas de Mercurio, Registro Civil, universidades/homologación y enlace directo; se distingue qué es total, parcial o solo cita.
+38. **Después de la nacionalidad**: guía ordenada (jura/promesa 180 días, Registro Civil, DNI/pasaporte, padrón, Seguridad Social, sanidad, Hacienda, banco, DGT) y FAQ con distinción entre obligatorio y recomendable.
 
 ## Comandos
 

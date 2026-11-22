@@ -403,3 +403,5 @@ Las preguntas se inspiraron en dudas recurrentes de foros y consultas, pero **no
 **DGT y permisos:** el canje depende del país y la categoría; los permisos extracomunitarios suelen poder usarse 6 meses desde la residencia. B desde 18; A1 desde 16, A2 desde 18, A desde 20 con 2 años de A2; C1 desde 18, C desde 21 (18 con CAP), D1 desde 21, D desde 24. C/D exigen CAP y, para mercancías peligrosas, ADR. La DGT y las pruebas son estatales; cita, centros médicos, autoescuelas y CAP cambian por provincia. [V/PV]
 
 **Razones humanitarias:** art. 128 del RD 1155/2024. Es una autorización temporal por circunstancias excepcionales humanitarias; exige un supuesto concreto y prueba (enfermedad grave, riesgo para la integridad, determinadas víctimas u otra razón humanitaria). No es una vía general ni se concede por pobreza. [V]
+
+**Después de la nacionalidad:** jura o promesa en 180 días; inscripción en el Registro Civil; DNI y pasaporte; actualización de padrón, Seguridad Social (el NAF no cambia), sanidad, Hacienda y DGT. La TIE deja de ser el documento de identidad. [V/PV]

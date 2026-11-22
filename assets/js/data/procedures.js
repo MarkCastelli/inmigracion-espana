@@ -379,6 +379,34 @@
       routeIds: []
     },
     {
+      id: 'post_nacionalidad', scope: 'national', cat: 'documentos', icon: 'user',
+      title: 'Después de la nacionalidad: DNI y actualización',
+      when: 'Cuando te conceden la nacionalidad. Primero la jura o promesa en 180 días; después el DNI y la actualización de tus datos.',
+      where: 'Registro Civil, Policía Nacional, ayuntamiento, Seguridad Social, Hacienda y DGT',
+      appointment: JUSTICIA,
+      appointmentLabel: 'Abrir sede de Justicia',
+      docs: [
+        'Resolución de concesión de la nacionalidad',
+        'Certificado de jura o promesa',
+        'Certificado literal de nacimiento',
+        'NIE/TIE anterior y pasaporte',
+        'Fotografía y tasa para DNI/pasaporte'
+      ],
+      steps: [
+        'Jura o promete la Constitución en el Registro Civil dentro de los 180 días desde la notificación.',
+        'Inscripción de la nacionalidad y obtención del certificado literal de nacimiento español.',
+        'Pide cita en la Policía Nacional para el DNI; si quieres, también el pasaporte español.',
+        'Actualiza el padrón municipal con el DNI y la nueva nacionalidad.',
+        'Actualiza la Seguridad Social (Import@ss o TA.1). Tu número de afiliación no cambia.',
+        'Actualiza la tarjeta sanitaria y los datos en Hacienda (NIF), banco, empresa, seguro y DGT.',
+        'Solicita el certificado de concordancia NIE-DNI si alguna entidad lo exige.',
+        'Renueva el certificado digital o Cl@ve con el DNI y revisa DEHú y notificaciones.'
+      ],
+      fee: 'DNI/pasaporte según tasa; certificados del Registro Civil gratuitos',
+      note: 'El DNI sustituye a la TIE como documento de identidad. No uses la TIE como si siguiera vigente. No todos los pasos son obligatorios, pero el orden evita bloqueos: primero jura, inscripción y DNI; después padrón, Seguridad Social, sanidad, Hacienda y entidades privadas.',
+      routeIds: ['nac_residencia_2', 'nac_residencia_1', 'nac_residencia_10', 'nac_22_2f', 'nac_origen', 'nac_opcion']
+    },
+    {
       id: 'renovacion', scope: 'national', cat: 'documentos', icon: 'clock',
       title: 'Renovar la autorización y la TIE: dos pasos distintos',
       when: 'Renovación administrativa: en los 2 meses anteriores al vencimiento, por Mercurio o sede. Huellas/TIE física: solo desde el día en que vence la tarjeta, nunca antes.',
