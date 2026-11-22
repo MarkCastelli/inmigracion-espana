@@ -487,9 +487,11 @@
         '<button class="btn btn--soft btn--sm" type="button" data-form-action="add-child">+ Añadir hijo/a</button>' +
         (F.children.length ? F.children.map(function (ch, i) {
           var lm = childMembers[i];
+          var childIsAdult = ch.age !== '' && Number(ch.age) >= 18;
           return '<div class="family-child" style="margin-top:14px"><div class="flex" style="justify-content:space-between"><h3>Hijo/a ' + (i + 1) + (lm && lm.name ? ': ' + fEsc(lm.name) : '') + '</h3><button class="btn btn--ghost btn--sm" type="button" data-form-action="remove-child" data-index="' + i + '">Quitar</button></div>' +
             (lm ? '<p class="muted">Edad: ' + fEsc(lm.age || 'sin indicar') + ' · vínculo: ' + fEsc(lm.relation) + '. Nombre y edad cargados desde el paso 0.</p>' : '') +
-            personBlock(ch, 'children.' + i, true, false, !!lm) +
+            (!childIsAdult ? '<div class="callout callout--info">' + icons.info(16) + '<div><p>Menor de edad: no se le piden hipoteca, alquiler ni suministros. Se entiende que vive con su familia.</p></div></div>' : '') +
+            personBlock(ch, 'children.' + i, childIsAdult, false, !!lm) +
             '<div class="form-grid">' +
             fInput('children.' + i + '.educationLevel', 'Estudios actuales', fget(ch, 'educationLevel'), 'text', 'ESO, Bachillerato, FP, universidad…') +
             '</div></div>';
@@ -502,7 +504,8 @@
           otherMembers.map(function (x) {
             return '<div class="family-child" style="margin-top:14px"><h3>' + fEsc(x.m.name || 'Integrante ' + (x.i + 1)) + ' · ' + fEsc(x.m.relation || 'otro') + ' · ' + fEsc(x.m.age || 'edad sin indicar') + '</h3>' +
               '<p class="muted">Nombre y edad cargados desde el paso 0.</p>' +
-              personBlock(x.m.data || {}, 'members.' + x.i + '.data', true, false, true) +
+              (Number(x.m.age) >= 18 ? '' : '<div class="callout callout--info">' + icons.info(16) + '<div><p>Menor de edad: no se le piden gastos de vivienda.</p></div></div>') +
+              personBlock(x.m.data || {}, 'members.' + x.i + '.data', Number(x.m.age) >= 18, false, true) +
               '<div class="form-grid">' + fInput('members.' + x.i + '.educationLevel', 'Estudios actuales', x.m.educationLevel || '', 'text', 'ESO, Bachillerato, FP, universidad…') + '</div></div>';
           }).join('') + '</div>';
       }

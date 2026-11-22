@@ -760,4 +760,25 @@ t('el resumen incluye estudios y discapacidad de los hijos', () => {
   nav(app, 'inicio');
 });
 
+t('un hijo menor no recibe preguntas de vivienda y gastos', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 2;
+  f.members = [{ name: 'Luis', age: '10', relation: 'hijo_comun', data: RL.formulario.person() }];
+  f.step = 6;
+  nav(app, 'formulario');
+  let html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Menor de edad'));
+  assert.ok(!html.includes('data-fpath="children.0.housing"'), 'menor no debe tener vivienda');
+  assert.ok(!html.includes('data-fpath="children.0.mortgage"'), 'menor no debe tener hipoteca');
+  f.members[0].age = '20';
+  RL.ui.render();
+  html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('data-fpath="children.0.housing"'), 'adulto sí debe tener vivienda');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
