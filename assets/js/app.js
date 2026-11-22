@@ -656,12 +656,30 @@
     });
   }
 
+  function housingExpenseFor(p, isApplicant) {
+    if (!p) return 0;
+    var hasAny = fnum(p.mortgageAmount) || fnum(p.housingCost) ||
+      fnum(p.expenses && p.expenses.luz) || fnum(p.expenses && p.expenses.agua) ||
+      fnum(p.expenses && p.expenses.gas) || fnum(p.expenses && p.expenses.comunidad) ||
+      fnum(p.expenses && p.expenses.internet);
+    if (!isApplicant && p.paysHousing !== 'si' && !hasAny) return 0;
+    var base = p.mortgage === 'si' ? fnum(p.mortgageAmount) : fnum(p.housingCost);
+    var exp = p.expenses || {};
+    return base + fnum(exp.luz) + fnum(exp.agua) + fnum(exp.gas) + fnum(exp.comunidad) + fnum(exp.internet);
+  }
+
   function formSummaryHTML(F, editable) {
     var income = fnum(fget(F.applicant, 'netSalary')) + (F.mode === 'family' ? fnum(fget(F.spouse, 'netSalary')) : 0);
-    var housing = fnum(fget(F.applicant, 'housingCost'));
-    var mortgage = fget(F.applicant, 'mortgage') === 'si' ? fnum(fget(F.applicant, 'mortgageAmount')) : 0;
-    var exp = mortgage > 0 ? mortgage : housing;
-    ['luz', 'agua', 'gas', 'comunidad', 'internet'].forEach(function (k) { exp += fnum(fget(F.applicant, 'expenses.' + k)); });
+    var housingPeople = [F.applicant];
+    if (F.mode === 'family') {
+      housingPeople.push(F.spouse);
+      housingPeople = housingPeople.concat(F.children || []);
+      (F.members || []).forEach(function (m) {
+        if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
+        if (m.data) housingPeople.push(m.data);
+      });
+    }
+    var exp = housingPeople.reduce(function (sum, p, i) { return sum + housingExpenseFor(p, i === 0); }, 0);
     var balance = income - exp;
     var members = [{ key: 'applicant', label: F.applicant.name || 'Titular', obj: F.applicant }];
     var childMeta = [];
@@ -681,7 +699,7 @@
     }
     html += '<div class="kv">' +
       '<div class="kv__row"><dt>Ingreso neto mensual</dt><dd>' + income.toFixed(2) + ' €</dd></div>' +
-      '<div class="kv__row"><dt>Gastos fijos declarados</dt><dd>' + exp.toFixed(2) + ' €</dd></div>' +
+      '<div class="kv__row"><dt>Gastos fijos del hogar</dt><dd>' + exp.toFixed(2) + ' €</dd></div>' +
       '<div class="kv__row"><dt>Diferencia</dt><dd><strong>' + balance.toFixed(2) + ' €</strong></dd></div>' +
       '</div>';
     if (F.print && F.print.applicant !== false) {

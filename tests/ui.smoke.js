@@ -873,4 +873,25 @@ t('discapacidad identifica a cada integrante por su nombre', () => {
   nav(app, 'inicio');
 });
 
+t('suma la hipoteca del titular y de la pareja en el gasto del hogar', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 2;
+  f.members = [{ name: 'Ana', age: '40', relation: 'esposa', data: RL.formulario.person() }];
+  f.applicant.mortgage = 'si';
+  f.applicant.mortgageAmount = '225';
+  f.applicant.expenses.luz = '100';
+  f.spouse.paysHousing = 'si';
+  f.spouse.mortgage = 'si';
+  f.spouse.mortgageAmount = '225';
+  f.step = 10;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('550.00 €'), 'debe sumar 225 + 225 + 100');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
