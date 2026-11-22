@@ -1468,13 +1468,20 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
   function textNode(el, value) {
     if (!el || value == null) return;
-    if (el.childNodes && el.childNodes.length) {
+    var target = null;
+    var fallback = null;
+    if (el.childNodes) {
       for (var i = 0; i < el.childNodes.length; i++) {
-        if (el.childNodes[i].nodeType === 3) {
-          el.childNodes[i].nodeValue = value;
-          return;
-        }
+        var node = el.childNodes[i];
+        if (node.nodeType !== 3) continue;
+        fallback = node;
+        if (/\S/.test(node.nodeValue || '')) { target = node; break; }
       }
+    }
+    target = target || fallback;
+    if (target) {
+      target.nodeValue = value;
+      return;
     }
     el.textContent = value;
   }
