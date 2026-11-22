@@ -893,6 +893,8 @@ t('suma la hipoteca del titular y de la pareja en el gasto del hogar', () => {
   nav(app, 'formulario');
   const html = app.document.querySelector('#view-formulario').innerHTML;
   assert.ok(html.includes('550.00 €'), 'debe sumar 225 + 225 + 100');
+  assert.ok(html.includes('Hipoteca/alquiler:</strong> 450.00 €'), 'debe mostrar la hipoteca total');
+  assert.ok(html.includes('Suministros:</strong> 100.00 €'), 'debe mostrar los suministros');
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

@@ -111,6 +111,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 81. **Permiso individual**: no se aplica como objetivo común; cada adulto sin permiso decide si quiere obtenerlo/canjearlo, y los menores no lo ven.
 82. **Ubicación**: «Sobre ti» pregunta dónde está ahora (España, Portugal, UE, Argentina, Latinoamérica, otro); el grupo familiar pregunta dónde está el resto de la familia.
 83. **Paso de irregular a legal**: cada integrante con residencia legal indica mes/año y la base de la fecha (resolución, efectos, TIE, recogida u otra); se explica que la TIE no siempre marca el inicio y se muestra en el resumen.
+84. **Desglose de vivienda**: el resumen separa hipoteca/alquiler total y suministros, y muestra el desglose por integrante; ya no usa solo la cuota del titular.
 
 ## Comandos
 

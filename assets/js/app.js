@@ -733,16 +733,31 @@
     });
   }
 
-  function housingExpenseFor(p, isApplicant) {
+  function housingBaseFor(p, isApplicant) {
     if (!p) return 0;
     var hasAny = fnum(p.mortgageAmount) || fnum(p.housingCost) ||
       fnum(p.expenses && p.expenses.luz) || fnum(p.expenses && p.expenses.agua) ||
       fnum(p.expenses && p.expenses.gas) || fnum(p.expenses && p.expenses.comunidad) ||
       fnum(p.expenses && p.expenses.internet);
     if (!isApplicant && p.paysHousing !== 'si' && !hasAny) return 0;
-    var base = p.mortgage === 'si' ? fnum(p.mortgageAmount) : fnum(p.housingCost);
-    var exp = p.expenses || {};
-    return base + fnum(exp.luz) + fnum(exp.agua) + fnum(exp.gas) + fnum(exp.comunidad) + fnum(exp.internet);
+    return p.mortgage === 'si' ? fnum(p.mortgageAmount) : fnum(p.housingCost);
+  }
+
+  function utilitiesFor(p) {
+    var exp = p && p.expenses ? p.expenses : {};
+    return fnum(exp.luz) + fnum(exp.agua) + fnum(exp.gas) + fnum(exp.comunidad) + fnum(exp.internet);
+  }
+
+  function housingExpenseFor(p, isApplicant) {
+    if (!p) return 0;
+    return housingBaseFor(p, isApplicant) + utilitiesFor(p);
+  }
+
+  function goalText(values) {
+    return (values || []).map(function (v) {
+      var found = RL.formulario.goals.filter(function (g) { return g.v === v; })[0];
+      return found ? found.l : v;
+    }).join(', ');
   }
 
   function formSummaryHTML(F, editable) {
@@ -756,7 +771,13 @@
         if (m.data) housingPeople.push(m.data);
       });
     }
-    var exp = housingPeople.reduce(function (sum, p, i) { return sum + housingExpenseFor(p, i === 0); }, 0);
+    var housingBase = 0;
+    var utilities = 0;
+    housingPeople.forEach(function (p, i) {
+      housingBase += housingBaseFor(p, i === 0);
+      utilities += utilitiesFor(p);
+    });
+    var exp = housingBase + utilities;
     var balance = income - exp;
     var members = [{ key: 'applicant', label: F.applicant.name || 'Titular', obj: F.applicant }];
     var childMeta = [];
@@ -803,12 +824,23 @@
       html += '<h3>Ayudas</h3><p>' + fEsc((fget(F.applicant, 'aidTypes') || []).join(', ')) + ' · ' + fEsc((fget(F.applicant, 'aidWho') || []).join(', ')) + '</p>';
     }
     if (F.print && F.print.housing !== false) {
-      html += '<h3>Vivienda y gastos</h3><p>' + fEsc(fget(F.applicant, 'housing') || 'Sin indicar') + ' · ' + exp.toFixed(2) + ' €/mes' +
-        (fget(F.applicant, 'mortgage') === 'si' ? ' · hipoteca: ' + fEsc(fget(F.applicant, 'mortgageAmount') || '0') + ' €' : '') + '</p>';
+      html += '<h3>Vivienda y gastos</h3><p>' + fEsc(fget(F.applicant, 'housing') || 'Sin indicar') + ' · total <strong>' + exp.toFixed(2) + ' €/mes</strong></p>' +
+        '<p><strong>Hipoteca/alquiler:</strong> ' + housingBase.toFixed(2) + ' € · <strong>Suministros:</strong> ' + utilities.toFixed(2) + ' €</p>' +
+        housingPeople.map(function (p, i) {
+          var base = housingBaseFor(p, i === 0);
+          var u = utilitiesFor(p);
+          if (!base && !u) return '';
+          return '<p class="muted" style="font-size:.83rem">' + fEsc(p.name || (i === 0 ? 'Titular' : 'Integrante ' + (i + 1))) + ': ' + base.toFixed(2) + ' € vivienda + ' + u.toFixed(2) + ' € suministros</p>';
+        }).join('');
     }
     if (F.print && F.print.goals !== false) {
-      html += '<h3>Objetivos</h3><p><strong>Titular:</strong> ' + fEsc((fget(F.applicant, 'goals') || []).join(', ') || 'Sin indicar') + '</p>';
-      if (F.mode === 'family') html += '<p><strong>Pareja:</strong> ' + fEsc((fget(F.spouse, 'goals') || []).join(', ') || 'Sin indicar') + '</p>';
+      html += '<h3>Objetivos</h3><p><strong>Titular:</strong> ' + fEsc(goalText(fget(F.applicant, 'goals')) || 'Sin indicar') + '</p>';
+      if (F.mode === 'family') {
+        html += '<p><strong>Pareja:</strong> ' + fEsc(goalText(fget(F.spouse, 'goals')) || 'Sin indicar') + '</p>';
+        F.children.forEach(function (ch, i) {
+          html += '<p><strong>Hijo/a ' + (i + 1) + ':</strong> ' + fEsc(goalText(fget(ch, 'goals')) || 'Sin indicar') + '</p>';
+        });
+      }
     }
     return html + '</div></div>';
   }
