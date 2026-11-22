@@ -3648,14 +3648,66 @@
       '<label class="field"><span class="field__label">Idiomas de atención</span><input class="input" name="idiomas" placeholder="Ej. español, francés, árabe, inglés"></label>' +
       '<label class="field field--full"><span class="field__label">Observaciones</span><textarea class="textarea" name="mensaje" rows="4"></textarea></label>' +
       '<label class="option option--check field--full" style="margin-top:10px"><input type="checkbox" name="consentimiento" required><span class="option__box"></span><span class="option__body"><span class="option__label">Declaro que soy abogado/a colegiado/a, que los datos son ciertos y acepto la <a href="#/legal">política de privacidad</a>. No incluyo datos de clientes.</span></span></label>' +
-      '<div class="field--full lawyer-submit"><button class="btn btn--primary" type="submit">Enviar solicitud</button><p id="lawyerFormStatus" class="muted" role="status" style="margin:10px 0 0"></p></div>' +
+      '<div class="field--full lawyer-submit"><div class="flex" style="gap:10px;flex-wrap:wrap"><button class="btn btn--primary" type="submit">Enviar solicitud</button><button class="btn btn--ghost btn--sm" type="button" id="lawyerDraftClear">Borrar borrador</button></div><p id="lawyerDraftNote" class="muted" role="status" style="margin:10px 0 0" hidden></p><p id="lawyerFormStatus" class="muted" role="status" style="margin:10px 0 0"></p></div>' +
       '</form></div></div>';
     html += '<div class="callout callout--info mt-3"><div><strong>Cómo se envía</strong><p>El formulario se envía por correo al responsable mediante un servicio de formularios. La dirección de destino no se muestra en la página. No incluyas datos de clientes, documentos, NIE ni información de salud.</p></div></div>';
     host.innerHTML = html;
     var form = $('#lawyerApplyForm');
     if (!form) return;
+    var draftKey = 'ruta-legal.lawyer-draft';
+    var draftNote = $('#lawyerDraftNote');
+    var draftClear = $('#lawyerDraftClear');
+
+    function saveLawyerDraft() {
+      try {
+        var draft = {};
+        form.querySelectorAll('[name]').forEach(function (el) {
+          if (!el.name || el.name === 'consentimiento' || el.name === '_honey') return;
+          if (el.type === 'radio' || el.type === 'checkbox') {
+            if (el.checked) draft[el.name] = el.value;
+          } else {
+            draft[el.name] = el.value;
+          }
+        });
+        localStorage.setItem(draftKey, JSON.stringify(draft));
+      } catch (e) {}
+    }
+
+    try {
+      var rawDraft = localStorage.getItem(draftKey);
+      if (rawDraft) {
+        var draft = JSON.parse(rawDraft);
+        Object.keys(draft).forEach(function (name) {
+          var el = form.querySelector('[name="' + name + '"]');
+          if (!el) return;
+          if (el.type === 'radio') {
+            var radio = form.querySelector('[name="' + name + '"][value="' + draft[name] + '"]');
+            if (radio) radio.checked = true;
+          } else if (el.type !== 'checkbox') {
+            el.value = draft[name];
+          }
+        });
+        if (draftNote) {
+          draftNote.hidden = false;
+          draftNote.textContent = 'Hemos recuperado tu borrador guardado en este dispositivo. Revisa los datos y completa solo lo que falte.';
+        }
+      }
+    } catch (e) {}
+
+    form.addEventListener('input', saveLawyerDraft);
+    form.addEventListener('change', saveLawyerDraft);
+    if (draftClear) {
+      draftClear.addEventListener('click', function () {
+        try { localStorage.removeItem(draftKey); } catch (e) {}
+        form.reset();
+        if (draftNote) { draftNote.hidden = true; draftNote.textContent = ''; }
+        var status = $('#lawyerFormStatus');
+        if (status) status.textContent = 'Borrador borrado.';
+      });
+    }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      saveLawyerDraft();
       var status = $('#lawyerFormStatus');
       if (!form.reportValidity()) return;
       var consent = form.querySelector('[name="consentimiento"]');
@@ -3678,6 +3730,7 @@
       }).then(function (r) {
         if (!r.ok) throw new Error('Error de envío');
         if (status) status.textContent = 'Solicitud enviada.';
+        try { localStorage.removeItem(draftKey); } catch (e) {}
         form.reset();
         go('abogados-gracias');
         window.scrollTo(0, 0);
