@@ -5518,24 +5518,26 @@ body.has-speech-bar { padding-bottom: 86px; }
     {
       id: 'padron', scope: 'local', cat: 'documentos', icon: 'home',
       title: 'Empadronamiento y certificado de padrón',
-      when: 'Nada más llegar a un municipio, y cada vez que cambies de domicilio.',
+      when: 'Nada más llegar a un municipio, y cada vez que cambies de domicilio. Es gratuito y no es un permiso de residencia.',
       where: function (c) { return c.localLabel + ' de ' + (c.municipality || 'tu municipio'); },
       urlKey: 'portal',
       appointmentLabel: 'Web de tu ayuntamiento',
       docs: [
-        'Pasaporte o NIE',
+        'Pasaporte, NIE o TIE',
         'Contrato de alquiler, escritura o autorización del propietario',
+        'Si no tienes contrato: certificado de convivencia, recibo o informe de servicios sociales',
         'Último recibo de luz o agua, si lo tienes',
-        'Formulario de alta de padrón del ayuntamiento'
+        'Libro de familia o documentación de los menores, si se empadronan contigo'
       ],
       steps: [
-        'Pide cita o consulta el horario del ayuntamiento/concello.',
-        'Lleva el contrato de alquiler y un documento de identidad.',
-        'Haz el alta de padrón y pide el certificado histórico si llevas tiempo.',
-        'Guarda el certificado: es la prueba principal de permanencia para el arraigo.'
+        'Pide cita o consulta el horario del ayuntamiento/concello; muchos exigen cita previa.',
+        'Lleva identidad y prueba de domicilio. Si vives de alquiler, contrato y autorización; si compartes, certificado de convivencia.',
+        'Haz el alta de padrón. Pide el volante o certificado y comprueba que aparecen todos los convivientes.',
+        'Si llevas tiempo, pide el certificado histórico con altas y bajas: es la prueba principal de permanencia para el arraigo.',
+        'Si te niegan el empadronamiento, pide la denegación por escrito y acude a servicios sociales o a una entidad de apoyo.'
       ],
       fee: 'Gratuito',
-      note: 'El padrón no es un permiso de residencia, pero sin él no puedes acreditar permanencia ni acceder a sanidad, escuela o ayudas.',
+      note: 'El padrón no es un permiso de residencia, pero sin él no puedes acreditar permanencia ni acceder a sanidad, escuela o ayudas. No todos los ayuntamientos piden los mismos documentos: confirma en el tuyo.',
       routeIds: ['arraigo_social', 'arraigo_sociolaboral', 'arraigo_socioformativo', 'arraigo_segunda_oportunidad', 'familiar_espanol', 'reagrupacion']
     },
     {
@@ -12109,7 +12111,7 @@ body.has-speech-bar { padding-bottom: 86px; }
 
     var q = ui.procSearch.toLowerCase();
     var list = RL.procedures.all.filter(function (pr) {
-      if (pr.scope === 'local' && !region) return false;
+      if (pr.scope === 'local' && !region && pr.id !== 'padron') return false;
       if (ui.procMine && pr.routeIds.length && !mineIds[pr.id]) return false;
       if (ui.procFilter !== 'todas' && pr.cat !== ui.procFilter) return false;
       if (!q) return true;
@@ -12129,6 +12131,9 @@ body.has-speech-bar { padding-bottom: 86px; }
       html += '<div class="callout callout--info" style="margin-bottom:16px">' + icons.info(18) +
         '<div><strong>Elige tu provincia</strong><p>Así adaptamos el ayuntamiento, el centro de salud y la oficina de empleo. Los trámites nacionales funcionan igual en toda España.</p><button class="btn btn--soft btn--sm mt-2" data-nav="directorio">Elegir provincia</button></div></div>';
     }
+
+    html += '<div class="callout callout--info" style="margin-bottom:16px">' + icons.home(18) +
+      '<div><strong>Lo primero: empadrónate</strong><p>El padrón es gratuito y no es un permiso de residencia. Sirve para acreditar dónde vives, acceder a sanidad, escuela y ayudas, y preparar arraigos. Está disponible aunque aún no tengas provincia seleccionada.</p><button class="btn btn--soft btn--sm mt-2" data-action="proc-highlight" data-id="padron">Ver guía de empadronamiento</button></div></div>';
 
     html += '<div class="dir-controls" style="grid-template-columns:minmax(220px,1fr) auto">' +
       '<div class="search">' + icons.search(18) + '<input class="input" type="search" id="procSearch" placeholder="Buscar: NIE, arraigo, cita, nacionalidad, padrón…" value="' + esc(ui.procSearch) + '" aria-label="Buscar trámites"></div>' +
@@ -12171,7 +12176,7 @@ body.has-speech-bar { padding-bottom: 86px; }
     var url = pr.appointment || RL.procedures.resolveUrl(pr, ctx.region);
     var label = pr.appointmentLabel || 'Abrir web oficial';
     var iconFn = icons[pr.icon] || icons.doc;
-    return '<article class="card proc-card">' +
+    return '<article class="card proc-card" id="proc-' + esc(pr.id) + '">' +
       '<div class="dir-card__head"><span class="dir-card__icon">' + iconFn(20) + '</span><div><h3>' + esc(pr.title) + '</h3><span class="badge badge--info">' + esc(pr.cat) + '</span></div></div>' +
       '<p class="proc-meta">' + icons.pin(13) + ' ' + esc(where) + '</p>' +
       '<p class="proc-meta">' + icons.clock(13) + ' ' + esc(pr.when) + '</p>' +
@@ -12917,6 +12922,11 @@ body.has-speech-bar { padding-bottom: 86px; }
     if (action === 'dir-filter') { ui.dirFilter = btn.getAttribute('data-filter'); renderDirectorio(); return; }
     if (action === 'proc-filter') { ui.procFilter = btn.getAttribute('data-filter'); renderTramites(); return; }
     if (action === 'proc-mine') { ui.procMine = !ui.procMine; renderTramites(); return; }
+    if (action === 'proc-highlight') {
+      var target = document.getElementById('proc-' + btn.getAttribute('data-id'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
     if (action === 'aid-filter') { ui.aidFilter = btn.getAttribute('data-filter'); renderDerechos(); return; }
     if (action === 'faq-filter') { ui.faqFilter = btn.getAttribute('data-filter'); renderPreguntas(); return; }
     if (action === 'online-filter') { ui.onlineFilter = btn.getAttribute('data-filter'); renderOnline(); return; }

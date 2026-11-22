@@ -487,4 +487,15 @@ t('el informe recoge la residencia sin calcular un veredicto', () => {
   nav(app, 'inicio');
 });
 
+t('el empadronamiento aparece aunque no hayas elegido provincia', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', goals: ['regularizar'] };
+  nav(app, 'tramites');
+  const html = app.document.querySelector('#view-tramites').innerHTML;
+  assert.ok(html.includes('Empadronamiento y certificado de padrón'), 'falta la ficha de padrón');
+  assert.ok(html.includes('Lo primero: empadrónate'), 'falta el aviso destacado');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

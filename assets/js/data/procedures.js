@@ -386,24 +386,26 @@
     {
       id: 'padron', scope: 'local', cat: 'documentos', icon: 'home',
       title: 'Empadronamiento y certificado de padrón',
-      when: 'Nada más llegar a un municipio, y cada vez que cambies de domicilio.',
+      when: 'Nada más llegar a un municipio, y cada vez que cambies de domicilio. Es gratuito y no es un permiso de residencia.',
       where: function (c) { return c.localLabel + ' de ' + (c.municipality || 'tu municipio'); },
       urlKey: 'portal',
       appointmentLabel: 'Web de tu ayuntamiento',
       docs: [
-        'Pasaporte o NIE',
+        'Pasaporte, NIE o TIE',
         'Contrato de alquiler, escritura o autorización del propietario',
+        'Si no tienes contrato: certificado de convivencia, recibo o informe de servicios sociales',
         'Último recibo de luz o agua, si lo tienes',
-        'Formulario de alta de padrón del ayuntamiento'
+        'Libro de familia o documentación de los menores, si se empadronan contigo'
       ],
       steps: [
-        'Pide cita o consulta el horario del ayuntamiento/concello.',
-        'Lleva el contrato de alquiler y un documento de identidad.',
-        'Haz el alta de padrón y pide el certificado histórico si llevas tiempo.',
-        'Guarda el certificado: es la prueba principal de permanencia para el arraigo.'
+        'Pide cita o consulta el horario del ayuntamiento/concello; muchos exigen cita previa.',
+        'Lleva identidad y prueba de domicilio. Si vives de alquiler, contrato y autorización; si compartes, certificado de convivencia.',
+        'Haz el alta de padrón. Pide el volante o certificado y comprueba que aparecen todos los convivientes.',
+        'Si llevas tiempo, pide el certificado histórico con altas y bajas: es la prueba principal de permanencia para el arraigo.',
+        'Si te niegan el empadronamiento, pide la denegación por escrito y acude a servicios sociales o a una entidad de apoyo.'
       ],
       fee: 'Gratuito',
-      note: 'El padrón no es un permiso de residencia, pero sin él no puedes acreditar permanencia ni acceder a sanidad, escuela o ayudas.',
+      note: 'El padrón no es un permiso de residencia, pero sin él no puedes acreditar permanencia ni acceder a sanidad, escuela o ayudas. No todos los ayuntamientos piden los mismos documentos: confirma en el tuyo.',
       routeIds: ['arraigo_social', 'arraigo_sociolaboral', 'arraigo_socioformativo', 'arraigo_segunda_oportunidad', 'familiar_espanol', 'reagrupacion']
     },
     {

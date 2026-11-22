@@ -1680,7 +1680,7 @@
 
     var q = ui.procSearch.toLowerCase();
     var list = RL.procedures.all.filter(function (pr) {
-      if (pr.scope === 'local' && !region) return false;
+      if (pr.scope === 'local' && !region && pr.id !== 'padron') return false;
       if (ui.procMine && pr.routeIds.length && !mineIds[pr.id]) return false;
       if (ui.procFilter !== 'todas' && pr.cat !== ui.procFilter) return false;
       if (!q) return true;
@@ -1700,6 +1700,9 @@
       html += '<div class="callout callout--info" style="margin-bottom:16px">' + icons.info(18) +
         '<div><strong>Elige tu provincia</strong><p>Así adaptamos el ayuntamiento, el centro de salud y la oficina de empleo. Los trámites nacionales funcionan igual en toda España.</p><button class="btn btn--soft btn--sm mt-2" data-nav="directorio">Elegir provincia</button></div></div>';
     }
+
+    html += '<div class="callout callout--info" style="margin-bottom:16px">' + icons.home(18) +
+      '<div><strong>Lo primero: empadrónate</strong><p>El padrón es gratuito y no es un permiso de residencia. Sirve para acreditar dónde vives, acceder a sanidad, escuela y ayudas, y preparar arraigos. Está disponible aunque aún no tengas provincia seleccionada.</p><button class="btn btn--soft btn--sm mt-2" data-action="proc-highlight" data-id="padron">Ver guía de empadronamiento</button></div></div>';
 
     html += '<div class="dir-controls" style="grid-template-columns:minmax(220px,1fr) auto">' +
       '<div class="search">' + icons.search(18) + '<input class="input" type="search" id="procSearch" placeholder="Buscar: NIE, arraigo, cita, nacionalidad, padrón…" value="' + esc(ui.procSearch) + '" aria-label="Buscar trámites"></div>' +
@@ -1742,7 +1745,7 @@
     var url = pr.appointment || RL.procedures.resolveUrl(pr, ctx.region);
     var label = pr.appointmentLabel || 'Abrir web oficial';
     var iconFn = icons[pr.icon] || icons.doc;
-    return '<article class="card proc-card">' +
+    return '<article class="card proc-card" id="proc-' + esc(pr.id) + '">' +
       '<div class="dir-card__head"><span class="dir-card__icon">' + iconFn(20) + '</span><div><h3>' + esc(pr.title) + '</h3><span class="badge badge--info">' + esc(pr.cat) + '</span></div></div>' +
       '<p class="proc-meta">' + icons.pin(13) + ' ' + esc(where) + '</p>' +
       '<p class="proc-meta">' + icons.clock(13) + ' ' + esc(pr.when) + '</p>' +
@@ -2488,6 +2491,11 @@
     if (action === 'dir-filter') { ui.dirFilter = btn.getAttribute('data-filter'); renderDirectorio(); return; }
     if (action === 'proc-filter') { ui.procFilter = btn.getAttribute('data-filter'); renderTramites(); return; }
     if (action === 'proc-mine') { ui.procMine = !ui.procMine; renderTramites(); return; }
+    if (action === 'proc-highlight') {
+      var target = document.getElementById('proc-' + btn.getAttribute('data-id'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
     if (action === 'aid-filter') { ui.aidFilter = btn.getAttribute('data-filter'); renderDerechos(); return; }
     if (action === 'faq-filter') { ui.faqFilter = btn.getAttribute('data-filter'); renderPreguntas(); return; }
     if (action === 'online-filter') { ui.onlineFilter = btn.getAttribute('data-filter'); renderOnline(); return; }

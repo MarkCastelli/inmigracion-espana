@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **175 pruebas pasando**.
+- **176 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -62,6 +62,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 32. **Gasto documental**: aviso de no pagar sin trámite, autoridad, requisito, vigencia y fecha; homologación y seguro solo con trámite concreto. Protocolo en `docs/GASTOS.md`.
 33. **Informe para abogado**: el plan ya no emite vías recomendadas; genera hechos, familia, documentos, fechas y dudas, en pantalla y PDF. Los catálogos y guías quedan como información general.
 34. **Razones humanitarias**: añadida vía propia (art. 128 RD 1155/2024), pregunta de supuesto concreto y ficha de trámite; no se concede por pobreza ni es automática.
+35. **Empadronamiento**: ficha visible aunque no haya provincia; aviso destacado, requisitos para compartir vivienda, certificado histórico y qué hacer si lo deniegan.
 
 ## Comandos
 
