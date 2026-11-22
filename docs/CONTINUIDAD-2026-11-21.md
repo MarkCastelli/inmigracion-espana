@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **177 pruebas pasando**.
+- **178 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -76,6 +76,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 46. **Negativa de servicios sociales**: FAQ ampliada con modelo de escrito, registro municipal/autonómico/estatal, Galicia (Xunta/Vigo), resguardo y reclamaciones.
 47. **Trabajo sin papeles**: FAQ corregida; denunciar no da residencia automática. Se explican pruebas, arraigo, art. 129 RD 1155/2024 y riesgos de expulsión.
 48. **No lucrativa y pensionistas**: fichas de residencia no lucrativa y emprendedor; FAQ con umbral 2026 (2.400 € + 600 €/familiar), pensión de 1.400 €, pareja que trabaja y alternativas.
+49. **Entidades de Vigo/Galicia**: COGAMI, Cáritas Tui-Vigo, APAMP, FEGAMP; filtro por provincia y municipio; bloque fijo «Entidades de tu zona» en el directorio para que no lo oculte el filtro de categoría.
 
 ## Comandos
 

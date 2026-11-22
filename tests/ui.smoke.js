@@ -518,4 +518,18 @@ t('las entidades locales aparecen según la provincia', () => {
   nav(app, 'inicio');
 });
 
+t('el directorio muestra Diversidades Acolle en Vigo', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', province: 'Pontevedra', municipality: 'Vigo', goals: ['regularizar'] };
+  nav(app, 'directorio');
+  const html = app.document.querySelector('#view-directorio').innerHTML;
+  assert.ok(html.includes('Diversidades Acolle'), 'no aparece Diversidades Acolle');
+  assert.ok(html.includes('COGAMI'), 'no aparece COGAMI');
+  assert.ok(html.includes('Cáritas Diocesana de Tui-Vigo'), 'no aparece Cáritas Tui-Vigo');
+  assert.ok(html.includes('APAMP'), 'no aparece APAMP');
+  assert.ok(html.includes('Entidades de tu zona'), 'falta el bloque de entidades');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

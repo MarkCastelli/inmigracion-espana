@@ -186,7 +186,47 @@
       where: 'Vigo (Pontevedra)',
       url: 'https://diversidades.org/',
       provinces: ['Pontevedra'],
+      municipalities: ['Vigo'],
       note: 'Entidad de Vigo que trabaja con personas migrantes y solicitantes de asilo. Confirma horario, cita y cobertura antes de desplazarte; no promete resultados ni papeles.'
+    },
+    {
+      id: 'cogami_vigo', scope: 'local', cat: 'ayuda', icon: 'shield',
+      title: 'COGAMI · oficina de Vigo',
+      what: ['Información y asesoramiento sobre discapacidad', 'Empleo y formación', 'Accesibilidad y autonomía personal', 'Orientación a familias'],
+      where: 'Rúa Teixugueiras, 15, baixo, Navia, Vigo',
+      url: 'https://www.cogami.gal/',
+      provinces: ['Pontevedra'],
+      municipalities: ['Vigo'],
+      note: 'Confederación Galega de Persoas con Discapacidade. Teléfono de Vigo: 986 281 893; correo: silvigo@cogami.gal. No es una oficina de extranjería: no tramita residencia.'
+    },
+    {
+      id: 'caritas_tui_vigo', scope: 'local', cat: 'ayuda', icon: 'family',
+      title: 'Cáritas Diocesana de Tui-Vigo',
+      what: ['Acogida y acompañamiento', 'Ayuda de emergencia', 'Empleo e inclusión', 'Apoyo a familias migrantes'],
+      where: 'Vigo (sede en García Barbón, 104)',
+      url: 'https://www.caritas.es/tuivigo/',
+      provinces: ['Pontevedra'],
+      municipalities: ['Vigo'],
+      note: 'Para ayudas concretas, pide cita y lleva documentación. No todas las ayudas son económicas ni automáticas; confirma horario y cobertura.'
+    },
+    {
+      id: 'apamp_vigo', scope: 'local', cat: 'ayuda', icon: 'family',
+      title: 'APAMP · parálisis cerebral y familias',
+      what: ['Apoyo a familias', 'Atención y servicios especializados', 'Orientación sobre discapacidad', 'Inclusión y autonomía'],
+      where: 'Vigo (Pontevedra)',
+      url: 'https://apamp.org/',
+      provinces: ['Pontevedra'],
+      municipalities: ['Vigo'],
+      note: 'Asociación de familias de personas con parálisis cerebral. No tramita residencia; orienta sobre discapacidad, apoyos y servicios.'
+    },
+    {
+      id: 'fegamp_asociaciones', scope: 'region', cat: 'ayuda', icon: 'family',
+      title: 'FEGAMP · asociaciones de inmigrantes de Galicia',
+      what: ['Directorio de asociaciones por municipio', 'Contactos de entidades locales', 'Búsqueda de apoyo en tu zona'],
+      where: 'Galicia',
+      url: 'https://fegamp.gal/content/asociacions-inmigrantes-galicia',
+      provinces: ['A Coruña', 'Lugo', 'Ourense', 'Pontevedra'],
+      note: 'Es un listado de la Federación Galega de Municipios e Provincias, no una entidad de ayuda directa. Confirma los datos de cada asociación antes de contactar.'
     },
     {
       id: 'cear', scope: 'national', cat: 'ayuda', icon: 'shield',

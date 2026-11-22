@@ -1510,7 +1510,8 @@
     var entries = RL.directory.entries.filter(function (e) {
       if (e.cat !== 'ayuda') return false;
       if (e.scope !== 'national' && (!d.region || !d.province)) return false;
-      if (e.provinces && e.provinces.length && (!d.province || e.provinces.indexOf(d.province) === -1)) return false;
+      if (e.provinces && e.provinces.length && d.province && !inPlace(e.provinces, d.province)) return false;
+      if (e.municipalities && e.municipalities.length && d.municipality && !inPlace(e.municipalities, d.municipality)) return false;
       return true;
     }).slice(0, 8);
     if (!entries.length) return '';
@@ -1784,6 +1785,38 @@
   /* ══════════════════════════════════════════════════════════
      DÓNDE IR · DIRECTORIO
      ══════════════════════════════════════════════════════════ */
+  function normPlace(v) {
+    return String(v || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  }
+
+  function inPlace(list, value) {
+    if (!list || !list.length) return true;
+    var v = normPlace(value);
+    return !!v && list.some(function (x) { return normPlace(x) === v; });
+  }
+
+  function localEntitiesHTML(d) {
+    if (!RL.directory) return '';
+    var entries = RL.directory.entries.filter(function (e) {
+      if (e.cat !== 'ayuda' || e.scope === 'national') return false;
+      if (e.provinces && e.provinces.length && d.province && !inPlace(e.provinces, d.province)) return false;
+      if (e.municipalities && e.municipalities.length && d.municipality && !inPlace(e.municipalities, d.municipality)) return false;
+      return true;
+    }).slice(0, 8);
+    if (!entries.length) return '';
+    return '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.family(18) +
+      '<h2>Entidades de tu zona</h2><span class="badge badge--info">' + esc((d.municipality || '') + (d.province ? ' · ' + d.province : '')) + '</span></div><div class="block__body">' +
+      '<p class="muted" style="font-size:.86rem;margin-top:0">Asociaciones locales que pueden orientar, acompañar o derivar. No sustituyen a un abogado ni garantizan papeles; confirma cita y cobertura.</p>' +
+      entries.map(function (e) {
+        var title = typeof e.title === 'function' ? e.title({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.title;
+        var where = typeof e.where === 'function' ? e.where({ municipality: d.municipality, regionName: d.region ? d.region.name : '' }) : e.where;
+        return '<div class="resource" style="align-items:flex-start"><span class="resource__icon">' + icons.family(15) + '</span><div>' +
+          '<strong>' + esc(title) + '</strong><p style="font-size:.85rem;color:var(--ink-2);margin:2px 0 0">' + esc((e.what || []).join(' · ')) + '</p>' +
+          '<p class="muted" style="font-size:.78rem;margin:3px 0 0">' + esc(where) + '</p>' +
+          '<a class="btn btn--soft btn--sm mt-2" href="' + esc(RL.dom.safeUrl(e.url)) + '" target="_blank" rel="noopener">' + icons.ext(13) + ' Ver web</a></div></div>';
+      }).join('') + '</div></div>';
+  }
+
   function renderDirectorio() {
     var host = $('#view-directorio');
     if (!RL.directory) {
@@ -1806,7 +1839,8 @@
 
     var list = RL.directory.entries.filter(function (e) {
       if (e.scope !== 'national' && !region) return false;
-      if (e.provinces && e.provinces.length && (!d.province || e.provinces.indexOf(d.province) === -1)) return false;
+      if (e.provinces && e.provinces.length && d.province && !inPlace(e.provinces, d.province)) return false;
+      if (e.municipalities && e.municipalities.length && d.municipality && !inPlace(e.municipalities, d.municipality)) return false;
       if (ui.dirFilter !== 'todas' && e.cat !== ui.dirFilter) return false;
       if (!q) return true;
       var title = typeof e.title === 'function' ? e.title(ctx) : e.title;
@@ -1837,6 +1871,8 @@
       html += '<p class="muted" style="font-size:.83rem;margin:-8px 0 16px">Viendo: <strong>' + esc(region.name) + '</strong>' +
         (d.province ? ' · ' + esc(d.province) : '') + (d.municipality ? ' · ' + esc(d.municipality) : '') + '</p>';
     }
+
+    html += localEntitiesHTML(d);
 
     html += '<div class="catalog-grid">' + list.map(function (e) { return dirCard(e, ctx); }).join('') + '</div>';
     if (!list.length) {
