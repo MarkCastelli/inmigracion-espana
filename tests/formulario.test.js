@@ -13,6 +13,8 @@ test('el formulario tiene estado inicial y vivienda con hipoteca', () => {
   assert.ok(f.applicant);
   assert.strictEqual(f.applicant.mortgage, '');
   assert.strictEqual(f.applicant.mortgageAmount, '');
+  assert.strictEqual(f.familyCount, 1);
+  assert.ok(Array.isArray(f.members));
   assert.ok(RL.formulario.docs.some(d => d.v === 'tie'));
   assert.ok(RL.formulario.aidTypes.length >= 8);
   assert.ok(RL.formulario.goals.some(g => g.v === 'nacionalidad'));

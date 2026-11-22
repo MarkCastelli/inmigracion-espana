@@ -629,4 +629,17 @@ t('el formulario guiado arranca en el paso 0', () => {
   nav(app, 'inicio');
 });
 
+t('el grupo familiar permite indicar integrantes, vínculo y edad', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.state.profile.formulario.mode = 'family';
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Composición del grupo familiar'));
+  assert.ok(html.includes('¿Cuántas personas formáis el grupo'));
+  assert.ok(html.includes('Añadir integrante'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

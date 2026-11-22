@@ -94,6 +94,8 @@
     return {
       step: 0,
       mode: '',
+      familyCount: 1,
+      members: [],
       applicant: person(),
       spouse: person(),
       children: [],
