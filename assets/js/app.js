@@ -3226,14 +3226,57 @@
       '<input class="input" type="' + (type || 'text') + '" id="fd-' + id + '" name="' + id + '" value="' + esc(value || '') + '"></div>';
   }
 
-  function openFormSheet(formId, routeId) {
+  function formPersonForKey(F, key) {
+    if (!F) return null;
+    if (key === 'applicant') return F.applicant;
+    if (key === 'spouse') return F.spouse;
+    if (key.indexOf('children.') === 0) return (F.children || [])[Number(key.split('.')[1])] || null;
+    if (key.indexOf('members.') === 0) {
+      var m = (F.members || [])[Number(key.split('.')[1])];
+      return m ? (m.data || null) : null;
+    }
+    return null;
+  }
+
+  function formSheetData(F, key) {
+    var person = formPersonForKey(F, key) || F.applicant;
+    var name = (person.name || '').trim();
+    var parts = name ? name.split(/\s+/) : [];
+    var nombre = parts.shift() || '';
+    var apellidos = parts.join(' ');
+    var docs = (person.docs || []).map(function (v) {
+      var found = RL.formulario.docs.filter(function (d) { return d.v === v; })[0];
+      return found ? found.l : v;
+    });
+    var children = (F.children || []).map(function (ch) { return ch.name + (ch.age ? ' (' + ch.age + ')' : ''); });
+    return {
+      nombre: nombre,
+      apellidos: apellidos,
+      fechaEntrada: person.entryDate || '',
+      nacionalidad: person.nationality || '',
+      vivienda: key === 'applicant' ? (person.housing || '') : '',
+      estudios: person.career || person.educationLevel || '',
+      telefono: person.phone || '',
+      email: person.email || '',
+      hijos: key === 'applicant' && children.length ? children.join(', ') : '',
+      edadesHijos: key === 'applicant' && (F.children || []).length ? F.children.map(function (ch) { return ch.age; }).filter(Boolean).join(', ') : '',
+      observaciones: [F.notes || '', docs.length ? 'Documentos marcados en el formulario: ' + docs.join(', ') : ''].filter(Boolean).join(' · ')
+    };
+  }
+
+  function openFormSheet(formId, routeId, personKey) {
     var form = RL.forms && RL.forms.byId(formId);
     if (!form) { toast('Formulario no encontrado.'); return; }
     var route = RL.routeById(routeId) || { title: '', docs: [] };
+    var F = RL.state.profile && RL.state.profile.formulario;
+    var hasFormData = F && F.applicant && (F.applicant.name || F.applicant.nationality || F.mode);
+    var people = hasFormData ? goalPeople(F) : [];
+    personKey = personKey || 'applicant';
+    if (!people.some(function (p) { return p.key === personKey; })) personKey = 'applicant';
     var p = RL.profile();
     var d = RL.derive(p);
     var stored = RL.state.formData || {};
-    var data = Object.assign({
+    var data = hasFormData ? formSheetData(F, personKey) : Object.assign({
       nacionalidad: RL.countryName(p.nationality),
       fechaEntrada: p.entryDate || '',
       estadoCivil: p.maritalStatus ? (RL.family.status[p.maritalStatus] || p.maritalStatus) : '',
@@ -3265,7 +3308,11 @@
       '<p class="eyebrow">Formulario oficial · ' + esc(form.code) + '</p>' +
       '<h2 id="formModalTitle">' + esc(form.title) + '</h2>' +
       '<p class="muted" style="font-size:.87rem">Rellena estos datos y generaremos una hoja para copiarlos en el modelo oficial. Se guardan solo en tu dispositivo.</p>' +
-      '<div class="callout callout--warn" style="margin:12px 0">' + icons.alert(18) + '<div><strong>No es el formulario oficial</strong><p>La hoja de datos no sustituye al impreso ni a tu firma. Descarga el ' + esc(form.code) + ' de la sede, copia los datos y fírmalo tú.</p></div></div>' +
+      (hasFormData ? '<div class="callout callout--info" style="margin:12px 0">' + icons.info(18) + '<div><strong>Datos cargados desde el formulario</strong><p>Elige de qué integrante quieres cargar los datos y revisa todos los campos. La hoja no se envía a ninguna administración.</p></div></div>' +
+        '<div class="field" style="margin-bottom:10px"><label class="field__label" for="formSheetPerson">Datos de qué integrante</label><select class="select" id="formSheetPerson">' +
+        people.map(function (p) { return '<option value="' + esc(p.key) + '"' + (p.key === personKey ? ' selected' : '') + '>' + esc(p.label) + '</option>'; }).join('') +
+        '</select></div>' : '') +
+      '<div class="callout callout--warn" style="margin:12px 0">' + icons.alert(18) + '<div><strong>No es el formulario oficial</strong><p>La hoja de datos no sustituye al impreso ni a tu firma. Descarga el ' + esc(form.code) + ' de la sede, copia los datos y fírmalo tú. Revisa fechas, nombres y números antes de presentarlo.</p></div></div>' +
       '<form id="formDataForm" class="form-grid" autocomplete="off">' +
       fdField('nombre', 'Nombre', data.nombre) +
       fdField('apellidos', 'Apellidos', data.apellidos) +
@@ -3314,6 +3361,14 @@
 
     document.body.appendChild(wrap);
     document.body.style.overflow = 'hidden';
+    var personSelect = wrap.querySelector('#formSheetPerson');
+    if (personSelect) {
+      personSelect.addEventListener('change', function () {
+        var key = personSelect.value;
+        closeFormModal();
+        openFormSheet(formId, routeId, key);
+      });
+    }
     var first = wrap.querySelector('input');
     if (first) first.focus();
   }
