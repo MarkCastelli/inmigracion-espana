@@ -1152,4 +1152,15 @@ t('la página legal existe y cubre privacidad y RGPD', () => {
   nav(app, 'inicio');
 });
 
+t('la página de donaciones explica el proyecto y enlaza a PayPal', () => {
+  nav(app, 'donar');
+  const html = app.document.querySelector('#view-donar').innerHTML;
+  assert.ok(html.includes('Ruta Legal es gratis'));
+  assert.ok(html.includes('Invítame un café'));
+  assert.ok(html.includes('https://www.paypal.com/donate/?hosted_button_id=YPZZZU5ZD4G9Y'));
+  assert.ok(html.includes('no es una ONG'));
+  assert.ok(!html.includes('undefined'));
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

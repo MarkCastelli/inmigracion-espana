@@ -87,6 +87,11 @@
       title: 'Aviso legal y privacidad | Ruta Legal',
       description: 'Aviso legal, privacidad, RGPD, almacenamiento local, cookies y derechos de las personas usuarias de Ruta Legal.',
       keywords: 'aviso legal, privacidad, RGPD, LOPDGDD, cookies, derechos'
+    },
+    donar: {
+      title: 'Donar | Ruta Legal',
+      description: 'Ruta Legal es gratis. Si te resulta útil, puedes invitarme un café con PayPal para mantener el proyecto y actualizar la información.',
+      keywords: 'donar Ruta Legal, PayPal, mantenimiento, proyecto gratuito'
     }
   };
 

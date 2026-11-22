@@ -925,3 +925,21 @@ html[dir="rtl"] .plan-head { text-align: right; }
 html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 @media (max-width: 720px) { .tip-toggle { padding: 4px 7px; font-size: .7rem; } }
 @media print { .tip-toggle, .field__tip { display: none !important; } }
+
+
+/* ── Donaciones ─────────────────────────────────────────────── */
+.nav__link--donate { color: #8a3f00; font-weight: 800; }
+.nav__link--donate:hover { background: #fff0e0; color: #6b2e00; }
+.donate-hero { max-width: 860px; margin: 0 auto 24px; text-align: center; }
+.donate-hero .lead { max-width: 720px; margin: 12px auto 0; color: var(--ink-2); font-size: 1.02rem; }
+.donate-hero h1 { margin: 8px 0 0; color: var(--brand); font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; }
+.donate-hero__badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 18px; }
+.donate-hero__badges span { padding: 6px 12px; border-radius: 999px; background: var(--surface-2, #eef6f7); border: 1px solid var(--line); font-size: .8rem; font-weight: 650; color: var(--ink-2); }
+.donate-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(240px, .8fr); gap: 18px; max-width: 980px; margin: 0 auto; }
+.donate-card, .donate-aside { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 24px; }
+.donate-card h2, .donate-aside h2 { margin-top: 0; color: var(--brand); }
+.donate-card p { color: var(--ink-2); line-height: 1.6; }
+.donate-btn { display: inline-flex; justify-content: center; width: 100%; margin: 10px 0 8px; padding: 13px 18px; font-size: 1rem; }
+.donate-small { font-size: .8rem !important; color: var(--muted) !important; }
+.donate-aside ul { padding-left: 18px; color: var(--ink-2); line-height: 1.65; font-size: .9rem; }
+@media (max-width: 820px) { .donate-grid { grid-template-columns: 1fr; } }

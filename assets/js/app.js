@@ -34,7 +34,7 @@
     aiLastId: null
   };
 
-  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'consulta', 'docs', 'formularios', 'ayuda', 'legal'];
+  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'consulta', 'docs', 'formularios', 'donar', 'ayuda', 'legal'];
   var REGION_LABEL = { latam: 'América Latina', ue: 'Unión Europea', eea: 'Espacio Económico Europeo', eu: 'Europa (otros)', africa: 'África', asia: 'Asia', otro: 'Otros países' };
 
   /* Perfil de ejemplo para probar la app sin escribir nada. */
@@ -193,6 +193,7 @@
     else if (ui.view === 'consulta') renderConsulta();
     else if (ui.view === 'docs') renderDocs();
     else if (ui.view === 'formularios') renderFormularios();
+    else if (ui.view === 'donar') renderDonar();
     else if (ui.view === 'ayuda') renderHelp();
     else if (ui.view === 'legal') renderLegal();
 
@@ -3478,6 +3479,40 @@
   /* ══════════════════════════════════════════════════════════
      AYUDA
      ══════════════════════════════════════════════════════════ */
+  function renderDonar() {
+    var host = $('#view-donar');
+    var paypal = 'https://www.paypal.com/donate/?hosted_button_id=YPZZZU5ZD4G9Y';
+    host.innerHTML = `<div class="donate-hero">
+      <p class="eyebrow">Mantener esto también cuesta</p>
+      <h1>Ruta Legal es gratis. De verdad.</h1>
+      <p class="lead">No hay anuncios, no hay registro obligatorio y no se venden tus datos. La información, el formulario, las traducciones y el informe siguen siendo gratuitos para quien los necesita.</p>
+      <div class="donate-hero__badges"><span>Sin publicidad</span><span>Sin muro de pago</span><span>Datos en tu dispositivo</span></div>
+    </div>
+    <div class="donate-grid">
+      <div class="donate-card">
+        <h2>Si te ha servido, invítame un café</h2>
+        <p>Detrás de una web así hay tiempo: revisar normativa, corregir fichas, traducir, probar el formulario, mantener enlaces oficiales y responder a los cambios. No es un trabajo de una tarde.</p>
+        <p>No necesitas una gran aportación. <strong>Un café, lo que puedas o lo que te nazca</strong>. Al final, todo suma para que el proyecto siga vivo y actualizado.</p>
+        <a class="btn btn--accent btn--lg donate-btn" href="${paypal}" target="_blank" rel="noopener noreferrer">Invítame un café con PayPal</a>
+        <p class="donate-small">Se abre PayPal en una pestaña nueva. Puedes pagar con tu cuenta o, según tu país, con tarjeta. No es necesario tener cuenta de Ruta Legal.</p>
+      </div>
+      <aside class="donate-aside">
+        <h2>Qué ayuda a mantener</h2>
+        <ul>
+          <li>Revisar y corregir la información legal.</li>
+          <li>Añadir fuentes oficiales y avisos.</li>
+          <li>Mejorar el formulario, el PDF y la accesibilidad.</li>
+          <li>Traducir campos y ayudas a más idiomas.</li>
+          <li>Pagar herramientas, dominio y mantenimiento.</li>
+        </ul>
+        <p class="muted">Si ahora no puedes donar, también ayudas compartiendo la web con alguien que la necesite.</p>
+      </aside>
+    </div>
+    <div class="callout callout--info"><div><strong>Transparencia</strong><p>La donación es voluntaria y no da derecho a asesoramiento jurídico, trato preferente ni resultado alguno. Ruta Legal no es una ONG ni una entidad benéfica; no emite certificado de donación ni desgrava fiscalmente. Es una aportación libre para mantener el proyecto.</p></div></div>
+    <div class="callout callout--warn"><div><strong>No dones si eso te deja sin lo necesario</strong><p>Tu situación económica es prioritaria. Si necesitas ayuda gratuita, en <a href="#/ayuda" data-nav="ayuda">Ayuda</a> tienes entidades y recursos. Y si no puedes aportar, no pasa nada: usa la web igual.</p></div></div>
+    <div class="flex mt-3"><button class="btn btn--soft btn--sm" data-nav="formulario">Preparar mi caso</button><button class="btn btn--ghost btn--sm" data-nav="ayuda">Ver ayuda gratuita</button></div>`;
+  }
+
   function renderLegal() {
     var host = $('#view-legal');
     var updated = fmt.date(RL.CONTENT_DATE, { year: true });
@@ -3766,7 +3801,7 @@
     if (action === 'generate-form') { generateForm(btn); return; }
     if (action === 'listen-view') {
       if (!RL.speech || !RL.speech.supported) { toast('Tu navegador no permite lectura en voz alta.'); return; }
-      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', ayuda: 'Ayuda', legal: 'Aviso legal y privacidad' };
+      var titles = { inicio: 'Inicio', antes: 'Mi experiencia', formulario: 'Formulario', diagnostico: 'Diagnóstico', plan: 'Tu plan', vias: 'Vías', tramites: 'Trámites', online: 'Online', preguntas: 'Preguntas', derechos: 'Derechos y ayudas', directorio: 'Dónde ir', consulta: 'Consulta IA', docs: 'Documentos', formularios: 'Descargas', donar: 'Donar', ayuda: 'Ayuda', legal: 'Aviso legal y privacidad' };
       if (ui.view === 'plan' && RL.hasSavedProfile()) {
         RL.speech.speak(RL.speech.buildPlanScript(RL.buildPlan(RL.profile())), 'Tu plan');
       } else {
