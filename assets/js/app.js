@@ -187,7 +187,7 @@
      ══════════════════════════════════════════════════════════ */
   var formState = null;
   var FORM_TITLES = [
-    'Tipo de consulta', 'Datos personales', 'Situación actual', 'Asilo', 'Vivienda',
+    'Sobre ti y tu familia', 'Datos personales', 'Situación actual', 'Asilo', 'Vivienda',
     'Pareja', 'Hijos', 'Discapacidad', 'Ayudas', 'Objetivos', 'Resumen', 'Documento final'
   ];
 
@@ -255,14 +255,16 @@
       }).join('') + '</div></fieldset>';
   }
 
-  function personBlock(obj, prefix, includeHousing) {
+  function personBlock(obj, prefix, includeHousing, skipBasics) {
     var F = RL.formulario;
-    var h = '<div class="form-grid">' +
+    var basics = skipBasics ? '' :
       fInput(prefix + '.name', 'Nombre y apellidos', fget(obj, 'name')) +
       fInput(prefix + '.age', 'Edad', fget(obj, 'age'), 'number') +
+      fInput(prefix + '.nationality', 'Nacionalidad', fget(obj, 'nationality')) +
       fInput(prefix + '.phone', 'Teléfono móvil', fget(obj, 'phone'), 'tel') +
       fInput(prefix + '.email', 'Email', fget(obj, 'email'), 'email') +
-      fInput(prefix + '.entryDate', 'Fecha de ingreso en España', fget(obj, 'entryDate'), 'date') +
+      fInput(prefix + '.entryDate', 'Fecha de ingreso en España', fget(obj, 'entryDate'), 'date');
+    var h = '<div class="form-grid">' + basics +
       fRadio(prefix + '.familyAbroad', '¿Tienes familia en otro país?', fget(obj, 'familyAbroad'), F.yesNo) +
       fRadio(prefix + '.bringFamily', '¿Quieres traerlos a España?', fget(obj, 'bringFamily'), F.yesNo) +
       fRadio(prefix + '.disability', '¿Tienes discapacidad?', fget(obj, 'disability'), F.yesNo) +
@@ -338,9 +340,38 @@
     return fget(obj, 'name') || (kind === 'applicant' ? 'Titular' : kind === 'spouse' ? 'Pareja' : 'Hijo/a ' + (index + 1));
   }
 
+  function syncFormMembers(F) {
+    if (F.mode !== 'family') return;
+    var count = Math.max(1, Math.min(10, Number(F.familyCount) || 1));
+    F.familyCount = count;
+    var needed = count - 1;
+    F.members = F.members || [];
+    while (F.members.length < needed) {
+      F.members.push({ name: '', age: '', relation: '', data: RL.formulario.person() });
+    }
+    if (F.members.length > needed) F.members.length = needed;
+  }
+
+  function memberOptions() {
+    return [
+      { v: '', l: 'Sin indicar' },
+      { v: 'esposa', l: 'Esposa' },
+      { v: 'pareja_hecho', l: 'Pareja de hecho' },
+      { v: 'pareja', l: 'Pareja' },
+      { v: 'hijo_comun', l: 'Hijo/a común' },
+      { v: 'hijo_ella', l: 'Hijo/a de ella' },
+      { v: 'hijo_el', l: 'Hijo/a de él' },
+      { v: 'padre_madre_el', l: 'Padre o madre de él' },
+      { v: 'padre_madre_ella', l: 'Padre o madre de ella' },
+      { v: 'hermano', l: 'Hermano/a' },
+      { v: 'otro', l: 'Otro' }
+    ];
+  }
+
   function renderFormulario() {
     var host = $('#view-formulario');
     var F = getForm();
+    syncFormMembers(F);
     var step = Math.max(0, Math.min(11, Number(F.step) || 0));
     var total = 12;
     var html = '<div class="wizard"><div class="plan-head"><div><p class="eyebrow">Formulario · Paso ' + step + ' de 11</p>' +
@@ -348,40 +379,41 @@
       '<div class="progress" style="margin-bottom:18px"><span style="display:block;height:100%;width:' + Math.round(step / 11 * 100) + '%"></span></div>';
 
     if (step === 0) {
-      html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>¿La consulta es para una persona o para un grupo familiar?</h2></div><div class="block__body">' +
+      html += '<div class="block" style="margin-bottom:18px"><div class="block__head">' + icons.user(18) + '<h2>Sobre ti</h2></div><div class="block__body">' +
+        '<div class="form-grid">' +
+        fInput('applicant.name', 'Nombre y apellidos', fget(F.applicant, 'name')) +
+        fInput('applicant.age', 'Edad', fget(F.applicant, 'age'), 'number') +
+        fInput('applicant.nationality', 'Nacionalidad', fget(F.applicant, 'nationality')) +
+        fInput('applicant.phone', 'Teléfono móvil', fget(F.applicant, 'phone'), 'tel') +
+        fInput('applicant.email', 'Email', fget(F.applicant, 'email'), 'email') +
+        fInput('applicant.entryDate', 'Fecha de ingreso en España', fget(F.applicant, 'entryDate'), 'date') +
+        '</div></div></div>';
+
+      html += '<div class="block"><div class="block__head">' + icons.family(18) + '<h2>Consulta para un individuo o grupo familiar</h2></div><div class="block__body">' +
         '<div class="option-list">' +
-        '<label class="option"><input type="radio" name="form-mode" data-fpath="mode" value="individual"' + (F.mode === 'individual' ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">Una persona</span></span></label>' +
-        '<label class="option"><input type="radio" name="form-mode" data-fpath="mode" value="family"' + (F.mode === 'family' ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">Grupo familiar (pareja, hijos, padres u otros)</span></span></label>' +
+        '<label class="option"><input type="radio" name="form-mode" data-fpath="mode" value="individual"' + (F.mode === 'individual' ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">Un individuo</span></span></label>' +
+        '<label class="option"><input type="radio" name="form-mode" data-fpath="mode" value="family"' + (F.mode === 'family' ? ' checked' : '') + '><span class="option__box"></span><span class="option__body"><span class="option__label">Grupo familiar</span></span></label>' +
         '</div>';
       if (F.mode === 'family') {
-        html += '<div style="margin-top:18px"><h3>Composición del grupo familiar</h3>' +
-          '<p class="muted">Indica cuántas personas sois en total, contándote. Después añade una fila por cada persona distinta de ti: pareja, esposa, esposo, hijo, hija, padre, madre, hermano/a u otro. La edad decide qué datos pediremos.</p>' +
-          '<div class="form-grid">' + fInput('familyCount', '¿Cuántas personas formáis el grupo, contándote?', F.familyCount, 'number') + '</div>' +
-          '<button class="btn btn--soft btn--sm" type="button" data-form-action="add-member">+ Añadir integrante</button>' +
+        html += '<div style="margin-top:18px"><h3>Cantidad de integrantes</h3>' +
+          '<p class="muted">Contándote a ti. Si eliges 3, se crearán dos filas para que indiques el vínculo y la edad de cada familiar.</p>' +
+          '<div class="form-grid">' + fSelect('familyCount', '¿Cuántas personas formáis el grupo?', F.familyCount, [
+            { v: '1', l: '1 persona (solo tú)' }, { v: '2', l: '2 personas' }, { v: '3', l: '3 personas' },
+            { v: '4', l: '4 personas' }, { v: '5', l: '5 personas' }, { v: '6', l: '6 personas' },
+            { v: '7', l: '7 personas' }, { v: '8', l: '8 personas' }, { v: '9', l: '9 personas' }, { v: '10', l: '10 personas o más' }
+          ]) + '</div>' +
           ((F.members || []).length ? '<div style="margin-top:12px">' + F.members.map(function (m, i) {
-            return '<div class="family-child" style="margin-top:10px"><div class="flex" style="justify-content:space-between"><strong>Integrante ' + (i + 1) + '</strong><button class="btn btn--ghost btn--sm" type="button" data-form-action="remove-member" data-index="' + i + '">Quitar</button></div><div class="form-grid">' +
-              fInput('members.' + i + '.name', 'Nombre y apellidos', m.name) +
+            return '<div class="family-child" style="margin-top:10px"><div class="flex" style="justify-content:space-between"><strong>Familiar ' + (i + 1) + '</strong><button class="btn btn--ghost btn--sm" type="button" data-form-action="remove-member" data-index="' + i + '">Quitar</button></div><div class="form-grid">' +
+              fSelect('members.' + i + '.relation', 'Relación', m.relation, memberOptions()) +
               fInput('members.' + i + '.age', 'Edad', m.age, 'number') +
-              fSelect('members.' + i + '.relation', 'Vínculo con el titular', m.relation, [
-                { v: '', l: 'Sin indicar' }, { v: 'pareja', l: 'Pareja' }, { v: 'esposa', l: 'Esposa' }, { v: 'esposo', l: 'Esposo' },
-                { v: 'hijo', l: 'Hijo' }, { v: 'hija', l: 'Hija' }, { v: 'padre_titular', l: 'Padre del titular' },
-                { v: 'madre_titular', l: 'Madre del titular' }, { v: 'padre_pareja', l: 'Padre de la pareja' },
-                { v: 'madre_pareja', l: 'Madre de la pareja' }, { v: 'hermano', l: 'Hermano/a' },
-                { v: 'abuelo', l: 'Abuelo/a' }, { v: 'otro', l: 'Otro' }
-              ]) + '</div></div>';
-          }).join('') + '</div>' : '<p class="muted">Todavía no has añadido integrantes.</p>') +
-          (function () {
-            var expected = Number(F.familyCount) || 1;
-            var listed = 1 + (F.members || []).length + (F.children || []).length;
-            if (expected > listed) return '<div class="callout callout--warn" style="margin-top:12px">' + icons.alert(16) + '<div><strong>Faltan integrantes por cargar</strong><p>Has indicado ' + expected + ' personas y solo hay ' + listed + ' contándote. Añade ' + (expected - listed) + ' fila(s).</p></div></div>';
-            if (expected < listed) return '<div class="callout callout--warn" style="margin-top:12px">' + icons.alert(16) + '<div><strong>Revisa el número</strong><p>Has indicado ' + expected + ' personas, pero hay ' + listed + ' contándote.</p></div></div>';
-            return '';
-          })() +
+              fInput('members.' + i + '.name', 'Nombre y apellidos', m.name) +
+              '</div></div>';
+          }).join('') + '</div>' : '') +
           '</div>';
       }
       html += '</div></div>';
     } else if (step === 1) {
-      html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Datos personales</h2></div><div class="block__body">' + personBlock(F.applicant, 'applicant', false) + '</div></div>';
+      html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Datos personales</h2></div><div class="block__body">' + personBlock(F.applicant, 'applicant', false, true) + '</div></div>';
     } else if (step === 2) {
       html += '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Situación actual</h2></div><div class="block__body">' + documentsBlock(F.applicant, 'applicant') + '</div></div>';
     } else if (step === 3) {
@@ -403,7 +435,7 @@
             '</div></div>';
         }).join('') : '<p class="muted">Todavía no has añadido hijos.</p>');
       var otherMembers = (F.members || []).map(function (m, i) { return { m: m, i: i }; }).filter(function (x) {
-        return ['pareja', 'esposa', 'esposo', 'hijo', 'hija'].indexOf(x.m.relation) === -1;
+        return ['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(x.m.relation) === -1;
       });
       if (otherMembers.length) {
         html += '<div style="margin-top:18px"><h3>Otros integrantes del grupo</h3><p class="muted">Padres, hermanos u otros convivientes. Completa sus datos, documentos, asilo y vivienda.</p>' +
@@ -452,7 +484,7 @@
         html += '<h3>Pareja</h3>' + fChecks('spouse.goals', 'Objetivos', fget(F.spouse, 'goals'), RL.formulario.goals);
         F.children.forEach(function (ch, i) { html += '<h3>Hijo/a ' + (i + 1) + '</h3>' + fChecks('children.' + i + '.goals', 'Objetivos', fget(ch, 'goals'), RL.formulario.goals); });
         (F.members || []).forEach(function (m, i) {
-          if (['pareja', 'esposa', 'esposo', 'hijo', 'hija'].indexOf(m.relation) !== -1) return;
+          if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
           html += '<h3>' + fEsc(m.name || ('Integrante ' + (i + 1))) + '</h3>' + fChecks('members.' + i + '.data.goals', 'Objetivos', fget(m.data || {}, 'goals'), RL.formulario.goals);
         });
       }
@@ -480,6 +512,12 @@
           fset(F, groupPath, vals);
         } else {
           fset(F, el.getAttribute('data-fpath'), el.value);
+        }
+        if (el.getAttribute('data-fpath') === 'familyCount') {
+          syncFormMembers(F);
+          saveForm();
+          renderFormulario();
+          return;
         }
         saveForm();
         if (el.type === 'radio' || el.tagName === 'SELECT') renderFormulario();
@@ -528,7 +566,7 @@
     if (F.mode === 'family' && F.print && F.print.children !== false) {
       F.children.forEach(function (ch, i) { html += '<h3>Hijo/a ' + (i + 1) + '</h3>' + summaryPerson(ch); });
       (F.members || []).forEach(function (m, i) {
-        if (['pareja', 'esposa', 'esposo', 'hijo', 'hija'].indexOf(m.relation) !== -1) return;
+        if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
         html += '<h3>' + fEsc(m.name || ('Integrante ' + (i + 1))) + ' · ' + fEsc(m.relation || 'otro') + '</h3>' + summaryPerson(m.data || {});
       });
     }
@@ -595,15 +633,14 @@
     var F = getForm();
     saveForm();
     if (action === 'add-member') {
-      var newMember = { name: '', age: '', relation: '', data: RL.formulario.person() };
       F.members = F.members || [];
-      F.members.push(newMember);
-      F.familyCount = Math.max(Number(F.familyCount) || 1, F.members.length + 1);
+      F.members.push({ name: '', age: '', relation: '', data: RL.formulario.person() });
+      F.familyCount = F.members.length + 1;
       saveForm(); renderFormulario(); return;
     }
     if (action === 'remove-member') {
       F.members.splice(Number(btn.getAttribute('data-index')), 1);
-      F.familyCount = Math.max(1, F.members.length + 1);
+      F.familyCount = F.members.length + 1;
       saveForm(); renderFormulario(); return;
     }
     if (action === 'add-child') {

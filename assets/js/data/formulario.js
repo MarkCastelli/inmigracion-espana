@@ -79,7 +79,7 @@
 
   function person() {
     return {
-      name: '', age: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
+      name: '', age: '', nationality: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
       disability: '', residence: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
       jobType: '', studies: '', career: '',
       disabilityRecognized: '', disabilityDegree: '', disabilityExpiryStatus: '', disabilityExpiry: '', dependency: '',

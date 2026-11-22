@@ -626,22 +626,25 @@ t('el formulario guiado arranca en el paso 0', () => {
   RL.state.profile = { nationality: 'CO', location: 'spain', goals: ['regularizar'] };
   nav(app, 'formulario');
   const html = app.document.querySelector('#view-formulario').innerHTML;
-  assert.ok(html.includes('Tipo de consulta'));
-  assert.ok(html.includes('Una persona'));
+  assert.ok(html.includes('Sobre ti y tu familia'));
+  assert.ok(html.includes('Un individuo'));
   assert.ok(html.includes('Grupo familiar'));
   RL.state.profile = saved;
   nav(app, 'inicio');
 });
 
-t('el grupo familiar permite indicar integrantes, vínculo y edad', () => {
+t('el grupo familiar genera filas de vínculo y edad al indicar cantidad', () => {
   const saved = RL.state.profile;
   RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
   RL.state.profile.formulario.mode = 'family';
+  RL.state.profile.formulario.familyCount = 3;
   nav(app, 'formulario');
   const html = app.document.querySelector('#view-formulario').innerHTML;
-  assert.ok(html.includes('Composición del grupo familiar'));
-  assert.ok(html.includes('¿Cuántas personas formáis el grupo'));
-  assert.ok(html.includes('Añadir integrante'));
+  assert.ok(html.includes('Cantidad de integrantes'));
+  assert.ok(html.includes('Familiar 1'));
+  assert.ok(html.includes('Familiar 2'));
+  assert.ok(html.includes('Relación'));
+  assert.ok(html.includes('Edad'));
   RL.state.profile = saved;
   nav(app, 'inicio');
 });
