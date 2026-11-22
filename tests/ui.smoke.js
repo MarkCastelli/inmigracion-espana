@@ -1175,4 +1175,16 @@ t('la página de abogados avisa de que no están verificados', () => {
   nav(app, 'inicio');
 });
 
+t('el alta de abogados muestra tarifas y formulario sin publicar el correo', () => {
+  nav(app, 'abogados-alta');
+  const html = app.document.querySelector('#view-abogados-alta').innerHTML;
+  assert.ok(html.includes('Opción solidaria'));
+  assert.ok(html.includes('20 €/mes'));
+  assert.ok(html.includes('240 € al año'));
+  assert.ok(html.includes('Número de matrícula'));
+  assert.ok(html.includes('Horario de atención'));
+  assert.ok(!html.includes('programandonosolos'), 'el correo no debe ser visible');
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

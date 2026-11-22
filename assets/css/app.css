@@ -949,3 +949,13 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 #view-donar .donate-grid + .callout { margin-top: 26px; }
 #view-donar .callout + .callout { margin-top: 16px; }
 #view-donar .callout { margin-bottom: 0; }
+
+
+/* ── Alta de abogados ───────────────────────────────────────── */
+.price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+.price-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); }
+.price-card h2 { margin: 8px 0; color: var(--brand); font-size: 1.8rem; }
+.price-card p { color: var(--ink-2); line-height: 1.6; }
+.lawyer-form .form-grid { align-items: start; }
+.lawyer-form .field--full { grid-column: 1 / -1; }
+@media (max-width: 760px) { .price-grid { grid-template-columns: 1fr; } }

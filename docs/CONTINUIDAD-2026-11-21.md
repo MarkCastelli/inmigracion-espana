@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **217 pruebas pasando**.
+- **218 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -134,6 +134,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 104. **Aviso legal y privacidad**: nueva vista `#/legal` enlazada desde el pie y Ayuda; cubre responsable, datos, bases jurídicas, datos sensibles, conservación, GitHub Pages, cookies/localStorage, derechos, AEPD, menores, propiedad intelectual y limitación de responsabilidad. Pendiente completar identidad/NIF/domicilio/email del responsable y revisión jurídica profesional.
 105. **Donar**: nueva vista `#/donar` y enlace en menú/pie; explica que la web es gratuita, el tiempo de mantenimiento, invita a un café y enlaza PayPal `hosted_button_id=YPZZZU5ZD4G9Y`; aclara que no es ONG, no da asesoramiento ni desgrava. Los avisos de transparencia y “no dones si…” tienen separación visual.
 106. **Abogados**: nueva vista `#/abogados` y menú; aviso destacado de que no se verifica identidad, colegiación, matrícula, honorarios ni resultados; directorio vacío hasta recibir solicitudes; campos de contacto, CTA por GitHub y guía para comprobar colegiación.
+107. **Alta de abogados**: vista `#/abogados-alta`; opción gratuita si atienden con aportación voluntaria y 20 €/mes (240 €/año por adelantado) si cobran; formulario con nombre, estudio, matrícula, colegio, contacto, web, citas, domicilio y horario; envío por FormSubmit con correo ofuscado en el código, consentimiento y privacidad actualizada.
 
 ## Comandos
 

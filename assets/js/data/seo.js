@@ -97,6 +97,11 @@
       title: 'Abogados de extranjería | Ruta Legal',
       description: 'Directorio de abogados que solicitan aparecer en Ruta Legal. No verificamos colegiación, honorarios ni resultados: comprueba siempre antes de contratar.',
       keywords: 'abogados extranjería, abogado inmigración, colegiación, honorarios, directorio'
+    },
+    'abogados-alta': {
+      title: 'Publicar tu despacho en Abogados | Ruta Legal',
+      description: 'Solicita aparecer en el directorio de abogados de Ruta Legal. Publicación gratuita si atiendes con aportación voluntaria; 20 €/mes (240 €/año) si cobras por tus servicios.',
+      keywords: 'publicar abogado, directorio abogados, extranjería, publicar despacho'
     }
   };
 

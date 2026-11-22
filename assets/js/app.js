@@ -34,7 +34,7 @@
     aiLastId: null
   };
 
-  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'abogados', 'consulta', 'docs', 'formularios', 'donar', 'ayuda', 'legal'];
+  var VIEWS = ['inicio', 'antes', 'formulario', 'diagnostico', 'plan', 'vias', 'tramites', 'online', 'preguntas', 'derechos', 'directorio', 'abogados', 'abogados-alta', 'consulta', 'docs', 'formularios', 'donar', 'ayuda', 'legal'];
   var REGION_LABEL = { latam: 'América Latina', ue: 'Unión Europea', eea: 'Espacio Económico Europeo', eu: 'Europa (otros)', africa: 'África', asia: 'Asia', otro: 'Otros países' };
 
   /* Perfil de ejemplo para probar la app sin escribir nada. */
@@ -191,6 +191,7 @@
     else if (ui.view === 'derechos') renderDerechos();
     else if (ui.view === 'directorio') renderDirectorio();
     else if (ui.view === 'abogados') renderAbogados();
+    else if (ui.view === 'abogados-alta') renderAbogadosAlta();
     else if (ui.view === 'consulta') renderConsulta();
     else if (ui.view === 'docs') renderDocs();
     else if (ui.view === 'formularios') renderFormularios();
@@ -3517,20 +3518,17 @@
   function renderAbogados() {
     var host = $('#view-abogados');
     var list = Array.isArray(RL.lawyers) ? RL.lawyers : [];
-    var fields = 'Nombre del estudio, nombre y apellidos del abogado/a, teléfono, WhatsApp, web, email, página para coger citas y dirección.';
-    var issueUrl = 'https://github.com/MarkCastelli/inmigracion-espana/issues/new?title=' +
-      encodeURIComponent('Solicitud para aparecer en Abogados') + '&body=' +
-      encodeURIComponent('Quiero aparecer en el directorio de Abogados de Ruta Legal.\n\n' + fields + '\n\nEspecialidad en extranjería:\nIdiomas:\n\nDeclaro que soy abogado/a colegiado/a y que los datos son correctos. No incluyo datos de clientes.');
+    var issueUrl = '#/abogados-alta';
     var html = '<div class="plan-head"><div><p class="eyebrow">Directorio</p><h1>Abogados</h1>' +
       '<p class="plan-head__sub">Despachos que solicitan aparecer para que puedas contactarlos. No es una recomendación ni un ranking.</p></div>' +
-      '<div class="plan-head__actions"><a class="btn btn--soft btn--sm" href="' + esc(issueUrl) + '" target="_blank" rel="noopener">' + icons.ext(15) + ' Solicitar aparecer</a></div></div>';
+      '<div class="plan-head__actions"><a class="btn btn--soft btn--sm" href="#/abogados-alta">' + icons.user(15) + ' Solicitar aparecer</a></div></div>';
     html += '<div class="callout callout--warn" style="border-width:2px">' + icons.alert(20) + '<div><strong>No verifico a los abogados</strong>' +
       '<p>No compruebo identidad, colegiación, número de colegiado, especialización, seguro, honorarios, resultados ni la veracidad de los datos publicados. No me hago responsable de problemas, pagos, conflictos o daños derivados del contacto con un despacho que aparezca aquí. Antes de contratar, verifica tú mismo y desconfía de quien prometa resultados.</p></div></div>';
     html += '<div class="callout callout--info">' + icons.info(18) + '<div><strong>Esta página es un tablón de contacto</strong><p>Los datos los aporta cada despacho. La presencia aquí no significa que Ruta Legal lo recomiende, que haya revisado su trabajo ni que tenga un acuerdo económico con él.</p></div></div>';
     if (!list.length) {
       html += '<div class="empty-state" style="margin-top:18px"><h2>Todavía no hay despachos publicados</h2>' +
         '<p>Estoy preparando la base de datos. Si eres abogado/a y quieres aparecer, escribe con los datos del despacho. Revisaré la solicitud antes de publicarla.</p>' +
-        '<a class="btn btn--primary" href="' + esc(issueUrl) + '" target="_blank" rel="noopener">' + icons.ext(16) + ' Quiero aparecer en Abogados</a></div>';
+        '<a class="btn btn--primary" href="#/abogados-alta">' + icons.user(16) + ' Quiero aparecer en Abogados</a></div>';
     } else {
       html += '<div class="block"><div class="block__head">' + icons.user(18) + '<h2>Despachos publicados</h2></div><div class="block__body">' +
         list.map(function (a) {
@@ -3561,9 +3559,80 @@
       '<p>Si quieres estar en esta página, contáctame para pasar a formar parte de la base de datos. Podrás publicar:</p>' +
       '<ul><li>Nombre del estudio.</li><li>Tu nombre y apellidos.</li><li>Teléfono y WhatsApp.</li><li>Web y email.</li><li>Página para coger citas.</li><li>Dirección.</li></ul>' +
       '<p>La solicitud se revisa antes de publicar. No se aceptan promesas de resultados, publicidad engañosa ni datos de clientes.</p>' +
-      '<a class="btn btn--primary" href="' + esc(issueUrl) + '" target="_blank" rel="noopener">' + icons.ext(16) + ' Enviar solicitud para aparecer</a>' +
-      '<p class="muted" style="font-size:.8rem;margin-top:10px">El envío se hace por GitHub. No incluyas datos personales de clientes ni documentos.</p></div></div>';
+      '<a class="btn btn--primary" href="#/abogados-alta">' + icons.user(16) + ' Enviar solicitud para aparecer</a>' +
+      '<p class="muted" style="font-size:.8rem;margin-top:10px">El formulario se envía por correo al responsable. No incluyas datos personales de clientes ni documentos.</p></div></div>';
     host.innerHTML = html;
+  }
+
+  function renderAbogadosAlta() {
+    var host = $('#view-abogados-alta');
+    var paypal = 'https://www.paypal.com/donate/?hosted_button_id=YPZZZU5ZD4G9Y';
+    var html = '<div class="plan-head"><div><p class="eyebrow">Publicar en Abogados</p><h1>Quiero aparecer</h1>' +
+      '<p class="plan-head__sub">Si tu trabajo ayuda de verdad a personas inmigrantes, este espacio puede ser gratuito. Si cobras por tus servicios, tiene un coste anual.</p></div>' +
+      '<div class="plan-head__actions"><a class="btn btn--soft btn--sm" href="#/abogados">' + icons.user(15) + ' Volver al directorio</a></div></div>';
+    html += '<div class="price-grid">' +
+      '<div class="price-card"><span class="badge badge--ok">Opción solidaria</span><h2>Gratis</h2><p>Si ayudas a inmigrantes <strong>sin cobrar un solo centavo</strong> y solo aceptas una aportación voluntaria de quien quiere y puede, publicaré tu información <strong>totalmente gratis</strong>.</p><p>En tu ficha se indicará: <strong>“Pago por servicios: VOLUNTARIO”</strong>.</p></div>' +
+      '<div class="price-card"><span class="badge badge--warn">Despacho que cobra</span><h2>20 €/mes</h2><p>Si lucras con tus servicios, el coste es <strong>20 € al mes</strong>: <strong>240 € al año</strong>, pagados por adelantado.</p><p>Completa el formulario y te enviaré el enlace de pago. No pagues nada ahora.</p></div></div>';
+    html += '<div class="callout callout--info"><div><strong>Primero reviso la solicitud</strong><p>No publico automáticamente. Compruebo que los datos estén completos y que la modalidad declarada sea coherente. La publicación no implica que Ruta Legal recomiende al despacho ni que haya verificado su colegiación.</p></div></div>';
+    html += '<div class="block mt-3"><div class="block__head">' + icons.doc(18) + '<h2>Formulario de solicitud</h2></div><div class="block__body">' +
+      '<form id="lawyerApplyForm" class="lawyer-form" autocomplete="off">' +
+      '<input type="text" name="_honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">' +
+      '<div class="form-grid">' +
+      '<label class="field"><span class="field__label">Nombre y apellidos *</span><input class="input" name="nombre" required></label>' +
+      '<label class="field"><span class="field__label">Nombre del estudio *</span><input class="input" name="estudio" required></label>' +
+      '<label class="field"><span class="field__label">Número de matrícula / colegiado *</span><input class="input" name="matricula" required></label>' +
+      '<label class="field"><span class="field__label">Colegio de Abogados *</span><input class="input" name="colegio" required></label>' +
+      '<label class="field"><span class="field__label">Email de contacto *</span><input class="input" type="email" name="email" required></label>' +
+      '<label class="field"><span class="field__label">Teléfono *</span><input class="input" type="tel" name="telefono" required></label>' +
+      '<label class="field"><span class="field__label">WhatsApp</span><input class="input" type="tel" name="whatsapp"></label>' +
+      '<label class="field"><span class="field__label">Página web</span><input class="input" type="url" name="web" placeholder="https://"></label>' +
+      '<label class="field"><span class="field__label">Página para coger cita</span><input class="input" type="url" name="citas" placeholder="https://"></label>' +
+      '<label class="field"><span class="field__label">Domicilio del despacho</span><input class="input" name="domicilio"></label>' +
+      '<label class="field"><span class="field__label">Horario de atención al público</span><input class="input" name="horario" placeholder="Ej. L-V 9:00-14:00"></label>' +
+      '<label class="field"><span class="field__label">Especialidad en extranjería</span><input class="input" name="especialidad" placeholder="Ej. arraigos, asilo, nacionalidad"></label>' +
+      '</div>' +
+      '<fieldset class="field"><legend class="field__label">Modalidad de publicación *</legend><div class="option-list">' +
+      '<label class="option"><input type="radio" name="modalidad" value="solidaria" required><span class="option__box"></span><span class="option__body"><span class="option__label">Ayudo sin cobrar; acepto aportación voluntaria (publicación gratis)</span></span></label>' +
+      '<label class="option"><input type="radio" name="modalidad" value="cobra"><span class="option__box"></span><span class="option__body"><span class="option__label">Cobro por mis servicios (20 €/mes · 240 €/año por adelantado)</span></span></label>' +
+      '</div></fieldset>' +
+      '<label class="field"><span class="field__label">Idiomas de atención</span><input class="input" name="idiomas" placeholder="Ej. español, francés, árabe, inglés"></label>' +
+      '<label class="field field--full"><span class="field__label">Observaciones</span><textarea class="textarea" name="mensaje" rows="4"></textarea></label>' +
+      '<label class="option option--check field--full" style="margin-top:10px"><input type="checkbox" name="consentimiento" required><span class="option__box"></span><span class="option__body"><span class="option__label">Declaro que soy abogado/a colegiado/a, que los datos son ciertos y acepto la <a href="#/legal">política de privacidad</a>. No incluyo datos de clientes.</span></span></label>' +
+      '<div class="field--full"><button class="btn btn--primary" type="submit">Enviar solicitud</button><p id="lawyerFormStatus" class="muted" role="status" style="margin:10px 0 0"></p></div>' +
+      '</form></div></div>';
+    html += '<div class="callout callout--info mt-3"><div><strong>Cómo se envía</strong><p>El formulario se envía por correo al responsable mediante un servicio de formularios. La dirección de destino no se muestra en la página. No incluyas datos de clientes, documentos, NIE ni información de salud.</p></div></div>';
+    host.innerHTML = html;
+    var form = $('#lawyerApplyForm');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var status = $('#lawyerFormStatus');
+      if (!form.reportValidity()) return;
+      var consent = form.querySelector('[name="consentimiento"]');
+      if (!consent || !consent.checked) { if (status) status.textContent = 'Debes aceptar la declaración y la privacidad.'; return; }
+      var payload = {};
+      ['nombre', 'estudio', 'matricula', 'colegio', 'email', 'telefono', 'whatsapp', 'web', 'citas', 'domicilio', 'horario', 'especialidad', 'idiomas', 'mensaje'].forEach(function (k) {
+        var el = form.querySelector('[name="' + k + '"]');
+        payload[k] = el ? el.value.trim() : '';
+      });
+      payload.modalidad = (form.querySelector('[name="modalidad"]:checked') || {}).value || '';
+      payload._subject = 'Quiero aparecer en abogados';
+      payload._template = 'table';
+      payload._captcha = 'false';
+      var recipient = atob('cHJvZ3JhbWFuZG9ub3NvbG9zQGdtYWlsLmNvbQ==');
+      if (status) status.textContent = 'Enviando solicitud…';
+      fetch('https://formsubmit.co/ajax/' + recipient, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (r) {
+        if (!r.ok) throw new Error('Error de envío');
+        if (status) status.textContent = 'Solicitud enviada. Te contactaré para revisar los datos y, si corresponde, enviarte el enlace de pago.';
+        form.reset();
+      }).catch(function () {
+        if (status) status.textContent = 'No se pudo enviar. Inténtalo más tarde o contacta desde el repositorio de GitHub.';
+      });
+    });
   }
 
   function renderLegal() {
@@ -3601,6 +3670,7 @@
       <h2>7. Destinatarios, hosting y transferencias</h2>
       <p>Ruta Legal no comparte los datos del formulario con terceros. El sitio se aloja en <strong>GitHub Pages</strong> (GitHub, Inc./Microsoft), que puede registrar datos técnicos como la dirección IP, la fecha y el navegador en sus registros de servidor. GitHub puede tratar esos datos fuera del Espacio Económico Europeo al amparo de sus garantías contractuales; consulta la <a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">política de privacidad de GitHub</a>.</p>
       <p>Cuando pulsas un enlace externo (BOE, ministerios, ONG, YouTube, DeepSeek, etc.), pasas al servicio de ese tercero y se aplican sus propias políticas. La app no controla esos sitios.</p>
+      <p><strong>Formulario de alta de abogados:</strong> si eres abogado/a y envías la solicitud, los datos del formulario se transmiten a <strong>FormSubmit</strong> y se reenvían por correo al responsable para revisar la publicación y, si corresponde, enviarte el enlace de pago. La base jurídica es tu consentimiento y la finalidad es gestionar tu solicitud. No incluyas datos de clientes, documentos, NIE ni información de salud. Puedes solicitar la supresión escribiendo al canal de contacto.</p>
 
       <h2>8. Cookies y almacenamiento local</h2>
       <p>Esta web <strong>no utiliza cookies publicitarias, píxeles de seguimiento ni herramientas de analítica</strong>. Usa almacenamiento local estrictamente necesario para recordar tus respuestas, el idioma, el tema y la preferencia de ayudas. Al no haber cookies no esenciales, no se muestra un banner de consentimiento de cookies. Puedes borrar el almacenamiento local desde la propia app o desde la configuración del navegador.</p>
