@@ -762,52 +762,98 @@
 
   function printReportHTML(F) {
     var people = goalPeople(F);
-    var disabled = people.filter(function (p) { return p.obj.disability === 'si'; });
     var showDisability = !F.print || F.print.disability !== false;
     var showGoals = !F.print || F.print.goals !== false;
+    var showHousing = !F.print || F.print.housing !== false;
     var today = new Date();
     var dateText = today.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' });
-    var html = '<div class="print-report">' +
-      '<header class="report-cover"><p class="report-kicker">Ruta Legal · Informe de caso</p>' +
+    var pages = [];
+
+    function selected(p) {
+      if (p.key === 'applicant') return !F.print || F.print.applicant !== false;
+      if (p.key === 'spouse') return F.mode === 'family' && (!F.print || F.print.spouse !== false);
+      if (p.key.indexOf('children.') === 0) return F.mode === 'family' && (!F.print || F.print.children !== false);
+      return F.mode === 'family';
+    }
+
+    function disabilityBlock(o) {
+      if (!showDisability || o.disability !== 'si') return '';
+      return '<section class="report-section"><h3>Discapacidad y dependencia</h3><p><strong>Grado:</strong> ' + fEsc(o.disabilityDegree || 'sin indicar') +
+        ' · <strong>Reconocida:</strong> ' + fEsc(o.disabilityRecognized || 'sin indicar') +
+        ' · <strong>Dependencia:</strong> ' + fEsc(o.dependency || 'sin indicar') +
+        ' · <strong>Vencimiento:</strong> ' + fEsc(o.disabilityExpiryStatus === 'no' ? 'No caduca' : (o.disabilityExpiry || 'sin indicar')) + '</p></section>';
+    }
+
+    function goalsBlock(o) {
+      if (!showGoals) return '';
+      var txt = goalText(o.goals) || 'Sin indicar';
+      return '<section class="report-section"><h3>Objetivos</h3><p>' + fEsc(txt) + '</p></section>';
+    }
+
+    function housingBlockFor(o) {
+      if (!showHousing) return '';
+      var base = housingBaseFor(o, o === F.applicant);
+      var util = utilitiesFor(o);
+      if (!base && !util) return '';
+      return '<section class="report-section"><h3>Vivienda y gastos</h3><p><strong>Vivienda:</strong> ' + base.toFixed(2) + ' €/mes · <strong>Suministros:</strong> ' + util.toFixed(2) + ' €/mes</p></section>';
+    }
+
+    var cover = '<header class="report-cover"><p class="report-kicker">Ruta Legal · Informe de caso</p>' +
       '<h1>Informe para asesoría legal</h1>' +
       '<p class="report-sub">Documento preparado para revisar con un abogado, ONG o servicio de extranjería.</p>' +
-      '<p class="report-meta">' + fEsc(dateText) + ' · ' + (F.mode === 'family' ? 'Grupo familiar' : 'Consulta individual') + ' · ' + fEsc(F.applicant.name || 'Titular sin nombre') + '</p></header>' +
+      '<p class="report-meta">' + fEsc(dateText) + ' · ' + (F.mode === 'family' ? 'Grupo familiar' : 'Consulta individual') + '</p></header>' +
+      '<section class="report-section"><h2>Datos del informe</h2><dl class="kv">' +
+      '<div class="kv__row"><dt>Titular</dt><dd>' + fEsc(F.applicant.name || 'Sin nombre') + '</dd></div>' +
+      '<div class="kv__row"><dt>Tipo de consulta</dt><dd>' + (F.mode === 'family' ? 'Grupo familiar' : 'Individual') + '</dd></div>' +
+      '<div class="kv__row"><dt>Personas incluidas</dt><dd>' + (F.mode === 'family' ? (1 + (F.members || []).length) + ' personas' : '1 persona') + '</dd></div>' +
+      '<div class="kv__row"><dt>Ubicación actual</dt><dd>' + fEsc({ espana: 'España', portugal: 'Portugal', ue: 'UE/EEE/Suiza', argentina: 'Argentina', latam: 'América Latina', otro: 'Otro país', dontknow: 'No lo sé' }[F.applicant.currentLocation] || 'Sin indicar') + '</dd></div>' +
+      (F.familyLocation ? '<div class="kv__row"><dt>Resto de la familia</dt><dd>' + fEsc({ todos_espana: 'Todos en España', algunos_espana: 'Algunos en España y otros fuera', todos_fuera: 'Todos fuera de España', portugal: 'En Portugal', argentina: 'En Argentina', latam: 'En América Latina', otro: 'En otro país', dontknow: 'No lo sé' }[F.familyLocation] || F.familyLocation) + '</dd></div>' : '') +
+      '</dl></section>' +
       '<section class="report-key"><h2>Puntos clave</h2><div class="report-key__grid">' +
-      '<div><span>Discapacidad reconocida</span><strong>' + (!showDisability ? 'Sección omitida' : (disabled.length ? disabled.map(function (p) { return fEsc(p.label); }).join(', ') : 'No consta')) + '</strong></div>' +
+      '<div><span>Discapacidad reconocida</span><strong>' + (!showDisability ? 'Sección omitida' : (people.some(function (p) { return p.obj.disability === 'si'; }) ? people.filter(function (p) { return p.obj.disability === 'si'; }).map(function (p) { return fEsc(p.label); }).join(', ') : 'No consta')) + '</strong></div>' +
       '<div><span>Objetivo principal</span><strong>' + (!showGoals ? 'Sección omitida' : fEsc(F.commonGoalsOn ? (goalText(F.commonGoals) || 'Sin indicar') : (goalText(F.applicant.goals) || 'Sin indicar'))) + '</strong></div>' +
       '<div><span>Ingreso neto mensual</span><strong>' + (fnum(fget(F.applicant, 'netSalary')) + (F.mode === 'family' ? fnum(fget(F.spouse, 'netSalary')) : 0)).toFixed(2) + ' €</strong></div>' +
-      '<div><span>Composición</span><strong>' + (F.mode === 'family' ? (1 + (F.members || []).length) + ' personas' : '1 persona') + '</strong></div>' +
-      '</div></section>';
-    if (showDisability) {
-      html += '<section class="report-section"><h2>Discapacidad y dependencia</h2>';
-      if (!disabled.length) {
-        html += '<p>No consta discapacidad reconocida en la información aportada.</p>';
-      } else {
-        disabled.forEach(function (p) {
-          var o = p.obj;
-          html += '<div class="report-person"><h3>' + fEsc(p.label) + '</h3><p><strong>Grado:</strong> ' + fEsc(o.disabilityDegree || 'sin indicar') +
-            ' · <strong>Reconocida:</strong> ' + fEsc(o.disabilityRecognized || 'sin indicar') +
-            ' · <strong>Dependencia:</strong> ' + fEsc(o.dependency || 'sin indicar') +
-            ' · <strong>Vencimiento:</strong> ' + fEsc(o.disabilityExpiryStatus === 'no' ? 'No caduca' : (o.disabilityExpiry || 'sin indicar')) + '</p></div>';
+      '<div><span>Organización</span><strong>Una página por integrante</strong></div></div></section>';
+    pages.push(cover);
+
+    people.filter(selected).forEach(function (p) {
+      var content = '<header class="report-person-head"><p class="report-kicker">' + fEsc(p.key === 'applicant' ? 'Titular' : 'Integrante del grupo') + '</p><h2>' + fEsc(p.label) + '</h2></header>' +
+        '<section class="report-section"><h3>Datos personales</h3>' + summaryPerson(p.obj) + '</section>' +
+        disabilityBlock(p.obj) +
+        goalsBlock(p.obj) +
+        housingBlockFor(p.obj);
+      pages.push(content);
+    });
+
+    if (!F.print || F.print.economy !== false) {
+      var income = fnum(fget(F.applicant, 'netSalary')) + (F.mode === 'family' ? fnum(fget(F.spouse, 'netSalary')) : 0);
+      var housingPeople = [F.applicant];
+      if (F.mode === 'family') {
+        housingPeople.push(F.spouse);
+        housingPeople = housingPeople.concat(F.children || []);
+        (F.members || []).forEach(function (m) {
+          if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
+          if (m.data) housingPeople.push(m.data);
         });
       }
-      html += '</section>';
+      var base = 0, utilities = 0;
+      housingPeople.forEach(function (p, i) { base += housingBaseFor(p, i === 0); utilities += utilitiesFor(p); });
+      var total = base + utilities;
+      pages.push('<header class="report-person-head"><p class="report-kicker">Cierre del informe</p><h2>Resumen económico del hogar</h2></header>' +
+        '<section class="report-section"><dl class="kv">' +
+        '<div class="kv__row"><dt>Ingreso neto mensual</dt><dd>' + income.toFixed(2) + ' €</dd></div>' +
+        '<div class="kv__row"><dt>Hipoteca/alquiler</dt><dd>' + base.toFixed(2) + ' €</dd></div>' +
+        '<div class="kv__row"><dt>Suministros</dt><dd>' + utilities.toFixed(2) + ' €</dd></div>' +
+        '<div class="kv__row"><dt>Gastos totales del hogar</dt><dd><strong>' + total.toFixed(2) + ' €</strong></dd></div>' +
+        '<div class="kv__row"><dt>Diferencia</dt><dd><strong>' + (income - total).toFixed(2) + ' €</strong></dd></div>' +
+        '</dl></section>');
     }
-    if (showGoals) {
-      html += '<section class="report-section"><h2>Objetivos</h2>';
-      if (F.commonGoalsOn && F.mode === 'family') {
-        html += '<p><strong>Objetivos comunes:</strong> ' + fEsc(goalText(F.commonGoals) || 'Sin indicar') + '</p>';
-      }
-      people.forEach(function (p) {
-        var goals = goalText(fget(p.obj, 'goals'));
-        if (goals) html += '<p><strong>' + fEsc(p.label) + ':</strong> ' + fEsc(goals) + '</p>';
-      });
-      html += '</section>';
-    }
-    html += '<section class="report-section">' + formSummaryHTML(F, false) + '</section>' +
-      '<footer class="report-footer"><p>Este informe recoge la información aportada por la persona solicitante. No es asesoramiento jurídico ni una garantía de concesión. La valoración legal corresponde a un abogado o entidad especializada.</p><p>Ruta Legal · documento generado en el dispositivo · ' + fEsc(dateText) + '</p></footer>' +
-      '</div>';
-    return html;
+
+    var totalPages = pages.length;
+    return pages.map(function (content, i) {
+      return '<section class="report-page"><header class="report-page__head"><span>Ruta Legal · Informe de caso</span><span>' + fEsc(F.applicant.name || 'Titular') + '</span></header>' +
+        content + '<footer class="report-page__foot"><span>Documento informativo · no sustituye a un abogado</span><span>Página ' + (i + 1) + ' de ' + totalPages + '</span></footer></section>';
+    }).join('');
   }
 
   function formSummaryHTML(F, editable) {

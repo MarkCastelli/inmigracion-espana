@@ -113,6 +113,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 83. **Paso de irregular a legal**: cada integrante con residencia legal indica mes/año y la base de la fecha (resolución, efectos, TIE, recogida u otra); se explica que la TIE no siempre marca el inicio y se muestra en el resumen.
 84. **Desglose de vivienda**: el resumen separa hipoteca/alquiler total y suministros, y muestra el desglose por integrante; ya no usa solo la cuota del titular.
 85. **Informe profesional**: paso 11 con portada, puntos clave, discapacidad reconocida, objetivos y secciones; CSS A4 para imprimir/guardar como PDF, respetando las secciones marcadas en el paso 10.
+86. **Informe paginado**: portada con datos generales, una página por integrante y cierre económico; cada página lleva “Página X de Y” y salto de página al imprimir.
 
 ## Comandos
 

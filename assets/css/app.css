@@ -793,3 +793,31 @@ html[dir="rtl"] .plan-head { text-align: right; }
   .report-cover h1 { font-size: 26pt; }
   .report-section > h2 { font-size: 14pt; }
 }
+
+
+/* ── Páginas del informe profesional ─────────────────────────── */
+.report-page {
+  background: #fff;
+  color: #172b31;
+  max-width: 980px;
+  margin: 0 auto 20px;
+  padding: 30px 34px 26px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.report-page__head { display:flex; justify-content:space-between; gap:12px; border-bottom:1px solid #cfe1e4; padding-bottom:7px; margin-bottom:18px; color:#597077; font-size:.72rem; letter-spacing:.04em; text-transform:uppercase; }
+.report-page__foot { display:flex; justify-content:space-between; gap:12px; border-top:1px solid #cfe1e4; padding-top:8px; margin-top:24px; color:#597077; font-size:.72rem; }
+.report-person-head { border-left:5px solid #e8863a; padding-left:12px; margin-bottom:14px; }
+.report-person-head h2 { margin:0; color:#0d4f5c; font-size:1.55rem; }
+.report-person-head .report-kicker { margin-bottom:3px; }
+.report-key__grid strong { overflow-wrap:anywhere; }
+@media print {
+  .report-page { border:0 !important; border-radius:0 !important; box-shadow:none !important; max-width:none !important; margin:0 !important; padding:0 0 16mm !important; min-height:250mm; break-after:page; page-break-after:always; }
+  .report-page:last-child { break-after:auto; page-break-after:auto; }
+  .report-page__head { position:running(header); }
+  .report-page__foot { position:absolute; left:0; right:0; bottom:0; }
+  .report-person-head h2 { font-size:18pt; }
+  .report-page .kv__row { break-inside:avoid; }
+}

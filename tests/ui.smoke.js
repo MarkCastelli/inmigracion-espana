@@ -961,6 +961,7 @@ t('el paso final genera un informe profesional con puntos clave', () => {
   assert.ok(html.includes('Informe para asesoría legal'));
   assert.ok(html.includes('Puntos clave'));
   assert.ok(html.includes('Discapacidad y dependencia'));
+  assert.ok(html.includes('Página 1 de'));
   assert.ok(html.includes('Ana Pérez'));
   assert.ok(html.includes('65_mas'));
   assert.ok(html.includes('Nacionalidad española'));
