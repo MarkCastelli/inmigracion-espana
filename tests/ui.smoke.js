@@ -929,4 +929,20 @@ t('pregunta por el permiso de conducir y su país', () => {
   nav(app, 'inicio');
 });
 
+t('pide la fecha de paso a residencia legal y su base', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  RL.state.profile.formulario.applicant.residence = 'trabajo_estudios';
+  RL.state.profile.formulario.step = 1;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Fecha en que pasaste de irregular a legal'));
+  assert.ok(html.includes('data-fpath="applicant.legalSinceMonth"'));
+  assert.ok(html.includes('data-fpath="applicant.legalSinceYear"'));
+  assert.ok(html.includes('data-fpath="applicant.legalSinceBasis"'));
+  assert.ok(html.includes('Fecha de la resolución de concesión'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

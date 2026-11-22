@@ -6,7 +6,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **203 pruebas pasando**.
+- **204 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -110,6 +110,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 80. **Permiso de conducir**: se pregunta si lo tiene y de qué país; se añade a documentos y a objetivos como «Obtener o canjear el permiso de conducir».
 81. **Permiso individual**: no se aplica como objetivo común; cada adulto sin permiso decide si quiere obtenerlo/canjearlo, y los menores no lo ven.
 82. **Ubicación**: «Sobre ti» pregunta dónde está ahora (España, Portugal, UE, Argentina, Latinoamérica, otro); el grupo familiar pregunta dónde está el resto de la familia.
+83. **Paso de irregular a legal**: cada integrante con residencia legal indica mes/año y la base de la fecha (resolución, efectos, TIE, recogida u otra); se explica que la TIE no siempre marca el inicio y se muestra en el resumen.
 
 ## Comandos
 

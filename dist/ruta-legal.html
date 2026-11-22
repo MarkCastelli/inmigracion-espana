@@ -41,7 +41,7 @@
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d4f5c'/%3E%3Cpath d='M18 44V28l14-9 14 9v16' fill='none' stroke='%23f7f4ee' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M26 44V34h12v10' fill='none' stroke='%23e8863a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
-/* ── assets/css/app.css?v=20261122u ── */
+/* ── assets/css/app.css?v=20261122v ── */
 /* ============================================================
    Ruta Legal · hoja de estilos única (sin dependencias)
    Diseño: papel cálido + verde profundo. Claro/oscuro automático.
@@ -1108,7 +1108,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 </div>
 
 <script>
-/* ── assets/js/core.js?v=20261122u ── */
+/* ── assets/js/core.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · núcleo: utilidades, estado local y fechas
    Sin dependencias. Funciona abriendo index.html directamente.
@@ -1355,7 +1355,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/i18n.js?v=20261122u ── */
+/* ── assets/js/data/i18n.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · idiomas de interfaz
    Fase 1: navegación, portada y avisos legales.
@@ -1639,7 +1639,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/seo.js?v=20261122u ── */
+/* ── assets/js/data/seo.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · SEO por sección
    Títulos, descripciones, palabras clave, Open Graph y JSON-LD.
@@ -1800,7 +1800,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/formulario.js?v=20261122u ── */
+/* ── assets/js/data/formulario.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · Formulario guiado 0-11
    Estado propio, separado del diagnóstico antiguo.
@@ -1886,7 +1886,8 @@ html[dir="rtl"] .plan-head { text-align: right; }
     return {
       name: '', age: '', nationality: '', phone: '', email: '', entryDate: '', familyAbroad: '', bringFamily: '',
       currentLocation: '',
-      disability: '', residence: '', drivingLicense: '', drivingLicenseCountry: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
+      disability: '', residence: '', legalSinceMonth: '', legalSinceYear: '', legalSinceBasis: '',
+      drivingLicense: '', drivingLicenseCountry: '', works: '', legalJob: '', hours: '', netSalary: '', bank: '',
       jobType: '', contractType: '', contractEnd: '', studies: '', career: '',
       paysHousing: '',
       disabilityRecognized: '', disabilityDegree: '', disabilityExpiryStatus: '', disabilityExpiry: '', dependency: '',
@@ -1930,7 +1931,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/antes.js?v=20261122u ── */
+/* ── assets/js/data/antes.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · Mi experiencia
    Testimonio personal, corregido y ordenado por temas.
@@ -2043,7 +2044,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/countries.js?v=20261122u ── */
+/* ── assets/js/data/countries.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · países y datos que afectan a las vías
    - dos: nacionalidad por residencia en 2 años (art. 22 CC)
@@ -2177,7 +2178,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/regions.js?v=20261122u ── */
+/* ── assets/js/data/regions.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · comunidades autónomas, provincias y servicios
    ============================================================ */
@@ -2266,7 +2267,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/questions.js?v=20261122u ── */
+/* ── assets/js/data/questions.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · cuestionario (esquema declarativo)
    Cada campo: { id, type, label, help, required, showIf, options }
@@ -3593,7 +3594,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-nacionalidad.js?v=20261122u ── */
+/* ── assets/js/data/routes-nacionalidad.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · vías de NACIONALIDAD española
    Base: Código Civil arts. 17-26, Ley 20/2022 (DA 8.ª, cerrada),
@@ -4032,7 +4033,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-espana.js?v=20261122u ── */
+/* ── assets/js/data/routes-espana.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · vías que se solicitan DESDE España
    Base: RD 1155/2024 (en vigor 20/05/2025), RD 316/2026 y
@@ -4969,7 +4970,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-exterior.js?v=20261122u ── */
+/* ── assets/js/data/routes-exterior.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · visados y entrada desde el exterior
    Base: LO 4/2000, RD 1155/2024, Ley 14/2013 (modificada por
@@ -5408,7 +5409,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/resources.js?v=20261122u ── */
+/* ── assets/js/data/resources.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · recursos, glosario, FAQ y bulos
    ============================================================ */
@@ -5554,7 +5555,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/directory.js?v=20261122u ── */
+/* ── assets/js/data/directory.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · directorio de sitios de interés
    Cada ficha dice qué se puede hacer allí y enlaza a la sede.
@@ -6084,7 +6085,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/procedures.js?v=20261122u ── */
+/* ── assets/js/data/procedures.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · trámites: qué hacer, dónde, con qué cita y qué llevar
    ============================================================ */
@@ -7231,7 +7232,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/aids.js?v=20261122u ── */
+/* ── assets/js/data/aids.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · derechos, discapacidad, dependencia y ayudas
    ============================================================ */
@@ -7606,7 +7607,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/faq.js?v=20261122u ── */
+/* ── assets/js/data/faq.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · preguntas frecuentes (dudas reales de foros)
    Respuestas contrastadas con normativa y sede oficial.
@@ -8476,7 +8477,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/data/online.js?v=20261122u ── */
+/* ── assets/js/data/online.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · trámites online, sedes y notificaciones
    ============================================================ */
@@ -8773,7 +8774,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/engine.js?v=20261122u ── */
+/* ── assets/js/engine.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · motor de reglas
    Convierte el perfil en un plan: vías que encajan, requisitos
@@ -10027,7 +10028,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/decision.js?v=20261122u ── */
+/* ── assets/js/decision.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · capa de decisión
    No sustituye al motor de reglas: lo ordena y lo audita.
@@ -10304,7 +10305,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/forms.js?v=20261122u ── */
+/* ── assets/js/forms.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · catálogo de formularios oficiales
    Enlaces a la sede del Ministerio de Inclusión y al Ministerio
@@ -10540,7 +10541,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/ai.js?v=20261122u ── */
+/* ── assets/js/ai.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · consulta abierta a una IA
    Genera un prompt con el caso, el diagnóstico y las reglas.
@@ -10841,7 +10842,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/pdf.js?v=20261122u ── */
+/* ── assets/js/pdf.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · generador de PDF sin dependencias
    Escribe un PDF válido (A4, Helvetica, WinAnsi) con el perfil,
@@ -11491,7 +11492,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/speech.js?v=20261122u ── */
+/* ── assets/js/speech.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · lectura en voz alta con la Web Speech API
    Sin servidor, sin API key y sin enviar texto a terceros.
@@ -11875,7 +11876,7 @@ html[dir="rtl"] .plan-head { text-align: right; }
 
 </script>
 <script>
-/* ── assets/js/app.js?v=20261122u ── */
+/* ── assets/js/app.js?v=20261122v ── */
 /* ============================================================
    Ruta Legal · interfaz (asistente, plan, catálogo, documentos)
    ============================================================ */
@@ -12152,6 +12153,24 @@ html[dir="rtl"] .plan-head { text-align: right; }
       fRadio(prefix + '.bringFamily', '¿Quieres traerlos a España?', fget(obj, 'bringFamily'), F.yesNo) +
       fRadio(prefix + '.disability', '¿Tienes discapacidad?', fget(obj, 'disability'), F.yesNo) +
       fSelect(prefix + '.residence', 'Situación actual de residencia', fget(obj, 'residence'), F.residence) +
+      (fget(obj, 'residence') && fget(obj, 'residence') !== 'irregular' && fget(obj, 'residence') !== 'dontknow'
+        ? '<div class="form-grid" style="grid-column:1/-1"><div class="callout callout--info" style="grid-column:1/-1">' + icons.info(16) + '<div><strong>Fecha en que pasaste de irregular a legal</strong><p>Indica el mes y año. La fecha que suele contar es la de la <strong>resolución de concesión</strong> o la fecha de efectos que indique la resolución. La TIE es el documento, pero no siempre marca el inicio; si no lo sabes, elige «No lo sé».</p></div></div>' +
+          fSelect(prefix + '.legalSinceMonth', 'Mes', fget(obj, 'legalSinceMonth'), [
+            { v: '', l: 'Sin indicar' }, { v: '01', l: 'Enero' }, { v: '02', l: 'Febrero' }, { v: '03', l: 'Marzo' },
+            { v: '04', l: 'Abril' }, { v: '05', l: 'Mayo' }, { v: '06', l: 'Junio' }, { v: '07', l: 'Julio' },
+            { v: '08', l: 'Agosto' }, { v: '09', l: 'Septiembre' }, { v: '10', l: 'Octubre' }, { v: '11', l: 'Noviembre' }, { v: '12', l: 'Diciembre' }
+          ]) +
+          fInput(prefix + '.legalSinceYear', 'Año', fget(obj, 'legalSinceYear'), 'number', 'Ej. 2023') +
+          fSelect(prefix + '.legalSinceBasis', '¿Desde cuándo cuenta esa fecha?', fget(obj, 'legalSinceBasis'), [
+            { v: '', l: 'Sin indicar' },
+            { v: 'resolucion', l: 'Fecha de la resolución de concesión' },
+            { v: 'efectos', l: 'Fecha de efectos indicada en la resolución' },
+            { v: 'tie', l: 'Fecha de la TIE' },
+            { v: 'recogida', l: 'Fecha de recogida de la TIE' },
+            { v: 'otro', l: 'Otra fecha' },
+            { v: 'dontknow', l: 'No lo sé' }
+          ]) + '</div>'
+        : '') +
       fRadio(prefix + '.drivingLicense', '¿Tienes permiso de conducir?', fget(obj, 'drivingLicense'), F.yesNo) +
       (fget(obj, 'drivingLicense') === 'si' ? fInput(prefix + '.drivingLicenseCountry', '¿De qué país es el permiso?', fget(obj, 'drivingLicenseCountry'), 'text', 'España, Colombia, Marruecos…') : '') +
       fRadio(prefix + '.works', '¿Trabajas?', fget(obj, 'works'), F.yesNo) +
@@ -12682,11 +12701,16 @@ html[dir="rtl"] .plan-head { text-align: right; }
     var aid = (p.aidTypes || []).map(function (v) { return label(RL.formulario.aidTypes, v); }).filter(Boolean).join(', ');
     var goals = (p.goals || []).map(function (v) { return label(RL.formulario.goals, v); }).filter(Boolean).join(', ');
     var locations = { espana: 'España', portugal: 'Portugal', ue: 'UE/EEE/Suiza', argentina: 'Argentina', latam: 'América Latina', otro: 'Otro país', dontknow: 'No lo sé' };
+    var months = { '01': '01', '02': '02', '03': '03', '04': '04', '05': '05', '06': '06', '07': '07', '08': '08', '09': '09', '10': '10', '11': '11', '12': '12' };
+    var bases = { resolucion: 'Resolución de concesión', efectos: 'Fecha de efectos de la resolución', tie: 'Fecha de la TIE', recogida: 'Recogida de la TIE', otro: 'Otra fecha', dontknow: 'No lo sé' };
+    var legalSince = (p.legalSinceMonth || p.legalSinceYear) ? ((months[p.legalSinceMonth] || p.legalSinceMonth || '') + '/' + (p.legalSinceYear || '')) : '';
     var rows = [
       ['Nombre', p.name], ['Edad', p.age], ['Nacionalidad', p.nationality],
       ['Dónde está ahora', locations[p.currentLocation] || p.currentLocation],
       ['Teléfono', p.phone], ['Email', p.email], ['Entrada en España', p.entryDate],
       ['Residencia', label(RL.formulario.residence, p.residence)],
+      ['Legal desde (mes/año)', legalSince],
+      ['Base de la fecha', bases[p.legalSinceBasis] || p.legalSinceBasis],
       ['Permiso de conducir', p.drivingLicense],
       ['País del permiso', p.drivingLicenseCountry],
       ['Documentos', docs], ['Trabaja', p.works], ['Empleo legal', p.legalJob],
