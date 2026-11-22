@@ -398,17 +398,24 @@
     {
       id: 'trabajadora_social_niega', cat: 'ayudas',
       q: '¿Qué hago si la trabajadora social me niega la ayuda o me pone trabas?',
-      short: 'Pide por escrito la solicitud y la denegación. Si no te dan cita, registra un escrito. Reclama al ayuntamiento, a la consejería, al Defensor del Pueblo o autonómico y, si hay resolución, recurre.',
+      short: 'No te quedes con un «no» verbal: presenta un escrito y pide cita, valoración y respuesta por escrito. En Galicia puedes usar el registro del concello (si es servicio municipal) o el Rexistro Xeral da Xunta (si es autonómico); en otras comunidades, la sede del ayuntamiento o de la comunidad. Guarda siempre el resguardo y, si hay resolución, recurre.',
       detail: [
-        'No te quedes solo con un «no» verbal. Presenta un escrito en el registro del ayuntamiento o por sede electrónica: «Solicito cita para valoración social y, si procede, ayuda de emergencia. Solicito respuesta por escrito». Guarda el resguardo.',
-        'Pide la hoja de reclamaciones del ayuntamiento y una copia de lo presentado. Anota fecha, nombre del servicio y motivo que te dieron.',
-        'Si la ayuda se deniega por resolución, pide el texto completo y el plazo de recurso: reposición y, si procede, contencioso-administrativo. La asistencia jurídica gratuita puede cubrirte si no tienes recursos.',
-        'Puedes acudir a la concejalía de servicios sociales, a la consejería de tu comunidad, a la Inspección de Servicios Sociales si existe, al Defensor del Pueblo o al defensor autonómico. No sustituyen a un juez, pero pueden mediar y pedir explicaciones.',
-        'Si hay menores, violencia o riesgo grave, dilo expresamente: activa protección y prioridad. Para violencia, 016; para emergencias, 112.',
-        'No es necesario ir con abogado a la primera cita, pero sí llevar pruebas y acompañante si te ayuda. No firmes nada que no entiendas.'
+        'Primero distingue quién decide: si es un servicio municipal (concello/ayuntamiento), presenta el escrito en el registro de ese concello; si es autonómico (Xunta/consejería), en el registro de la comunidad; si es estatal, en el Registro General del Estado o sede electrónica. Pregunta en la propia oficina qué registro corresponde y pide el resguardo.',
+        'En Galicia: para servicios sociales del concello, usa la sede electrónica o el registro presencial del concello (por ejemplo, en Vigo, sede.vigo.org); para la Xunta, el Rexistro Xeral da Xunta en sede.xunta.gal. En otras comunidades, busca «registro electrónico» o «sede electrónica» de tu ayuntamiento/consejería. También vale el registro físico.',
+        'No hace falta un abogado para presentar el escrito. Lleva copia y pide que te sellen la tuya o el justificante electrónico. Anota fecha, hora, oficina y nombre de quien te atendió.',
+        'Modelo orientativo: «A/A Servicios Sociales de [municipio]. D/Dña [nombre], con NIE/pasaporte [número], domicilio [dirección], teléfono [número]. EXPONGO: [situación: falta de ingresos, menores, discapacidad, violencia, salud, vivienda]. SOLICITO: 1) cita para valoración social; 2) ayuda de emergencia si procede; 3) información por escrito de requisitos y documentación; 4) respuesta por escrito y copia del expediente. Fecha y firma».',
+        'Adjunta lo que tengas: empadronamiento, pasaporte/NIE, ingresos, gastos, alquiler, facturas, libro de familia, informes médicos o de discapacidad, resolución o denegación previa. Si no tienes algo, pide que te lo indiquen por escrito.',
+        'Si te niegan la cita o el escrito, envía la solicitud por correo certificado o por la sede electrónica y guarda el acuse. También puedes pedir la hoja de reclamaciones del ayuntamiento y una copia de lo presentado.',
+        'Si hay resolución denegatoria, pide el texto completo y el plazo de recurso: reposición ante el mismo órgano y, si procede, recurso contencioso-administrativo. La asistencia jurídica gratuita puede cubrirte si no tienes recursos.',
+        'Si no contestan o no te dan solución, reclama a la concejalía de servicios sociales, a la consejería de tu comunidad, a la Inspección de Servicios Sociales si existe, al Defensor del Pueblo o al Valedor do Pobo en Galicia. No sustituyen al juez, pero pueden mediar y exigir explicaciones.',
+        'Si hay menores, violencia, discapacidad, embarazo o riesgo grave, dilo expresamente y pide atención urgente. Para violencia, 016; para emergencias, 112.',
+        'No firmes nada que no entiendas y no aceptes un «no» sin motivo escrito. Si te dicen que «no tienes derecho», pide que lo concreten: norma, requisito que no cumples y documento que lo acredita.'
       ],
       links: [
+        ['Sede Xunta de Galicia', 'https://sede.xunta.gal/'],
+        ['Sede do Concello de Vigo', 'https://sede.vigo.org/'],
         ['Defensor del Pueblo', 'https://www.defensordelpueblo.es/'],
+        ['Valedor do Pobo', 'https://www.valedordopobo.gal/'],
         ['Asistencia jurídica gratuita', 'https://sede.mjusticia.gob.es/es/tramites/asistencia-juridica-gratuita']
       ]
     },
