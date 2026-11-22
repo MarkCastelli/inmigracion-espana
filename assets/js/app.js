@@ -605,8 +605,12 @@
     ['luz', 'agua', 'gas', 'comunidad', 'internet'].forEach(function (k) { exp += Number(fget(F.applicant, 'expenses.' + k)) || 0; });
     var balance = income - exp;
     var members = [{ key: 'applicant', label: 'Titular', obj: F.applicant }];
+    var childMeta = [];
     if (F.mode === 'family') {
       members.push({ key: 'spouse', label: 'Pareja', obj: F.spouse });
+      childMeta = (F.members || []).filter(function (m) {
+        return ['hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1;
+      });
       F.children.forEach(function (ch, i) { members.push({ key: 'children.' + i, label: 'Hijo/a ' + (i + 1), obj: ch }); });
     }
     var html = '<div class="block"><div class="block__head">' + icons.doc(18) + '<h2>Resumen del caso</h2></div><div class="block__body">';
@@ -626,7 +630,11 @@
     }
     if (F.mode === 'family' && F.print && F.print.spouse !== false) html += '<h3>Pareja</h3>' + summaryPerson(F.spouse);
     if (F.mode === 'family' && F.print && F.print.children !== false) {
-      F.children.forEach(function (ch, i) { html += '<h3>Hijo/a ' + (i + 1) + '</h3>' + summaryPerson(ch); });
+      F.children.forEach(function (ch, i) {
+        var meta = childMeta[i];
+        var rel = meta ? ({ hijo_comun: 'Hijo o hija de ambos', hijo_ella: 'Hijo o hija de ella', hijo_el: 'Hijo o hija de él', hijo: 'Hijo', hija: 'Hija' }[meta.relation] || meta.relation) : '';
+        html += '<h3>Hijo/a ' + (i + 1) + (rel ? ' · ' + fEsc(rel) : '') + (meta && meta.age ? ' · ' + fEsc(meta.age) + ' años' : '') + '</h3>' + summaryPerson(ch);
+      });
       (F.members || []).forEach(function (m, i) {
         if (['pareja', 'esposa', 'esposo', 'pareja_hecho', 'hijo', 'hija', 'hijo_comun', 'hijo_ella', 'hijo_el'].indexOf(m.relation) !== -1) return;
         html += '<h3>' + fEsc(m.name || ('Integrante ' + (i + 1))) + ' · ' + fEsc(m.relation || 'otro') + '</h3>' + summaryPerson(m.data || {});
@@ -651,11 +659,26 @@
   }
 
   function summaryPerson(p) {
+    function label(list, value) {
+      var found = (list || []).filter(function (x) { return x.v === value || x.value === value; })[0];
+      return found ? (found.l || found.label) : value;
+    }
+    var docs = (p.docs || []).map(function (v) { return label(RL.formulario.docs, v); }).filter(Boolean).join(', ');
+    var aid = (p.aidTypes || []).map(function (v) { return label(RL.formulario.aidTypes, v); }).filter(Boolean).join(', ');
+    var goals = (p.goals || []).map(function (v) { return label(RL.formulario.goals, v); }).filter(Boolean).join(', ');
     var rows = [
-      ['Nombre', fget(p, 'name')], ['Edad', fget(p, 'age')], ['Teléfono', fget(p, 'phone')],
-      ['Email', fget(p, 'email')], ['Entrada en España', fget(p, 'entryDate')],
-      ['Residencia', fget(p, 'residence')], ['Trabaja', fget(p, 'works')],
-      ['Sueldo neto', fget(p, 'netSalary')], ['Estudios', fget(p, 'career')]
+      ['Nombre', p.name], ['Edad', p.age], ['Nacionalidad', p.nationality],
+      ['Teléfono', p.phone], ['Email', p.email], ['Entrada en España', p.entryDate],
+      ['Residencia', label(RL.formulario.residence, p.residence)],
+      ['Documentos', docs], ['Trabaja', p.works], ['Empleo legal', p.legalJob],
+      ['Horas', p.hours], ['Sueldo neto', p.netSalary ? p.netSalary + ' €' : ''],
+      ['Tipo de empleo', p.jobType], ['Estudia', p.studies], ['Estudios', p.career || p.educationLevel],
+      ['Discapacidad', p.disability], ['Reconocida', p.disabilityRecognized],
+      ['Grado', p.disabilityDegree],
+      ['Vencimiento', p.disabilityExpiryStatus === 'no' ? 'No caduca / sin vencimiento' : (p.disabilityExpiryStatus === 'yes' ? p.disabilityExpiry : p.disabilityExpiryStatus)],
+      ['Dependencia', p.dependency], ['Ayudas', p.aidReceived],
+      ['Tipos de ayuda', aid], ['Objetivos', goals],
+      ['Asilo', p.asylumRequested], ['Estado del asilo', p.asylumStatus]
     ].filter(function (r) { return r[1] !== '' && r[1] != null; });
     return '<dl class="kv">' + rows.map(function (r) { return '<div class="kv__row"><dt>' + fEsc(r[0]) + '</dt><dd>' + fEsc(r[1]) + '</dd></div>'; }).join('') + '</dl>';
   }

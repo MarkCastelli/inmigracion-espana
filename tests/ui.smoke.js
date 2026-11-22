@@ -735,4 +735,29 @@ t('no ofrece NIE o TIE a quien ya los tiene', () => {
   nav(app, 'inicio');
 });
 
+t('el resumen incluye estudios y discapacidad de los hijos', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { nationality: 'CO', location: 'spain', formulario: RL.formulario.blank() };
+  const f = RL.state.profile.formulario;
+  f.mode = 'family';
+  f.familyCount = 2;
+  f.members = [{ name: 'Luis', age: '10', relation: 'hijo_comun', data: RL.formulario.person() }];
+  f.children = [RL.formulario.person()];
+  f.children[0].name = 'Luis';
+  f.children[0].age = '10';
+  f.children[0].educationLevel = 'ESO';
+  f.children[0].disability = 'si';
+  f.children[0].disabilityDegree = '33_44';
+  f.children[0].disabilityExpiryStatus = 'no';
+  f.step = 10;
+  nav(app, 'formulario');
+  const html = app.document.querySelector('#view-formulario').innerHTML;
+  assert.ok(html.includes('Hijo/a 1'));
+  assert.ok(html.includes('ESO'));
+  assert.ok(html.includes('33_44'));
+  assert.ok(html.includes('No caduca / sin vencimiento'));
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');
