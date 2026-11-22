@@ -22,7 +22,7 @@ test('la guía online tiene sedes y servicios únicos', () => {
 
 test('incluye Cl@ve, DEHú, Mercurio, DGT y citas', () => {
   const ids = RL.online.items.map(x => x.id);
-  for (const id of ['clave', 'dehu', 'mercurio', 'dgt_canje', 'extranjeria_sede', 'icpp', 'cervantes']) {
+  for (const id of ['clave', 'dehu', 'mercurio', 'registro_civil', 'universidades', 'dgt_canje', 'extranjeria_sede', 'icpp', 'cervantes']) {
     assert.ok(ids.includes(id), 'falta ' + id);
   }
   assert.strictEqual(RL.online.items.find(x => x.id === 'dgt_canje').mode, 'partial');

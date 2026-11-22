@@ -331,6 +331,54 @@
       routeIds: []
     },
     {
+      id: 'mercurio', scope: 'national', cat: 'documentos', icon: 'globe',
+      title: 'Mercurio · extranjería online',
+      when: 'Para los procedimientos de extranjería habilitados en Mercurio. Permite presentar sin cita, pero no todos los trámites están disponibles.',
+      where: 'Mercurio (sede electrónica de extranjería)',
+      appointment: 'https://mercurio.delegaciondelgobierno.gob.es/mercurio/',
+      appointmentLabel: 'Abrir Mercurio',
+      docs: [
+        'Certificado digital o Cl@ve',
+        'Formulario del procedimiento concreto',
+        'Documentos escaneados en PDF',
+        'Tasa pagada, si el trámite la exige',
+        'Resguardo o justificante de presentación'
+      ],
+      steps: [
+        'Comprueba si tu procedimiento concreto está habilitado en Mercurio.',
+        'Entra con certificado digital o Cl@ve; no uses el certificado de otra persona.',
+        'Rellena el formulario y adjunta los documentos en el formato que pida.',
+        'Paga la tasa si corresponde y guarda el justificante.',
+        'Descarga el resguardo y consulta el estado del expediente.'
+      ],
+      fee: 'Según la tasa del procedimiento',
+      note: 'Mercurio no sirve para nacionalidad ni para todos los trámites. Si tu procedimiento no está habilitado, usa la sede de Extranjería o la cita previa. No pagues a un gestor sin comprobar antes que el trámite se puede presentar por Mercurio.',
+      routeIds: []
+    },
+    {
+      id: 'registro_civil', scope: 'national', cat: 'documentos', icon: 'doc',
+      title: 'Registro Civil · certificados online',
+      when: 'Para certificados de nacimiento, matrimonio, defunción o último testamento. La descarga inmediata requiere identificación electrónica.',
+      where: 'Sede del Ministerio de Justicia / Registro Civil',
+      appointment: 'https://sede.mjusticia.gob.es/',
+      appointmentLabel: 'Abrir sede de Justicia',
+      docs: [
+        'Cl@ve, certificado digital o DNI electrónico',
+        'Datos de la inscripción: nombre, fecha y registro',
+        'Libro de familia o datos de los progenitores, si los tienes'
+      ],
+      steps: [
+        'Entra en la sede del Ministerio de Justicia y elige «Certificados del Registro Civil».',
+        'Identifícate con Cl@ve, certificado digital o DNI electrónico.',
+        'Rellena los datos de la inscripción y solicita el certificado.',
+        'Descarga el PDF al momento y guarda una copia.',
+        'Si no tienes identificación electrónica, solicita el certificado por correo postal.'
+      ],
+      fee: 'Certificados gratuitos; otros trámites pueden tener tasa',
+      note: 'Los certificados se descargan al momento y son gratuitos. Inscripciones, rectificaciones y otros actos del Registro Civil pueden exigir cita presencial: no todos los trámites son 100 % online.',
+      routeIds: []
+    },
+    {
       id: 'renovacion', scope: 'national', cat: 'documentos', icon: 'clock',
       title: 'Renovar la autorización y la TIE: dos pasos distintos',
       when: 'Renovación administrativa: en los 2 meses anteriores al vencimiento, por Mercurio o sede. Huellas/TIE física: solo desde el día en que vence la tarjeta, nunca antes.',

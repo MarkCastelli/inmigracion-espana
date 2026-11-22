@@ -345,6 +345,8 @@ t('la guía de trámites muestra cita, documentos y pasos', () => {
   assert.ok(html.includes('Permiso de moto'));
   assert.ok(html.includes('Permiso profesional'));
   assert.ok(html.includes('Jefatura Provincial de Tráfico de Madrid'));
+  assert.ok(html.includes('Mercurio · extranjería online'));
+  assert.ok(html.includes('Registro Civil · certificados online'));
   RL.state.profile = saved;
   nav(app, 'inicio');
 });

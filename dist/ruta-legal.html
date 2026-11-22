@@ -5463,6 +5463,54 @@ body.has-speech-bar { padding-bottom: 86px; }
       routeIds: []
     },
     {
+      id: 'mercurio', scope: 'national', cat: 'documentos', icon: 'globe',
+      title: 'Mercurio · extranjería online',
+      when: 'Para los procedimientos de extranjería habilitados en Mercurio. Permite presentar sin cita, pero no todos los trámites están disponibles.',
+      where: 'Mercurio (sede electrónica de extranjería)',
+      appointment: 'https://mercurio.delegaciondelgobierno.gob.es/mercurio/',
+      appointmentLabel: 'Abrir Mercurio',
+      docs: [
+        'Certificado digital o Cl@ve',
+        'Formulario del procedimiento concreto',
+        'Documentos escaneados en PDF',
+        'Tasa pagada, si el trámite la exige',
+        'Resguardo o justificante de presentación'
+      ],
+      steps: [
+        'Comprueba si tu procedimiento concreto está habilitado en Mercurio.',
+        'Entra con certificado digital o Cl@ve; no uses el certificado de otra persona.',
+        'Rellena el formulario y adjunta los documentos en el formato que pida.',
+        'Paga la tasa si corresponde y guarda el justificante.',
+        'Descarga el resguardo y consulta el estado del expediente.'
+      ],
+      fee: 'Según la tasa del procedimiento',
+      note: 'Mercurio no sirve para nacionalidad ni para todos los trámites. Si tu procedimiento no está habilitado, usa la sede de Extranjería o la cita previa. No pagues a un gestor sin comprobar antes que el trámite se puede presentar por Mercurio.',
+      routeIds: []
+    },
+    {
+      id: 'registro_civil', scope: 'national', cat: 'documentos', icon: 'doc',
+      title: 'Registro Civil · certificados online',
+      when: 'Para certificados de nacimiento, matrimonio, defunción o último testamento. La descarga inmediata requiere identificación electrónica.',
+      where: 'Sede del Ministerio de Justicia / Registro Civil',
+      appointment: 'https://sede.mjusticia.gob.es/',
+      appointmentLabel: 'Abrir sede de Justicia',
+      docs: [
+        'Cl@ve, certificado digital o DNI electrónico',
+        'Datos de la inscripción: nombre, fecha y registro',
+        'Libro de familia o datos de los progenitores, si los tienes'
+      ],
+      steps: [
+        'Entra en la sede del Ministerio de Justicia y elige «Certificados del Registro Civil».',
+        'Identifícate con Cl@ve, certificado digital o DNI electrónico.',
+        'Rellena los datos de la inscripción y solicita el certificado.',
+        'Descarga el PDF al momento y guarda una copia.',
+        'Si no tienes identificación electrónica, solicita el certificado por correo postal.'
+      ],
+      fee: 'Certificados gratuitos; otros trámites pueden tener tasa',
+      note: 'Los certificados se descargan al momento y son gratuitos. Inscripciones, rectificaciones y otros actos del Registro Civil pueden exigir cita presencial: no todos los trámites son 100 % online.',
+      routeIds: []
+    },
+    {
       id: 'renovacion', scope: 'national', cat: 'documentos', icon: 'clock',
       title: 'Renovar la autorización y la TIE: dos pasos distintos',
       when: 'Renovación administrativa: en los 2 meses anteriores al vencimiento, por Mercurio o sede. Huellas/TIE física: solo desde el día en que vence la tarjeta, nunca antes.',
@@ -7186,12 +7234,12 @@ body.has-speech-bar { padding-bottom: 86px; }
     },
     {
       id: 'mercurio', scope: 'national', cat: 'extranjeria', mode: 'partial',
-      title: 'Mercurio',
-      what: ['Cargar información de solicitudes de extranjería', 'Presentar expedientes', 'Aportar documentación'],
-      requires: 'Certificado digital; normalmente empresa, representante o autorizado.',
+      title: 'Mercurio · extranjería online',
+      what: ['Presentar solicitudes y renovaciones habilitadas', 'Aportar documentos a un expediente', 'Consultar el estado'],
+      requires: 'Certificado digital o Cl@ve. No todos los procedimientos están habilitados; algunos exigen empresa, representante o autorización.',
       where: 'Mercurio',
       url: 'https://mercurio.delegaciondelgobierno.gob.es/mercurio/',
-      note: 'No es la vía general para particulares. Si eres trabajador, pregunta a tu empresa o gestor; si eres autónomo, necesitas certificado.'
+      note: 'Permite evitar la cita para los trámites habilitados, pero no sustituye a la sede ni sirve para nacionalidad. Comprueba si tu procedimiento concreto está en Mercurio antes de preparar el expediente.'
     },
     {
       id: 'dgt_canje', scope: 'national', cat: 'dgt', mode: 'partial',
@@ -7248,6 +7296,15 @@ body.has-speech-bar { padding-bottom: 86px; }
       note: 'La nacionalidad por residencia se puede iniciar online; la inscripción posterior puede requerir Registro Civil.'
     },
     {
+      id: 'registro_civil', scope: 'national', cat: 'justicia', mode: 'partial',
+      title: 'Registro Civil · certificados online',
+      what: ['Certificado de nacimiento', 'Certificado de matrimonio', 'Certificado de defunción', 'Último testamento'],
+      requires: 'Cl@ve, certificado digital o DNI electrónico para descarga inmediata. Sin identificación electrónica, la solicitud puede hacerse por correo postal.',
+      where: 'Sede del Ministerio de Justicia',
+      url: 'https://sede.mjusticia.gob.es/',
+      note: 'Los certificados se descargan al momento y son gratuitos. Inscripciones, rectificaciones y otros actos del Registro Civil pueden exigir cita presencial; no todos los trámites son 100 % online.'
+    },
+    {
       id: 'cervantes', scope: 'national', cat: 'formacion', mode: 'total',
       title: 'Exámenes CCSE y DELE A2',
       what: ['Inscripción al CCSE', 'Inscripción al DELE A2', 'Consulta de resultados y certificados'],
@@ -7273,6 +7330,15 @@ body.has-speech-bar { padding-bottom: 86px; }
       where: 'Comisaría de tu provincia',
       url: 'https://icp.administracionelectronica.gob.es/icpplus',
       note: 'La cita se pide online, pero el trámite es presencial. No vayas sin cita y sin la tasa.'
+    },
+    {
+      id: 'universidades', scope: 'national', cat: 'formacion', mode: 'partial',
+      title: 'Universidades y homologación de títulos',
+      what: ['Homologación de títulos extranjeros', 'Reconocimiento profesional', 'Acceso a universidad (UNEDasiss)'],
+      requires: 'Título, traducción jurada y apostilla; pago de tasa. Algunos trámites se inician online y siguen presenciales.',
+      where: 'Ministerio de Ciencia, Innovación y Universidades',
+      url: 'https://www.ciencia.gob.es/',
+      note: 'No homologues por defecto: confirma si tu profesión está regulada o si el trámite concreto lo exige. La homologación no es lo mismo que el reconocimiento profesional.'
     },
     {
       id: 'ccaa_sede', scope: 'region', cat: 'ccaa', mode: 'partial',
