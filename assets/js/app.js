@@ -210,8 +210,10 @@
     window.addEventListener('hashchange', function () {
       var v = parseHash().view;
       if (v && VIEWS.indexOf(v) !== -1) {
+        var previousView = ui.view;
         if (RL.speech && RL.speech.isSpeaking()) RL.speech.stop();
         ui.view = v;
+        if (v !== previousView) trackView(v);
         render();
       }
     });
@@ -232,7 +234,24 @@
     return { view: parts[0] || 'inicio', id: parts[1] || '' };
   }
 
+  var lastTrackedPath = '';
+  function trackView(view) {
+    var path = location.pathname + (view === 'inicio' ? '' : '?view=' + encodeURIComponent(view));
+    if (path === lastTrackedPath) return;
+    lastTrackedPath = path;
+    var tries = 0;
+    function send() {
+      if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+        window.goatcounter.count({ path: path, title: document.title });
+        return;
+      }
+      if (tries++ < 10) setTimeout(send, 300);
+    }
+    setTimeout(send, 220);
+  }
+
   function go(view) {
+    var previousView = ui.view;
     if (VIEWS.indexOf(view) === -1) view = 'inicio';
     if (RL.speech && RL.speech.isSpeaking()) RL.speech.stop();
     if (ui.view === 'diagnostico' && view !== 'diagnostico') {
@@ -251,6 +270,8 @@
       }
     }
     ui.view = view;
+    if (view !== previousView) trackView(view);
+    ui.errors = {};
     ui.errors = {};
     if (location.hash !== '#/' + view) {
       location.hash = '#/' + view;
@@ -3947,12 +3968,13 @@
 
       <h2>7. Destinatarios, hosting y transferencias</h2>
       <p>Ruta Legal no comparte los datos del formulario con terceros. El sitio se aloja en <strong>GitHub Pages</strong> (GitHub, Inc./Microsoft), que puede registrar datos técnicos como la dirección IP, la fecha y el navegador en sus registros de servidor. GitHub puede tratar esos datos fuera del Espacio Económico Europeo al amparo de sus garantías contractuales; consulta la <a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">política de privacidad de GitHub</a>.</p>
+      <p><strong>Analítica de visitas:</strong> para saber si la web se visita usamos <strong>GoatCounter</strong>, una analítica agregada sin cookies ni perfilado publicitario. Registra la página visitada, el referidor y datos técnicos agregados (navegador, país, dispositivo); no recibe el contenido del formulario. Puedes consultar su <a href="https://www.goatcounter.com/privacy" target="_blank" rel="noopener">política de privacidad</a>.</p>
       <p>Cuando pulsas un enlace externo (BOE, ministerios, ONG, YouTube, DeepSeek, etc.), pasas al servicio de ese tercero y se aplican sus propias políticas. La app no controla esos sitios.</p>
       <p><strong>Formulario de alta de abogados:</strong> si eres abogado/a y envías la solicitud, los datos del formulario se transmiten a <strong>FormSubmit</strong> y se reenvían por correo al responsable para revisar la publicación y, si corresponde, enviarte el enlace de pago. La base jurídica es tu consentimiento y la finalidad es gestionar tu solicitud. No incluyas datos de clientes, documentos, NIE ni información de salud. Puedes solicitar la supresión escribiendo al canal de contacto.</p>
       <p><strong>Formulario de feedback:</strong> el asunto, el contenido y la página desde la que envías la incidencia se transmiten a FormSubmit y se reenvían por correo al responsable para corregir errores o enlaces caídos. No incluyas datos personales, de salud ni documentación; este canal no es para consultas legales.</p>
 
-      <h2>8. Cookies y almacenamiento local</h2>
-      <p>Esta web <strong>no utiliza cookies publicitarias, píxeles de seguimiento ni herramientas de analítica</strong>. Usa almacenamiento local estrictamente necesario para recordar tus respuestas, el idioma, el tema y la preferencia de ayudas. Al no haber cookies no esenciales, no se muestra un banner de consentimiento de cookies. Puedes borrar el almacenamiento local desde la propia app o desde la configuración del navegador.</p>
+      <h2>8. Cookies, analítica y almacenamiento local</h2>
+      <p>Esta web <strong>no utiliza cookies publicitarias ni píxeles de seguimiento</strong>. Para contar visitas de forma agregada usa <strong>GoatCounter</strong>, una analítica sin cookies que no crea perfiles publicitarios ni recibe los datos del formulario. También usa almacenamiento local estrictamente necesario para recordar tus respuestas, el idioma, el tema y la preferencia de ayudas. Al no haber cookies no esenciales, no se muestra un banner de consentimiento de cookies. Puedes borrar el almacenamiento local desde la propia app o desde la configuración del navegador.</p>
 
       <h2>9. Seguridad</h2>
       <p>La información se queda en tu dispositivo. La seguridad física y el acceso al navegador dependen de ti: usa un dispositivo de confianza, bloquea la pantalla y evita guardar el informe en ordenadores compartidos. Ninguna medida es infalible; si el dispositivo se pierde o se comparte, tus datos pueden quedar accesibles.</p>

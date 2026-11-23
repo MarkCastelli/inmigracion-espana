@@ -302,7 +302,7 @@ test('la portada comunica gratuidad, privacidad, honestidad y PDF', () => {
     'es totalmente gratis para el inmigrante',
     'no evaluamos tu caso',
     'la decisión es tuya',
-    'tus datos no se envían ni se comparten con nadie',
+    'tus datos del formulario se quedan en tu dispositivo',
     'puedes descargar tu informe en pdf',
     'completar el formulario es la base de todo',
     'no se envía a ningún servidor de ruta legal',
@@ -392,7 +392,7 @@ test('el paso de documentos solo aparece si estás en España', () => {
 
 test('index.html referencia todos los scripts y existen', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  const srcs = [...html.matchAll(/<script src="([^"]+)"/g)].map(m => m[1].split('?')[0]);
+  const srcs = [...html.matchAll(/<script src="([^"]+)"/g)].map(m => m[1].split('?')[0]).filter(s => !/^https?:|^\/\//.test(s));
   assert.ok(srcs.length >= 8, 'esperaba al menos 8 scripts');
   assert.ok(srcs[0].endsWith('core.js'), 'core.js debe ir primero');
   assert.ok(srcs[srcs.length - 1].endsWith('app.js'), 'app.js debe ir último');

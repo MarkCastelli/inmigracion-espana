@@ -158,6 +158,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 128. **Capa responsive global**: imágenes/SVG limitados al 100 %, rejillas de catálogo y ayuda con `minmax(min(100%,...))`, compromisos/precios/formularios a una columna en tablet/móvil, botones a ancho completo y modales/informe ajustados a 520 px.
 129. **Menú hamburguesa**: en móvil/tablet (≤980 px) el menú se oculta y se abre con un botón accesible `#navToggle`; panel vertical, cierre al elegir sección, clic fuera o Escape; escritorio mantiene la fila completa.
 130. **Docs en móvil**: la matriz de documentos se oculta a ≤700 px y se sustituye por tarjetas por documento con cada integrante y su ✓/—, sin scroll horizontal ni columnas cortadas.
+131. **GoatCounter**: script de `https://rutalegal.goatcounter.com/count` en `index.html` y `dist`; seguimiento de cambios de vista SPA con `goatcounter.count({path})`; privacidad actualizada (analítica agregada sin cookies, no recibe formularios). Requiere verificar el correo de la cuenta y desplegar.
 
 ## Comandos
 

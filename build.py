@@ -45,10 +45,14 @@ def inline_css(match: re.Match) -> str:
 
 
 def inline_js(match: re.Match) -> str:
-    js = read(match.group(1))
+    rel = match.group(1)
+    # Los scripts externos (GoatCounter) se mantienen como etiquetas externas.
+    if rel.startswith(("http://", "https://", "//")):
+        return match.group(0)
+    js = read(rel)
     # Evita que un literal </script> cierre la etiqueta al incrustar.
     js = js.replace("</script", "<\\/script")
-    return "<script>\n/* ── %s ── */\n%s\n</script>" % (match.group(1), js)
+    return "<script>\n/* ── %s ── */\n%s\n</script>" % (rel, js)
 
 
 def main() -> int:
