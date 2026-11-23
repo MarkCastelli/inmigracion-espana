@@ -41,7 +41,7 @@
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d4f5c'/%3E%3Cpath d='M18 44V28l14-9 14 9v16' fill='none' stroke='%23f7f4ee' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M26 44V34h12v10' fill='none' stroke='%23e8863a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
-/* ── assets/css/app.css?v=20261122bw ── */
+/* ── assets/css/app.css?v=20261122by ── */
 /* ============================================================
    Ruta Legal · hoja de estilos única (sin dependencias)
    Diseño: papel cálido + verde profundo. Claro/oscuro automático.
@@ -1067,6 +1067,28 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
   .nav__link { flex: 0 0 auto; font-size: .74rem; padding: 7px 8px; }
 }
 
+
+/* Tablet: el menú nunca desborda la página; si no cabe, se desplaza dentro */
+@media (max-width: 980px) {
+  .nav { max-width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+}
+
+
+/* ── Adaptación de informe y datos largos ───────────────────── */
+.kv__row { flex-wrap: wrap; }
+.kv__row dd { overflow-wrap: anywhere; word-break: break-word; }
+@media (max-width: 600px) {
+  .report-page { padding: 20px 16px; border-radius: 8px; }
+  .report-key__grid { grid-template-columns: 1fr; }
+  .report-page__head, .report-page__foot { flex-wrap: wrap; gap: 4px 10px; }
+  .report-person-head h2 { font-size: 1.3rem; }
+  .report-person-head { padding-left: 9px; }
+  .kv__row { flex-direction: column; gap: 2px; }
+  .kv__row dd { text-align: left; }
+  .topbar__actions { flex-wrap: wrap; justify-content: flex-end; }
+  .modal__panel { border-radius: 14px; max-height: 94vh; }
+}
+
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Ruta Legal","url":"https://markcastelli.github.io/inmigracion-espana/","description":"Guía gratuita y privada para inmigrantes en España: residencia, arraigo, nacionalidad, asilo, reagrupación familiar, trámites y entidades.","inLanguage":["es","ar","fr","en","ro"]}
@@ -1631,7 +1653,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 </div>
 
 <script>
-/* ── assets/js/core.js?v=20261122bw ── */
+/* ── assets/js/core.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · núcleo: utilidades, estado local y fechas
    Sin dependencias. Funciona abriendo index.html directamente.
@@ -1878,7 +1900,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/i18n.js?v=20261122bw ── */
+/* ── assets/js/data/i18n.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · idiomas de interfaz
    Fase 1: navegación, portada y avisos legales.
@@ -2169,7 +2191,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/seo.js?v=20261122bw ── */
+/* ── assets/js/data/seo.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · SEO por sección
    Títulos, descripciones, palabras clave, Open Graph y JSON-LD.
@@ -2371,7 +2393,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/formulario.js?v=20261122bw ── */
+/* ── assets/js/data/formulario.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · Formulario guiado 0-11
    Estado propio, separado del diagnóstico antiguo.
@@ -2701,7 +2723,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/tooltips.js?v=20261122bw ── */
+/* ── assets/js/data/tooltips.js?v=20261122by ── */
 /* Ruta Legal · ayudas contextuales del formulario.
    Textos por idioma; el PDF no usa estos textos. */
 (function () {
@@ -2884,7 +2906,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/lawyers.js?v=20261122bw ── */
+/* ── assets/js/data/lawyers.js?v=20261122by ── */
 /* Ruta Legal · carga del directorio de abogados desde JSON.
    La base editable está en assets/js/data/lawyers.json.
    Campos públicos: id, demo, nombre, estudio, matricula, colegio, email,
@@ -2933,7 +2955,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/antes.js?v=20261122bw ── */
+/* ── assets/js/data/antes.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · Mi experiencia
    Testimonio personal, corregido y ordenado por temas.
@@ -3046,7 +3068,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/countries.js?v=20261122bw ── */
+/* ── assets/js/data/countries.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · países y datos que afectan a las vías
    - dos: nacionalidad por residencia en 2 años (art. 22 CC)
@@ -3180,7 +3202,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/regions.js?v=20261122bw ── */
+/* ── assets/js/data/regions.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · comunidades autónomas, provincias y servicios
    ============================================================ */
@@ -3269,7 +3291,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/questions.js?v=20261122bw ── */
+/* ── assets/js/data/questions.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · cuestionario (esquema declarativo)
    Cada campo: { id, type, label, help, required, showIf, options }
@@ -4596,7 +4618,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-nacionalidad.js?v=20261122bw ── */
+/* ── assets/js/data/routes-nacionalidad.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · vías de NACIONALIDAD española
    Base: Código Civil arts. 17-26, Ley 20/2022 (DA 8.ª, cerrada),
@@ -5034,7 +5056,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-espana.js?v=20261122bw ── */
+/* ── assets/js/data/routes-espana.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · vías que se solicitan DESDE España
    Base: RD 1155/2024 (en vigor 20/05/2025), RD 316/2026 y
@@ -5971,7 +5993,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/routes-exterior.js?v=20261122bw ── */
+/* ── assets/js/data/routes-exterior.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · visados y entrada desde el exterior
    Base: LO 4/2000, RD 1155/2024, Ley 14/2013 (modificada por
@@ -6410,7 +6432,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/resources.js?v=20261122bw ── */
+/* ── assets/js/data/resources.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · recursos, glosario, FAQ y bulos
    ============================================================ */
@@ -6559,7 +6581,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/directory.js?v=20261122bw ── */
+/* ── assets/js/data/directory.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · directorio de sitios de interés
    Cada ficha dice qué se puede hacer allí y enlaza a la sede.
@@ -7089,7 +7111,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/procedures.js?v=20261122bw ── */
+/* ── assets/js/data/procedures.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · trámites: qué hacer, dónde, con qué cita y qué llevar
    ============================================================ */
@@ -8236,7 +8258,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/aids.js?v=20261122bw ── */
+/* ── assets/js/data/aids.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · derechos, discapacidad, dependencia y ayudas
    ============================================================ */
@@ -8611,7 +8633,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/faq.js?v=20261122bw ── */
+/* ── assets/js/data/faq.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · preguntas frecuentes (dudas reales de foros)
    Respuestas contrastadas con normativa y sede oficial.
@@ -9481,7 +9503,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/data/online.js?v=20261122bw ── */
+/* ── assets/js/data/online.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · trámites online, sedes y notificaciones
    ============================================================ */
@@ -9778,7 +9800,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/engine.js?v=20261122bw ── */
+/* ── assets/js/engine.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · motor de reglas
    Convierte el perfil en un plan: vías que encajan, requisitos
@@ -11032,7 +11054,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/decision.js?v=20261122bw ── */
+/* ── assets/js/decision.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · capa de decisión
    No sustituye al motor de reglas: lo ordena y lo audita.
@@ -11309,7 +11331,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/forms.js?v=20261122bw ── */
+/* ── assets/js/forms.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · catálogo de formularios oficiales
    Enlaces a la sede del Ministerio de Inclusión y al Ministerio
@@ -11545,7 +11567,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/ai.js?v=20261122bw ── */
+/* ── assets/js/ai.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · consulta abierta a una IA
    Genera un prompt con el caso, el diagnóstico y las reglas.
@@ -11924,7 +11946,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/pdf.js?v=20261122bw ── */
+/* ── assets/js/pdf.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · generador de PDF sin dependencias
    Escribe un PDF válido (A4, Helvetica, WinAnsi) con el perfil,
@@ -12574,7 +12596,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/speech.js?v=20261122bw ── */
+/* ── assets/js/speech.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · lectura en voz alta con la Web Speech API
    Sin servidor, sin API key y sin enviar texto a terceros.
@@ -12958,7 +12980,7 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 
 </script>
 <script>
-/* ── assets/js/app.js?v=20261122bw ── */
+/* ── assets/js/app.js?v=20261122by ── */
 /* ============================================================
    Ruta Legal · interfaz (asistente, plan, catálogo, documentos)
    ============================================================ */
