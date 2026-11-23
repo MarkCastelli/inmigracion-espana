@@ -1265,6 +1265,7 @@ t('cada hijo e integrante puede marcar sus documentos', () => {
   nav(app, 'docs');
   html = app.document.querySelector('#view-docs').innerHTML;
   assert.ok(html.includes('Quién tiene cada documento'));
+  assert.ok(html.includes('doc-cards'), 'faltan tarjetas de documentos para móvil');
   assert.ok(html.includes('Luis'));
   assert.ok(html.includes('Pasaporte de tu país'));
   RL.state.profile = saved;

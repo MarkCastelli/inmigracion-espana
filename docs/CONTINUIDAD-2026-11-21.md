@@ -157,6 +157,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 127. **Adaptación móvil/tablet**: viewport correcto, formularios a una columna en móvil, menú desplazable en una fila, informe y filas de datos que se apilan, tablas con scroll, modales y rejillas de precios/donaciones adaptadas.
 128. **Capa responsive global**: imágenes/SVG limitados al 100 %, rejillas de catálogo y ayuda con `minmax(min(100%,...))`, compromisos/precios/formularios a una columna en tablet/móvil, botones a ancho completo y modales/informe ajustados a 520 px.
 129. **Menú hamburguesa**: en móvil/tablet (≤980 px) el menú se oculta y se abre con un botón accesible `#navToggle`; panel vertical, cierre al elegir sección, clic fuera o Escape; escritorio mantiene la fila completa.
+130. **Docs en móvil**: la matriz de documentos se oculta a ≤700 px y se sustituye por tarjetas por documento con cada integrante y su ✓/—, sin scroll horizontal ni columnas cortadas.
 
 ## Comandos
 

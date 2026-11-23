@@ -3358,7 +3358,13 @@
             return '<td>' + ((p.obj.docs || []).indexOf(d.v) !== -1 ? '<span class="doc-yes" aria-label="Sí">✓</span>' : '<span class="doc-no" aria-label="No">—</span>') + '</td>';
           }).join('') + '</tr>';
         }).join('') + '</tbody></table></div>' +
-        '<p class="field__help">✓ = lo marcó esa persona. — = no lo marcó. No significa que no lo necesite: el abogado debe revisarlo.</p></div></div>';
+        '<div class="doc-cards">' + rows.map(function (d) {
+          return '<article class="doc-card"><h3>' + fEsc(d.l) + '</h3><ul>' + people.map(function (p) {
+            var has = (p.obj.docs || []).indexOf(d.v) !== -1;
+            return '<li><span>' + fEsc(p.label) + '</span><strong class="' + (has ? 'doc-yes' : 'doc-no') + '">' + (has ? '✓' : '—') + '</strong></li>';
+          }).join('') + '</ul></article>';
+        }).join('') + '</div>' +
+                '<p class="field__help">✓ = lo marcó esa persona. — = no lo marcó. No significa que no lo necesite: el abogado debe revisarlo.</p></div></div>';
       var unmarked = docTypes.filter(function (d) {
         return !people.some(function (p) { return (p.obj.docs || []).indexOf(d.v) !== -1; });
       });
