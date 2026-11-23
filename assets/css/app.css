@@ -1005,3 +1005,20 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
 .report-mode--full { background: #fff1e6; color: #8a3f00; border: 1px solid #f0b27a; }
 @media (max-width: 700px) { .print-choice { grid-template-columns: 1fr; } }
 @media print { .print-choice { display: none !important; } .report-mode { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+
+
+/* En móvil el menú se desplaza en una sola fila, sin apilar 17 botones */
+@media (max-width: 720px) {
+  .nav {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding: 6px 2px 8px;
+  }
+  .nav::-webkit-scrollbar { height: 3px; }
+  .nav::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .nav__link { flex: 0 0 auto; font-size: .74rem; padding: 7px 8px; }
+}
