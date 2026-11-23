@@ -155,6 +155,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 125. **Reserva de admisión**: la página «Quiero aparecer» avisa de que Ruta Legal puede colocar un aviso en el sitio si considera que la solicitud o la información no cumple los estándares, sin dar explicación del caso.
 126. **Feedback con FormSubmit**: el aviso de Ayuda envía asunto, contenido y página mediante el mismo sistema que el alta de abogados; no abre el gestor de correo ni muestra la dirección. Si el envío se confirma, redirige a `#/feedback-gracias`; si falla, mantiene el mensaje y muestra error. Privacidad actualizada.
 127. **Adaptación móvil/tablet**: viewport correcto, formularios a una columna en móvil, menú desplazable en una fila, informe y filas de datos que se apilan, tablas con scroll, modales y rejillas de precios/donaciones adaptadas.
+128. **Capa responsive global**: imágenes/SVG limitados al 100 %, rejillas de catálogo y ayuda con `minmax(min(100%,...))`, compromisos/precios/formularios a una columna en tablet/móvil, botones a ancho completo y modales/informe ajustados a 520 px.
 
 ## Comandos
 

@@ -1044,3 +1044,44 @@ html[dir="rtl"] .field__tipbox { left: auto; right: 0; }
   .topbar__actions { flex-wrap: wrap; justify-content: flex-end; }
   .modal__panel { border-radius: 14px; max-height: 94vh; }
 }
+
+
+/* ══════════════════════════════════════════════════════════
+   Adaptación global: todas las vistas, tarjetas y rejillas
+   ══════════════════════════════════════════════════════════ */
+html, body { max-width: 100%; overflow-x: hidden; }
+img, svg, video, canvas { max-width: 100%; height: auto; }
+.view, .block, .card, .plan-main, .plan-aside, .wizard { min-width: 0; }
+.catalog-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+.help-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+@media (max-width: 980px) {
+  .commitments__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero__card { max-width: none; width: 100%; }
+  .pdf-band__text { max-width: none; }
+  .dir-controls { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .price-grid { grid-template-columns: 1fr; }
+  .plan-head__actions { width: 100%; }
+  .plan-head__actions .btn { flex: 1 1 auto; justify-content: center; }
+  .topbar__actions { flex-wrap: wrap; justify-content: flex-end; }
+  .thanks-card { margin: 24px auto; padding: 24px 18px; }
+  .block { border-radius: 12px; }
+}
+@media (max-width: 520px) {
+  .view { padding-left: 14px; padding-right: 14px; }
+  .hero__cta, .pdf-band__cta { width: 100%; }
+  .hero__cta .btn, .pdf-band__cta .btn { width: 100%; justify-content: center; }
+  .options { grid-template-columns: 1fr; }
+  .commitments__grid { grid-template-columns: 1fr; }
+  .wizard__nav { flex-wrap: wrap; }
+  .wizard__nav .btn { flex: 1 1 140px; justify-content: center; }
+  .modal { padding: 8px; }
+  .modal__panel { padding: 18px 14px; border-radius: 12px; }
+  .donate-card, .donate-aside, .price-card { padding: 18px 15px; }
+  .donate-hero h1 { font-size: 2rem; }
+  .report-page { padding: 16px 12px; }
+  .report-page__foot { font-size: .68rem; }
+  .field__tipbox { width: min(240px, 88vw); }
+}
