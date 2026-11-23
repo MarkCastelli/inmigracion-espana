@@ -421,6 +421,8 @@ test('el plan es determinista para el mismo perfil', () => {
 test('SEO técnico: enlaces, JSON-LD, canonical y sitemap', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   assert.ok(html.includes('<a class="nav__link" href="?view=formulario"'), 'navegación no rastreable');
+  assert.ok(html.includes('id="navToggle"'), 'falta botón hamburguesa');
+  assert.ok(html.includes('aria-controls="mainNav"'), 'falta relación accesible del menú');
   assert.ok(html.includes('WebApplication'), 'falta WebApplication JSON-LD');
   assert.ok(html.includes('<noscript>'), 'falta contenido noscript');
   assert.ok(html.includes('rel="canonical"'), 'falta canonical');

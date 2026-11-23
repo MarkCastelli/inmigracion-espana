@@ -183,6 +183,30 @@
       });
     }
 
+    var navToggle = $('#navToggle');
+    var mainNav = $('#mainNav');
+    if (navToggle && mainNav) {
+      var setNav = function (open) {
+        mainNav.classList.toggle('is-open', open);
+        navToggle.setAttribute('aria-expanded', String(open));
+        navToggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      };
+      navToggle.addEventListener('click', function () {
+        setNav(!mainNav.classList.contains('is-open'));
+      });
+      mainNav.querySelectorAll('[data-nav]').forEach(function (link) {
+        link.addEventListener('click', function () { setNav(false); });
+      });
+      document.addEventListener('click', function (event) {
+        if (!mainNav.classList.contains('is-open')) return;
+        if (mainNav.contains(event.target) || navToggle.contains(event.target)) return;
+        setNav(false);
+      });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') setNav(false);
+      });
+    }
+
     window.addEventListener('hashchange', function () {
       var v = parseHash().view;
       if (v && VIEWS.indexOf(v) !== -1) {
