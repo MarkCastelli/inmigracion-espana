@@ -1298,4 +1298,17 @@ t('el PDF básico oculta datos identificativos y sensibles', () => {
   nav(app, 'inicio');
 });
 
+t('una ficha antigua incompleta no deja la vista en blanco', () => {
+  const saved = RL.state.profile;
+  RL.state.profile = { formulario: { applicant: { name: 'Dato antiguo' }, step: 11 } };
+  nav(app, 'docs');
+  let html = app.document.querySelector('#view-docs').innerHTML;
+  assert.ok(html.trim().length > 20, 'Docs quedó vacía');
+  nav(app, 'plan');
+  html = app.document.querySelector('#view-plan').innerHTML;
+  assert.ok(html.trim().length > 20, 'Plan quedó vacío');
+  RL.state.profile = saved;
+  nav(app, 'inicio');
+});
+
 console.log('\nSmoke test de interfaz terminado.');

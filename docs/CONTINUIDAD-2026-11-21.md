@@ -1,12 +1,12 @@
 # Continuidad — 21/11/2026
 
-Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-legal`.
+Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\Inmigrantes App\ruta-legal`.
 
 ## Estado
 
 - App estática vanilla JS, sin backend, con `localStorage`.
 - Build actual: `dist/ruta-legal.html` (~709 KB).
-- **225 pruebas pasando**.
+- **226 pruebas pasando**.
 - **0 enlaces mal** en la última auditoría; 2 bloqueados por el organismo (403) y 4 no verificables por TLS/timeout.
 - Contenido: **35 preguntas**, **32 trámites**, **28 ayudas**, **19 portales online**, **20 formularios/tasas**.
 
@@ -163,7 +163,7 @@ Nota para retomar el **22/11/2026**. El proyecto está en `E:\DeepSeekH\ruta-leg
 ## Comandos
 
 ```bat
-cd E:\DeepSeekH\ruta-legal
+cd E:\DeepSeekH\Inmigrantes App\ruta-legal
 python tests/check_html.py
 node tests/engine.test.js
 node tests/familia.test.js
@@ -202,4 +202,6 @@ Abrir: `dist\ruta-legal.html` o `start.bat`.
 
 ## Git
 
-Repositorio inicializado en `E:\DeepSeekH\ruta-legal` en este cierre. El commit incluye app, datos, pruebas, documentación y build.
+Repositorio inicializado en `E:\DeepSeekH\Inmigrantes App\ruta-legal` en este cierre. El commit incluye app, datos, pruebas, documentación y build.
+
+132. **Blindaje de vistas**: formularios antiguos se normalizan al cargar; si una vista falla, muestra un aviso con recarga en vez de quedar en blanco. Añadida prueba de ficha incompleta en Docs y Plan.

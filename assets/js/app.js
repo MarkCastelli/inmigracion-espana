@@ -291,29 +291,37 @@
     });
     $('#globalProgress').hidden = ui.view !== 'diagnostico';
 
-    if (ui.view === 'inicio') renderHome();
-    else if (ui.view === 'antes') renderAntes();
-    else if (ui.view === 'formulario') renderFormulario();
-    else if (ui.view === 'diagnostico') renderWizard();
-    else if (ui.view === 'plan') renderPlan();
-    else if (ui.view === 'vias') renderCatalog();
-    else if (ui.view === 'tramites') renderTramites();
-    else if (ui.view === 'online') renderOnline();
-    else if (ui.view === 'preguntas') renderPreguntas();
-    else if (ui.view === 'derechos') renderDerechos();
-    else if (ui.view === 'directorio') renderDirectorio();
-    else if (ui.view === 'abogados') renderAbogados();
-    else if (ui.view === 'abogados-alta') renderAbogadosAlta();
-    else if (ui.view === 'abogados-gracias') renderAbogadosGracias();
-    else if (ui.view === 'feedback-gracias') renderFeedbackGracias();
-    else if (ui.view === 'consulta') renderConsulta();
-    else if (ui.view === 'docs') renderDocs();
-    else if (ui.view === 'formularios') renderFormularios();
-    else if (ui.view === 'donar') renderDonar();
-    else if (ui.view === 'ayuda') renderHelp();
-    else if (ui.view === 'legal') renderLegal();
+    try {
+      if (ui.view === 'inicio') renderHome();
+      else if (ui.view === 'antes') renderAntes();
+      else if (ui.view === 'formulario') renderFormulario();
+      else if (ui.view === 'diagnostico') renderWizard();
+      else if (ui.view === 'plan') renderPlan();
+      else if (ui.view === 'vias') renderCatalog();
+      else if (ui.view === 'tramites') renderTramites();
+      else if (ui.view === 'online') renderOnline();
+      else if (ui.view === 'preguntas') renderPreguntas();
+      else if (ui.view === 'derechos') renderDerechos();
+      else if (ui.view === 'directorio') renderDirectorio();
+      else if (ui.view === 'abogados') renderAbogados();
+      else if (ui.view === 'abogados-alta') renderAbogadosAlta();
+      else if (ui.view === 'abogados-gracias') renderAbogadosGracias();
+      else if (ui.view === 'feedback-gracias') renderFeedbackGracias();
+      else if (ui.view === 'consulta') renderConsulta();
+      else if (ui.view === 'docs') renderDocs();
+      else if (ui.view === 'formularios') renderFormularios();
+      else if (ui.view === 'donar') renderDonar();
+      else if (ui.view === 'ayuda') renderHelp();
+      else if (ui.view === 'legal') renderLegal();
 
-    if (RL.seo) RL.seo.apply(ui.view);
+      if (RL.seo) RL.seo.apply(ui.view);
+    } catch (err) {
+      if (window.console && console.error) console.error('Error al renderizar ' + ui.view, err);
+      var host = $('#view-' + ui.view);
+      if (host) {
+        host.innerHTML = '<div class="callout callout--warn">' + icons.alert(18) + '<div><strong>No se pudo cargar esta página</strong><p>Tus datos siguen guardados en este navegador. Recarga la página; si el problema continúa, no borres nada y avísanos indicando la sección.</p><div class="flex mt-2"><button class="btn btn--primary btn--sm" type="button" data-action="reload">Recargar</button><button class="btn btn--soft btn--sm" type="button" data-nav="inicio">Volver al inicio</button></div></div></div>';
+      }
+    }
 
     window.scrollTo(0, 0);
     var main = $('#main');
@@ -329,11 +337,34 @@
     'Pareja', 'Hijos', 'Discapacidad', 'Ayudas', 'Objetivos', 'Resumen', 'Documento final'
   ];
 
+  function normalizeForm(F) {
+    var base = RL.formulario.blank();
+    F = F || {};
+    function person(p) {
+      p = p || {};
+      return Object.assign({}, base.applicant, p, {
+        expenses: Object.assign({}, base.applicant.expenses, p.expenses || {}),
+        docs: Array.isArray(p.docs) ? p.docs : []
+      });
+    }
+    F = Object.assign({}, base, F);
+    F.applicant = person(F.applicant);
+    F.spouse = person(F.spouse);
+    F.children = (Array.isArray(F.children) ? F.children : []).map(person);
+    F.members = (Array.isArray(F.members) ? F.members : []).map(function (m) {
+      m = m || {};
+      return Object.assign({}, m, { data: person(m.data) });
+    });
+    F.print = Object.assign({}, base.print, F.print || {});
+    F.printBasic = !!F.printBasic;
+    return F;
+  }
+
   function getForm() {
     var stored = RL.state.profile && RL.state.profile.formulario;
-    if (stored && stored !== formState) formState = stored;
+    if (stored && stored !== formState) formState = normalizeForm(stored);
     if (formState) return formState;
-    formState = (stored && stored.applicant) ? stored : RL.formulario.blank();
+    formState = RL.formulario.blank();
     if (!formState.step) formState.step = 0;
     return formState;
   }
@@ -1262,6 +1293,7 @@
     if (action === 'remove-child') {
       F.children.splice(Number(btn.getAttribute('data-index')), 1); saveForm(); renderFormulario(); return;
     }
+    if (action === 'reload') { location.reload(); return; }
     if (action === 'print') { openPrintChoice(); return; }
     if (action === 'next') {
       if (F.step >= 11) { F.step = 0; F.completed = false; saveForm(); renderFormulario(); return; }
